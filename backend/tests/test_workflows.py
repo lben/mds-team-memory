@@ -146,6 +146,30 @@ def test_corroboration_grouping_and_spam(make_client):
     assert contradiction["item"]["group_id"] != second["item"]["group_id"]
 
 
+def test_helped_stays_idempotent_across_group_formation(make_client):
+    """Regression: a mark placed before the item joins a corroboration group
+    must not be payable again after grouping (PRD 11 idempotency, PRD 7 spam)."""
+    author, reader = make_client(), make_client()
+    fact = f"Feed sigma-{uuid.uuid4().hex[:8]} loads after the staging checkpoint completes."
+    first = author.post("/api/capture", data={"body": fact}).json()["item"]
+
+    assert reader.post(f"/api/items/{first['id']}/helped").json()["created"] is True
+    assert author.get("/api/profile").json()["totals"]["helped"] == 1
+
+    # The author reposts near-identical content, forming a group with the marked item.
+    duplicate = author.post("/api/capture", data={"body": fact + "."}).json()
+    assert duplicate["corroboration"]["group_size"] == 2
+
+    # Re-marking either member must not create a second event for the same author.
+    assert reader.post(f"/api/items/{first['id']}/helped").json()["created"] is False
+    assert reader.post(f"/api/items/{duplicate['item']['id']}/helped").json()["created"] is False
+    assert author.get("/api/profile").json()["totals"]["helped"] == 1
+
+    # The UI state agrees: both group members render as already marked.
+    detail = reader.get(f"/api/items/{duplicate['item']['id']}").json()
+    assert detail["marked_helped"] is True
+
+
 def test_document_upload_search_open_exact_passage(make_client):
     """W8: uploaded document is searchable and opens at the exact passage."""
     client = make_client()

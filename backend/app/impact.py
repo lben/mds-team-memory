@@ -62,16 +62,41 @@ def notify(
         pass
 
 
+def _helped_keys(db: Session, item: KnowledgeItem, actor_id: str, beneficiary_id: str) -> list[str]:
+    """Every dedup key that can represent an existing 'helped' mark by this actor
+    for this beneficiary. Per-item keys of group members are included so a mark
+    placed before the item joined a corroboration group still counts."""
+    if not item.group_id:
+        return [f"helped:{actor_id}:item:{item.id}"]
+    keys = [f"helped:{actor_id}:group:{item.group_id}:{beneficiary_id}"]
+    member_ids = (
+        db.query(KnowledgeItem.id)
+        .filter(
+            KnowledgeItem.group_id == item.group_id,
+            KnowledgeItem.author_profile_id == beneficiary_id,
+        )
+        .all()
+    )
+    keys += [f"helped:{actor_id}:item:{mid}" for (mid,) in member_ids]
+    return keys
+
+
+def already_helped(db: Session, item: KnowledgeItem, actor_id: str) -> bool:
+    keys = _helped_keys(db, item, actor_id, item.author_profile_id)
+    return db.query(ImpactEvent).filter(ImpactEvent.dedup_key.in_(keys)).first() is not None
+
+
 def mark_helped(db: Session, item: KnowledgeItem, actor: Profile) -> tuple[bool, str | None]:
-    """'Helped me' on an item. Idempotent per actor; grouped duplicates by the
-    same author pay once; other contributors in the group each earn +1 once."""
+    """'Helped me' on an item. Idempotent per actor — including across group
+    formation; grouped duplicates by the same author pay once; other
+    contributors in the group each earn +1 once."""
     if item.author_profile_id == actor.id:
         return False, "You cannot mark your own contribution"
-    if item.group_id:
-        key = f"helped:{actor.id}:group:{item.group_id}:{item.author_profile_id}"
+    if already_helped(db, item, actor.id):
+        created = False
     else:
-        key = f"helped:{actor.id}:item:{item.id}"
-    created = record_event(db, "helped", item.author_profile_id, key, actor.id, item.id)
+        key = _helped_keys(db, item, actor.id, item.author_profile_id)[0]
+        created = record_event(db, "helped", item.author_profile_id, key, actor.id, item.id)
     if created:
         notify(
             db,
@@ -91,7 +116,12 @@ def mark_helped(db: Session, item: KnowledgeItem, actor: Profile) -> tuple[bool,
             .all()
         )
         for (other_id,) in others:
-            if record_event(
+            existing = (
+                db.query(ImpactEvent)
+                .filter(ImpactEvent.dedup_key.in_(_helped_keys(db, item, actor.id, other_id)))
+                .first()
+            )
+            if existing is None and record_event(
                 db,
                 "group_helped",
                 other_id,

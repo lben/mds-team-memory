@@ -149,6 +149,7 @@ onMounted(async () => {
           <span class="muted" style="font-size: 11px">Asked by {{ detail.author }} · {{ fmt(detail.created_at) }}</span>
         </div>
         <h2 style="margin-top: 12px">{{ detail.body.length > 160 ? detail.body.slice(0, 160) + '…' : detail.body }}</h2>
+        <div v-if="detail.body.length > 160" class="body">{{ detail.body }}</div>
         <div class="meta" style="margin-top: 10px">
           <span v-for="c in detail.concepts" :key="c.id" class="chip">{{ c.name }}</span>
           <span v-if="detail.suggested_experts.length">Suggested experts: {{ detail.suggested_experts.join(', ') }}</span>

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from . import config
 from .concepts import route_question, tag_subject
+from .impact import already_helped
 from .models import ImpactEvent, KnowledgeItem, Profile, Relationship
 from .text import normalized_hash, query_terms, similarity
 
@@ -111,13 +112,7 @@ def endorsed(db: Session, item: KnowledgeItem) -> bool:
 def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) -> dict:
     info = group_info(db, item)
     author = db.get(Profile, item.author_profile_id)
-    marked = False
-    if profile:
-        if item.group_id:
-            key = f"helped:{profile.id}:group:{item.group_id}:{item.author_profile_id}"
-        else:
-            key = f"helped:{profile.id}:item:{item.id}"
-        marked = db.query(ImpactEvent).filter(ImpactEvent.dedup_key == key).first() is not None
+    marked = bool(profile) and already_helped(db, item, profile.id)
     return {
         "id": item.id,
         "kind": item.kind,
