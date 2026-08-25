@@ -1,0 +1,11 @@
+# Copy this file to tools/deploy.toml and adjust the destinations.
+# A destination is either:
+#   - a directory path: a local folder, a mounted network share, or a Windows
+#     UNC path such as '\\\\fileserver\\apps\\mds-team-memory-uat'
+#   - "user@host:/path" to copy over SSH with scp
+
+[uat]
+destination = "/path/to/uat/mds-team-memory"
+
+[prod]
+destination = "/path/to/prod/mds-team-memory"

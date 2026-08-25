@@ -1,0 +1,11 @@
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+data/
+build/
+frontend/dist/
+tools/deploy.toml
+.pytest_cache/
+test-results/
+.DS_Store
