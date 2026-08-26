@@ -14,6 +14,7 @@ automatic knowledge graphs, and outcome-based impact tracking.
 python3 -m venv .venv
 ./.venv/bin/pip install -r requirements.txt -r requirements-dev.txt
 ./.venv/bin/alembic -c backend/alembic.ini upgrade head
+./.venv/bin/python manage.py create-admin                     # admin accounts are CLI-only
 ./.venv/bin/uvicorn app.main:app --app-dir backend --reload   # API on :8000
 
 cd frontend && npm install && npm run dev                     # UI on :5173 (proxies /api)
@@ -40,5 +41,8 @@ python tools/deploy.py uat    # or: prod
 ```
 
 This builds the frontend, assembles a Node-free release, and copies it to the
-target. Server-side steps are in `SERVER_SETUP.md`. On first use the app asks
-the installer to create the first admin account under **Expertise Routing**.
+target. Server-side steps are in `SERVER_SETUP.md`.
+
+Administrator accounts are created only with `python manage.py create-admin` on
+the server — there is no sign-up in the UI. The Admin navigation is hidden from
+everyone until an admin signs in at `/admin/expertise`.

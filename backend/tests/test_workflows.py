@@ -266,13 +266,19 @@ def test_expertise_routing(make_client, admin_client):
 
 
 def test_admin_auth_gates(make_client, admin_client):
-    """Admin onboarding happens once; admin APIs require a session; more admins can be added."""
+    """No self-service admin creation over HTTP; admin APIs require a session;
+    a logged-in admin can add more admins."""
     anonymous = make_client()
-    assert anonymous.post(
-        "/api/admin/setup", json={"username": "x_intruder", "password": "password123"}
-    ).status_code == 403
+    # The setup endpoint is gone: accounts are created with `manage.py create-admin`.
+    intruder = {"username": "x_intruder", "password": "password123"}
+    assert anonymous.post("/api/admin/setup", json=intruder).status_code != 200
+    # ...and nothing was created by trying.
+    assert anonymous.post("/api/admin/login", json=intruder).status_code == 401
     assert anonymous.get("/api/admin/concepts").status_code == 401
     assert anonymous.get("/api/admin/expertise").status_code == 401
+    # Anonymous visitors are told nothing about whether admin accounts exist.
+    state = anonymous.get("/api/admin/state").json()
+    assert state == {"logged_in": False, "username": None}
 
     r = admin_client.post(
         "/api/admin/admins", json={"username": f"second{uuid.uuid4().hex[:5]}", "password": "another-pass-1"}
@@ -282,6 +288,43 @@ def test_admin_auth_gates(make_client, admin_client):
     assert anonymous.post(
         "/api/admin/login", json={"username": "rootadmin", "password": "wrong-password"}
     ).status_code == 401
+
+
+def test_manage_command_creates_admin(make_client):
+    """`python manage.py create-admin` creates a working account on the server."""
+    import os
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    manage = Path(__file__).resolve().parents[2] / "manage.py"
+    username = f"deployadmin{uuid.uuid4().hex[:6]}"
+    password = "deploy-time-pw"
+
+    result = subprocess.run(
+        [sys.executable, str(manage), "create-admin", "--username", username],
+        input=password + "\n",
+        capture_output=True,
+        text=True,
+        env=os.environ,
+    )
+    assert result.returncode == 0, result.stderr
+    assert f"Created admin '{username}'" in result.stdout
+
+    client = make_client()
+    assert client.post("/api/admin/login", json={"username": username, "password": password}).status_code == 200
+    assert client.get("/api/admin/concepts").status_code == 200
+
+    # Re-running for the same username fails instead of silently replacing the account.
+    repeat = subprocess.run(
+        [sys.executable, str(manage), "create-admin", "--username", username],
+        input=password + "\n",
+        capture_output=True,
+        text=True,
+        env=os.environ,
+    )
+    assert repeat.returncode != 0
+    assert "already exists" in repeat.stderr
 
 
 def test_correction_lifecycle(make_client, admin_client):

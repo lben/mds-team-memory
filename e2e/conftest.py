@@ -3,6 +3,7 @@ import socket
 import subprocess
 import sys
 import time
+import types
 import urllib.request
 from pathlib import Path
 
@@ -57,6 +58,18 @@ def base_url_server(tmp_path_factory):
     else:
         server.terminate()
         raise RuntimeError("server did not start")
-    yield base
+
+    def create_admin(username: str, password: str) -> None:
+        """Run the real deploy-time command against this server's database."""
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "manage.py"), "create-admin", "--username", username],
+            input=password + "\n",
+            capture_output=True,
+            text=True,
+            env=env,
+        )
+        assert result.returncode == 0, result.stderr
+
+    yield types.SimpleNamespace(url=base, create_admin=create_admin)
     server.terminate()
     server.wait(timeout=10)

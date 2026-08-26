@@ -42,24 +42,11 @@ class MappingIn(BaseModel):
 
 
 @router.get("/state")
-def state(admin: AdminUser | None = Depends(get_admin), db: Session = Depends(get_db)):
-    needs_setup = db.query(AdminUser).first() is None
-    return {
-        "needs_setup": needs_setup,
-        "logged_in": admin is not None,
-        "username": admin.username if admin else None,
-    }
-
-
-@router.post("/setup")
-def setup(payload: CredentialsIn, response: Response, db: Session = Depends(get_db)):
-    if db.query(AdminUser).first() is not None:
-        raise HTTPException(403, "Setup is already complete")
-    admin = AdminUser(username=payload.username.strip(), password_hash=hash_password(payload.password))
-    db.add(admin)
-    db.commit()
-    create_admin_session(db, response, admin)
-    return {"ok": True, "username": admin.username}
+def state(admin: AdminUser | None = Depends(get_admin)):
+    """Whether this browser holds an admin session. Deliberately reveals nothing
+    about whether admin accounts exist — accounts are created on the server with
+    `python manage.py create-admin`."""
+    return {"logged_in": admin is not None, "username": admin.username if admin else None}
 
 
 @router.post("/login")

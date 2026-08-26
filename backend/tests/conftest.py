@@ -46,14 +46,30 @@ def make_client(app_modules):
         c.close()
 
 
+ADMIN_CREDENTIALS = {"username": "rootadmin", "password": "correct-horse-9"}
+
+
 @pytest.fixture()
-def admin_client(make_client):
-    """A client logged in as admin (running first-time setup if needed)."""
+def admin_client(make_client, app_modules):
+    """A client logged in as admin. The account is seeded directly because
+    admin creation is a server-side command, not an HTTP endpoint."""
+    from app.auth import hash_password
+    from app.db import SessionLocal
+    from app.models import AdminUser
+
+    db = SessionLocal()
+    try:
+        if not db.query(AdminUser).filter_by(username=ADMIN_CREDENTIALS["username"]).first():
+            db.add(
+                AdminUser(
+                    username=ADMIN_CREDENTIALS["username"],
+                    password_hash=hash_password(ADMIN_CREDENTIALS["password"]),
+                )
+            )
+            db.commit()
+    finally:
+        db.close()
+
     client = make_client()
-    state = client.get("/api/admin/state").json()
-    credentials = {"username": "rootadmin", "password": "correct-horse-9"}
-    if state["needs_setup"]:
-        assert client.post("/api/admin/setup", json=credentials).status_code == 200
-    else:
-        assert client.post("/api/admin/login", json=credentials).status_code == 200
+    assert client.post("/api/admin/login", json=ADMIN_CREDENTIALS).status_code == 200
     return client

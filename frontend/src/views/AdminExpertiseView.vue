@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ApiError, api } from '../api'
 import { store } from '../store'
 
+const router = useRouter()
+
 interface AdminState {
-  needs_setup: boolean
   logged_in: boolean
   username: string | null
 }
@@ -42,7 +44,8 @@ const newAdminPass = ref('')
 const admins = ref<{ id: string; username: string }[]>([])
 
 async function loadState() {
-  state.value = await api.get<AdminState>('/api/admin/state')
+  await store.loadAdmin()
+  state.value = store.admin
   if (state.value.logged_in) await loadData()
 }
 
@@ -58,11 +61,10 @@ async function loadData() {
 async function submitAuth() {
   authError.value = ''
   try {
-    const endpoint = state.value?.needs_setup ? '/api/admin/setup' : '/api/admin/login'
-    await api.post(endpoint, { username: username.value.trim(), password: password.value })
+    await api.post('/api/admin/login', { username: username.value.trim(), password: password.value })
     password.value = ''
     await loadState()
-    store.notify(state.value?.needs_setup === false ? 'Signed in as admin' : 'Admin created')
+    store.notify('Signed in as admin')
   } catch (e) {
     authError.value = e instanceof ApiError ? e.message : 'Authentication failed'
   }
@@ -71,6 +73,7 @@ async function submitAuth() {
 async function logout() {
   await api.post('/api/admin/logout')
   await loadState()
+  router.push('/capture')
 }
 
 async function addConcept() {
@@ -148,21 +151,15 @@ onMounted(loadState)
 
     <!-- First-run onboarding / login -->
     <div v-if="state && !state.logged_in" class="card auth-card" data-testid="admin-auth">
-      <h2>{{ state.needs_setup ? 'Create the first admin' : 'Admin sign in' }}</h2>
-      <p v-if="state.needs_setup">
-        Welcome. This instance has no administrator yet. Create the first admin account to manage concepts, aliases, and
-        expertise routing. You can add more admins afterwards.
-      </p>
-      <p v-else>Admin access is required to manage concepts and expertise mappings.</p>
+      <h2>Admin sign in</h2>
+      <p>Admin access is required to manage concepts and expertise mappings.</p>
       <label>Username</label>
       <input v-model="username" type="text" autocomplete="username" data-testid="admin-username" />
-      <label>Password <span style="text-transform:none;font-weight:400">(at least 8 characters)</span></label>
+      <label>Password</label>
       <input v-model="password" type="password" autocomplete="current-password" data-testid="admin-password" @keyup.enter="submitAuth" />
       <p v-if="authError" class="form-error">{{ authError }}</p>
       <div class="modal-actions">
-        <button class="btn primary" data-testid="admin-submit" @click="submitAuth">
-          {{ state.needs_setup ? 'Create admin account' : 'Sign in' }}
-        </button>
+        <button class="btn primary" data-testid="admin-submit" @click="submitAuth">Sign in</button>
       </div>
     </div>
 

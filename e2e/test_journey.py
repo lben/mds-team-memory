@@ -5,8 +5,8 @@ import re
 from playwright.sync_api import Browser, expect
 
 
-def test_critical_journey(browser: Browser, base_url_server: str):
-    base = base_url_server
+def test_critical_journey(browser: Browser, base_url_server):
+    base = base_url_server.url
 
     # Three real browser profiles: admin/installer, contributor A, expert B.
     admin_ctx = browser.new_context(viewport={"width": 1366, "height": 768})
@@ -20,13 +20,24 @@ def test_critical_journey(browser: Browser, base_url_server: str):
     b.goto(base + "/")
     b_label = b.evaluate("() => fetch('/api/profile').then(r => r.json()).then(p => p.label)")
 
-    # ---- First-run admin onboarding, then concept + expertise mapping.
+    # ---- Ordinary users never see the Admin section at all.
+    expect(a.get_by_test_id("admin-nav")).to_have_count(0)
+
+    # The installer creates the admin account with the deploy-time command.
+    base_url_server.create_admin("installer", "first-admin-pw")
+
+    # Signing in is only reachable by going to the admin URL directly.
     admin.goto(base + "/admin/expertise")
-    expect(admin.get_by_test_id("admin-auth")).to_contain_text("Create the first admin")
+    expect(admin.get_by_test_id("admin-auth")).to_contain_text("Admin sign in")
+    expect(admin.get_by_test_id("admin-nav")).to_have_count(0)
     admin.get_by_test_id("admin-username").fill("installer")
     admin.get_by_test_id("admin-password").fill("first-admin-pw")
     admin.get_by_test_id("admin-submit").click()
     expect(admin.get_by_test_id("concept-name")).to_be_visible()
+    # Only now does the Admin section appear, and only for this browser.
+    expect(admin.get_by_test_id("admin-nav")).to_be_visible()
+    a.reload()
+    expect(a.get_by_test_id("admin-nav")).to_have_count(0)
 
     admin.get_by_test_id("concept-name").fill("Optima")
     admin.get_by_test_id("concept-aliases").fill("opt-feed")

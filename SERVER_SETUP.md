@@ -27,14 +27,24 @@ python3 -m venv .venv
    .venv\Scripts\alembic -c backend\alembic.ini upgrade head
    ```
 
-2. Start (or restart) the application — one process serves the API and the UI:
+2. Create an administrator account (first deploy only — repeat any time you need
+   another admin). The password is prompted for and never echoed:
+
+   ```powershell
+   .venv\Scripts\python manage.py create-admin
+   ```
+
+   `manage.py list-admins` shows the accounts that already exist.
+
+3. Start (or restart) the application — one process serves the API and the UI:
 
    ```powershell
    .venv\Scripts\uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8000
    ```
 
-3. Open `http://<server>:8000`. On the first visit, go to **Expertise Routing**
-   to create the first admin account.
+4. Open `http://<server>:8000`. Ordinary users never see an Admin section. An
+   administrator signs in by going to `/admin/expertise` directly; the Admin
+   navigation appears only after a successful sign-in, in that browser only.
 
 ## Configuration (environment variables, all optional)
 

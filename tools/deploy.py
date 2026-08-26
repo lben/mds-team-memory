@@ -31,6 +31,7 @@ RELEASE_ITEMS = [
     ("backend/alembic", "backend/alembic"),
     ("backend/alembic.ini", "backend/alembic.ini"),
     ("frontend/dist", "frontend/dist"),
+    ("manage.py", "manage.py"),
     ("requirements.txt", "requirements.txt"),
     ("SERVER_SETUP.md", "SERVER_SETUP.md"),
 ]
@@ -105,10 +106,11 @@ def main() -> None:
     assemble_release(args.target)
     push(destination)
     print(
-        "\nNext steps on the server (first deploy only — see SERVER_SETUP.md):\n"
-        "  1. python -m venv .venv && install requirements.txt\n"
+        "\nNext steps on the server (see SERVER_SETUP.md):\n"
+        "  1. first deploy: python -m venv .venv && install requirements.txt\n"
         "  2. every deploy: .venv/bin/alembic -c backend/alembic.ini upgrade head  (data is preserved)\n"
-        "  3. restart:      .venv/bin/uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8000"
+        "  3. first deploy: .venv/bin/python manage.py create-admin\n"
+        "  4. restart:      .venv/bin/uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8000"
     )
 
 
