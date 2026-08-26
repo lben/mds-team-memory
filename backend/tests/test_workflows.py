@@ -170,6 +170,22 @@ def test_helped_stays_idempotent_across_group_formation(make_client):
     assert detail["marked_helped"] is True
 
 
+def test_item_relationships_endpoint(make_client):
+    """Regression: this route read columns that the relationship-review schema
+    change removed, so it returned 500 for any item that had a relationship."""
+    a, b = make_client(), make_client()
+    fact = f"The tau-{uuid.uuid4().hex[:8]} report is generated after the nightly close."
+    first = a.post("/api/capture", data={"body": fact}).json()["item"]
+    b.post("/api/capture", data={"body": fact})
+
+    r = a.get(f"/api/items/{first['id']}/relationships")
+    assert r.status_code == 200
+    rows = r.json()
+    assert rows and rows[0]["rel_type"] == "corroborates"
+    assert rows[0]["state"] == "confirmed"
+    assert "similar after normalization" in rows[0]["evidence"]
+
+
 def test_document_upload_search_open_exact_passage(make_client):
     """W8: uploaded document is searchable and opens at the exact passage."""
     client = make_client()

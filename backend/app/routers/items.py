@@ -239,11 +239,11 @@ def item_relationships(
             "id": r.id,
             "src_kind": r.src_kind,
             "src_id": r.src_id,
-            "rel_type": r.rel_type,
+            "rel_type": r.relationship_type.name,
             "dst_kind": r.dst_kind,
             "dst_id": r.dst_id,
             "evidence": r.evidence,
-            "confidence": r.confidence,
+            "state": r.state,
         }
         for r in rels
     ]
