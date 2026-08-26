@@ -20,24 +20,36 @@ def test_critical_journey(browser: Browser, base_url_server):
     b.goto(base + "/")
     b_label = b.evaluate("() => fetch('/api/profile').then(r => r.json()).then(p => p.label)")
 
-    # ---- Ordinary users never see the Admin section at all.
-    expect(a.get_by_test_id("admin-nav")).to_have_count(0)
+    # ---- The Expertise Routing link is visible to everyone, but demands credentials
+    # and offers no way to create an account.
+    expect(a.get_by_test_id("admin-nav")).to_be_visible()
+    a.get_by_test_id("admin-nav").get_by_role("link").click()
+    expect(a).to_have_url(re.compile("/admin/expertise$"))
+    expect(a.get_by_test_id("admin-auth")).to_contain_text("Admin sign in")
+    expect(a.get_by_test_id("concept-name")).to_have_count(0)
+    expect(a.get_by_test_id("admin-auth")).not_to_contain_text("Create")
+
+    # Wrong credentials are refused and the tools stay hidden.
+    a.get_by_test_id("admin-username").fill("installer")
+    a.get_by_test_id("admin-password").fill("not-the-password")
+    a.get_by_test_id("admin-submit").click()
+    expect(a.locator(".form-error")).to_be_visible()
+    expect(a.get_by_test_id("concept-name")).to_have_count(0)
 
     # The installer creates the admin account with the deploy-time command.
     base_url_server.create_admin("installer", "first-admin-pw")
 
-    # Signing in is only reachable by going to the admin URL directly.
     admin.goto(base + "/admin/expertise")
     expect(admin.get_by_test_id("admin-auth")).to_contain_text("Admin sign in")
-    expect(admin.get_by_test_id("admin-nav")).to_have_count(0)
     admin.get_by_test_id("admin-username").fill("installer")
     admin.get_by_test_id("admin-password").fill("first-admin-pw")
     admin.get_by_test_id("admin-submit").click()
     expect(admin.get_by_test_id("concept-name")).to_be_visible()
-    # Only now does the Admin section appear, and only for this browser.
-    expect(admin.get_by_test_id("admin-nav")).to_be_visible()
+
+    # The other browser still has no admin session.
     a.reload()
-    expect(a.get_by_test_id("admin-nav")).to_have_count(0)
+    expect(a.get_by_test_id("admin-auth")).to_be_visible()
+    a.goto(base + "/capture")
 
     admin.get_by_test_id("concept-name").fill("Optima")
     admin.get_by_test_id("concept-aliases").fill("opt-feed")

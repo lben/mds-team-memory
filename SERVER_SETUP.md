@@ -42,9 +42,9 @@ python3 -m venv .venv
    .venv\Scripts\uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8000
    ```
 
-4. Open `http://<server>:8000`. Ordinary users never see an Admin section. An
-   administrator signs in by going to `/admin/expertise` directly; the Admin
-   navigation appears only after a successful sign-in, in that browser only.
+4. Open `http://<server>:8000`. The **Expertise Routing** link stays visible in
+   the sidebar, but opening it asks for admin credentials; the mapping tools
+   appear only after a successful sign-in, in that browser only.
 
 ## Configuration (environment variables, all optional)
 

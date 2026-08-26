@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { ApiError, api } from '../api'
 import { store } from '../store'
-
-const router = useRouter()
 
 interface AdminState {
   logged_in: boolean
@@ -44,8 +41,7 @@ const newAdminPass = ref('')
 const admins = ref<{ id: string; username: string }[]>([])
 
 async function loadState() {
-  await store.loadAdmin()
-  state.value = store.admin
+  state.value = await api.get<AdminState>('/api/admin/state')
   if (state.value.logged_in) await loadData()
 }
 
@@ -73,7 +69,7 @@ async function submitAuth() {
 async function logout() {
   await api.post('/api/admin/logout')
   await loadState()
-  router.push('/capture')
+  store.notify('Signed out of admin')
 }
 
 async function addConcept() {

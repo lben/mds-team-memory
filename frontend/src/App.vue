@@ -68,7 +68,6 @@ function fmt(ts: string) {
 
 onMounted(() => {
   store.loadProfile()
-  store.loadAdmin()
   store.refreshUnread()
   window.setInterval(() => store.refreshUnread(), 30000)
 })
@@ -87,12 +86,10 @@ onMounted(() => {
         <router-link to="/context" active-class="active"><span class="nav-dot"></span>Context Map</router-link>
         <router-link to="/impact" active-class="active"><span class="nav-dot"></span>Impact</router-link>
       </nav>
-      <template v-if="store.admin.logged_in">
-        <div class="nav-label">Admin</div>
-        <nav class="nav" data-testid="admin-nav">
-          <router-link to="/admin/expertise" active-class="active"><span class="nav-dot"></span>Expertise Routing</router-link>
-        </nav>
-      </template>
+      <div class="nav-label">Admin</div>
+      <nav class="nav" data-testid="admin-nav">
+        <router-link to="/admin/expertise" active-class="active"><span class="nav-dot"></span>Expertise Routing</router-link>
+      </nav>
       <button class="profile" @click="showProfile = !showProfile" data-testid="profile-button">
         <span class="avatar">{{ initials }}</span>
         <span>

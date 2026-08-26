@@ -38,9 +38,9 @@ The password is never echoed and never appears in shell history. Run
 and passwords must be at least 8 characters. Run the database migrations first —
 the command tells you if the database is not initialised yet.
 
-Ordinary users never see an Admin section in the sidebar. An administrator signs
-in by visiting `/admin/expertise` directly, and the Admin navigation appears only
-after a successful sign-in, in that browser.
+The **Expertise Routing** link stays visible in the sidebar for everyone, but
+opening it asks for admin credentials. The concept, alias, and expertise-mapping
+tools appear only after a successful sign-in, in that browser.
 
 ## Tests
 
@@ -64,5 +64,4 @@ This builds the frontend, assembles a Node-free release, and copies it to the
 target. Server-side steps are in `SERVER_SETUP.md`.
 
 Administrator accounts are created only with `python manage.py create-admin` on
-the server — there is no sign-up in the UI. The Admin navigation is hidden from
-everyone until an admin signs in at `/admin/expertise`.
+the server — there is no sign-up in the UI. See **Administrator accounts** above.
