@@ -22,6 +22,26 @@ cd frontend && npm install && npm run dev                     # UI on :5173 (pro
 
 For a production-like run, `npm run build` then open `http://127.0.0.1:8000`.
 
+## Administrator accounts
+
+Admins are created only from the command line, on the machine running the app —
+there is no sign-up or first-run setup in the UI:
+
+```bash
+python manage.py create-admin                 # prompts for username and password
+python manage.py create-admin --username jane # prompts for the password only
+python manage.py list-admins                  # show existing accounts
+```
+
+The password is never echoed and never appears in shell history. Run
+`create-admin` again whenever you need another admin; usernames must be unique
+and passwords must be at least 8 characters. Run the database migrations first —
+the command tells you if the database is not initialised yet.
+
+Ordinary users never see an Admin section in the sidebar. An administrator signs
+in by visiting `/admin/expertise` directly, and the Admin navigation appears only
+after a successful sign-in, in that browser.
+
 ## Tests
 
 ```bash
