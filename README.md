@@ -42,6 +42,33 @@ The **Expertise Routing** link stays visible in the sidebar for everyone, but
 opening it asks for admin credentials. The concept, alias, and expertise-mapping
 tools appear only after a successful sign-in, in that browser.
 
+## The context map
+
+Concepts and their aliases are defined by an admin; any contribution, answer, or
+extracted document passage mentioning one is tagged automatically. When enough
+team content mentions two concepts together (three by default,
+`MDS_COOCCURRENCE_MIN`), a link between them is **suggested** and drawn dashed
+for everyone. Solid edges are confirmed; dashed edges are automatically detected.
+
+Admins curate from the table below the map — clicking a node or edge in the graph
+jumps to its row:
+
+- **Approve** a suggested link to make it solid, or **reject** it to hide it from
+  the map. A rejected link is not forgotten: it stays in the table, its
+  occurrence count keeps rising as new content mentions both concepts, and it can
+  be inspected and re-approved at any time.
+- **Occurrences** opens the actual contributions and document passages behind a
+  link. Anyone can read this evidence view; only admins can change anything.
+- Add a link by hand by picking two concepts, a relationship type, and a note
+  that becomes its recorded evidence.
+- **Concepts** and **Relationship types** are managed in the other tabs.
+  Renaming a relationship type updates every link using it; a type can only be
+  deleted once nothing uses it. `related to` and `corroborates` are built in and
+  protected.
+
+Private scratchpad content never contributes to a link, a count, or the evidence
+view, and no action on this page can delete a teammate's contribution.
+
 ## Tests
 
 ```bash

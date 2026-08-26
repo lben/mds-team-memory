@@ -356,7 +356,14 @@ def test_link_discovery_review_and_reversal(make_client, admin_client):
     # Re-approving restores it.
     admin_client.patch(f"/api/graph/links/{link['id']}", json={"state": "confirmed"})
     graph = reader.get("/api/graph/local", params={"concept_id": left["id"]}).json()
-    assert next(e for e in graph["edges"] if e["link_id"] == link["id"])["style"] == "solid"
+    edge = next(e for e in graph["edges"] if e["link_id"] == link["id"])
+    assert edge["style"] == "solid"
+    # Regression: the "why connected" sentence tracks the live count after review
+    # rather than freezing at the count when the link was first detected.
+    assert "4 team entries" in edge["evidence"]
+    author.post("/api/capture", data={"body": f"Alpha{suffix} with Beta{suffix} once more. {uuid.uuid4().hex}"})
+    graph = reader.get("/api/graph/local", params={"concept_id": left["id"]}).json()
+    assert "5 team entries" in next(e for e in graph["edges"] if e["link_id"] == link["id"])["evidence"]
 
 
 def test_link_admin_gating_and_manual_links(make_client, admin_client):
@@ -398,6 +405,15 @@ def test_link_admin_gating_and_manual_links(make_client, admin_client):
     edge = next(e for e in graph["edges"] if e["link_id"] == created["id"])
     assert edge["style"] == "solid"
     assert edge["label"] == f"feeds{suffix}"
+
+    # 'corroborates' is generated between contributions and cannot label a
+    # concept link, on either the create or the update path.
+    builtin = next(
+        t for t in admin_client.get("/api/graph/relationship-types").json() if not t["selectable"]
+    )
+    assert admin_client.patch(
+        f"/api/graph/links/{created['id']}", json={"type_id": builtin["id"]}
+    ).status_code == 400
 
     assert anonymous.delete(f"/api/graph/links/{created['id']}").status_code == 401
     assert admin_client.delete(f"/api/graph/links/{created['id']}").status_code == 200

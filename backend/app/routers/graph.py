@@ -22,6 +22,7 @@ from ..models import (
 from ..relationships import (
     VISIBLE_STATES,
     evidence_detail,
+    evidence_text,
     find_link,
     link_dict,
     recount,
@@ -81,6 +82,17 @@ def _visible_concept_links(db: Session) -> list[Relationship]:
     )
 
 
+def _selectable_type(db: Session, type_id: str) -> RelationshipType:
+    """A label an admin may put on a concept link. 'corroborates' is generated
+    automatically between contributions and is never chosen by hand."""
+    rtype = db.get(RelationshipType, type_id)
+    if not rtype:
+        raise HTTPException(404, "Relationship type not found")
+    if rtype.id == CORROBORATES_ID:
+        raise HTTPException(400, "'corroborates' is generated automatically between contributions")
+    return rtype
+
+
 def _get_link(db: Session, link_id: str) -> Relationship:
     link = db.get(Relationship, link_id)
     if not link or link.src_kind != "concept" or link.dst_kind != "concept":
@@ -132,7 +144,7 @@ def local_graph(concept_id: str, db: Session = Depends(get_db)):
             {"id": f"c:{other.id}", "type": "concept", "label": other.name},
             link.relationship_type.name,
             "dashed" if link.state == "suggested" else "solid",
-            link.evidence,
+            evidence_text(link),
             link.id,
         )
 
@@ -281,10 +293,7 @@ def create_link(
     for concept_id in (payload.src_id, payload.dst_id):
         if not db.get(Concept, concept_id):
             raise HTTPException(404, "Concept not found")
-    if not db.get(RelationshipType, payload.type_id):
-        raise HTTPException(404, "Relationship type not found")
-    if payload.type_id == CORROBORATES_ID:
-        raise HTTPException(400, "'corroborates' is generated automatically between contributions")
+    _selectable_type(db, payload.type_id)
     if find_link(db, payload.src_id, payload.dst_id):
         raise HTTPException(400, "These concepts are already linked — edit the existing link")
 
@@ -319,8 +328,7 @@ def update_link(
 ):
     link = _get_link(db, link_id)
     if payload.type_id:
-        if not db.get(RelationshipType, payload.type_id):
-            raise HTTPException(404, "Relationship type not found")
+        _selectable_type(db, payload.type_id)
         link.relationship_type_id = payload.type_id
     if payload.state:
         set_state(db, link, payload.state, admin.username, payload.note)

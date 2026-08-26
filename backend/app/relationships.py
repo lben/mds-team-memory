@@ -83,8 +83,6 @@ def refresh_for_item(db: Session, concept_ids: list[str]) -> None:
         link = find_link(db, a, b)
         if link:
             link.occurrence_count = count
-            if link.state == "suggested":
-                link.evidence = _auto_evidence(count)
         elif count >= config.COOCCURRENCE_MIN:
             db.add(
                 Relationship(
@@ -95,7 +93,6 @@ def refresh_for_item(db: Session, concept_ids: list[str]) -> None:
                     relationship_type_id=RELATED_TO_ID,
                     state="suggested",
                     occurrence_count=count,
-                    evidence=_auto_evidence(count),
                 )
             )
     try:
@@ -104,8 +101,16 @@ def refresh_for_item(db: Session, concept_ids: list[str]) -> None:
         db.rollback()
 
 
-def _auto_evidence(count: int) -> str:
-    return f"Mentioned together in {count} team {'entry' if count == 1 else 'entries'}."
+def evidence_text(link: Relationship) -> str:
+    """Derived at read time so the sentence can never go stale as content grows."""
+    parts = []
+    if link.occurrence_count:
+        entries = "entry" if link.occurrence_count == 1 else "entries"
+        parts.append(f"Mentioned together in {link.occurrence_count} team {entries}.")
+    if link.review_note:
+        who = link.reviewed_by or "Admin"
+        parts.append(f"Admin note ({who}): {link.review_note}")
+    return " ".join(parts) or "No supporting team content yet."
 
 
 def recount(db: Session, link: Relationship) -> int:
@@ -126,7 +131,7 @@ def link_dict(db: Session, link: Relationship) -> dict:
         "type_name": link.relationship_type.name,
         "state": link.state,
         "occurrence_count": link.occurrence_count,
-        "evidence": link.evidence,
+        "evidence": evidence_text(link),
         "reviewed_by": link.reviewed_by,
         "reviewed_at": link.reviewed_at.isoformat() + "Z" if link.reviewed_at else None,
         "review_note": link.review_note,
@@ -194,11 +199,3 @@ def type_usage(db: Session, type_id: str) -> int:
     )
 
 
-def ensure_builtin_types(db: Session) -> None:
-    """Seed the protected vocabulary on databases that predate it."""
-    from .models import BUILTIN_TYPES
-
-    for type_id, name in BUILTIN_TYPES.items():
-        if not db.get(RelationshipType, type_id):
-            db.add(RelationshipType(id=type_id, name=name, is_builtin=True))
-    db.commit()

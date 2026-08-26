@@ -82,10 +82,10 @@ def downgrade() -> None:
         "relationships",
         sa.Column("id", sa.String(32), primary_key=True),
         sa.Column("src_kind", sa.String(12), nullable=False),
-        sa.Column("src_id", sa.String(32), nullable=False, index=True),
+        sa.Column("src_id", sa.String(32), nullable=False),
         sa.Column("rel_type", sa.String(24), nullable=False),
         sa.Column("dst_kind", sa.String(12), nullable=False),
-        sa.Column("dst_id", sa.String(32), nullable=False, index=True),
+        sa.Column("dst_id", sa.String(32), nullable=False),
         sa.Column("evidence", sa.Text(), nullable=False, server_default=""),
         sa.Column("confidence", sa.String(12), nullable=False, server_default="inferred"),
         sa.Column("created_at", sa.DateTime(), nullable=False),
@@ -100,3 +100,6 @@ def downgrade() -> None:
     )
     op.drop_table("relationships_new")
     op.drop_table("relationship_types")
+    # Created after the old table is gone so the index names are free again.
+    op.create_index("ix_relationships_src_id", "relationships", ["src_id"])
+    op.create_index("ix_relationships_dst_id", "relationships", ["dst_id"])

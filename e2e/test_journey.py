@@ -216,6 +216,13 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(a.locator(".map-side")).to_contain_text("related to")
     expect(a.locator(".map-side")).to_contain_text("confirmed")
 
+    # Clicking the centred concept in the graph jumps to its row in the table.
+    admin.get_by_test_id("tab-links").click()
+    graph_box = admin.locator(".graph-box").bounding_box()
+    admin.mouse.click(graph_box["x"] + graph_box["width"] / 2, graph_box["y"] + graph_box["height"] / 2)
+    expect(admin.get_by_test_id("tab-concepts")).to_have_class(re.compile("active"))
+    expect(panel.locator(".panel-body.concepts.highlight")).to_contain_text("Optima")
+
     # Renaming a relationship type updates the map immediately.
     admin.get_by_test_id("tab-types").click()
     admin.get_by_test_id("type-name").fill("feeds")
