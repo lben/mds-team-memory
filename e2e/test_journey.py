@@ -26,7 +26,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     a.get_by_test_id("admin-nav").get_by_role("link").click()
     expect(a).to_have_url(re.compile("/admin/expertise$"))
     expect(a.get_by_test_id("admin-auth")).to_contain_text("Admin sign in")
-    expect(a.get_by_test_id("concept-name")).to_have_count(0)
+    expect(a.get_by_test_id("mapping-table")).to_have_count(0)
     expect(a.get_by_test_id("admin-auth")).not_to_contain_text("Create")
 
     # Wrong credentials are refused and the tools stay hidden.
@@ -34,7 +34,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     a.get_by_test_id("admin-password").fill("not-the-password")
     a.get_by_test_id("admin-submit").click()
     expect(a.locator(".form-error")).to_be_visible()
-    expect(a.get_by_test_id("concept-name")).to_have_count(0)
+    expect(a.get_by_test_id("mapping-table")).to_have_count(0)
 
     # The installer creates the admin account with the deploy-time command.
     base_url_server.create_admin("installer", "first-admin-pw")
@@ -44,18 +44,25 @@ def test_critical_journey(browser: Browser, base_url_server):
     admin.get_by_test_id("admin-username").fill("installer")
     admin.get_by_test_id("admin-password").fill("first-admin-pw")
     admin.get_by_test_id("admin-submit").click()
-    expect(admin.get_by_test_id("concept-name")).to_be_visible()
+    expect(admin.get_by_test_id("mapping-table")).to_be_visible()
 
     # The other browser still has no admin session.
     a.reload()
     expect(a.get_by_test_id("admin-auth")).to_be_visible()
     a.goto(base + "/capture")
 
+    # Concepts are created on the Context Map, where their effect is visible.
+    admin.goto(base + "/context")
+    admin.get_by_test_id("tab-concepts").click()
     admin.get_by_test_id("concept-name").fill("Optima")
     admin.get_by_test_id("concept-aliases").fill("opt-feed")
     admin.get_by_test_id("add-concept").click()
-    expect(admin.locator(".area-chips").first).to_contain_text("Optima")
+    expect(admin.get_by_test_id("map-admin-panel")).to_contain_text("opt-feed")
+    admin.get_by_test_id("concept-name").fill("Olympus")
+    admin.get_by_test_id("add-concept").click()
+    expect(admin.get_by_test_id("map-admin-panel")).to_contain_text("Olympus")
 
+    admin.goto(base + "/admin/expertise")
     admin.get_by_test_id("map-profile").select_option(label=b_label)
     admin.get_by_test_id("map-concept").select_option(label="Optima")
     admin.get_by_test_id("add-mapping").click()
@@ -164,6 +171,66 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(a.locator(".relation").first).to_be_visible()
     expect(a.locator(".map-side")).to_contain_text("mentioned in")
     expect(a.locator(".map-side")).not_to_contain_text("topsecret")
+    # Ordinary users get no admin panel on the map.
+    expect(a.get_by_test_id("map-admin-panel")).to_have_count(0)
+
+    # ---- Admin curates the map: detected links can be rejected and reinstated.
+    for i in range(3):
+        b.goto(base + "/capture")
+        b.get_by_test_id("capture-text").fill(
+            f"Optima consumes the Olympus feed on run {i} before the downstream load."
+        )
+        b.get_by_test_id("share-knowledge").click()
+        expect(b.get_by_test_id("success-modal")).to_be_visible()
+        b.get_by_role("button", name="Add another").click()
+
+    admin.goto(base + "/context")
+    panel = admin.get_by_test_id("map-admin-panel")
+    expect(panel).to_be_visible()
+    row = panel.locator(".panel-body.links").first
+    expect(row).to_contain_text("SUGGESTED")
+    expect(row).to_contain_text("related to")
+
+    # The drill-down shows the real contributions behind the detected link.
+    row.locator(".count").click()
+    evidence = admin.get_by_test_id("evidence-modal")
+    expect(evidence).to_contain_text("Optima")
+    expect(evidence).to_contain_text("mentioned together in")
+    expect(evidence).to_contain_text("Olympus feed on run")
+    # Evidence is drawn from real team content, never the private scratchpad.
+    expect(evidence).not_to_contain_text("topsecret")
+    admin.get_by_test_id("evidence-modal").get_by_role("button", name="Close").click()
+
+    # Rejecting hides the link from the map for everyone...
+    admin.once("dialog", lambda d: d.accept("Looks coincidental"))
+    row.get_by_role("button", name="Reject").click()
+    expect(panel.locator(".panel-body.links").first).to_contain_text("REJECTED")
+    a.reload()
+    expect(a.locator(".map-side")).not_to_contain_text("related to")
+
+    # ...but it stays in the admin table with its evidence, and can be reinstated.
+    expect(panel.locator(".panel-body.links").first).to_contain_text("Looks coincidental")
+    panel.locator(".panel-body.links").first.get_by_role("button", name="Approve").click()
+    expect(panel.locator(".panel-body.links").first).to_contain_text("CONFIRMED")
+    a.reload()
+    expect(a.locator(".map-side")).to_contain_text("related to")
+    expect(a.locator(".map-side")).to_contain_text("confirmed")
+
+    # Renaming a relationship type updates the map immediately.
+    admin.get_by_test_id("tab-types").click()
+    admin.get_by_test_id("type-name").fill("feeds")
+    admin.get_by_test_id("add-type").click()
+    expect(panel).to_contain_text("feeds")
+    admin.get_by_test_id("tab-links").click()
+    panel.locator(".panel-body.links").first.locator("select").select_option(label="feeds")
+    a.reload()
+    expect(a.locator(".map-side")).to_contain_text("feeds")
+
+    # A type in use cannot be deleted.
+    admin.get_by_test_id("tab-types").click()
+    type_row = panel.locator(".panel-body.types", has_text="feeds").first
+    type_row.get_by_role("button", name="Delete").click()
+    expect(admin.locator(".toast")).to_contain_text("used by 1 link")
 
     # ---- Impact: B earned accepted-answer points; leaderboard labels unverified.
     b.goto(base + "/impact")

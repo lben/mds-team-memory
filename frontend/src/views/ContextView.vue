@@ -3,7 +3,9 @@ import cytoscape, { type Core } from 'cytoscape'
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../api'
+import EvidenceModal from '../components/EvidenceModal.vue'
 import ItemDetailModal from '../components/ItemDetailModal.vue'
+import MapAdminPanel from '../components/MapAdminPanel.vue'
 
 interface ConceptRow {
   id: string
@@ -23,6 +25,7 @@ interface GraphEdge {
   label: string
   style: string
   evidence: string
+  link_id: string | null
 }
 
 const router = useRouter()
@@ -32,6 +35,10 @@ const mode = ref<'local' | 'global'>('local')
 const edges = ref<GraphEdge[]>([])
 const centerName = ref('')
 const detailId = ref<string | null>(null)
+const evidenceLinkId = ref<string | null>(null)
+const isAdmin = ref(false)
+const selectedLinkId = ref<string | null>(null)
+const selectedConceptRow = ref<string | null>(null)
 const graphEl = ref<HTMLDivElement | null>(null)
 let cy: Core | null = null
 
@@ -40,7 +47,6 @@ const NODE_COLORS: Record<string, string> = {
   item: '#47a979',
   question: '#e4a01d',
   document: '#b17acb',
-  profile: '#6a85b2',
 }
 
 function initCy() {
@@ -91,18 +97,29 @@ function initCy() {
         },
       },
       { selector: 'edge[lineStyle="dashed"]', style: { 'line-style': 'dashed' } },
+      { selector: 'edge:selected', style: { 'line-color': '#d83a52', width: 3, color: '#fff' } },
+      { selector: 'node:selected', style: { 'border-color': '#d83a52', 'border-width': 4 } },
     ],
   })
+
+  cy.on('tap', 'edge', (evt) => {
+    const linkId = evt.target.data('linkId')
+    // Only concept-to-concept links are editable; structural edges have no record.
+    if (linkId) selectedLinkId.value = linkId
+  })
+
   cy.on('tap', 'node', (evt) => {
     const id: string = evt.target.id()
     if (id.startsWith('c:')) {
       const conceptId = id.slice(2)
-      if (mode.value === 'global') mode.value = 'local'
-      selectedConcept.value = conceptId
-      loadLocal(conceptId)
+      selectedConceptRow.value = conceptId
+      if (conceptId !== selectedConcept.value) {
+        if (mode.value === 'global') mode.value = 'local'
+        selectedConcept.value = conceptId
+        loadLocal(conceptId)
+      }
     } else if (id.startsWith('i:')) {
-      const kind = evt.target.data('nodeType')
-      if (kind === 'question') router.push(`/questions/${id.slice(2)}`)
+      if (evt.target.data('nodeType') === 'question') router.push(`/questions/${id.slice(2)}`)
       else detailId.value = id.slice(2)
     } else if (id.startsWith('d:')) {
       router.push(`/documents/${id.slice(2)}`)
@@ -119,26 +136,34 @@ async function loadLocal(conceptId: string) {
   centerName.value = graph.nodes[0]?.label ?? ''
   cy.elements().remove()
   const neighbors = graph.nodes.filter((n) => !n.center)
-  const nodes = graph.nodes.map((n) => {
-    const angle = neighbors.length ? (2 * Math.PI * neighbors.indexOf(n)) / neighbors.length : 0
-    return {
-      data: {
-        id: n.id,
-        label: n.label + (n.sublabel ? `\n${n.sublabel}` : ''),
-        color: n.center ? '#d83a52' : NODE_COLORS[n.type] || '#596f91',
-        size: n.center ? 90 : n.type === 'concept' ? 70 : 56,
-        nodeType: n.type,
-      },
-      // Deterministic layout: center node fixed, neighbors on a circle in server order.
-      position: n.center
-        ? { x: 0, y: 0 }
-        : { x: Math.cos(angle - Math.PI / 2) * 240, y: Math.sin(angle - Math.PI / 2) * 240 },
-    }
-  })
-  cy.add(nodes)
+  cy.add(
+    graph.nodes.map((n) => {
+      const angle = neighbors.length ? (2 * Math.PI * neighbors.indexOf(n)) / neighbors.length : 0
+      return {
+        data: {
+          id: n.id,
+          label: n.label + (n.sublabel ? `\n${n.sublabel}` : ''),
+          color: n.center ? '#d83a52' : NODE_COLORS[n.type] || '#596f91',
+          size: n.center ? 90 : n.type === 'concept' ? 70 : 56,
+          nodeType: n.type,
+        },
+        // Deterministic layout: centre fixed, neighbours on a circle in server order.
+        position: n.center
+          ? { x: 0, y: 0 }
+          : { x: Math.cos(angle - Math.PI / 2) * 240, y: Math.sin(angle - Math.PI / 2) * 240 },
+      }
+    }),
+  )
   cy.add(
     graph.edges.map((e) => ({
-      data: { id: `${e.source}->${e.target}`, source: e.source, target: e.target, label: e.label, lineStyle: e.style },
+      data: {
+        id: `${e.source}->${e.target}`,
+        source: e.source,
+        target: e.target,
+        label: e.label,
+        lineStyle: e.style,
+        linkId: e.link_id,
+      },
     })),
   )
   cy.fit(undefined, 40)
@@ -156,6 +181,7 @@ async function loadGlobal() {
     label: 'related to',
     style: 'dashed',
     evidence: `Mentioned together in ${e.count} team entries.`,
+    link_id: null,
   }))
   centerName.value = 'Aggregated clusters'
   cy.elements().remove()
@@ -164,11 +190,10 @@ async function loadGlobal() {
     const angle = (2 * Math.PI * ci) / clusterCount
     const cxPos = clusterCount === 1 ? 0 : Math.cos(angle) * 320
     const cyPos = clusterCount === 1 ? 0 : Math.sin(angle) * 240
-    cy!.add({
-      data: { id: `cl:${cluster.id}`, label: cluster.label, color: '#173a5f', size: 40, kind: 'cluster' },
-    })
+    cy!.add({ data: { id: `cl:${cluster.id}`, label: cluster.label, color: '#173a5f', size: 40, kind: 'cluster' } })
     cluster.concepts.forEach((concept, i) => {
       const inner = (2 * Math.PI * i) / cluster.concepts.length
+      const spread = Math.min(2, cluster.concepts.length / 3 + 1)
       cy!.add({
         data: {
           id: `c:${concept.id}`,
@@ -179,8 +204,8 @@ async function loadGlobal() {
           nodeType: 'concept',
         },
         position: {
-          x: cxPos + Math.cos(inner) * 70 * Math.min(2, cluster.concepts.length / 3 + 1),
-          y: cyPos + Math.sin(inner) * 60 * Math.min(2, cluster.concepts.length / 3 + 1),
+          x: cxPos + Math.cos(inner) * 70 * spread,
+          y: cyPos + Math.sin(inner) * 60 * spread,
         },
       })
     })
@@ -207,19 +232,24 @@ function setMode(m: 'local' | 'global') {
 
 function onConceptChange() {
   mode.value = 'local'
+  selectedConceptRow.value = selectedConcept.value
   loadLocal(selectedConcept.value)
 }
 
-onMounted(async () => {
+async function refresh() {
   concepts.value = await api.get<ConceptRow[]>('/api/graph/concepts')
-  // The graph container only renders once concepts exist; init Cytoscape after that.
-  await nextTick()
-  initCy()
-  const first = [...concepts.value].sort((a, b) => b.mentions - a.mentions)[0]
-  if (first) {
-    selectedConcept.value = first.id
-    await loadLocal(first.id)
+  if (!concepts.value.some((c) => c.id === selectedConcept.value)) {
+    selectedConcept.value = [...concepts.value].sort((a, b) => b.mentions - a.mentions)[0]?.id ?? ''
   }
+  await nextTick()
+  if (!cy && concepts.value.length) initCy()
+  if (mode.value === 'global') await loadGlobal()
+  else if (selectedConcept.value) await loadLocal(selectedConcept.value)
+}
+
+onMounted(async () => {
+  isAdmin.value = (await api.get<{ logged_in: boolean }>('/api/admin/state')).logged_in
+  await refresh()
 })
 
 onBeforeUnmount(() => cy?.destroy())
@@ -238,8 +268,8 @@ onBeforeUnmount(() => cy?.destroy())
     <div v-if="!concepts.length" class="card card-pad">
       <h3>No concepts defined yet</h3>
       <p class="muted" style="font-size: 13px; margin-top: 8px">
-        An admin defines concepts and aliases under Expertise Routing. Contributions mentioning them are then connected
-        automatically.
+        Concepts are the backbone of the map. An admin creates them below; contributions mentioning them are then
+        connected automatically.
       </p>
     </div>
 
@@ -248,7 +278,7 @@ onBeforeUnmount(() => cy?.destroy())
         <div class="map-toolbar">
           <strong>{{ mode === 'local' ? `Local context: ${centerName}` : 'Global map: aggregated clusters' }}</strong>
           <div class="row gap8">
-            <select v-if="mode === 'local'" v-model="selectedConcept" @change="onConceptChange">
+            <select v-if="mode === 'local'" v-model="selectedConcept" data-testid="concept-picker" @change="onConceptChange">
               <option v-for="c in concepts" :key="c.id" :value="c.id">{{ c.name }} ({{ c.mentions }})</option>
             </select>
             <div class="toggle">
@@ -262,27 +292,40 @@ onBeforeUnmount(() => cy?.destroy())
 
       <aside class="map-side">
         <div class="card context-card">
-          <div class="row between">
-            <h3>{{ mode === 'local' ? centerName : 'Clusters' }}</h3>
-          </div>
+          <h3>{{ mode === 'local' ? centerName : 'Clusters' }}</h3>
           <p v-if="mode === 'local'">
-            Click a connected concept to recenter and expand one hop. Click items, questions or documents to open them.
+            Click a concept to recentre, or an item, question or document to open it. Dashed edges are automatically
+            detected; solid edges are confirmed.
           </p>
-          <p v-else>Aggregated concepts grouped by supported co-occurrence. Click a concept to drill into its local context.</p>
+          <p v-else>Aggregated concepts grouped by their links. Click a concept to drill into its local context.</p>
           <h3 style="margin-top: 12px">Why connected</h3>
-          <p v-if="!edges.length" class="muted" style="font-size: 11px">No confirmed or inferred relationships yet.</p>
+          <p v-if="!edges.length" class="muted" style="font-size: 11px">No relationships yet.</p>
           <div v-for="e in edges" :key="e.source + e.target + e.label" class="relation">
-            <strong>{{ e.label }}</strong> · {{ e.style === 'dashed' ? 'inferred' : 'confirmed' }}
+            <strong>{{ e.label }}</strong> · {{ e.style === 'dashed' ? 'detected' : 'confirmed' }}
             <div class="evidence">{{ e.evidence }}</div>
+            <button v-if="e.link_id" class="btn small ghost" @click="evidenceLinkId = e.link_id">
+              See the contributions
+            </button>
           </div>
-        </div>
-        <div class="card context-card">
-          <h3>Map rules</h3>
-          <p>Solid edges are explicit. Dashed edges are inferred from co-occurrence. Positions are stable, not force-directed.</p>
         </div>
       </aside>
     </div>
 
+    <MapAdminPanel
+      v-if="isAdmin"
+      :center-concept-id="selectedConcept"
+      :selected-link-id="selectedLinkId"
+      :selected-concept-id="selectedConceptRow"
+      @changed="refresh"
+      @evidence="evidenceLinkId = $event"
+    />
+
     <ItemDetailModal v-if="detailId" :item-id="detailId" @close="detailId = null" />
+    <EvidenceModal
+      v-if="evidenceLinkId"
+      :link-id="evidenceLinkId"
+      @close="evidenceLinkId = null"
+      @open-item="evidenceLinkId = null; detailId = $event"
+    />
   </section>
 </template>

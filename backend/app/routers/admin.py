@@ -21,7 +21,10 @@ from ..models import (
     ItemConcept,
     KnowledgeItem,
     Profile,
+    Relationship,
+    RelationshipType,
 )
+from ..relationships import type_usage
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -39,6 +42,15 @@ class ConceptIn(BaseModel):
 class MappingIn(BaseModel):
     profile_id: str
     concept_id: str
+
+
+class ConceptUpdateIn(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    aliases: list[str] = []
+
+
+class RelationshipTypeIn(BaseModel):
+    name: str = Field(min_length=1, max_length=60)
 
 
 @router.get("/state")
@@ -124,13 +136,87 @@ def _retag_existing(db: Session, concept: Concept) -> None:
     db.commit()
 
 
+@router.put("/concepts/{concept_id}", dependencies=[Depends(require_admin)])
+def update_concept(concept_id: str, payload: ConceptUpdateIn, db: Session = Depends(get_db)):
+    concept = db.get(Concept, concept_id)
+    if not concept:
+        raise HTTPException(404, "Concept not found")
+    concept.name = payload.name.strip()
+    db.query(ConceptAlias).filter(ConceptAlias.concept_id == concept_id).delete()
+    for alias in payload.aliases:
+        alias = alias.strip().lower()
+        if alias:
+            db.add(ConceptAlias(concept_id=concept.id, alias=alias))
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(400, "That concept name or alias is already used")
+    # Renaming or re-aliasing changes what the text matches, so retag content.
+    _retag_existing(db, concept)
+    return {"id": concept.id, "name": concept.name, "aliases": [a.alias for a in concept.aliases]}
+
+
 @router.delete("/concepts/{concept_id}", dependencies=[Depends(require_admin)])
 def delete_concept(concept_id: str, db: Session = Depends(get_db)):
     concept = db.get(Concept, concept_id)
     if not concept:
         raise HTTPException(404, "Concept not found")
     db.query(ItemConcept).filter(ItemConcept.concept_id == concept_id).delete()
+    db.query(Relationship).filter(
+        Relationship.src_kind == "concept",
+        (Relationship.src_id == concept_id) | (Relationship.dst_id == concept_id),
+    ).delete()
     db.delete(concept)
+    db.commit()
+    return {"ok": True}
+
+
+@router.post("/relationship-types", dependencies=[Depends(require_admin)])
+def create_relationship_type(payload: RelationshipTypeIn, db: Session = Depends(get_db)):
+    rtype = RelationshipType(name=payload.name.strip(), is_builtin=False)
+    db.add(rtype)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(400, "That relationship type already exists")
+    return {"id": rtype.id, "name": rtype.name, "is_builtin": False, "usage": 0}
+
+
+@router.put("/relationship-types/{type_id}", dependencies=[Depends(require_admin)])
+def rename_relationship_type(
+    type_id: str, payload: RelationshipTypeIn, db: Session = Depends(get_db)
+):
+    rtype = db.get(RelationshipType, type_id)
+    if not rtype:
+        raise HTTPException(404, "Relationship type not found")
+    if rtype.is_builtin:
+        raise HTTPException(400, f"'{rtype.name}' is built in and cannot be renamed")
+    rtype.name = payload.name.strip()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(400, "That relationship type already exists")
+    return {"id": rtype.id, "name": rtype.name, "usage": type_usage(db, rtype.id)}
+
+
+@router.delete("/relationship-types/{type_id}", dependencies=[Depends(require_admin)])
+def delete_relationship_type(type_id: str, db: Session = Depends(get_db)):
+    rtype = db.get(RelationshipType, type_id)
+    if not rtype:
+        raise HTTPException(404, "Relationship type not found")
+    if rtype.is_builtin:
+        raise HTTPException(400, f"'{rtype.name}' is built in and cannot be deleted")
+    usage = type_usage(db, type_id)
+    if usage:
+        raise HTTPException(
+            400,
+            f"'{rtype.name}' is used by {usage} link{'s' if usage != 1 else ''}. "
+            "Change or remove those links first.",
+        )
+    db.delete(rtype)
     db.commit()
     return {"ok": True}
 

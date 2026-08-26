@@ -1,31 +1,56 @@
 from collections import Counter, defaultdict
-from itertools import combinations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from .. import config
-from ..auth import get_profile
+from ..auth import require_admin
 from ..db import get_db
 from ..models import (
+    CORROBORATES_ID,
+    RELATED_TO_ID,
+    AdminUser,
     Concept,
     Document,
     DocumentPassage,
-    ExpertiseMapping,
     ItemConcept,
     KnowledgeItem,
-    Profile,
+    Relationship,
+    RelationshipType,
 )
+from ..relationships import (
+    VISIBLE_STATES,
+    evidence_detail,
+    find_link,
+    link_dict,
+    recount,
+    set_state,
+)
+
 router = APIRouter(prefix="/api/graph", tags=["graph"])
 
 MAX_NEIGHBORS = 12
 
 
+class LinkIn(BaseModel):
+    src_id: str
+    dst_id: str
+    type_id: str
+    note: str = Field(min_length=1, max_length=500)
+
+
+class LinkPatch(BaseModel):
+    state: str | None = Field(default=None, pattern="^(suggested|confirmed|rejected)$")
+    type_id: str | None = None
+    note: str | None = Field(default=None, max_length=500)
+
+
 def _team_subject_concepts(db: Session) -> list[tuple[str, str, str]]:
     """(subject_kind, subject_id, concept_id) restricted to team-visible content.
 
-    Private items and scratchpads are excluded so they can never appear in
-    another profile's graph or counts.
+    Private items are excluded so they can never appear in another profile's
+    graph or counts.
     """
     item_rows = (
         db.query(ItemConcept.subject_id, ItemConcept.concept_id)
@@ -44,15 +69,23 @@ def _team_subject_concepts(db: Session) -> list[tuple[str, str, str]]:
     return [("item", s, c) for s, c in item_rows] + [("passage", s, c) for s, c in passage_rows]
 
 
-def _cooccurrence(rows: list[tuple[str, str, str]]) -> Counter:
-    by_subject: dict[tuple[str, str], set[str]] = defaultdict(set)
-    for kind, subject_id, concept_id in rows:
-        by_subject[(kind, subject_id)].add(concept_id)
-    pairs: Counter = Counter()
-    for concept_ids in by_subject.values():
-        for a, b in combinations(sorted(concept_ids), 2):
-            pairs[(a, b)] += 1
-    return pairs
+def _visible_concept_links(db: Session) -> list[Relationship]:
+    return (
+        db.query(Relationship)
+        .filter(
+            Relationship.src_kind == "concept",
+            Relationship.dst_kind == "concept",
+            Relationship.state.in_(VISIBLE_STATES),
+        )
+        .all()
+    )
+
+
+def _get_link(db: Session, link_id: str) -> Relationship:
+    link = db.get(Relationship, link_id)
+    if not link or link.src_kind != "concept" or link.dst_kind != "concept":
+        raise HTTPException(404, "Link not found")
+    return link
 
 
 @router.get("/concepts")
@@ -64,24 +97,16 @@ def list_concepts(db: Session = Depends(get_db)):
 
 
 @router.get("/local")
-def local_graph(
-    concept_id: str,
-    profile: Profile = Depends(get_profile),
-    db: Session = Depends(get_db),
-):
+def local_graph(concept_id: str, db: Session = Depends(get_db)):
     center = db.get(Concept, concept_id)
     if not center:
         raise HTTPException(404, "Concept not found")
-    rows = _team_subject_concepts(db)
-    pairs = _cooccurrence(rows)
     center_node = {"id": f"c:{center.id}", "type": "concept", "label": center.name, "center": True}
     nodes: list[dict] = [center_node]
     edges: list[dict] = []
 
-    def add(node: dict, edge_label: str, style: str, evidence: str) -> None:
-        if len(nodes) - 1 >= MAX_NEIGHBORS:
-            return
-        if any(n["id"] == node["id"] for n in nodes):
+    def add(node: dict, edge_label: str, style: str, evidence: str, link_id: str | None = None) -> None:
+        if len(nodes) - 1 >= MAX_NEIGHBORS or any(n["id"] == node["id"] for n in nodes):
             return
         nodes.append(node)
         edges.append(
@@ -91,53 +116,54 @@ def local_graph(
                 "label": edge_label,
                 "style": style,
                 "evidence": evidence,
+                "link_id": link_id,
             }
         )
 
-    # 1. Related concepts through supported co-occurrence (inferred, dashed).
-    related = [
-        (pair[0] if pair[1] == center.id else pair[1], count)
-        for pair, count in pairs.items()
-        if center.id in pair and count >= config.COOCCURRENCE_MIN
-    ]
-    for other_id, count in sorted(related, key=lambda r: (-r[1], r[0]))[:5]:
+    # 1. Concept-to-concept links: dashed while suggested, solid once confirmed.
+    for link in _visible_concept_links(db):
+        if center.id not in (link.src_id, link.dst_id):
+            continue
+        other_id = link.dst_id if link.src_id == center.id else link.src_id
         other = db.get(Concept, other_id)
+        if not other:
+            continue
         add(
             {"id": f"c:{other.id}", "type": "concept", "label": other.name},
-            "related to",
-            "dashed",
-            f"Mentioned together in {count} team entries.",
+            link.relationship_type.name,
+            "dashed" if link.state == "suggested" else "solid",
+            link.evidence,
+            link.id,
         )
 
-    concept_subjects = [(k, s) for k, s, c in rows if c == center.id]
+    concept_subjects = [(k, s) for k, s, c in _team_subject_concepts(db) if c == center.id]
     item_ids = [s for k, s in concept_subjects if k == "item"]
     passage_ids = [s for k, s in concept_subjects if k == "passage"]
 
-    # 2. Documents whose passages mention the concept (confirmed, solid).
+    # 2. Documents whose passages mention the concept (structural, solid).
     if passage_ids:
         doc_locators: dict[str, list[str]] = defaultdict(list)
         for p in db.query(DocumentPassage).filter(DocumentPassage.id.in_(passage_ids)).all():
             doc_locators[p.document_id].append(p.locator)
         for doc_id in sorted(doc_locators)[:3]:
             doc = db.get(Document, doc_id)
-            locators = ", ".join(doc_locators[doc_id][:3])
             add(
                 {"id": f"d:{doc.id}", "type": "document", "label": doc.filename},
                 "documented in",
                 "solid",
-                f"Matched at {locators}.",
+                f"Matched at {', '.join(doc_locators[doc_id][:3])}.",
             )
 
-    # 3. Questions and team items mentioning the concept (confirmed, solid).
+    # 3. Questions and team items mentioning the concept (structural, solid).
     if item_ids:
         items = (
             db.query(KnowledgeItem)
             .filter(KnowledgeItem.id.in_(item_ids), KnowledgeItem.visibility == "team")
             .all()
         )
-        questions = [i for i in items if i.kind == "question"]
-        contents = [i for i in items if i.kind in ("note", "excerpt", "answer")]
-        for q in sorted(questions, key=lambda x: x.created_at, reverse=True)[:3]:
+        for q in sorted(
+            [i for i in items if i.kind == "question"], key=lambda x: x.created_at, reverse=True
+        )[:3]:
             add(
                 {
                     "id": f"i:{q.id}",
@@ -150,7 +176,11 @@ def local_graph(
                 "The question text mentions this concept.",
             )
         seen_groups: set[str] = set()
-        for i in sorted(contents, key=lambda x: x.created_at, reverse=True):
+        for i in sorted(
+            [i for i in items if i.kind in ("note", "excerpt", "answer")],
+            key=lambda x: x.created_at,
+            reverse=True,
+        ):
             group_key = i.group_id or i.id
             if group_key in seen_groups:
                 continue
@@ -166,17 +196,6 @@ def local_graph(
                 "The contribution text mentions this concept.",
             )
 
-    # 4. Mapped experts (confirmed, solid).
-    for m in (
-        db.query(ExpertiseMapping).filter(ExpertiseMapping.concept_id == center.id).all()[:2]
-    ):
-        add(
-            {"id": f"p:{m.profile_id}", "type": "profile", "label": m.profile.label},
-            "expert",
-            "solid",
-            "Mapped by an admin as an expertise area.",
-        )
-
     return {"nodes": nodes, "edges": edges}
 
 
@@ -184,21 +203,19 @@ def local_graph(
 def global_graph(db: Session = Depends(get_db)):
     rows = _team_subject_concepts(db)
     counts = Counter(c for _, _, c in rows)
-    pairs = _cooccurrence(rows)
-    strong = {pair: n for pair, n in pairs.items() if n >= config.COOCCURRENCE_MIN}
-
+    links = _visible_concept_links(db)
     concepts = {c.id: c for c in db.query(Concept).all() if counts.get(c.id, 0) > 0}
-    # Connected components over strong co-occurrence edges.
+
     neighbors: dict[str, set[str]] = defaultdict(set)
-    for a, b in strong:
-        if a in concepts and b in concepts:
-            neighbors[a].add(b)
-            neighbors[b].add(a)
+    for link in links:
+        if link.src_id in concepts and link.dst_id in concepts:
+            neighbors[link.src_id].add(link.dst_id)
+            neighbors[link.dst_id].add(link.src_id)
+
     clusters = []
     unvisited = set(concepts)
     while unvisited:
-        start = min(unvisited)
-        component, stack = [], [start]
+        component, stack = [], [min(unvisited)]
         while stack:
             node = stack.pop()
             if node not in unvisited:
@@ -218,8 +235,128 @@ def global_graph(db: Session = Depends(get_db)):
         )
     clusters.sort(key=lambda cl: -sum(c["size"] for c in cl["concepts"]))
     edges = [
-        {"source": a, "target": b, "count": n}
-        for (a, b), n in sorted(strong.items())
-        if a in concepts and b in concepts
+        {"source": link.src_id, "target": link.dst_id, "count": link.occurrence_count}
+        for link in links
+        if link.src_id in concepts and link.dst_id in concepts
     ]
     return {"clusters": clusters, "edges": edges}
+
+
+@router.get("/links/{link_id}/evidence")
+def link_evidence(link_id: str, db: Session = Depends(get_db)):
+    """Drill-down into the contributions behind a link. Readable by everyone;
+    only ever returns team-visible content."""
+    return evidence_detail(db, _get_link(db, link_id))
+
+
+@router.get("/links", dependencies=[Depends(require_admin)])
+def list_links(
+    concept_id: str | None = None,
+    state: str | None = Query(default=None, pattern="^(suggested|confirmed|rejected)$"),
+    db: Session = Depends(get_db),
+):
+    query = db.query(Relationship).filter(
+        Relationship.src_kind == "concept", Relationship.dst_kind == "concept"
+    )
+    if concept_id:
+        query = query.filter(
+            (Relationship.src_id == concept_id) | (Relationship.dst_id == concept_id)
+        )
+    if state:
+        query = query.filter(Relationship.state == state)
+    links = query.all()
+    for link in links:
+        recount(db, link)
+    db.commit()
+    links.sort(key=lambda link: (-link.occurrence_count, link.id))
+    return [link_dict(db, link) for link in links]
+
+
+@router.post("/links")
+def create_link(
+    payload: LinkIn, admin: AdminUser = Depends(require_admin), db: Session = Depends(get_db)
+):
+    if payload.src_id == payload.dst_id:
+        raise HTTPException(400, "A link needs two different concepts")
+    for concept_id in (payload.src_id, payload.dst_id):
+        if not db.get(Concept, concept_id):
+            raise HTTPException(404, "Concept not found")
+    if not db.get(RelationshipType, payload.type_id):
+        raise HTTPException(404, "Relationship type not found")
+    if payload.type_id == CORROBORATES_ID:
+        raise HTTPException(400, "'corroborates' is generated automatically between contributions")
+    if find_link(db, payload.src_id, payload.dst_id):
+        raise HTTPException(400, "These concepts are already linked — edit the existing link")
+
+    link = Relationship(
+        src_kind="concept",
+        src_id=payload.src_id,
+        dst_kind="concept",
+        dst_id=payload.dst_id,
+        relationship_type_id=payload.type_id,
+        state="confirmed",
+        evidence=f"Stated by admin {admin.username}: {payload.note.strip()}",
+        reviewed_by=admin.username,
+        review_note=payload.note.strip(),
+    )
+    db.add(link)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(400, "These concepts are already linked")
+    recount(db, link)
+    db.commit()
+    return link_dict(db, link)
+
+
+@router.patch("/links/{link_id}")
+def update_link(
+    link_id: str,
+    payload: LinkPatch,
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    link = _get_link(db, link_id)
+    if payload.type_id:
+        if not db.get(RelationshipType, payload.type_id):
+            raise HTTPException(404, "Relationship type not found")
+        link.relationship_type_id = payload.type_id
+    if payload.state:
+        set_state(db, link, payload.state, admin.username, payload.note)
+    else:
+        if payload.note is not None:
+            link.review_note = payload.note.strip() or None
+        db.commit()
+    db.refresh(link)
+    return link_dict(db, link)
+
+
+@router.delete("/links/{link_id}", dependencies=[Depends(require_admin)])
+def delete_link(link_id: str, db: Session = Depends(get_db)):
+    """Permanent removal. Rejecting is usually better: it keeps the link
+    inspectable and lets the count carry on rising."""
+    link = _get_link(db, link_id)
+    db.delete(link)
+    db.commit()
+    return {"deleted": True}
+
+
+@router.get("/relationship-types")
+def list_relationship_types(db: Session = Depends(get_db)):
+    from ..relationships import type_usage
+
+    types = db.query(RelationshipType).order_by(RelationshipType.name).all()
+    return [
+        {
+            "id": t.id,
+            "name": t.name,
+            "is_builtin": t.is_builtin,
+            "usage": type_usage(db, t.id),
+            "is_default": t.id == RELATED_TO_ID,
+            # 'corroborates' is generated by duplicate grouping between items and
+            # is not a label an admin can put on a concept link.
+            "selectable": t.id != CORROBORATES_ID,
+        }
+        for t in types
+    ]

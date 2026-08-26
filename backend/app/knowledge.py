@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from . import config
 from .concepts import route_question, tag_subject
 from .impact import already_helped
-from .models import ImpactEvent, KnowledgeItem, Profile, Relationship
+from .models import CORROBORATES_ID, ImpactEvent, KnowledgeItem, Profile, Relationship
+from .relationships import refresh_for_item
 from .text import normalized_hash, query_terms, similarity
 
 GROUPABLE_KINDS = ("note", "excerpt", "answer")
@@ -59,11 +60,11 @@ def process_after_save(db: Session, item: KnowledgeItem) -> dict:
                             Relationship(
                                 src_kind="item",
                                 src_id=item.id,
-                                rel_type="corroborates",
                                 dst_kind="item",
                                 dst_id=m.id,
+                                relationship_type_id=CORROBORATES_ID,
+                                state="confirmed",
                                 evidence=f"Content is {int(similarity(item.body, m.body) * 100)}% similar after normalization.",
-                                confidence="confirmed",
                             )
                         )
                 except IntegrityError:
@@ -77,6 +78,7 @@ def process_after_save(db: Session, item: KnowledgeItem) -> dict:
     if item.kind == "question":
         route_question(db, item, concepts)
     db.commit()
+    refresh_for_item(db, [c.id for c in concepts])
     return corroboration
 
 

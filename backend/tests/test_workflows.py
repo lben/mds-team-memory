@@ -290,6 +290,182 @@ def test_admin_auth_gates(make_client, admin_client):
     ).status_code == 401
 
 
+def _concept(admin_client, name: str, aliases: list[str] | None = None) -> dict:
+    return admin_client.post(
+        "/api/admin/concepts", json={"name": name, "aliases": aliases or []}
+    ).json()
+
+
+def _link_between(admin_client, a: str, b: str) -> dict | None:
+    links = admin_client.get("/api/graph/links", params={"concept_id": a}).json()
+    return next((l for l in links if b in (l["src_id"], l["dst_id"])), None)
+
+
+def test_link_discovery_review_and_reversal(make_client, admin_client):
+    """Detected links are suggested/dashed, approving makes them confirmed/solid,
+    rejecting hides them from the map while the count keeps rising, and the
+    decision is reversible."""
+    author, reader = make_client(), make_client()
+    suffix = uuid.uuid4().hex[:6]
+    left = _concept(admin_client, f"Alpha{suffix}")
+    right = _concept(admin_client, f"Beta{suffix}")
+
+    # Below the threshold (3) nothing is suggested.
+    for _ in range(2):
+        author.post("/api/capture", data={"body": f"Alpha{suffix} feeds Beta{suffix} nightly. {uuid.uuid4().hex}"})
+    assert _link_between(admin_client, left["id"], right["id"]) is None
+
+    author.post("/api/capture", data={"body": f"Alpha{suffix} and Beta{suffix} share a window. {uuid.uuid4().hex}"})
+    link = _link_between(admin_client, left["id"], right["id"])
+    assert link["state"] == "suggested"
+    assert link["occurrence_count"] == 3
+    assert link["type_name"] == "related to"
+
+    # Suggested links are dashed and visible to everyone.
+    graph = reader.get("/api/graph/local", params={"concept_id": left["id"]}).json()
+    edge = next(e for e in graph["edges"] if e["link_id"] == link["id"])
+    assert edge["style"] == "dashed"
+
+    # Approving promotes it to solid.
+    admin_client.patch(f"/api/graph/links/{link['id']}", json={"state": "confirmed"})
+    graph = reader.get("/api/graph/local", params={"concept_id": left["id"]}).json()
+    assert next(e for e in graph["edges"] if e["link_id"] == link["id"])["style"] == "solid"
+
+    # Rejecting removes it from the local and global maps.
+    admin_client.patch(
+        f"/api/graph/links/{link['id']}", json={"state": "rejected", "note": "Coincidence"}
+    )
+    graph = reader.get("/api/graph/local", params={"concept_id": left["id"]}).json()
+    assert all(e["link_id"] != link["id"] for e in graph["edges"])
+    global_edges = reader.get("/api/graph/global").json()["edges"]
+    assert not [e for e in global_edges if {e["source"], e["target"]} == {left["id"], right["id"]}]
+
+    # ...but it stays visible to admins and keeps counting new evidence.
+    author.post("/api/capture", data={"body": f"Alpha{suffix} to Beta{suffix} again. {uuid.uuid4().hex}"})
+    rejected = _link_between(admin_client, left["id"], right["id"])
+    assert rejected["state"] == "rejected"
+    assert rejected["occurrence_count"] == 4
+    assert rejected["review_note"] == "Coincidence"
+    assert rejected["reviewed_by"] == "rootadmin"
+
+    # Drill-down shows the real contributions behind it.
+    evidence = reader.get(f"/api/graph/links/{link['id']}/evidence").json()
+    assert evidence["occurrence_count"] == 4
+    assert len(evidence["items"]) == 4
+
+    # Re-approving restores it.
+    admin_client.patch(f"/api/graph/links/{link['id']}", json={"state": "confirmed"})
+    graph = reader.get("/api/graph/local", params={"concept_id": left["id"]}).json()
+    assert next(e for e in graph["edges"] if e["link_id"] == link["id"])["style"] == "solid"
+
+
+def test_link_admin_gating_and_manual_links(make_client, admin_client):
+    """Only admins mutate links; manual links require a note and carry it as evidence."""
+    anonymous = make_client()
+    suffix = uuid.uuid4().hex[:6]
+    left = _concept(admin_client, f"Gamma{suffix}")
+    right = _concept(admin_client, f"Delta{suffix}")
+
+    assert anonymous.get("/api/graph/links").status_code == 401
+    assert anonymous.post(
+        "/api/graph/links",
+        json={"src_id": left["id"], "dst_id": right["id"], "type_id": "x", "note": "n"},
+    ).status_code == 401
+
+    feeds = admin_client.post("/api/admin/relationship-types", json={"name": f"feeds{suffix}"}).json()
+
+    created = admin_client.post(
+        "/api/graph/links",
+        json={
+            "src_id": left["id"],
+            "dst_id": right["id"],
+            "type_id": feeds["id"],
+            "note": "Confirmed with the platform team",
+        },
+    ).json()
+    assert created["state"] == "confirmed"
+    assert "Confirmed with the platform team" in created["evidence"]
+
+    # A second link between the same pair is refused; edit the existing one.
+    duplicate = admin_client.post(
+        "/api/graph/links",
+        json={"src_id": right["id"], "dst_id": left["id"], "type_id": feeds["id"], "note": "again"},
+    )
+    assert duplicate.status_code == 400
+
+    # A manual link renders solid with its own label.
+    graph = anonymous.get("/api/graph/local", params={"concept_id": left["id"]}).json()
+    edge = next(e for e in graph["edges"] if e["link_id"] == created["id"])
+    assert edge["style"] == "solid"
+    assert edge["label"] == f"feeds{suffix}"
+
+    assert anonymous.delete(f"/api/graph/links/{created['id']}").status_code == 401
+    assert admin_client.delete(f"/api/graph/links/{created['id']}").status_code == 200
+
+
+def test_relationship_type_vocabulary(make_client, admin_client):
+    """Types can be renamed (changing the map), deleted only when unused, and
+    built-ins are protected."""
+    suffix = uuid.uuid4().hex[:6]
+    left = _concept(admin_client, f"Eps{suffix}")
+    right = _concept(admin_client, f"Zeta{suffix}")
+    rtype = admin_client.post("/api/admin/relationship-types", json={"name": f"owns{suffix}"}).json()
+
+    link = admin_client.post(
+        "/api/graph/links",
+        json={"src_id": left["id"], "dst_id": right["id"], "type_id": rtype["id"], "note": "why"},
+    ).json()
+
+    # Usage is reported so the UI can warn before renaming.
+    listed = admin_client.get("/api/graph/relationship-types").json()
+    assert next(t for t in listed if t["id"] == rtype["id"])["usage"] == 1
+
+    # Deleting a type in use is refused and names the count.
+    refused = admin_client.delete(f"/api/admin/relationship-types/{rtype['id']}")
+    assert refused.status_code == 400
+    assert "used by 1 link" in refused.json()["detail"]
+
+    # Renaming updates the existing map immediately.
+    admin_client.put(f"/api/admin/relationship-types/{rtype['id']}", json={"name": f"stewards{suffix}"})
+    graph = make_client().get("/api/graph/local", params={"concept_id": left["id"]}).json()
+    assert next(e for e in graph["edges"] if e["link_id"] == link["id"])["label"] == f"stewards{suffix}"
+
+    # Once unused it can be deleted.
+    admin_client.delete(f"/api/graph/links/{link['id']}")
+    assert admin_client.delete(f"/api/admin/relationship-types/{rtype['id']}").status_code == 200
+
+    # Built-ins are protected either way.
+    builtin = next(t for t in admin_client.get("/api/graph/relationship-types").json() if t["is_builtin"])
+    assert admin_client.delete(f"/api/admin/relationship-types/{builtin['id']}").status_code == 400
+    assert admin_client.put(
+        f"/api/admin/relationship-types/{builtin['id']}", json={"name": "renamed"}
+    ).status_code == 400
+
+
+def test_links_never_expose_private_content(make_client, admin_client):
+    """Private scratchpad text contributes no links, counts, or evidence."""
+    owner, other = make_client(), make_client()
+    suffix = uuid.uuid4().hex[:6]
+    left = _concept(admin_client, f"Priv{suffix}")
+    right = _concept(admin_client, f"Sec{suffix}")
+
+    pad = owner.get("/api/scratchpad").json()["default"]
+    owner.put(
+        f"/api/scratchpad/{pad['id']}",
+        json={"content": f"Priv{suffix} and Sec{suffix} rotate together\n" * 5},
+    )
+    assert _link_between(admin_client, left["id"], right["id"]) is None
+
+    # Team content creates the link; the private text adds nothing to its evidence.
+    for _ in range(3):
+        other.post("/api/capture", data={"body": f"Priv{suffix} pairs with Sec{suffix}. {uuid.uuid4().hex}"})
+    link = _link_between(admin_client, left["id"], right["id"])
+    assert link["occurrence_count"] == 3
+    evidence = admin_client.get(f"/api/graph/links/{link['id']}/evidence").json()
+    assert len(evidence["items"]) == 3
+    assert all("rotate together" not in i["body"] for i in evidence["items"])
+
+
 def test_manage_command_creates_admin(make_client):
     """`python manage.py create-admin` creates a working account on the server."""
     import os

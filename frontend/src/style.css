@@ -126,6 +126,25 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .route-flow{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
 .flow-node{padding:12px 14px;border:1px solid var(--border);background:#fff;border-radius:10px;text-align:center;font-size:11px;min-width:145px}
 .arrow{color:#8292a8;font-weight:800}
+.admin-panel{margin-top:16px;overflow:hidden}
+.panel-tabs{display:flex;align-items:center;gap:4px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.panel-tabs button{border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:650;padding:8px 12px;border-radius:8px}
+.panel-tabs button:hover{background:#f2f5f9}
+.panel-tabs button.active{background:var(--navy-2);color:#fff}
+.scope-toggle{margin-left:auto;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.panel-row{display:flex;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;background:#f8faff}
+.panel-row input{flex:1;min-width:170px}
+.panel-head,.panel-body{display:grid;align-items:center;gap:12px;padding:11px 16px}
+.panel-head{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border)}
+.panel-body{border-bottom:1px solid var(--border);font-size:12px}
+.panel-body:last-child{border-bottom:0}
+.panel-body.highlight{background:var(--accent-soft);box-shadow:inset 3px 0 var(--accent)}
+.panel-head.links,.panel-body.links{grid-template-columns:minmax(220px,2fr) 110px 110px 120px minmax(180px,auto)}
+.panel-head.concepts,.panel-body.concepts{grid-template-columns:minmax(160px,1fr) minmax(180px,2fr) 170px}
+.panel-head.types,.panel-body.types{grid-template-columns:minmax(180px,1fr) 120px 170px}
+.panel-body .note{font-size:10px}
+.panel-body .count{font-weight:800;color:var(--navy-3);padding:4px 8px}
+.empty{padding:16px;font-size:12px}
 .auth-card{max-width:430px;margin:60px auto;padding:28px}
 .auth-card h2{margin-bottom:6px}.auth-card p{color:var(--muted);font-size:13px;line-height:1.5}
 .auth-card label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin:14px 0 5px;text-transform:uppercase;letter-spacing:.06em}

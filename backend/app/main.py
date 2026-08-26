@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -5,10 +6,23 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import config
+from .db import SessionLocal
+from .relationships import ensure_builtin_types
 from .routers import admin, documents, graph, impact, items, notifications, profile, questions, scratchpad
 from .routers import search as search_router
 
-app = FastAPI(title="MDS Team Memory")
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """Seed the protected relationship vocabulary on databases that predate it."""
+    db = SessionLocal()
+    try:
+        ensure_builtin_types(db)
+    finally:
+        db.close()
+    yield
+
+
+app = FastAPI(title="MDS Team Memory", lifespan=lifespan)
 
 for r in (
     profile.router,

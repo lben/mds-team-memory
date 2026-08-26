@@ -30,8 +30,6 @@ const authError = ref('')
 const concepts = ref<ConceptRow[]>([])
 const mappings = ref<MappingRow[]>([])
 const profiles = ref<ProfileRow[]>([])
-const conceptName = ref('')
-const conceptAliases = ref('')
 const mapProfile = ref('')
 const mapConcept = ref('')
 const previewQuery = ref('')
@@ -70,28 +68,6 @@ async function logout() {
   await api.post('/api/admin/logout')
   await loadState()
   store.notify('Signed out of admin')
-}
-
-async function addConcept() {
-  if (!conceptName.value.trim()) return
-  try {
-    await api.post('/api/admin/concepts', {
-      name: conceptName.value.trim(),
-      aliases: conceptAliases.value.split(',').map((a) => a.trim()).filter(Boolean),
-    })
-    conceptName.value = ''
-    conceptAliases.value = ''
-    await loadData()
-    store.notify('Concept added; existing content tagged')
-  } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not add the concept')
-  }
-}
-
-async function removeConcept(id: string) {
-  if (!window.confirm('Delete this concept and its mappings?')) return
-  await api.delete(`/api/admin/concepts/${id}`)
-  await loadData()
 }
 
 async function addMapping() {
@@ -163,24 +139,15 @@ onMounted(loadState)
       <div class="grid-2">
         <div class="card card-pad">
           <h3>Concepts and aliases</h3>
-          <p class="muted" style="font-size: 11px; margin-top: 4px">
-            Deterministic matching only: questions and contributions are tagged when they mention a concept or one of its
-            aliases.
+          <p class="muted" style="font-size: 12px; margin-top: 6px; line-height: 1.5">
+            Concepts and their aliases are managed on the
+            <router-link to="/context" style="color: var(--accent-2); font-weight: 650">Context Map</router-link>, where you
+            can see the effect of a change on the graph straight away. Questions and contributions are tagged when they
+            mention a concept or one of its aliases.
           </p>
-          <div class="row gap8" style="margin-top: 12px; flex-wrap: wrap">
-            <input v-model="conceptName" type="text" placeholder="Concept name (e.g. Optima)" style="flex: 1; min-width: 140px" data-testid="concept-name" />
-            <input v-model="conceptAliases" type="text" placeholder="Aliases, comma separated" style="flex: 1.4; min-width: 170px" data-testid="concept-aliases" />
-            <button class="btn primary" data-testid="add-concept" @click="addConcept">Add</button>
-          </div>
-          <div style="margin-top: 12px">
-            <p v-if="!concepts.length" class="muted" style="font-size: 12px">No concepts yet.</p>
-            <div v-for="c in concepts" :key="c.id" class="row between" style="padding: 8px 0; border-top: 1px solid var(--border)">
-              <div class="area-chips">
-                <span class="chip team">{{ c.name }}</span>
-                <span v-for="a in c.aliases" :key="a" class="chip">{{ a }}</span>
-              </div>
-              <button class="btn small ghost" @click="removeConcept(c.id)">Remove</button>
-            </div>
+          <div class="area-chips" style="margin-top: 12px">
+            <span v-for="c in concepts" :key="c.id" class="chip team">{{ c.name }}</span>
+            <span v-if="!concepts.length" class="muted" style="font-size: 12px">No concepts yet.</span>
           </div>
         </div>
 

@@ -36,6 +36,12 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     }),
+  patch: <T>(url: string, body: unknown) =>
+    request<T>(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
   delete: <T>(url: string) => request<T>(url, { method: 'DELETE' }),
 }
 
