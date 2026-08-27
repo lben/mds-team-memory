@@ -46,6 +46,22 @@ python3 -m venv .venv
    the sidebar, but opening it asks for admin credentials; the mapping tools
    appear only after a successful sign-in, in that browser only.
 
+## Resetting a test instance
+
+To wipe a UAT instance and rebuild it at the current schema:
+
+```powershell
+.venv\Scripts\python manage.py reset-database
+```
+
+It prints what will be destroyed and asks you to type `reset` to confirm
+(`--yes` skips the prompt for scripted use). It deletes the database and all
+uploaded files rather than downgrading, so it works from any previous schema
+version. Stop the application first, then create an admin and restart.
+
+**Never run this against production.** Check the database path it prints before
+confirming.
+
 ## Configuration (environment variables, all optional)
 
 | Variable | Default | Purpose |

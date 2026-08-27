@@ -38,6 +38,24 @@ The password is never echoed and never appears in shell history. Run
 and passwords must be at least 8 characters. Run the database migrations first —
 the command tells you if the database is not initialised yet.
 
+## Resetting an instance
+
+For testing a new build against a clean slate:
+
+```bash
+python manage.py reset-database        # prompts before deleting anything
+python manage.py reset-database --yes  # for scripts; no prompt
+```
+
+It lists what will be destroyed, deletes the database and every uploaded file,
+then migrates back up to the current schema. Because it deletes rather than
+downgrades, it works from any previous schema version — including one the
+current build has never seen. Stop the application first, and create an admin
+again afterwards.
+
+**This destroys all data.** Without `--yes` it requires you to type `reset` at a
+terminal, and it refuses outright when there is no terminal.
+
 The **Expertise Routing** link stays visible in the sidebar for everyone, but
 opening it asks for admin credentials. The concept, alias, and expertise-mapping
 tools appear only after a successful sign-in, in that browser.

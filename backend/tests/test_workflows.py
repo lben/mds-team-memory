@@ -610,6 +610,60 @@ def test_manage_command_creates_admin(make_client):
     assert "already exists" in repeat.stderr
 
 
+def test_reset_database_command(tmp_path):
+    """`reset-database` refuses without confirmation, and otherwise rebuilds the
+    current schema from whatever version was there before."""
+    import os
+    import sqlite3
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    from alembic.config import Config
+    from alembic.script import ScriptDirectory
+
+    root = Path(__file__).resolve().parents[2]
+    alembic_bin = Path(sys.executable).parent / "alembic"
+    db = tmp_path / "t.sqlite3"
+    env = {**os.environ, "MDS_DATA_DIR": str(tmp_path), "MDS_DATABASE_URL": f"sqlite:///{db}"}
+
+    # Start from an older revision to prove the reset does not depend on it.
+    subprocess.run(
+        [str(alembic_bin), "-c", str(root / "backend/alembic.ini"), "upgrade", "0001"],
+        env=env, check=True, capture_output=True,
+    )
+    con = sqlite3.connect(db)
+    con.execute("INSERT INTO profiles (id, token_hash, created_at) VALUES ('p','h',datetime('now'))")
+    con.commit()
+    con.close()
+    uploads = tmp_path / "uploads"
+    uploads.mkdir(exist_ok=True)
+    (uploads / "kept.txt").write_text("x")
+
+    command = [sys.executable, str(root / "manage.py"), "reset-database"]
+    refused = subprocess.run(
+        command, env=env, capture_output=True, text=True, stdin=subprocess.DEVNULL
+    )
+    assert refused.returncode != 0
+    con = sqlite3.connect(db)
+    assert con.execute("SELECT COUNT(*) FROM profiles").fetchone()[0] == 1, "nothing may be deleted"
+    con.close()
+    assert (uploads / "kept.txt").exists()
+
+    done = subprocess.run(command + ["--yes"], env=env, capture_output=True, text=True)
+    assert done.returncode == 0, done.stderr
+
+    head = ScriptDirectory.from_config(
+        Config(str(root / "backend/alembic.ini"))
+    ).get_current_head()
+    con = sqlite3.connect(db)
+    assert con.execute("SELECT version_num FROM alembic_version").fetchone()[0] == head
+    assert con.execute("SELECT COUNT(*) FROM profiles").fetchone()[0] == 0
+    assert con.execute("SELECT COUNT(*) FROM relationship_types").fetchone()[0] == 2
+    con.close()
+    assert not (uploads / "kept.txt").exists()
+
+
 def test_correction_lifecycle(make_client, admin_client):
     """Correction proposed, adopted by original author, impact once, history kept."""
     author, corrector = make_client(), make_client()
