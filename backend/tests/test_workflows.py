@@ -435,10 +435,16 @@ def test_vocabulary_is_a_single_source_of_truth(make_client, admin_client):
     assert admin_client.put(
         f"/api/admin/concepts/{first['id']}", json={"name": " ", "aliases": [f"alt{suffix}"]}
     ).status_code == 400
+    # The refused update must leave the concept entirely untouched: same name,
+    # same aliases, and its name still reserved rather than released.
     intact = next(
         c for c in admin_client.get("/api/admin/concepts").json() if c["id"] == first["id"]
     )
     assert intact["name"] == f"Optima{suffix}"
+    assert intact["aliases"] == [f"opt{suffix}", f"opti{suffix}"]
+    assert admin_client.post(
+        "/api/admin/concepts", json={"name": f"Optima{suffix}", "aliases": []}
+    ).status_code == 400
     assert_one_canonical_term_per_concept()
 
 

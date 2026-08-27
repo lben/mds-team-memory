@@ -62,7 +62,12 @@ def seed_messy_0002(db: Path) -> dict:
         "INSERT INTO document_passages (id, document_id, ord, text, locator) VALUES (?,?,?,?,?)",
         (passage, document, 0, "Optima passage", "Line 1"),
     )
-    for kind, subject in [("item", item), ("passage", passage), ("item", "no-such-item")]:
+    for kind, subject in [
+        ("item", item),
+        ("passage", passage),
+        ("item", "no-such-item"),
+        ("passage", "no-such-passage"),
+    ]:
         con.execute(
             "INSERT INTO item_concepts (id, subject_kind, subject_id, concept_id) VALUES (?,?,?,?)",
             (uuid.uuid4().hex, kind, subject, ids["Optima"]),
@@ -110,9 +115,9 @@ def test_upgrade_folds_colliding_vocabulary_without_losing_concepts(messy_db):
     assert after["terms"] == after["distinct_terms"], "a term may belong to only one concept"
     assert after["fk_violations"] == 0
     assert after["integrity"] == "ok"
-    # The orphan tag is gone; the two valid ones survive on their new tables.
-    assert after["item_tags"] == 1
-    assert after["passage_tags"] == 1
+    # Both orphans are gone; the two valid tags survive on their new tables.
+    assert after["item_tags"] == 1, "orphan item tag must not survive the new foreign key"
+    assert after["passage_tags"] == 1, "orphan passage tag must not survive the new foreign key"
 
     con = sqlite3.connect(db)
     terms = dict(con.execute("SELECT term, is_canonical FROM concept_terms"))
