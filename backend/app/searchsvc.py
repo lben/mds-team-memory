@@ -6,7 +6,7 @@ from datetime import timedelta
 from sqlalchemy import text as sql_text
 from sqlalchemy.orm import Session
 
-from .concepts import term_groups
+from .concepts import match_concepts, term_groups
 from .knowledge import item_dict
 from .models import DocumentPassage, KnowledgeItem, Profile, Scratchpad, utcnow
 from .text import build_fts_match, content_terms, find_matches
@@ -143,9 +143,12 @@ def search_all(db: Session, profile: Profile, query: str) -> dict:
         items += _item_hits(db, expression, profile, terms, groups)
         passages += _passage_hits(db, expression, terms, groups)
 
+    # Concepts the query mentions, so the knowledge graph can focus on them.
+    matched = match_concepts(db, query)
     return {
         "query": query,
         "terms": terms,
+        "concepts": [{"id": c.id, "name": c.name} for c in matched],
         "items": _rank(items, group=True),
         "documents": _rank(passages, group=False),
         "scratchpad": _scratchpad_hits(db, profile, query),

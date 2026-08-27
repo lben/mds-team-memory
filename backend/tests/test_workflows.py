@@ -155,6 +155,45 @@ def test_shared_counter_encourages_before_impact(make_client):
     assert shared["shared_total"] == 3
 
 
+def test_feed_and_question_deletion(make_client):
+    """The home feed shows latest team knowledge with groups collapsed, and an
+    asker can delete a mistaken question only while nobody has answered."""
+    author, other = make_client(), make_client()
+    fact = f"Feed item rho-{uuid.uuid4().hex[:8]} exists for the feed test."
+    author.post("/api/capture", data={"body": fact})
+    other.post("/api/capture", data={"body": fact})  # duplicate -> one feed entry
+
+    feed = other.get("/api/feed").json()
+    matches = [i for i in feed if f"rho-" in i["body"] and fact.split()[2] in i["body"]]
+    assert len(matches) == 1, "a corroboration group appears once in the feed"
+    assert feed[0]["created_at"] >= feed[-1]["created_at"], "newest first"
+    assert all(i["visibility"] == "team" for i in feed)
+
+    # Question deletion: only the asker, and only while unanswered.
+    question = author.post("/api/questions", json={"body": unique("Mistaken question")}).json()
+    assert other.delete(f"/api/questions/{question['id']}").status_code == 403
+    assert author.delete(f"/api/questions/{question['id']}").status_code == 200
+    assert author.get(f"/api/questions/{question['id']}").status_code == 404
+
+    answered = author.post("/api/questions", json={"body": unique("Real question")}).json()
+    other.post(f"/api/questions/{answered['id']}/answers", json={"body": unique("An answer")})
+    refused = author.delete(f"/api/questions/{answered['id']}")
+    assert refused.status_code == 400, "a question with answers must survive"
+    assert author.get(f"/api/questions/{answered['id']}").status_code == 200
+
+
+def test_search_reports_matched_concepts(make_client, admin_client):
+    """Search names the concepts the query mentions, so the graph can focus."""
+    suffix = uuid.uuid4().hex[:6]
+    concept = admin_client.post(
+        "/api/admin/concepts", json={"name": f"Sigma{suffix}", "aliases": [f"sig{suffix}"]}
+    ).json()
+    client = make_client()
+    results = client.get("/api/search", params={"q": f"what is sig{suffix} exactly"}).json()
+    assert results["concepts"] == [{"id": concept["id"], "name": f"Sigma{suffix}"}]
+    assert client.get("/api/search", params={"q": "nothing relevant here"}).json()["concepts"] == []
+
+
 def test_scratchpad_private_and_share_selection(make_client):
     """W5+W6: scratchpad invisible to others; sharing exposes only the selection."""
     owner, other = make_client(), make_client()

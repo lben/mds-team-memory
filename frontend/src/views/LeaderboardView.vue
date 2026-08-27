@@ -57,8 +57,8 @@ onMounted(load)
   <section class="page">
     <div class="page-head">
       <div>
-        <div class="eyebrow">Contribution impact</div>
-        <h1>Impact</h1>
+        <div class="eyebrow">Recognition</div>
+        <h1>Leaderboard</h1>
         <p class="lead">Recognition is based on useful outcomes, not posting volume.</p>
       </div>
       <div class="row gap8">

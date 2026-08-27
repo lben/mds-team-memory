@@ -8,7 +8,7 @@ from ..concepts import match_concepts
 from ..db import get_db
 from ..impact import notify, record_event
 from ..knowledge import item_dict, process_after_save
-from ..models import ExpertiseMapping, ItemConcept, KnowledgeItem, Profile
+from ..models import ExpertiseMapping, ItemConcept, KnowledgeItem, Notification, Profile
 
 router = APIRouter(prefix="/api/questions", tags=["questions"])
 
@@ -52,10 +52,25 @@ def list_questions(
         .group_by(KnowledgeItem.parent_id)
         .all()
     )
+    my_concepts = [
+        cid
+        for (cid,) in db.query(ExpertiseMapping.concept_id).filter(
+            ExpertiseMapping.profile_id == profile.id
+        )
+    ]
+    matching_mine: set[str] = set()
+    if my_concepts:
+        matching_mine = {
+            iid
+            for (iid,) in db.query(ItemConcept.item_id).filter(
+                ItemConcept.concept_id.in_(my_concepts)
+            )
+        }
     result = []
     for q in questions:
         d = item_dict(db, q, profile)
         d["answer_count"] = answer_counts.get(q.id, 0)
+        d["matches_me"] = q.id in matching_mine
         result.append(d)
     return result
 
@@ -127,6 +142,28 @@ def add_answer(
         )
         db.commit()
     return item_dict(db, answer, profile)
+
+
+@router.delete("/{question_id}")
+def delete_question(
+    question_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
+):
+    """The asker can delete a question posted by mistake — but only while nobody
+    has answered, so a teammate's contribution is never destroyed with it."""
+    question = _question(db, question_id)
+    if question.author_profile_id != profile.id:
+        raise HTTPException(403, "Only the asker can delete their question")
+    answers = (
+        db.query(KnowledgeItem)
+        .filter(KnowledgeItem.kind == "answer", KnowledgeItem.parent_id == question.id)
+        .count()
+    )
+    if answers:
+        raise HTTPException(400, "This question already has answers and cannot be deleted")
+    db.query(Notification).filter(Notification.item_id == question.id).delete()
+    db.delete(question)
+    db.commit()
+    return {"deleted": True}
 
 
 @router.post("/{question_id}/accept")

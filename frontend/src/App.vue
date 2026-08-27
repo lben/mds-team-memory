@@ -8,16 +8,14 @@ const route = useRoute()
 const router = useRouter()
 
 const titles: Record<string, string> = {
-  '/capture': 'Capture',
-  '/search': 'Search',
-  '/questions': 'Questions',
+  '/': 'Home',
   '/scratchpad': 'Scratchpad',
   '/documents': 'Documents',
-  '/context': 'Context Map',
-  '/impact': 'Impact',
+  '/leaderboard': 'Leaderboard',
   '/admin/expertise': 'Expertise Routing',
 }
 const crumb = computed(() => {
+  if (route.path === '/') return 'Home'
   const base = '/' + route.path.split('/')[1]
   return titles[route.path] || titles[base] || 'MDS'
 })
@@ -64,12 +62,13 @@ async function openNotification(n: { item_id: string | null }) {
   // not in a generic item modal.
   try {
     const item = await api.get<{ kind: string; parent_id: string | null }>(`/api/items/${n.item_id}`)
-    if (item.kind === 'question') return void router.push(`/questions/${n.item_id}`)
-    if (item.kind === 'answer' && item.parent_id) return void router.push(`/questions/${item.parent_id}`)
+    if (item.kind === 'question') return void router.push({ path: '/', query: { question: n.item_id } })
+    if (item.kind === 'answer' && item.parent_id)
+      return void router.push({ path: '/', query: { question: item.parent_id } })
   } catch {
     /* fall through to the generic view */
   }
-  router.push({ path: '/search', query: { item: n.item_id } })
+  router.push({ path: '/', query: { item: n.item_id } })
 }
 
 function fmt(ts: string) {
@@ -88,13 +87,10 @@ onMounted(() => {
     <aside class="sidebar">
       <div class="brand"><strong>MDS</strong><span>Team Memory</span></div>
       <nav class="nav" aria-label="Main navigation">
-        <router-link to="/capture" active-class="active"><span class="nav-dot"></span>Capture</router-link>
-        <router-link to="/search" active-class="active"><span class="nav-dot"></span>Search</router-link>
-        <router-link to="/questions" active-class="active"><span class="nav-dot"></span>Questions</router-link>
+        <router-link to="/" exact-active-class="active"><span class="nav-dot"></span>Home</router-link>
         <router-link to="/scratchpad" active-class="active"><span class="nav-dot"></span>Scratchpad</router-link>
         <router-link to="/documents" active-class="active"><span class="nav-dot"></span>Documents</router-link>
-        <router-link to="/context" active-class="active"><span class="nav-dot"></span>Context Map</router-link>
-        <router-link to="/impact" active-class="active"><span class="nav-dot"></span>Impact</router-link>
+        <router-link to="/leaderboard" active-class="active"><span class="nav-dot"></span>Leaderboard</router-link>
       </nav>
       <div class="nav-label">Admin</div>
       <nav class="nav" data-testid="admin-nav">
@@ -121,9 +117,6 @@ onMounted(() => {
       <header class="topbar">
         <div class="crumb">MDS Team Memory / <strong>{{ crumb }}</strong></div>
         <div class="top-actions">
-          <router-link class="btn" to="/search">Search</router-link>
-          <router-link class="btn" :to="{ path: '/questions', query: { ask: '1' } }">Ask question</router-link>
-          <router-link class="btn primary" to="/capture">Quick Capture</router-link>
           <button class="btn bell" @click="openNotifications" aria-label="Notifications" data-testid="bell">
             🔔<span v-if="store.unread" class="badge">{{ store.unread }}</span>
           </button>

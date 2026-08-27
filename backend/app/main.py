@@ -5,13 +5,14 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import config
-from .routers import admin, documents, graph, impact, items, notifications, profile, questions, scratchpad
+from .routers import admin, documents, feed, graph, impact, items, notifications, profile, questions, scratchpad
 from .routers import search as search_router
 
 app = FastAPI(title="MDS Team Memory")
 
 for r in (
     profile.router,
+    feed.router,
     items.router,
     questions.router,
     search_router.router,

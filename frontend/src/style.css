@@ -145,6 +145,26 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .panel-body .note{font-size:10px}
 .panel-body .count{font-weight:800;color:var(--navy-3);padding:4px 8px}
 .empty{padding:16px;font-size:12px}
+.home-graph{margin-bottom:16px;min-height:0}
+.home-graph .graph-box{height:380px}
+.graph-empty{display:grid;place-items:center;height:380px;color:#8ea7c9;font-size:13px;padding:0 40px;text-align:center}
+.composer{padding:16px}
+.composer-input{width:100%;min-height:76px;resize:vertical;padding:13px 15px;font-size:15px;line-height:1.5}
+.composer-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.search-banner{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;padding:10px 14px;background:var(--info-soft);border:1px solid #cddcf3;border-radius:10px;font-size:12px;font-weight:650;color:var(--navy-3)}
+.home-columns{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:start}
+.col-title{margin-bottom:10px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+.col-empty{font-size:12px;padding:14px;background:var(--panel);border:1px dashed var(--border-strong);border-radius:12px}
+.home-columns .result{margin-bottom:12px;grid-template-columns:minmax(0,1fr)}
+.question-card{margin-bottom:12px;padding:14px 16px}
+.q-head{cursor:pointer}
+.q-body{display:block;font-size:13px;margin:8px 0 6px;overflow-wrap:anywhere}
+.q-toggle{margin-left:auto;color:var(--muted-2)}
+.q-detail{border-top:1px solid var(--border);margin-top:10px;padding-top:6px}
+.q-detail .body{font-size:13px;color:#3e4b60;line-height:1.55;overflow-wrap:anywhere}
+.q-detail .answer-compose{margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
+.q-detail .answer-compose textarea{width:100%;height:76px;padding:10px}
+@media(max-width:1150px){.home-columns{grid-template-columns:1fr}}
 .auth-card{max-width:430px;margin:60px auto;padding:28px}
 .auth-card h2{margin-bottom:6px}.auth-card p{color:var(--muted);font-size:13px;line-height:1.5}
 .auth-card label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin:14px 0 5px;text-transform:uppercase;letter-spacing:.06em}

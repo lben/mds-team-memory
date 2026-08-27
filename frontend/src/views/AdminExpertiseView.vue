@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ApiError, api } from '../api'
+import EvidenceModal from '../components/EvidenceModal.vue'
+import MapAdminPanel from '../components/MapAdminPanel.vue'
 import { store } from '../store'
+
+const evidenceLinkId = ref<string | null>(null)
 
 interface AdminState {
   logged_in: boolean
@@ -138,17 +142,12 @@ onMounted(loadState)
     <template v-if="state?.logged_in">
       <div class="grid-2">
         <div class="card card-pad">
-          <h3>Concepts and aliases</h3>
+          <h3>How tagging works</h3>
           <p class="muted" style="font-size: 12px; margin-top: 6px; line-height: 1.5">
-            Concepts and their aliases are managed on the
-            <router-link to="/context" style="color: var(--accent-2); font-weight: 650">Context Map</router-link>, where you
-            can see the effect of a change on the graph straight away. Questions and contributions are tagged when they
-            mention a concept or one of its aliases.
+            Questions and contributions are tagged when they mention a concept or one of its aliases — deterministic
+            word matching, nothing else. Concepts, links, and relationship types are managed in the curation table
+            below; the knowledge graph itself lives on the Home page.
           </p>
-          <div class="area-chips" style="margin-top: 12px">
-            <span v-for="c in concepts" :key="c.id" class="chip team">{{ c.name }}</span>
-            <span v-if="!concepts.length" class="muted" style="font-size: 12px">No concepts yet.</span>
-          </div>
         </div>
 
         <div class="card card-pad">
@@ -196,6 +195,15 @@ onMounted(loadState)
         </div>
       </div>
 
+      <MapAdminPanel
+        style="margin-top: 16px"
+        center-concept-id=""
+        :selected-link-id="null"
+        :selected-concept-id="null"
+        @changed="loadData"
+        @evidence="evidenceLinkId = $event"
+      />
+
       <div class="card route-preview">
         <h3>Routing preview</h3>
         <div class="row gap8" style="margin-top: 10px">
@@ -217,5 +225,6 @@ onMounted(loadState)
         </div>
       </div>
     </template>
+    <EvidenceModal v-if="evidenceLinkId" :link-id="evidenceLinkId" @close="evidenceLinkId = null" />
   </section>
 </template>
