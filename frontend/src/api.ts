@@ -70,6 +70,7 @@ export interface Item {
   updated_at: string
   snippet?: string
   answer_count?: number
+  question?: { id: string; body: string; status: string | null } | null
 }
 
 export interface Corroboration {

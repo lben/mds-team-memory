@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { api } from '../api'
+import { initialsFor } from '../profile'
 
 interface LeaderEntry {
   profile_id: string
@@ -41,14 +42,6 @@ function setPeriod(p: '30d' | 'all') {
   load()
 }
 
-function initials(label: string) {
-  return label
-    .split(/\s+/)
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
-}
 
 onMounted(load)
 </script>
@@ -95,7 +88,7 @@ onMounted(load)
       <div v-for="entry in data.leaderboard" :key="entry.profile_id" class="leader-row" :class="{ me: entry.is_me }">
         <div class="rank">{{ entry.score > 0 ? entry.rank : '—' }}</div>
         <div class="person">
-          <span class="avatar">{{ initials(entry.label) }}</span>
+          <span class="avatar">{{ initialsFor(entry.label) }}</span>
           <span>
             <strong>{{ entry.label }}</strong>
             <span>{{ entry.is_me ? 'You · unverified' : 'Unverified' }}</span>

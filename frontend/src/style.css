@@ -23,8 +23,10 @@ a{color:inherit;text-decoration:none}
 .nav a:hover{background:#172f50}.nav a.active{background:var(--navy-2);font-weight:650}
 .nav-dot{width:7px;height:7px;border-radius:50%;background:#7690b2;flex:0 0 auto}.nav a.active .nav-dot{background:var(--accent)}
 .profile{margin-top:auto;background:var(--navy-2);border:1px solid rgba(255,255,255,.07);padding:12px;border-radius:11px;display:flex;align-items:center;gap:10px;border-width:1px;color:#fff;text-align:left;width:100%;cursor:pointer}
-.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#d7e4f7;color:var(--navy);font-weight:800;font-size:12px;flex:0 0 auto}
-.profile strong{font-size:12px;display:block}.profile span{font-size:10px;color:#aabbd1;display:block;margin-top:2px}
+.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#d7e4f7;color:var(--navy);font-weight:800;font-size:12px;line-height:1;flex:0 0 auto;text-align:center}
+.profile strong{font-size:12px;display:block}
+/* :not(.avatar) so these do not override the avatar's grid centering */
+.profile span:not(.avatar){font-size:10px;color:#aabbd1;display:block;margin-top:2px}
 .profile-pop{position:fixed;left:16px;bottom:76px;width:250px;background:#fff;color:var(--ink);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:14px;z-index:60}
 .profile-pop label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .profile-pop input{width:100%;margin-top:6px;padding:8px 10px}
@@ -114,7 +116,7 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .leader-head,.leader-row{display:grid;grid-template-columns:54px minmax(170px,1.6fr) repeat(5,minmax(80px,1fr));align-items:center}
 .leader-head{padding:11px 16px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
 .leader-row{padding:13px 16px;border-bottom:1px solid var(--border);position:relative}.leader-row:last-child{border-bottom:0}.leader-row.me{background:var(--info-soft)}
-.rank{font-weight:800}.person{display:flex;align-items:center;gap:10px}.person .avatar{width:30px;height:30px}.person strong{font-size:12px}.person span{font-size:10px;color:var(--muted);display:block}
+.rank{font-weight:800}.person{display:flex;align-items:center;gap:10px}.person .avatar{width:30px;height:30px}.person strong{font-size:12px}.person span:not(.avatar){font-size:10px;color:var(--muted);display:block}
 .score{font-weight:800;color:var(--navy-3)}
 .admin-table{overflow:hidden}
 .admin-head,.admin-row{display:grid;grid-template-columns:1.2fr 1.6fr 140px;align-items:center;gap:14px}
@@ -165,6 +167,13 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .q-detail .answer-compose{margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
 .q-detail .answer-compose textarea{width:100%;height:76px;padding:10px}
 @media(max-width:1150px){.home-columns{grid-template-columns:1fr}}
+.answered-question{display:flex;align-items:center;gap:8px;width:100%;text-align:left;margin:8px 0 2px;padding:8px 10px;border:1px solid var(--border);border-left:3px solid var(--warning);border-radius:8px;background:#fffdf6;color:#5d4a1e;font-size:11px;line-height:1.4}
+.answered-question:hover{background:#fff8e6}
+.nav-signout{border:0;background:transparent;color:#e8eef7;display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;text-align:left;font-size:14px;width:100%}
+.nav-signout:hover{background:#172f50}
+.nav-signout .who{margin-left:auto;font-size:10px;color:#8ea7c9;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pop-note{font-size:10px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+.pop-admin{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
 .auth-card{max-width:430px;margin:60px auto;padding:28px}
 .auth-card h2{margin-bottom:6px}.auth-card p{color:var(--muted);font-size:13px;line-height:1.5}
 .auth-card label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin:14px 0 5px;text-transform:uppercase;letter-spacing:.06em}

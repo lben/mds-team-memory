@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from './api'
+import { identityNote, initialsFor } from './profile'
 import { store } from './store'
 
 const route = useRoute()
@@ -25,13 +26,14 @@ const showNotifications = ref(false)
 const nameDraft = ref('')
 const notifications = ref<{ id: string; kind: string; message: string; item_id: string | null; read: boolean; created_at: string }[]>([])
 
-const initials = computed(() => {
-  const label = store.profile?.label || ''
-  const words = label.trim().split(/\s+/)
-  const source = store.profile?.display_name || ''
-  if (source) return words.map((w) => w[0]).slice(0, 2).join('').toUpperCase()
-  return label.slice(-4, -2).toUpperCase() || 'BP'
-})
+const initials = computed(() => initialsFor(store.profile?.label))
+const identity = computed(() => identityNote(store.profile?.label))
+async function signOutAdmin() {
+  await api.post('/api/admin/logout')
+  await store.loadAdmin()
+  store.notify('Signed out of admin')
+  router.push('/')
+}
 
 async function saveName() {
   if (!nameDraft.value.trim()) return
@@ -77,6 +79,7 @@ function fmt(ts: string) {
 
 onMounted(() => {
   store.loadProfile()
+  store.loadAdmin()
   store.refreshUnread()
   window.setInterval(() => store.refreshUnread(), 30000)
 })
@@ -95,17 +98,28 @@ onMounted(() => {
       <div class="nav-label">Admin</div>
       <nav class="nav" data-testid="admin-nav">
         <router-link to="/admin/expertise" active-class="active"><span class="nav-dot"></span>Expertise Routing</router-link>
+        <button
+          v-if="store.admin.logged_in"
+          class="nav-signout"
+          data-testid="sign-out-admin"
+          @click="signOutAdmin"
+        >
+          <span class="nav-dot"></span>Sign out<span class="who">{{ store.admin.username }}</span>
+        </button>
       </nav>
       <button class="profile" @click="showProfile = !showProfile" data-testid="profile-button">
         <span class="avatar">{{ initials }}</span>
         <span>
           <strong>{{ store.profile?.label || '…' }}</strong>
-          <span>Unverified · This browser</span>
+          <span>{{ identity }}</span>
         </span>
       </button>
       <div v-if="showProfile" class="profile-pop">
-        <label>Optional display name (unverified)</label>
+        <label>Display name</label>
         <input v-model="nameDraft" type="text" maxlength="80" placeholder="e.g. Jane S." @keyup.enter="saveName" />
+        <p class="pop-note">
+          Contributors have no login yet, so a name you set here is self-declared and shown as unverified.
+        </p>
         <div class="modal-actions" style="margin-top: 12px">
           <button class="btn small" @click="showProfile = false">Close</button>
           <button class="btn small primary" @click="saveName">Save name</button>

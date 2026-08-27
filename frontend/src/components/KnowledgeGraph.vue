@@ -48,6 +48,7 @@ function initCy() {
   cy = cytoscape({
     container: graphEl.value,
     userZoomingEnabled: true,
+    maxZoom: 1.3,
     style: [
       {
         selector: 'node',

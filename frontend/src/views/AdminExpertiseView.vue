@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { ApiError, api } from '../api'
 import EvidenceModal from '../components/EvidenceModal.vue'
 import MapAdminPanel from '../components/MapAdminPanel.vue'
+import { identityNote, initialsFor } from '../profile'
 import { store } from '../store'
 
 const evidenceLinkId = ref<string | null>(null)
@@ -43,7 +44,8 @@ const newAdminPass = ref('')
 const admins = ref<{ id: string; username: string }[]>([])
 
 async function loadState() {
-  state.value = await api.get<AdminState>('/api/admin/state')
+  await store.loadAdmin()
+  state.value = store.admin
   if (state.value.logged_in) await loadData()
 }
 
@@ -66,12 +68,6 @@ async function submitAuth() {
   } catch (e) {
     authError.value = e instanceof ApiError ? e.message : 'Authentication failed'
   }
-}
-
-async function logout() {
-  await api.post('/api/admin/logout')
-  await loadState()
-  store.notify('Signed out of admin')
 }
 
 async function addMapping() {
@@ -121,7 +117,6 @@ onMounted(loadState)
       </div>
       <div v-if="state?.logged_in" class="row gap8">
         <span class="chip good">ADMIN · {{ state.username }}</span>
-        <button class="btn small" @click="logout">Sign out</button>
       </div>
     </div>
 
@@ -183,8 +178,8 @@ onMounted(loadState)
         </div>
         <div v-for="m in mappings" :key="m.profile_id" class="admin-row">
           <div class="person">
-            <span class="avatar">{{ m.label.slice(-4, -2).toUpperCase() || 'BP' }}</span>
-            <span><strong>{{ m.label }}</strong><span>Unverified pilot profile</span></span>
+            <span class="avatar">{{ initialsFor(m.label) }}</span>
+            <span><strong>{{ m.label }}</strong><span>{{ identityNote(m.label) }}</span></span>
           </div>
           <div class="area-chips">
             <span v-for="a in m.areas" :key="a.mapping_id" class="chip">

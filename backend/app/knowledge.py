@@ -116,9 +116,17 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
     info = group_info(db, item)
     author = db.get(Profile, item.author_profile_id)
     marked = bool(profile) and already_helped(db, item, profile.id)
+    # An answer is meaningless without the question it answers, so carry a
+    # preview of it wherever the answer is shown.
+    question = None
+    if item.kind == "answer" and item.parent_id:
+        parent = db.get(KnowledgeItem, item.parent_id)
+        if parent:
+            question = {"id": parent.id, "body": parent.body, "status": parent.question_status}
     return {
         "id": item.id,
         "kind": item.kind,
+        "question": question,
         "title": item.title,
         "body": item.body,
         "visibility": item.visibility,

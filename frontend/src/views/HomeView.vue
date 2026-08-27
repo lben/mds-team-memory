@@ -271,6 +271,10 @@ onMounted(async () => {
                 <span v-if="item.contributors > 1" class="chip good">{{ item.contributors }} CONTRIBUTORS</span>
                 <span v-if="item.endorsed" class="chip good">SME ENDORSED</span>
               </div>
+              <button v-if="item.question" class="answered-question" @click="expandQuestion(item.question.id)">
+                <span class="chip warn">ANSWERING</span>
+                {{ item.question.body.length > 110 ? item.question.body.slice(0, 110) + '…' : item.question.body }}
+              </button>
               <p class="body" v-html="item.snippet"></p>
               <div class="meta">
                 <span>{{ item.author }}<template v-if="item.contributors > 1"> and {{ item.contributors - 1 }} more</template></span>
@@ -325,6 +329,10 @@ onMounted(async () => {
                 <span v-if="item.contributors > 1" class="chip good">{{ item.contributors }} CONTRIBUTORS</span>
                 <span v-if="item.endorsed" class="chip good">SME ENDORSED</span>
               </div>
+              <button v-if="item.question" class="answered-question" @click="expandQuestion(item.question.id)">
+                <span class="chip warn">ANSWERING</span>
+                {{ item.question.body.length > 110 ? item.question.body.slice(0, 110) + '…' : item.question.body }}
+              </button>
               <p class="body" style="white-space: pre-wrap">{{ item.body.length > 400 ? item.body.slice(0, 400) + '…' : item.body }}</p>
               <div class="meta">
                 <span>{{ item.author }}</span>
