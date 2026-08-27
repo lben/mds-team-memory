@@ -254,9 +254,15 @@ onMounted(async () => {
         <h3 class="col-title">{{ results ? 'Knowledge found' : 'Latest knowledge' }}</h3>
 
         <template v-if="results">
-          <p v-if="!knowledgeResults.length && !results.documents.length && !results.scratchpad.length" class="muted col-empty">
-            No matches in team knowledge, documents, or your scratchpad.
-          </p>
+          <!-- PRD 2: a failed search must be able to become a team question
+               without retyping — the text is still in the box above. -->
+          <div v-if="!knowledgeResults.length && !results.documents.length && !results.scratchpad.length" class="empty-ask" data-testid="nothing-found">
+            <div>
+              <h3>Nobody has written this down yet</h3>
+              <p>Put it to the team as a question — your text is still in the box above.</p>
+            </div>
+            <button class="btn primary" data-testid="ask-from-search" @click="ask">Ask this question</button>
+          </div>
           <article v-for="item in knowledgeResults" :key="item.id" class="card result">
             <div>
               <div class="row gap8 wrap">

@@ -147,7 +147,7 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .empty{padding:16px;font-size:12px}
 .home-graph{margin-bottom:16px;min-height:0}
 .home-graph .graph-box{height:380px}
-.graph-empty{display:grid;place-items:center;height:380px;color:#8ea7c9;font-size:13px;padding:0 40px;text-align:center}
+.graph-empty{display:grid;place-items:center;height:150px;color:#8ea7c9;font-size:13px;padding:0 40px;text-align:center}
 .composer{padding:16px}
 .composer-input{width:100%;min-height:76px;resize:vertical;padding:13px 15px;font-size:15px;line-height:1.5}
 .composer-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}

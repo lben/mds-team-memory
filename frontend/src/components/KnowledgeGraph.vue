@@ -122,23 +122,27 @@ async function loadFull() {
     const angle = (2 * Math.PI * ci) / clusterCount
     const cxPos = clusterCount === 1 ? 0 : Math.cos(angle) * 320
     const cyPos = clusterCount === 1 ? 0 : Math.sin(angle) * 240
-    cy!.add({ data: { id: `cl:${cluster.id}`, label: cluster.label, color: '#173a5f', size: 40, kind: 'cluster' } })
+    // A cluster of one concept needs no wrapper: the box would just repeat the
+    // concept's own name back at it.
+    const grouped = cluster.concepts.length > 1
+    if (grouped) {
+      cy!.add({ data: { id: `cl:${cluster.id}`, label: cluster.label, color: '#173a5f', size: 40, kind: 'cluster' } })
+    }
     cluster.concepts.forEach((concept, i) => {
       const inner = (2 * Math.PI * i) / cluster.concepts.length
       const spread = Math.min(2, cluster.concepts.length / 3 + 1)
       cy!.add({
         data: {
           id: `c:${concept.id}`,
-          parent: `cl:${cluster.id}`,
+          ...(grouped ? { parent: `cl:${cluster.id}` } : {}),
           label: `${concept.name}\n${concept.size}`,
           color: NODE_COLORS.concept,
-          size: Math.min(80, 40 + concept.size * 4),
+          size: Math.min(92, 54 + concept.size * 5),
           nodeType: 'concept',
         },
-        position: {
-          x: cxPos + Math.cos(inner) * 70 * spread,
-          y: cyPos + Math.sin(inner) * 60 * spread,
-        },
+        position: grouped
+          ? { x: cxPos + Math.cos(inner) * 70 * spread, y: cyPos + Math.sin(inner) * 60 * spread }
+          : { x: cxPos, y: cyPos },
       })
     })
   })

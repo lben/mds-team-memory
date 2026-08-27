@@ -119,7 +119,8 @@ def test_critical_journey(browser: Browser, base_url_server):
 
     b.get_by_test_id("home-input").fill("topsecret-alpha")
     b.get_by_test_id("do-search").click()
-    expect(b.get_by_test_id("knowledge-column")).to_contain_text("No matches")
+    expect(b.get_by_test_id("nothing-found")).to_be_visible()
+    expect(b.get_by_test_id("knowledge-column")).not_to_contain_text("topsecret")
 
     start = len(secret) + 1
     editor.evaluate(
@@ -135,8 +136,14 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(b.get_by_test_id("knowledge-column")).to_contain_text("operations shared drive")
     b.get_by_test_id("home-input").fill("topsecret-alpha")
     b.get_by_test_id("do-search").click()
-    expect(b.get_by_test_id("knowledge-column")).to_contain_text("No matches")
-    b.get_by_test_id("clear-search").click()
+    expect(b.get_by_test_id("nothing-found")).to_be_visible()
+    expect(b.get_by_test_id("knowledge-column")).not_to_contain_text("topsecret")
+    # A failed search becomes a team question without retyping (PRD 2).
+    b.get_by_test_id("ask-from-search").click()
+    expect(b.locator(".question-card", has_text="topsecret-alpha")).to_have_count(1)
+    b.once("dialog", lambda d: d.accept())
+    b.locator(".question-card", has_text="topsecret-alpha").first.get_by_test_id("delete-question").click()
+    expect(b.locator(".question-card", has_text="topsecret-alpha")).to_have_count(0)
 
     # ---- Documents (W8) — separate screen; exact passage from a home search.
     a.goto(base + "/documents")
