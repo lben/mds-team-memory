@@ -54,4 +54,46 @@ export const store = reactive({
       /* transient */
     }
   },
+
+  /** Listen for pushed notifications, falling back to polling if a websocket
+   * cannot be established — corporate proxies sometimes block them. */
+  watchNotifications() {
+    const startPolling = () => {
+      if (pollTimer) return
+      pollTimer = window.setInterval(() => store.refreshUnread(), 30000)
+    }
+    const stopPolling = () => {
+      if (!pollTimer) return
+      window.clearInterval(pollTimer)
+      pollTimer = 0
+    }
+
+    const connect = () => {
+      let socket: WebSocket
+      try {
+        const scheme = location.protocol === 'https:' ? 'wss' : 'ws'
+        socket = new WebSocket(`${scheme}://${location.host}/ws/notifications`)
+      } catch {
+        startPolling()
+        return
+      }
+      socket.onopen = () => {
+        stopPolling()
+        retryDelay = 2000
+        store.refreshUnread() // catch anything missed while disconnected
+      }
+      socket.onmessage = () => store.refreshUnread()
+      socket.onerror = () => socket.close()
+      socket.onclose = () => {
+        startPolling()
+        window.setTimeout(connect, retryDelay)
+        retryDelay = Math.min(retryDelay * 2, 60000)
+      }
+    }
+
+    connect()
+  },
 })
+
+let pollTimer = 0
+let retryDelay = 2000

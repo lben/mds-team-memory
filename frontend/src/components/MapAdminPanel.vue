@@ -363,6 +363,11 @@ loadAll()
         <div>
           <strong>{{ t.name }}</strong>
           <span v-if="t.is_builtin" class="chip" style="margin-left: 8px">BUILT IN</span>
+          <span v-if="!t.selectable" class="chip warn" style="margin-left: 6px">SYSTEM</span>
+          <span v-else-if="t.is_default" class="chip good" style="margin-left: 6px">DEFAULT</span>
+          <div v-if="!t.selectable" class="muted note" style="margin-top: 4px">
+            Generated automatically between duplicate contributions — not offered when linking concepts.
+          </div>
         </div>
         <div class="muted note">{{ t.usage }} link{{ t.usage === 1 ? '' : 's' }}</div>
         <div class="row gap8">
@@ -371,7 +376,8 @@ loadAll()
         </div>
       </div>
       <p class="muted empty">
-        Built-in types are protected. A type can only be deleted once no links use it.
+        Built-in types are protected. A type can only be deleted once no links use it. Every type here except
+        those marked SYSTEM can be chosen when linking two concepts.
       </p>
     </div>
   </div>

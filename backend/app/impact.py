@@ -2,6 +2,7 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from .live import queue_wake
 from .models import ImpactEvent, KnowledgeItem, Notification, Profile
 
 POINTS = {
@@ -58,8 +59,9 @@ def notify(
                     dedup_key=dedup_key,
                 )
             )
+        queue_wake(db, profile_id)
     except IntegrityError:
-        pass
+        pass  # duplicate notification; nothing new to wake anyone for
 
 
 def _helped_keys(db: Session, item: KnowledgeItem, actor_id: str, beneficiary_id: str) -> list[str]:

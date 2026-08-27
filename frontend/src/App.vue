@@ -81,7 +81,7 @@ onMounted(() => {
   store.loadProfile()
   store.loadAdmin()
   store.refreshUnread()
-  window.setInterval(() => store.refreshUnread(), 30000)
+  store.watchNotifications()
 })
 </script>
 

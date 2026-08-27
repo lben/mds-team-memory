@@ -3,6 +3,8 @@
 import io
 import uuid
 
+import pytest
+
 
 def unique(text: str) -> str:
     return f"{text} {uuid.uuid4().hex[:8]}"
@@ -153,6 +155,33 @@ def test_shared_counter_encourages_before_impact(make_client):
         f"/api/scratchpad/{pad['id']}/share", json={"text": "A useful private line to share."}
     ).json()
     assert shared["shared_total"] == 3
+
+
+def test_notifications_are_pushed_not_polled(make_client):
+    """The server wakes a profile's open tab when it gets a notification, and
+    only after the transaction commits."""
+    asker, answerer = make_client(), make_client()
+    question = asker.post("/api/questions", json={"body": unique("Push me a notification")}).json()
+
+    with asker.websocket_connect("/ws/notifications") as socket:
+        assert socket.receive_json() == {"type": "ready"}
+        answerer.post(f"/api/questions/{question['id']}/answers", json={"body": unique("An answer")})
+        assert socket.receive_json() == {"type": "notifications"}
+
+    # The signal carries no content: the browser re-reads the real list.
+    unread = asker.get("/api/notifications").json()
+    assert unread["unread"] >= 1
+
+
+def test_notification_socket_requires_a_profile_cookie(app_modules):
+    """A browser can only ever subscribe to its own notifications."""
+    from fastapi.testclient import TestClient
+    from starlette.websockets import WebSocketDisconnect
+
+    stranger = TestClient(app_modules)  # no profile cookie established
+    with pytest.raises(WebSocketDisconnect):
+        with stranger.websocket_connect("/ws/notifications") as socket:
+            socket.receive_json()
 
 
 def test_feed_and_question_deletion(make_client):

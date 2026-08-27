@@ -21,6 +21,7 @@ for r in (
     graph.router,
     impact.router,
     notifications.router,
+    notifications.ws_router,
     admin.router,
 ):
     app.include_router(r)

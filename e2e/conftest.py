@@ -72,4 +72,8 @@ def base_url_server(tmp_path_factory):
 
     yield types.SimpleNamespace(url=base, create_admin=create_admin)
     server.terminate()
-    server.wait(timeout=10)
+    try:
+        server.wait(timeout=10)
+    except subprocess.TimeoutExpired:
+        server.kill()
+        server.wait(timeout=10)

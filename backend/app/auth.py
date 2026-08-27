@@ -15,7 +15,7 @@ ADMIN_COOKIE = "mds_admin"
 PBKDF2_ITERATIONS = 200_000
 
 
-def _hash_token(token: str) -> str:
+def hash_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
 
@@ -29,11 +29,11 @@ def get_profile(
     """Return the current browser profile, creating one (and its cookie) if needed."""
     token = request.cookies.get(PROFILE_COOKIE)
     if token:
-        profile = db.query(Profile).filter_by(token_hash=_hash_token(token)).first()
+        profile = db.query(Profile).filter_by(token_hash=hash_token(token)).first()
         if profile:
             return profile
     token = secrets.token_hex(32)
-    profile = Profile(token_hash=_hash_token(token))
+    profile = Profile(token_hash=hash_token(token))
     db.add(profile)
     db.commit()
     response.set_cookie(PROFILE_COOKIE, token, max_age=10 * 365 * 24 * 3600, **_cookie_kwargs())
@@ -60,7 +60,7 @@ def create_admin_session(db: Session, response: Response, admin: AdminUser) -> N
     token = secrets.token_hex(32)
     db.add(
         AdminSession(
-            token_hash=_hash_token(token),
+            token_hash=hash_token(token),
             admin_user_id=admin.id,
             expires_at=utcnow() + timedelta(hours=config.ADMIN_SESSION_HOURS),
         )
@@ -73,7 +73,7 @@ def get_admin(request: Request, db: Session = Depends(get_db)) -> AdminUser | No
     token = request.cookies.get(ADMIN_COOKIE)
     if not token:
         return None
-    session = db.get(AdminSession, _hash_token(token))
+    session = db.get(AdminSession, hash_token(token))
     if not session or session.expires_at < utcnow():
         return None
     return db.get(AdminUser, session.admin_user_id)
@@ -88,7 +88,7 @@ def require_admin(admin: AdminUser | None = Depends(get_admin)) -> AdminUser:
 def clear_admin_session(request: Request, response: Response, db: Session) -> None:
     token = request.cookies.get(ADMIN_COOKIE)
     if token:
-        session = db.get(AdminSession, _hash_token(token))
+        session = db.get(AdminSession, hash_token(token))
         if session:
             db.delete(session)
             db.commit()
