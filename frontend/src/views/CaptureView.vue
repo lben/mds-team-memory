@@ -105,7 +105,7 @@ onMounted(async () => {
 
     <div class="grid-2" style="margin-top: 16px">
       <div class="card stat-card">
-        <h3>Your contribution so far</h3>
+        <h3>Your knowledge is helping</h3>
         <p class="muted" style="font-size: 11px">Impact appears only when teammates use your contributions.</p>
         <div class="stats">
           <div class="stat" data-testid="shared-stat">
