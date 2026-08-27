@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from ..auth import get_profile
 from ..db import get_db
+from ..impact import shared_count
 from ..knowledge import item_dict, process_after_save
 from ..models import KnowledgeItem, Profile, Scratchpad, utcnow
 from ..text import find_matches
@@ -109,4 +110,8 @@ def share_selection(
     db.add(item)
     db.commit()
     corroboration = process_after_save(db, item)
-    return {"item": item_dict(db, item, profile), "corroboration": corroboration}
+    return {
+        "item": item_dict(db, item, profile),
+        "corroboration": corroboration,
+        "shared_total": shared_count(db, profile.id),
+    }

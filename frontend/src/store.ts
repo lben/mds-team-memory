@@ -6,7 +6,14 @@ interface Profile {
   label: string
   display_name: string | null
   verified: boolean
-  totals: { helped: number; accepted: number; corrections: number; endorsements: number; score: number }
+  totals: {
+    shared: number
+    helped: number
+    accepted: number
+    corrections: number
+    endorsements: number
+    score: number
+  }
 }
 
 export const store = reactive({

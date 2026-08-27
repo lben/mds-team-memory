@@ -12,7 +12,7 @@ const body = ref((route.query.prefill as string) || '')
 const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const sharing = ref(false)
-const success = ref<{ corroboration: Corroboration; item: Item | null } | null>(null)
+const success = ref<{ corroboration: Corroboration; item: Item | null; sharedTotal: number } | null>(null)
 const matching = ref<Item[]>([])
 
 function pickFile() {
@@ -32,11 +32,17 @@ async function share() {
     const form = new FormData()
     form.set('body', body.value)
     if (file.value) form.set('file', file.value)
-    const result = await api.postForm<{ item: Item | null; corroboration: Corroboration; document_id: string | null }>(
-      '/api/capture',
-      form,
-    )
-    success.value = { corroboration: result.corroboration, item: result.item }
+    const result = await api.postForm<{
+      item: Item | null
+      corroboration: Corroboration
+      document_id: string | null
+      shared_total: number
+    }>('/api/capture', form)
+    success.value = {
+      corroboration: result.corroboration,
+      item: result.item,
+      sharedTotal: result.shared_total,
+    }
     await store.loadProfile()
   } catch (e) {
     store.notify(e instanceof ApiError ? e.message : 'Could not save your knowledge')
@@ -99,12 +105,17 @@ onMounted(async () => {
 
     <div class="grid-2" style="margin-top: 16px">
       <div class="card stat-card">
-        <h3>Your knowledge is helping</h3>
+        <h3>Your contribution so far</h3>
         <p class="muted" style="font-size: 11px">Impact appears only when teammates use your contributions.</p>
         <div class="stats">
+          <div class="stat" data-testid="shared-stat">
+            <strong>{{ store.profile?.totals.shared ?? 0 }}</strong><span>Knowledge shared</span>
+          </div>
           <div class="stat"><strong>{{ store.profile?.totals.helped ?? 0 }}</strong><span>Helpful marks</span></div>
           <div class="stat"><strong>{{ store.profile?.totals.accepted ?? 0 }}</strong><span>Accepted answers</span></div>
-          <div class="stat"><strong>{{ store.profile?.totals.corrections ?? 0 }}</strong><span>Adopted corrections</span></div>
+        </div>
+        <div v-if="(store.profile?.totals.shared ?? 0) > 0 && (store.profile?.totals.score ?? 0) === 0" class="success-strip">
+          Thank you for sharing — your contributions are searchable by the whole team.
         </div>
       </div>
       <div class="card stat-card">
@@ -129,6 +140,7 @@ onMounted(async () => {
     <SuccessModal
       v-if="success"
       :corroboration="success.corroboration"
+      :shared-total="success.sharedTotal"
       @close="success = null"
       @view="viewContribution"
       @another="addAnother"

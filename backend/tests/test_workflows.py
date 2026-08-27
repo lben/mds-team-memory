@@ -22,6 +22,40 @@ def test_capture_and_search(make_client):
     assert "<mark>" in results["items"][0]["snippet"]
 
 
+def test_natural_language_query_ranks_on_meaningful_words(make_client):
+    """Regression: 'what is X' surfaced entries matching only 'is', with the
+    entry actually about X last. Function words must not produce results."""
+    author, reader = make_client(), make_client()
+    tool = f"dbvisualizer{uuid.uuid4().hex[:6]}"
+    noise = [
+        "This is the nightly reconciliation checklist for the operations team.",
+        "It is important that the batch is verified before it is released.",
+        "There is a standing meeting where this is reviewed every week.",
+    ]
+    for body in noise:
+        author.post("/api/capture", data={"body": body})
+    target = author.post(
+        "/api/capture",
+        data={"body": f"{tool} is the SQL client we use to inspect the warehouse tables."},
+    ).json()["item"]
+
+    results = reader.get("/api/search", params={"q": f"what is {tool}"}).json()
+    assert results["terms"] == [tool]
+    # The entry about the tool is the only result; the 'is' noise never appears.
+    assert [i["id"] for i in results["items"]] == [target["id"]]
+
+    # A multi-word query ranks full coverage above partial, never the reverse.
+    partial = author.post(
+        "/api/capture", data={"body": "The warehouse tables are refreshed at 06:00 ET."}
+    ).json()["item"]
+    both = reader.get("/api/search", params={"q": f"what is {tool} warehouse tables"}).json()
+    ranked = [i["id"] for i in both["items"]]
+    assert ranked[0] == target["id"]
+    assert partial["id"] in ranked
+    assert ranked.index(target["id"]) < ranked.index(partial["id"])
+    assert both["items"][0]["coverage"] > both["items"][-1]["coverage"]
+
+
 def test_failed_search_becomes_question(make_client):
     """W2: the same search text becomes a team-visible question without retyping."""
     client = make_client()
@@ -78,6 +112,47 @@ def test_answer_accept_and_helpful(make_client):
         f"/api/questions/{question['id']}/answers", json={"body": unique("Late detail")}
     )
     assert late.status_code == 200
+
+
+def test_shared_counter_encourages_before_impact(make_client):
+    """Sharing is counted and visible to everyone even with zero impact, but it
+    never earns points (PRD 11: share an item = 0) or changes rank."""
+    author, reader = make_client(), make_client()
+    assert author.get("/api/profile").json()["totals"]["shared"] == 0
+
+    fact = f"The eta-{uuid.uuid4().hex[:8]} export runs after the close."
+    first = author.post("/api/capture", data={"body": fact}).json()
+    assert first["shared_total"] == 1
+    author.post("/api/capture", data={"body": f"Unrelated note {uuid.uuid4().hex}"})
+
+    totals = author.get("/api/profile").json()["totals"]
+    assert totals["shared"] == 2
+    assert totals["score"] == 0  # sharing alone is worth no points
+
+    # Reposting the same content does not inflate the counter.
+    repeat = author.post("/api/capture", data={"body": fact}).json()
+    assert repeat["shared_total"] == 2
+
+    # Asking a question is not sharing knowledge.
+    author.post("/api/questions", json={"body": f"Where is the eta export documented? {uuid.uuid4().hex}"})
+    assert author.get("/api/profile").json()["totals"]["shared"] == 2
+
+    # Others can see it, with no impact yet and therefore no rank.
+    board = reader.get("/api/impact", params={"period": "all"}).json()
+    me = next(e for e in board["leaderboard"] if e["profile_id"] == first["item"]["author_id"])
+    assert me["shared"] == 2
+    assert me["score"] == 0
+    author_view = author.get("/api/impact", params={"period": "all"}).json()
+    assert author_view["me"]["shared"] == 2
+    assert author_view["me"]["rank"] is None
+
+    # Sharing a scratchpad excerpt counts too.
+    pad = author.get("/api/scratchpad").json()["default"]
+    author.put(f"/api/scratchpad/{pad['id']}", json={"content": "A useful private line to share."})
+    shared = author.post(
+        f"/api/scratchpad/{pad['id']}/share", json={"text": "A useful private line to share."}
+    ).json()
+    assert shared["shared_total"] == 3
 
 
 def test_scratchpad_private_and_share_selection(make_client):

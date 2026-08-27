@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from ..auth import get_profile
 from ..db import get_db
-from ..impact import profile_totals
+from ..impact import profile_totals, shared_counts
 from ..models import ImpactEvent, Profile, utcnow
 
 router = APIRouter(prefix="/api/impact", tags=["impact"])
@@ -28,11 +28,19 @@ def impact(
         query = query.filter(ImpactEvent.created_at >= utcnow() - timedelta(days=30))
     rows = query.group_by(ImpactEvent.beneficiary_profile_id, ImpactEvent.event_type).all()
 
+    since = utcnow() - timedelta(days=30) if period == "30d" else None
+    shared = shared_counts(db, since=since)
+
+    def blank() -> dict:
+        return {"shared": 0, "helped": 0, "accepted": 0, "corrections": 0, "endorsements": 0, "score": 0}
+
     by_profile: dict[str, dict] = {}
+    # Contributors who have shared but not yet earned impact still appear, so
+    # sharing is visible before it pays off.
+    for profile_id, count in shared.items():
+        by_profile.setdefault(profile_id, blank())["shared"] = count
     for profile_id, event_type, count, points in rows:
-        entry = by_profile.setdefault(
-            profile_id, {"helped": 0, "accepted": 0, "corrections": 0, "endorsements": 0, "score": 0}
-        )
+        entry = by_profile.setdefault(profile_id, blank())
         if event_type in ("helped", "group_helped"):
             entry["helped"] += count
         elif event_type == "answer_accepted":
@@ -58,11 +66,17 @@ def impact(
             }
             for pid, entry in by_profile.items()
         ),
-        key=lambda e: (-e["score"], e["label"]),
+        # Impact decides the order; among contributors with equal impact the one
+        # who has shared more appears first, which is a tie-break, not a ranking
+        # by volume.
+        key=lambda e: (-e["score"], -e["shared"], e["label"]),
     )
     for rank, entry in enumerate(leaderboard, start=1):
         entry["rank"] = rank
-    my_rank = next((e["rank"] for e in leaderboard if e["is_me"]), None)
+    # Rank reflects impact, so someone who has only shared so far is not ranked
+    # last for it — their shared count is what the page shows them instead.
+    me = next((e for e in leaderboard if e["is_me"]), None)
+    my_rank = me["rank"] if me and me["score"] > 0 else None
     return {
         "period": period,
         "me": {**profile_totals(db, profile.id), "rank": my_rank},

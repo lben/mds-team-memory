@@ -6,7 +6,7 @@ from ..auth import get_admin, get_profile
 from ..concepts import match_concepts
 from ..db import get_db
 from ..docstore import save_uploaded_document
-from ..impact import mark_helped, notify, record_event
+from ..impact import mark_helped, notify, record_event, shared_count
 from ..knowledge import item_dict, process_after_save
 from ..models import (
     AdminUser,
@@ -60,6 +60,7 @@ def capture(
         corroboration = process_after_save(db, item)
         result["item"] = item_dict(db, item, profile)
     result["corroboration"] = corroboration
+    result["shared_total"] = shared_count(db, profile.id)
     return result
 
 

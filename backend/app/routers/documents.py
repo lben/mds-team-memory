@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from ..auth import get_profile
 from ..db import get_db
 from ..docstore import document_dict, save_uploaded_document
+from ..impact import shared_count
 from ..knowledge import item_dict, process_after_save
 from ..models import Document, DocumentPassage, KnowledgeItem, Profile
 
@@ -72,4 +73,8 @@ def share_passage(
     db.add(item)
     db.commit()
     corroboration = process_after_save(db, item)
-    return {"item": item_dict(db, item, profile), "corroboration": corroboration}
+    return {
+        "item": item_dict(db, item, profile),
+        "corroboration": corroboration,
+        "shared_total": shared_count(db, profile.id),
+    }

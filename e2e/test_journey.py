@@ -241,10 +241,24 @@ def test_critical_journey(browser: Browser, base_url_server):
 
     # ---- Impact: B earned accepted-answer points; leaderboard labels unverified.
     b.goto(base + "/impact")
-    expect(b.locator(".impact-hero")).to_contain_text("1")
+    expect(b.get_by_test_id("my-shared")).to_be_visible()
     row = b.locator(".leader-row.me")
     expect(row).to_contain_text("You · unverified")
     expect(row.locator(".score")).to_contain_text("3")
+
+    # Sharing is visible to everyone, and is counted separately from impact.
+    a.goto(base + "/impact")
+    shared_now = a.get_by_test_id("my-shared").locator("strong").inner_text()
+    assert int(shared_now) > 0, "contributor A shared knowledge during this journey"
+    expect(a.get_by_test_id("leaderboard")).to_contain_text("Shared")
+
+    # The counter is acknowledged at the moment of sharing.
+    a.goto(base + "/capture")
+    a.get_by_test_id("capture-text").fill("The quarterly archive job runs on the first Sunday.")
+    a.get_by_test_id("share-knowledge").click()
+    expect(a.get_by_test_id("shared-total")).to_contain_text("piece of knowledge you have shared")
+    a.get_by_role("button", name="Add another").click()
+    expect(a.get_by_test_id("shared-stat")).to_contain_text(str(int(shared_now) + 1))
 
     # B also received an in-app notification for the accepted answer.
     b.get_by_test_id("bell").click()

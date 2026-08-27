@@ -7,6 +7,7 @@ interface LeaderEntry {
   label: string
   verified: boolean
   is_me: boolean
+  shared: number
   helped: number
   accepted: number
   corrections: number
@@ -16,7 +17,15 @@ interface LeaderEntry {
 }
 interface ImpactData {
   period: string
-  me: { helped: number; accepted: number; corrections: number; endorsements: number; score: number; rank: number | null }
+  me: {
+    shared: number
+    helped: number
+    accepted: number
+    corrections: number
+    endorsements: number
+    score: number
+    rank: number | null
+  }
   leaderboard: LeaderEntry[]
 }
 
@@ -59,26 +68,32 @@ onMounted(load)
     </div>
 
     <div v-if="data" class="impact-hero">
+      <div class="card impact-metric" data-testid="my-shared">
+        <strong>{{ data.me.shared }}</strong><span>Knowledge you shared</span>
+      </div>
       <div class="card impact-metric"><strong>{{ data.me.helped }}</strong><span>Your Helpful marks</span></div>
       <div class="card impact-metric"><strong>{{ data.me.accepted }}</strong><span>Your accepted answers</span></div>
-      <div class="card impact-metric"><strong>{{ data.me.corrections }}</strong><span>Your corrections adopted</span></div>
-      <div class="card impact-metric"><strong>{{ data.me.rank ? `#${data.me.rank}` : '—' }}</strong><span>Your current rank</span></div>
+      <div class="card impact-metric">
+        <strong>{{ data.me.rank ? `#${data.me.rank}` : '—' }}</strong>
+        <span>{{ data.me.rank ? 'Your current rank' : 'Ranked once your knowledge helps someone' }}</span>
+      </div>
     </div>
 
     <div v-if="data" class="card leaderboard" data-testid="leaderboard">
       <div class="leader-head">
         <div>Rank</div>
         <div>Contributor</div>
+        <div>Shared</div>
         <div>Helpful</div>
         <div>Accepted</div>
         <div>Corrections</div>
         <div>Impact</div>
       </div>
       <p v-if="!data.leaderboard.length" class="muted" style="padding: 16px; font-size: 12px">
-        No impact recorded in this period yet. Impact appears when knowledge helps someone.
+        Nothing shared in this period yet.
       </p>
       <div v-for="entry in data.leaderboard" :key="entry.profile_id" class="leader-row" :class="{ me: entry.is_me }">
-        <div class="rank">{{ entry.rank }}</div>
+        <div class="rank">{{ entry.score > 0 ? entry.rank : '—' }}</div>
         <div class="person">
           <span class="avatar">{{ initials(entry.label) }}</span>
           <span>
@@ -86,6 +101,7 @@ onMounted(load)
             <span>{{ entry.is_me ? 'You · unverified' : 'Unverified' }}</span>
           </span>
         </div>
+        <div>{{ entry.shared }}</div>
         <div>{{ entry.helped }}</div>
         <div>{{ entry.accepted }}</div>
         <div>{{ entry.corrections }}</div>

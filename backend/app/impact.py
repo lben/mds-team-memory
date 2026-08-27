@@ -140,6 +140,34 @@ def mark_helped(db: Session, item: KnowledgeItem, actor: Profile) -> tuple[bool,
     return created, None if created else "Already marked"
 
 
+# Contributions that add knowledge. Asking a question is not sharing.
+SHARED_KINDS = ("note", "excerpt", "answer", "correction")
+
+
+def shared_counts(db: Session, profile_ids: list[str] | None = None, since=None) -> dict[str, int]:
+    """How many distinct pieces of knowledge each profile has shared.
+
+    This is a visible encouragement counter, never points: reposting the same
+    normalized content counts once, and it never feeds the impact score.
+    """
+    query = db.query(
+        KnowledgeItem.author_profile_id,
+        func.count(func.distinct(func.coalesce(KnowledgeItem.normalized_hash, KnowledgeItem.id))),
+    ).filter(
+        KnowledgeItem.visibility == "team",
+        KnowledgeItem.kind.in_(SHARED_KINDS),
+    )
+    if profile_ids is not None:
+        query = query.filter(KnowledgeItem.author_profile_id.in_(profile_ids or [""]))
+    if since is not None:
+        query = query.filter(KnowledgeItem.created_at >= since)
+    return dict(query.group_by(KnowledgeItem.author_profile_id).all())
+
+
+def shared_count(db: Session, profile_id: str) -> int:
+    return shared_counts(db, [profile_id]).get(profile_id, 0)
+
+
 def profile_totals(db: Session, profile_id: str) -> dict:
     rows = (
         db.query(ImpactEvent.event_type, func.count(), func.sum(ImpactEvent.points))
@@ -149,6 +177,7 @@ def profile_totals(db: Session, profile_id: str) -> dict:
     )
     by_type = {t: c for t, c, _ in rows}
     return {
+        "shared": shared_count(db, profile_id),
         "helped": by_type.get("helped", 0) + by_type.get("group_helped", 0),
         "accepted": by_type.get("answer_accepted", 0),
         "corrections": by_type.get("correction_adopted", 0),
