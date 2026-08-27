@@ -298,7 +298,10 @@ def create_link(
         dst_id=payload.dst_id,
         relationship_type_id=payload.type_id,
         state="confirmed",
-        evidence=f"Stated by admin {admin.username}: {payload.note.strip()}",
+        # A concept link's evidence is derived at read time from its live
+        # occurrence count and this note; storing the note twice would be a
+        # second copy to keep in step. `evidence` stays empty here and is only
+        # used by the automatic item-to-item corroboration rows.
         reviewed_by=admin.username,
         review_note=payload.note.strip(),
     )

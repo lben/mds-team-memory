@@ -269,9 +269,10 @@ loadAll()
       <button :class="{ active: tab === 'concepts' }" data-testid="tab-concepts" @click="tab = 'concepts'">Concepts</button>
       <button :class="{ active: tab === 'types' }" data-testid="tab-types" @click="tab = 'types'">Relationship types</button>
       <span v-if="loadError" class="form-error" style="margin-left: 10px" data-testid="panel-error">{{ loadError }}</span>
-      <label v-if="tab === 'links'" class="scope-toggle">
+      <label v-if="tab === 'links' && centerConceptId" class="scope-toggle">
         <input v-model="scopeAll" type="checkbox" /> Show all concepts
       </label>
+      <span v-else-if="tab === 'links'" class="scope-toggle">Showing every link</span>
     </div>
 
     <!-- Links -->
