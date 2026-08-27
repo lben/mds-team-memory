@@ -64,6 +64,12 @@ def _item_hits(db: Session, match: str, profile: Profile, terms: list[str], alia
         d = item_dict(db, item, profile)
         d["type"] = "item"
         d["snippet"] = _safe_snippet(snip)
+        if item.kind == "question":
+            d["answer_count"] = (
+                db.query(KnowledgeItem)
+                .filter(KnowledgeItem.kind == "answer", KnowledgeItem.parent_id == item.id)
+                .count()
+            )
         d["coverage"] = _coverage(f"{item.title or ''} {item.body}", terms, aliases)
         d["score"] = -rank + _signals(d, item.updated_at)
         hits.append(d)

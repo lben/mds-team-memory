@@ -166,6 +166,13 @@ async function onChanged() {
   graph.value?.refresh()
 }
 
+async function onQuestionDeleted(id: string) {
+  expandedQuestion.value = null
+  // Search results are a snapshot; drop the deleted question from them too.
+  if (results.value) results.value.items = results.value.items.filter((i) => i.id !== id)
+  await onChanged()
+}
+
 function pickFile() {
   fileInput.value?.click()
 }
@@ -346,7 +353,7 @@ onMounted(async () => {
           :question="q"
           :expanded="expandedQuestion === q.id"
           @changed="onChanged"
-          @deleted="expandedQuestion = null; onChanged()"
+          @deleted="onQuestionDeleted(q.id)"
         />
       </div>
     </div>

@@ -1,8 +1,12 @@
 # MDS Team Memory
 
-Team knowledge base MVP: quick capture, keyword search (SQLite FTS5), Q&A with
-expertise routing, private scratchpads, document passages with exact locators,
-automatic knowledge graphs, and outcome-based impact tracking.
+Team knowledge base MVP built around a single main window: a knowledge graph on
+top that grows with every contribution, one input whose text becomes a Search,
+an Ask, or a Capture, and two columns below — latest knowledge on the left,
+questions on the right (questions matching your expertise first; while
+searching, matched questions with accepted answers first). Scratchpad,
+Documents, and the Leaderboard are separate screens. Search uses SQLite FTS5
+with concept-alias expansion; recognition is outcome-based.
 
 - Backend: Python 3.12, FastAPI, SQLAlchemy, Alembic, SQLite + FTS5
 - Frontend: Vue 3, TypeScript, Vite, Cytoscape.js
@@ -60,7 +64,7 @@ The **Expertise Routing** link stays visible in the sidebar for everyone, but
 opening it asks for admin credentials. The concept, alias, and expertise-mapping
 tools appear only after a successful sign-in, in that browser.
 
-## The context map
+## The knowledge graph
 
 Concepts and their aliases are defined by an admin; any contribution, answer, or
 extracted document passage mentioning one is tagged automatically. When enough
@@ -68,8 +72,9 @@ team content mentions two concepts together (three by default,
 `MDS_COOCCURRENCE_MIN`), a link between them is **suggested** and drawn dashed
 for everyone. Solid edges are confirmed; dashed edges are automatically detected.
 
-Admins curate from the table below the map — clicking a node or edge in the graph
-jumps to its row:
+The graph lives at the top of the Home page: the full map by default, focused on
+the concepts a search mentions. Admins curate links, concepts, and relationship
+types from the table on the Expertise Routing page:
 
 - **Approve** a suggested link to make it solid, or **reject** it to hide it from
   the map. A rejected link is not forgotten: it stays in the table, its
