@@ -165,7 +165,7 @@ onMounted(async () => {
       v-if="success"
       :corroboration="success"
       @close="success = null"
-      @view="success = null; router.push('/search')"
+      @view="success = null; router.push('/')"
       @another="success = null"
     />
   </section>
