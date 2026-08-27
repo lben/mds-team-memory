@@ -136,7 +136,6 @@ class Concept(Base):
     __tablename__ = "concepts"
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     terms: Mapped[list["ConceptTerm"]] = relationship(
         back_populates="concept", cascade="all, delete-orphan", lazy="selectin"

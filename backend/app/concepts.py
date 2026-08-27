@@ -45,10 +45,6 @@ def term_groups(db: Session) -> dict[str, list[str]]:
     return groups
 
 
-# Kept as the public name used by search.
-alias_groups = term_groups
-
-
 def mentions(text: str, term: str) -> bool:
     """The one rule for 'does this text mention this term': whole words only."""
     return re.search(rf"(?<!\w){re.escape(term)}(?!\w)", text.lower()) is not None

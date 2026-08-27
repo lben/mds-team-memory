@@ -143,8 +143,6 @@ def upgrade() -> None:
     op.drop_table("concept_aliases")
     with op.batch_alter_table("concepts") as batch:
         batch.drop_column("name")
-    op.add_column("concepts", sa.Column("created_at", sa.DateTime()))
-    connection.execute(sa.text("UPDATE concepts SET created_at = CURRENT_TIMESTAMP"))
 
 
 def downgrade() -> None:
@@ -204,7 +202,5 @@ def downgrade() -> None:
     op.drop_table("item_concepts_new")
     op.drop_table("passage_concepts")
     op.drop_table("concept_terms")
-    with op.batch_alter_table("concepts") as batch:
-        batch.drop_column("created_at")
     op.create_index("ix_item_concepts_subject_id", "item_concepts", ["subject_id"])
     op.create_index("ix_item_concepts_concept_id", "item_concepts", ["concept_id"])

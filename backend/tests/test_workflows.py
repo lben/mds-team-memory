@@ -426,6 +426,46 @@ def test_vocabulary_is_a_single_source_of_truth(make_client, admin_client):
     assert updated.status_code == 200
     assert updated.json()["aliases"] == [f"opt{suffix}", f"opti{suffix}"]
 
+    # A concept's identity is its canonical term, so a blank name is refused —
+    # even when aliases would otherwise make the term set non-empty. Accepting
+    # it once left a nameless concept and released the old name.
+    assert admin_client.post(
+        "/api/admin/concepts", json={"name": "   ", "aliases": [f"ghost{suffix}"]}
+    ).status_code == 400
+    assert admin_client.put(
+        f"/api/admin/concepts/{first['id']}", json={"name": " ", "aliases": [f"alt{suffix}"]}
+    ).status_code == 400
+    intact = next(
+        c for c in admin_client.get("/api/admin/concepts").json() if c["id"] == first["id"]
+    )
+    assert intact["name"] == f"Optima{suffix}"
+    assert_one_canonical_term_per_concept()
+
+
+def assert_one_canonical_term_per_concept() -> None:
+    """Every concept has exactly one canonical term — the invariant the whole
+    single-vocabulary design rests on."""
+    from sqlalchemy import text as sql_text
+
+    from app.db import SessionLocal
+
+    db = SessionLocal()
+    try:
+        broken = db.execute(
+            sql_text(
+                "SELECT COUNT(*) FROM concepts c WHERE ("
+                "  SELECT COUNT(*) FROM concept_terms t"
+                "  WHERE t.concept_id = c.id AND t.is_canonical = 1) != 1"
+            )
+        ).scalar()
+        duplicates = db.execute(
+            sql_text("SELECT COUNT(*) - COUNT(DISTINCT term) FROM concept_terms")
+        ).scalar()
+    finally:
+        db.close()
+    assert broken == 0, f"{broken} concept(s) without exactly one canonical term"
+    assert duplicates == 0, "a term is owned by more than one concept"
+
 
 def test_tags_are_rebuilt_when_the_vocabulary_changes(make_client, admin_client):
     """Tags are derived data: renaming or removing a word must not leave content

@@ -6,7 +6,7 @@ from datetime import timedelta
 from sqlalchemy import text as sql_text
 from sqlalchemy.orm import Session
 
-from .concepts import alias_groups
+from .concepts import term_groups
 from .knowledge import item_dict
 from .models import DocumentPassage, KnowledgeItem, Profile, Scratchpad, utcnow
 from .text import build_fts_match, content_terms, find_matches
@@ -126,7 +126,7 @@ def _rank(hits: list[dict], group: bool) -> list[dict]:
 
 
 def search_all(db: Session, profile: Profile, query: str) -> dict:
-    groups = alias_groups(db)
+    groups = term_groups(db)
     terms = content_terms(query)
     items: list[dict] = []
     passages: list[dict] = []

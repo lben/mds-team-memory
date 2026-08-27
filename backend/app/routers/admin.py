@@ -97,13 +97,16 @@ def _concept_dict(concept: Concept) -> dict:
 
 def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str]) -> None:
     """Replace a concept's vocabulary, rejecting words another concept owns."""
+    # The canonical term is the concept's identity, so it must exist even when
+    # aliases would otherwise make the term set non-empty.
+    canonical_term = normalize_term(name)
+    if not canonical_term:
+        raise HTTPException(400, "A concept needs a name")
     wanted: dict[str, str] = {}
-    for display, canonical in [(name, True)] + [(a, False) for a in aliases]:
+    for display in [name, *aliases]:
         term = normalize_term(display)
         if term:
             wanted.setdefault(term, display.strip())
-    if not wanted:
-        raise HTTPException(400, "A concept needs a name")
 
     taken = (
         db.query(ConceptTerm)
@@ -116,7 +119,6 @@ def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str]) -> 
             400, f"'{taken.display}' is already used by the concept '{owner.name if owner else '?'}'"
         )
 
-    canonical_term = normalize_term(name)
     db.query(ConceptTerm).filter(ConceptTerm.concept_id == concept.id).delete()
     db.flush()
     for term, display in wanted.items():
