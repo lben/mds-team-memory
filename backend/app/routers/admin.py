@@ -11,15 +11,13 @@ from ..auth import (
     require_admin,
     verify_password,
 )
-from ..concepts import match_concepts
+from ..concepts import match_concepts, normalize_term, retag_everything
 from ..db import get_db
 from ..models import (
     AdminUser,
     Concept,
-    ConceptAlias,
+    ConceptTerm,
     ExpertiseMapping,
-    ItemConcept,
-    KnowledgeItem,
     Profile,
     Relationship,
     RelationshipType,
@@ -93,47 +91,65 @@ def list_admins(db: Session = Depends(get_db)):
     return [{"id": a.id, "username": a.username} for a in db.query(AdminUser).order_by(AdminUser.username)]
 
 
-@router.get("/concepts", dependencies=[Depends(require_admin)])
-def list_concepts(db: Session = Depends(get_db)):
-    return [
-        {"id": c.id, "name": c.name, "aliases": [a.alias for a in c.aliases]}
-        for c in db.query(Concept).order_by(Concept.name).all()
-    ]
+def _concept_dict(concept: Concept) -> dict:
+    return {"id": concept.id, "name": concept.name, "aliases": concept.aliases}
 
 
-@router.post("/concepts", dependencies=[Depends(require_admin)])
-def create_concept(payload: ConceptIn, db: Session = Depends(get_db)):
-    concept = Concept(name=payload.name.strip())
-    db.add(concept)
-    try:
-        db.flush()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(400, "That concept already exists")
-    for alias in payload.aliases:
-        alias = alias.strip().lower()
-        if alias:
-            db.add(ConceptAlias(concept_id=concept.id, alias=alias))
+def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str]) -> None:
+    """Replace a concept's vocabulary, rejecting words another concept owns."""
+    wanted: dict[str, str] = {}
+    for display, canonical in [(name, True)] + [(a, False) for a in aliases]:
+        term = normalize_term(display)
+        if term:
+            wanted.setdefault(term, display.strip())
+    if not wanted:
+        raise HTTPException(400, "A concept needs a name")
+
+    taken = (
+        db.query(ConceptTerm)
+        .filter(ConceptTerm.term.in_(list(wanted)), ConceptTerm.concept_id != concept.id)
+        .first()
+    )
+    if taken:
+        owner = db.get(Concept, taken.concept_id)
+        raise HTTPException(
+            400, f"'{taken.display}' is already used by the concept '{owner.name if owner else '?'}'"
+        )
+
+    canonical_term = normalize_term(name)
+    db.query(ConceptTerm).filter(ConceptTerm.concept_id == concept.id).delete()
+    db.flush()
+    for term, display in wanted.items():
+        db.add(
+            ConceptTerm(
+                concept_id=concept.id,
+                term=term,
+                display=display,
+                is_canonical=term == canonical_term,
+            )
+        )
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(400, "An alias is already used by another concept")
-    _retag_existing(db, concept)
-    return {"id": concept.id, "name": concept.name, "aliases": [a.alias for a in concept.aliases]}
+        raise HTTPException(400, "That word is already used by another concept")
+    db.refresh(concept)
 
 
-def _retag_existing(db: Session, concept: Concept) -> None:
-    """Tag already-saved team items with a newly created concept (deterministic backfill)."""
-    from ..concepts import tag_subject
+@router.get("/concepts", dependencies=[Depends(require_admin)])
+def list_concepts(db: Session = Depends(get_db)):
+    concepts = db.query(Concept).all()
+    return [_concept_dict(c) for c in sorted(concepts, key=lambda c: c.name.lower())]
 
-    aliases = [concept.name.lower()] + [a.alias for a in concept.aliases]
-    items = db.query(KnowledgeItem).filter(KnowledgeItem.visibility == "team").all()
-    for item in items:
-        low = ((item.title or "") + " " + item.body).lower()
-        if any(a in low for a in aliases):
-            tag_subject(db, "item", item.id, (item.title or "") + " " + item.body)
-    db.commit()
+
+@router.post("/concepts", dependencies=[Depends(require_admin)])
+def create_concept(payload: ConceptIn, db: Session = Depends(get_db)):
+    concept = Concept()
+    db.add(concept)
+    db.flush()
+    _set_terms(db, concept, payload.name, payload.aliases)
+    retag_everything(db)
+    return _concept_dict(concept)
 
 
 @router.put("/concepts/{concept_id}", dependencies=[Depends(require_admin)])
@@ -141,20 +157,10 @@ def update_concept(concept_id: str, payload: ConceptUpdateIn, db: Session = Depe
     concept = db.get(Concept, concept_id)
     if not concept:
         raise HTTPException(404, "Concept not found")
-    concept.name = payload.name.strip()
-    db.query(ConceptAlias).filter(ConceptAlias.concept_id == concept_id).delete()
-    for alias in payload.aliases:
-        alias = alias.strip().lower()
-        if alias:
-            db.add(ConceptAlias(concept_id=concept.id, alias=alias))
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(400, "That concept name or alias is already used")
-    # Renaming or re-aliasing changes what the text matches, so retag content.
-    _retag_existing(db, concept)
-    return {"id": concept.id, "name": concept.name, "aliases": [a.alias for a in concept.aliases]}
+    _set_terms(db, concept, payload.name, payload.aliases)
+    # Renaming or re-aliasing changes what the text matches, so rebuild the tags.
+    retag_everything(db)
+    return _concept_dict(concept)
 
 
 @router.delete("/concepts/{concept_id}", dependencies=[Depends(require_admin)])
@@ -162,7 +168,8 @@ def delete_concept(concept_id: str, db: Session = Depends(get_db)):
     concept = db.get(Concept, concept_id)
     if not concept:
         raise HTTPException(404, "Concept not found")
-    db.query(ItemConcept).filter(ItemConcept.concept_id == concept_id).delete()
+    # Tags, terms and expertise mappings cascade; concept links are polymorphic
+    # by design and are removed here.
     db.query(Relationship).filter(
         Relationship.src_kind == "concept",
         (Relationship.src_id == concept_id) | (Relationship.dst_id == concept_id),

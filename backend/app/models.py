@@ -126,35 +126,84 @@ class DocumentPassage(Base):
 
 
 class Concept(Base):
+    """A concept has no name of its own: its name is its canonical term.
+
+    Every word that can resolve to a concept — the canonical name and all its
+    aliases — lives in concept_terms, so one word can belong to exactly one
+    concept and there is a single place to look a word up.
+    """
+
     __tablename__ = "concepts"
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
-    name: Mapped[str] = mapped_column(String(120), unique=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
-    aliases: Mapped[list["ConceptAlias"]] = relationship(
-        back_populates="concept", cascade="all, delete-orphan"
+    terms: Mapped[list["ConceptTerm"]] = relationship(
+        back_populates="concept", cascade="all, delete-orphan", lazy="selectin"
     )
 
+    @property
+    def canonical(self) -> "ConceptTerm | None":
+        return next((t for t in self.terms if t.is_canonical), None)
 
-class ConceptAlias(Base):
-    __tablename__ = "concept_aliases"
+    @property
+    def name(self) -> str:
+        term = self.canonical
+        return term.display if term else "(unnamed concept)"
+
+    @property
+    def aliases(self) -> list[str]:
+        return sorted(t.display for t in self.terms if not t.is_canonical)
+
+
+class ConceptTerm(Base):
+    """One searchable word for one concept.
+
+    `term` is the lowercased match key and is unique across every concept, so a
+    name can never collide with another concept's alias. `display` keeps the
+    spelling the admin typed.
+    """
+
+    __tablename__ = "concept_terms"
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
-    concept_id: Mapped[str] = mapped_column(ForeignKey("concepts.id", ondelete="CASCADE"), index=True)
-    alias: Mapped[str] = mapped_column(String(120), unique=True)  # stored normalized (lowercase)
+    concept_id: Mapped[str] = mapped_column(
+        ForeignKey("concepts.id", ondelete="CASCADE"), index=True
+    )
+    term: Mapped[str] = mapped_column(String(120), unique=True)
+    display: Mapped[str] = mapped_column(String(120))
+    is_canonical: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    concept: Mapped[Concept] = relationship(back_populates="aliases")
+    concept: Mapped[Concept] = relationship(back_populates="terms")
 
 
 class ItemConcept(Base):
-    """Deterministic 'mentions' link between any content row and a concept."""
+    """Deterministic 'mentions' link between a contribution and a concept.
+
+    Derived from the item text and the vocabulary; recomputed whenever either
+    changes. Real foreign keys mean it cannot outlive what it points at.
+    """
 
     __tablename__ = "item_concepts"
-    __table_args__ = (UniqueConstraint("subject_kind", "subject_id", "concept_id"),)
+    __table_args__ = (UniqueConstraint("item_id", "concept_id"),)
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
-    subject_kind: Mapped[str] = mapped_column(String(12))  # item|passage
-    subject_id: Mapped[str] = mapped_column(String(32), index=True)
+    item_id: Mapped[str] = mapped_column(
+        ForeignKey("knowledge_items.id", ondelete="CASCADE"), index=True
+    )
+    concept_id: Mapped[str] = mapped_column(ForeignKey("concepts.id", ondelete="CASCADE"), index=True)
+
+
+class PassageConcept(Base):
+    """The same link for an extracted document passage."""
+
+    __tablename__ = "passage_concepts"
+    __table_args__ = (UniqueConstraint("passage_id", "concept_id"),)
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    passage_id: Mapped[str] = mapped_column(
+        ForeignKey("document_passages.id", ondelete="CASCADE"), index=True
+    )
     concept_id: Mapped[str] = mapped_column(ForeignKey("concepts.id", ondelete="CASCADE"), index=True)
 
 

@@ -19,6 +19,7 @@ from .models import (
     DocumentPassage,
     ItemConcept,
     KnowledgeItem,
+    PassageConcept,
     Relationship,
     RelationshipType,
     utcnow,
@@ -34,17 +35,12 @@ def _team_subject_ids(db: Session, concept_id: str) -> set[tuple[str, str]]:
     content out of link counts, evidence and the map.
     """
     item_rows = db.execute(
-        select(ItemConcept.subject_id)
-        .join(
-            KnowledgeItem,
-            (ItemConcept.subject_kind == "item") & (KnowledgeItem.id == ItemConcept.subject_id),
-        )
+        select(ItemConcept.item_id)
+        .join(KnowledgeItem, KnowledgeItem.id == ItemConcept.item_id)
         .where(ItemConcept.concept_id == concept_id, KnowledgeItem.visibility == "team")
     ).all()
     passage_rows = db.execute(
-        select(ItemConcept.subject_id).where(
-            ItemConcept.concept_id == concept_id, ItemConcept.subject_kind == "passage"
-        )
+        select(PassageConcept.passage_id).where(PassageConcept.concept_id == concept_id)
     ).all()
     return {("item", r[0]) for r in item_rows} | {("passage", r[0]) for r in passage_rows}
 

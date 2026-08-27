@@ -392,6 +392,108 @@ def _link_between(admin_client, a: str, b: str) -> dict | None:
     return next((l for l in links if b in (l["src_id"], l["dst_id"])), None)
 
 
+def test_vocabulary_is_a_single_source_of_truth(make_client, admin_client):
+    """A word belongs to exactly one concept: names and aliases share one
+    namespace, case-insensitively, so duplicates are refused instead of
+    silently resolving to whichever concept happens to be found first."""
+    suffix = uuid.uuid4().hex[:6]
+    first = admin_client.post(
+        "/api/admin/concepts", json={"name": f"Optima{suffix}", "aliases": [f"opt{suffix}"]}
+    ).json()
+    assert first["name"] == f"Optima{suffix}"
+    assert first["aliases"] == [f"opt{suffix}"]
+
+    # A second concept cannot claim the first one's name...
+    clash = admin_client.post(
+        "/api/admin/concepts", json={"name": f"Payments{suffix}", "aliases": [f"Optima{suffix}"]}
+    )
+    assert clash.status_code == 400
+    assert f"Optima{suffix}" in clash.json()["detail"]
+
+    # ...nor a case variant of it, as a name or an alias.
+    assert admin_client.post(
+        "/api/admin/concepts", json={"name": f"optima{suffix}".lower(), "aliases": []}
+    ).status_code == 400
+    assert admin_client.post(
+        "/api/admin/concepts", json={"name": f"Other{suffix}", "aliases": [f"OPT{suffix}"]}
+    ).status_code == 400
+
+    # A concept can still edit its own words.
+    updated = admin_client.put(
+        f"/api/admin/concepts/{first['id']}",
+        json={"name": f"Optima{suffix}", "aliases": [f"opt{suffix}", f"opti{suffix}"]},
+    )
+    assert updated.status_code == 200
+    assert updated.json()["aliases"] == [f"opt{suffix}", f"opti{suffix}"]
+
+
+def test_tags_are_rebuilt_when_the_vocabulary_changes(make_client, admin_client):
+    """Tags are derived data: renaming or removing a word must not leave content
+    tagged with a concept its text no longer mentions, and a concept created
+    after a document was uploaded must still find that document."""
+    author = make_client()
+    suffix = uuid.uuid4().hex[:6]
+    concept = admin_client.post(
+        "/api/admin/concepts", json={"name": f"Falcon{suffix}", "aliases": [f"fal{suffix}"]}
+    ).json()
+    mentions = lambda: next(
+        c["mentions"] for c in author.get("/api/graph/concepts").json() if c["id"] == concept["id"]
+    )
+
+    author.post("/api/capture", data={"body": f"The Falcon{suffix} service restarts on Sundays."})
+    author.post("/api/capture", data={"body": f"Check fal{suffix} before the release."})
+    assert mentions() == 2
+
+    # Removing the alias must drop the tag that only the alias justified.
+    admin_client.put(
+        f"/api/admin/concepts/{concept['id']}", json={"name": f"Falcon{suffix}", "aliases": []}
+    )
+    assert mentions() == 1
+
+    # Renaming must drop tags whose text no longer mentions the concept at all.
+    admin_client.put(
+        f"/api/admin/concepts/{concept['id']}", json={"name": f"Peregrine{suffix}", "aliases": []}
+    )
+    assert mentions() == 0
+
+    # A concept defined after a document was uploaded still tags that document.
+    marker = f"Kestrel{uuid.uuid4().hex[:6]}"
+    author.post(
+        "/api/documents",
+        files={"file": ("ops.txt", io.BytesIO(f"The {marker} ledger reconciles daily.".encode()), "text/plain")},
+    )
+    late = admin_client.post("/api/admin/concepts", json={"name": marker, "aliases": []}).json()
+    late_mentions = next(
+        c["mentions"] for c in author.get("/api/graph/concepts").json() if c["id"] == late["id"]
+    )
+    assert late_mentions == 1, "document passages must be tagged by the backfill too"
+
+
+def test_deleting_a_concept_leaves_nothing_behind(make_client, admin_client):
+    """Terms, tags, expertise mappings and links all go with the concept."""
+    author = make_client()
+    suffix = uuid.uuid4().hex[:6]
+    concept = admin_client.post(
+        "/api/admin/concepts", json={"name": f"Zephyr{suffix}", "aliases": [f"zeph{suffix}"]}
+    ).json()
+    author.post("/api/capture", data={"body": f"Zephyr{suffix} handles the overnight sweep."})
+    profile_id = author.get("/api/profile").json()["id"]
+    admin_client.post(
+        "/api/admin/expertise", json={"profile_id": profile_id, "concept_id": concept["id"]}
+    )
+
+    assert admin_client.delete(f"/api/admin/concepts/{concept['id']}").status_code == 200
+    assert all(c["id"] != concept["id"] for c in author.get("/api/graph/concepts").json())
+    assert all(
+        concept["id"] not in [a["concept_id"] for a in row["areas"]]
+        for row in admin_client.get("/api/admin/expertise").json()
+    )
+    # The word is free again now that nothing owns it.
+    assert admin_client.post(
+        "/api/admin/concepts", json={"name": f"Zephyr{suffix}", "aliases": []}
+    ).status_code == 200
+
+
 def test_link_discovery_review_and_reversal(make_client, admin_client):
     """Detected links are suggested/dashed, approving makes them confirmed/solid,
     rejecting hides them from the map while the count keeps rising, and the

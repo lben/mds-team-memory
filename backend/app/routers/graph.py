@@ -16,6 +16,7 @@ from ..models import (
     DocumentPassage,
     ItemConcept,
     KnowledgeItem,
+    PassageConcept,
     Relationship,
     RelationshipType,
 )
@@ -54,19 +55,12 @@ def _team_subject_concepts(db: Session) -> list[tuple[str, str, str]]:
     graph or counts.
     """
     item_rows = (
-        db.query(ItemConcept.subject_id, ItemConcept.concept_id)
-        .join(
-            KnowledgeItem,
-            (ItemConcept.subject_kind == "item") & (KnowledgeItem.id == ItemConcept.subject_id),
-        )
+        db.query(ItemConcept.item_id, ItemConcept.concept_id)
+        .join(KnowledgeItem, KnowledgeItem.id == ItemConcept.item_id)
         .filter(KnowledgeItem.visibility == "team")
         .all()
     )
-    passage_rows = (
-        db.query(ItemConcept.subject_id, ItemConcept.concept_id)
-        .filter(ItemConcept.subject_kind == "passage")
-        .all()
-    )
+    passage_rows = db.query(PassageConcept.passage_id, PassageConcept.concept_id).all()
     return [("item", s, c) for s, c in item_rows] + [("passage", s, c) for s, c in passage_rows]
 
 
@@ -104,7 +98,7 @@ def _get_link(db: Session, link_id: str) -> Relationship:
 def list_concepts(db: Session = Depends(get_db)):
     rows = _team_subject_concepts(db)
     counts = Counter(c for _, _, c in rows)
-    concepts = db.query(Concept).order_by(Concept.name).all()
+    concepts = sorted(db.query(Concept).all(), key=lambda c: c.name.lower())
     return [{"id": c.id, "name": c.name, "mentions": counts.get(c.id, 0)} for c in concepts]
 
 

@@ -44,6 +44,7 @@ const scopeAll = ref(false)
 const links = ref<LinkRow[]>([])
 const concepts = ref<ConceptRow[]>([])
 const types = ref<TypeRow[]>([])
+const loadError = ref('')
 const selectableTypes = computed(() => types.value.filter((t) => t.selectable))
 
 const newConceptName = ref('')
@@ -59,13 +60,24 @@ const editAliases = ref('')
 
 async function loadAll() {
   const query = scopeAll.value || !props.centerConceptId ? '' : `?concept_id=${props.centerConceptId}`
-  ;[links.value, concepts.value, types.value] = await Promise.all([
+  // Loaded independently: one failing request must not blank the other tables,
+  // and a failure has to be visible rather than looking like "nothing here".
+  const [l, c, t] = await Promise.allSettled([
     api.get<LinkRow[]>(`/api/graph/links${query}`),
     api.get<ConceptRow[]>('/api/admin/concepts'),
     api.get<TypeRow[]>('/api/graph/relationship-types'),
   ])
-  if (!selectableTypes.value.some((t) => t.id === linkType.value)) {
-    linkType.value = selectableTypes.value.find((t) => t.is_default)?.id ?? selectableTypes.value[0]?.id ?? ''
+  const failures: string[] = []
+  if (l.status === 'fulfilled') links.value = l.value
+  else failures.push('links')
+  if (c.status === 'fulfilled') concepts.value = c.value
+  else failures.push('concepts')
+  if (t.status === 'fulfilled') types.value = t.value
+  else failures.push('relationship types')
+  loadError.value = failures.length ? `Could not load ${failures.join(', ')}. Check the server.` : ''
+
+  if (!selectableTypes.value.some((t2) => t2.id === linkType.value)) {
+    linkType.value = selectableTypes.value.find((t2) => t2.is_default)?.id ?? selectableTypes.value[0]?.id ?? ''
   }
 }
 
@@ -256,6 +268,7 @@ loadAll()
       <button :class="{ active: tab === 'links' }" data-testid="tab-links" @click="tab = 'links'">Links</button>
       <button :class="{ active: tab === 'concepts' }" data-testid="tab-concepts" @click="tab = 'concepts'">Concepts</button>
       <button :class="{ active: tab === 'types' }" data-testid="tab-types" @click="tab = 'types'">Relationship types</button>
+      <span v-if="loadError" class="form-error" style="margin-left: 10px" data-testid="panel-error">{{ loadError }}</span>
       <label v-if="tab === 'links'" class="scope-toggle">
         <input v-model="scopeAll" type="checkbox" /> Show all concepts
       </label>

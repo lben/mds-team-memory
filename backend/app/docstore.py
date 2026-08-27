@@ -6,7 +6,7 @@ from fastapi import HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from . import config
-from .concepts import tag_subject
+from .concepts import retag_passage
 from .extraction import extract_passages
 from .models import Document, DocumentPassage, Profile
 
@@ -52,7 +52,7 @@ def save_uploaded_document(db: Session, profile: Profile, upload: UploadFile) ->
         )
         db.add(passage)
         db.flush()
-        tag_subject(db, "passage", passage.id, p["text"])
+        retag_passage(db, passage)
     db.commit()
     return document
 

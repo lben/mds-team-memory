@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from . import config
-from .concepts import route_question, tag_subject
+from .concepts import match_concepts, retag_item, route_question
 from .impact import already_helped
 from .models import CORROBORATES_ID, ImpactEvent, KnowledgeItem, Profile, Relationship
 from .relationships import refresh_for_item
@@ -39,7 +39,8 @@ def process_after_save(db: Session, item: KnowledgeItem) -> dict:
     Never blocks or rejects the contribution. Returns corroboration info for the UI.
     """
     item.normalized_hash = normalized_hash(item.body)
-    concepts = tag_subject(db, "item", item.id, (item.title or "") + " " + item.body)
+    concept_ids = retag_item(db, item)
+    concepts = match_concepts(db, (item.title or "") + " " + item.body) if concept_ids else []
 
     corroboration = {"group_size": 1, "contributors": 1}
     if item.visibility == "team" and item.kind in GROUPABLE_KINDS:

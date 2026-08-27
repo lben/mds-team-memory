@@ -43,9 +43,7 @@ def list_questions(
         my_concepts = db.query(ExpertiseMapping.concept_id).filter(
             ExpertiseMapping.profile_id == profile.id
         )
-        matching = db.query(ItemConcept.subject_id).filter(
-            ItemConcept.subject_kind == "item", ItemConcept.concept_id.in_(my_concepts)
-        )
+        matching = db.query(ItemConcept.item_id).filter(ItemConcept.concept_id.in_(my_concepts))
         query = query.filter(KnowledgeItem.id.in_(matching))
     questions = query.order_by(KnowledgeItem.created_at.desc()).limit(200).all()
     answer_counts = dict(
