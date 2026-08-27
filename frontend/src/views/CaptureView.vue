@@ -41,7 +41,9 @@ async function share() {
     success.value = {
       corroboration: result.corroboration,
       item: result.item,
-      sharedTotal: result.shared_total,
+      // A document-only upload does not raise the knowledge counter, so do not
+      // claim it did.
+      sharedTotal: result.item ? result.shared_total : 0,
     }
     await store.loadProfile()
   } catch (e) {

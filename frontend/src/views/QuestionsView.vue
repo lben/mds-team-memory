@@ -100,6 +100,18 @@ watch(
   },
 )
 
+// The topbar "Ask question" link must work from this page too, not only on
+// mount. The query is cleared once consumed so the next click changes the
+// route again.
+watch(
+  () => route.query.ask,
+  (ask) => {
+    if (!ask) return
+    showComposer.value = true
+    router.replace({ path: route.path, query: {} })
+  },
+)
+
 onMounted(async () => {
   await loadList()
   const id = route.params.id

@@ -57,9 +57,19 @@ async function markAllRead() {
   store.unread = 0
 }
 
-function openNotification(n: { item_id: string | null }) {
+async function openNotification(n: { item_id: string | null }) {
   showNotifications.value = false
-  if (n.item_id) router.push({ path: '/search', query: { item: n.item_id } })
+  if (!n.item_id) return
+  // A notification about a question or an answer belongs on the question page,
+  // not in a generic item modal.
+  try {
+    const item = await api.get<{ kind: string; parent_id: string | null }>(`/api/items/${n.item_id}`)
+    if (item.kind === 'question') return void router.push(`/questions/${n.item_id}`)
+    if (item.kind === 'answer' && item.parent_id) return void router.push(`/questions/${item.parent_id}`)
+  } catch {
+    /* fall through to the generic view */
+  }
+  router.push({ path: '/search', query: { item: n.item_id } })
 }
 
 function fmt(ts: string) {
