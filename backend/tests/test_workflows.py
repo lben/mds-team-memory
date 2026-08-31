@@ -583,6 +583,52 @@ def test_tags_are_rebuilt_when_the_vocabulary_changes(make_client, admin_client)
     assert late_mentions == 1, "document passages must be tagged by the backfill too"
 
 
+def test_word_forms_reach_their_concept(make_client, admin_client):
+    """Writing "emulate" or "emulators" means the Emulation concept. Matching
+    stays deterministic: a shared stem, never a guess."""
+    author, reader = make_client(), make_client()
+    tag = uuid.uuid4().hex[:6]
+    root = f"zorb{tag}"                      # a unique but well-formed English root
+    concept = admin_client.post(
+        "/api/admin/concepts", json={"name": f"{root}ation", "aliases": []}
+    ).json()
+    mentions = lambda: next(
+        c["mentions"] for c in reader.get("/api/graph/concepts").json() if c["id"] == concept["id"]
+    )
+
+    for body in [
+        f"You can {root}ate the old cartridges on a laptop.",
+        f"Two {root}ators were compared for frame timing.",
+        f"She spent the weekend {root}ating an arcade board.",
+    ]:
+        author.post("/api/capture", data={"body": body})
+    assert mentions() == 3, "verb, agent noun and gerund all reach the concept"
+
+    # The search box understands the same forms.
+    results = reader.get("/api/search", params={"q": f"how do I {root}ate a cartridge"}).json()
+    assert results["concepts"] and results["concepts"][0]["id"] == concept["id"]
+    assert results["items"], "search finds the content written in another word form"
+
+    # An unrelated word sharing no stem is left alone.
+    author.post("/api/capture", data={"body": f"The {root}ic festival has nothing to do with it."})
+    assert mentions() == 3
+
+
+def test_a_shared_stem_is_refused_rather_than_guessed(make_client, admin_client):
+    """Two concepts whose words reduce to the same stem keep exact matching
+    only — the loose match is dropped rather than handed to whichever was
+    found first."""
+    author, reader = make_client(), make_client()
+    tag = uuid.uuid4().hex[:6]
+    first = admin_client.post("/api/admin/concepts", json={"name": f"blorp{tag}ing", "aliases": []}).json()
+    second = admin_client.post("/api/admin/concepts", json={"name": f"blorp{tag}ed", "aliases": []}).json()
+
+    author.post("/api/capture", data={"body": f"blorp{tag}ing is a community tradition."})
+    counts = {c["id"]: c["mentions"] for c in reader.get("/api/graph/concepts").json()}
+    assert counts[first["id"]] == 1, "the exact word still tags its own concept"
+    assert counts[second["id"]] == 0, "the shared stem must not tag the other concept"
+
+
 def test_deleting_a_concept_leaves_nothing_behind(make_client, admin_client):
     """Terms, tags, expertise mappings and links all go with the concept."""
     author = make_client()

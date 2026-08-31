@@ -38,6 +38,38 @@ def query_terms(query: str) -> list[str]:
     return [t for t in re.findall(r"\w+", query.lower()) if t]
 
 
+def stem(word: str) -> str:
+    """Reduce an English word to a comparison key, deterministically.
+
+    Deliberately conservative: a missed match only means a concept is not
+    tagged, while an over-eager rule would tag the wrong concept. No
+    dependency and no model — the PRD requires deterministic matching.
+    """
+    w = word.lower()
+    if len(w) <= 4:
+        return w
+    # Plural. '-es' only after a sibilant (boxes, dishes); otherwise drop the
+    # '-s' alone, so "roguelikes" keeps its final e.
+    if w.endswith("ies") and len(w) > 5:
+        w = w[:-1] if w[:-1].endswith("e") else w[:-3] + "y"
+    elif w.endswith("es") and len(w) > 4:
+        w = w[:-2] if w[-4:-2] in ("ss", "sh", "ch", "zz") or w[-3] in "sxz" else w[:-1]
+    elif w.endswith("s") and not w.endswith("ss"):
+        w = w[:-1]
+    for suffix, replacement in [
+        ("ational", "ate"), ("ization", "ize"), ("ation", "ate"), ("ator", "ate"),
+        ("ing", ""), ("edly", ""), ("ed", ""), ("er", ""), ("or", ""),
+    ]:
+        if w.endswith(suffix) and len(w) - len(suffix) >= 3:
+            w = w[: -len(suffix)] + replacement
+            if w.endswith(("at", "bl", "iz")):  # emulating -> emulat -> emulate
+                w += "e"
+            break
+    if len(w) > 3 and w[-1] == w[-2] and w[-1] not in "aeiou":  # running -> run
+        w = w[:-1]
+    return w
+
+
 def content_terms(query: str) -> list[str]:
     """The meaningful words of a query, in order, without duplicates.
 

@@ -10,6 +10,7 @@ import re
 from sqlalchemy.orm import Session
 
 from .impact import notify
+from .text import stem
 from .models import (
     Concept,
     ConceptTerm,
@@ -45,14 +46,36 @@ def term_groups(db: Session) -> dict[str, list[str]]:
     return groups
 
 
+def stem_index(db: Session) -> dict[str, str]:
+    """stem -> concept_id, for single-word terms only.
+
+    A stem claimed by two different concepts is dropped rather than resolved
+    arbitrarily: those words still match exactly, they just stop matching
+    loosely. Same rule as the vocabulary itself — one word, one concept.
+    """
+    owners: dict[str, set[str]] = {}
+    for term, concept_id in vocabulary(db):
+        if " " in term:
+            continue  # multi-word terms only ever match exactly
+        owners.setdefault(stem(term), set()).add(concept_id)
+    return {key: next(iter(ids)) for key, ids in owners.items() if len(ids) == 1}
+
+
 def mentions(text: str, term: str) -> bool:
     """The one rule for 'does this text mention this term': whole words only."""
     return re.search(rf"(?<!\w){re.escape(term)}(?!\w)", text.lower()) is not None
 
 
-def match_concept_ids(db: Session, text: str, vocab=None) -> set[str]:
+def match_concept_ids(db: Session, text: str, vocab=None, stems=None) -> set[str]:
     low = text.lower()
-    return {cid for term, cid in (vocab or vocabulary(db)) if mentions(low, term)}
+    found = {cid for term, cid in (vocab or vocabulary(db)) if mentions(low, term)}
+    # Then loosely: "emulate" and "emulators" should reach the Emulation concept.
+    index = stem_index(db) if stems is None else stems
+    for word in re.findall(r"\w+", low):
+        owner = index.get(stem(word))
+        if owner:
+            found.add(owner)
+    return found
 
 
 def match_concepts(db: Session, text: str) -> list[Concept]:
@@ -68,9 +91,9 @@ def _sync(db: Session, existing: dict[str, object], wanted: set[str], make) -> N
         db.delete(existing[concept_id])
 
 
-def retag_item(db: Session, item: KnowledgeItem, vocab=None) -> set[str]:
+def retag_item(db: Session, item: KnowledgeItem, vocab=None, stems=None) -> set[str]:
     """Recompute an item's tags from scratch, adding and removing as needed."""
-    wanted = match_concept_ids(db, f"{item.title or ''} {item.body}", vocab)
+    wanted = match_concept_ids(db, f"{item.title or ''} {item.body}", vocab, stems)
     existing = {
         row.concept_id: row
         for row in db.query(ItemConcept).filter(ItemConcept.item_id == item.id).all()
@@ -79,8 +102,8 @@ def retag_item(db: Session, item: KnowledgeItem, vocab=None) -> set[str]:
     return wanted
 
 
-def retag_passage(db: Session, passage: DocumentPassage, vocab=None) -> set[str]:
-    wanted = match_concept_ids(db, passage.text, vocab)
+def retag_passage(db: Session, passage: DocumentPassage, vocab=None, stems=None) -> set[str]:
+    wanted = match_concept_ids(db, passage.text, vocab, stems)
     existing = {
         row.concept_id: row
         for row in db.query(PassageConcept).filter(PassageConcept.passage_id == passage.id).all()
@@ -95,11 +118,11 @@ def retag_everything(db: Session) -> None:
     Covers passages as well as items, so a concept created after a document was
     uploaded still finds it.
     """
-    vocab = vocabulary(db)
+    vocab, stems = vocabulary(db), stem_index(db)
     for item in db.query(KnowledgeItem).all():
-        retag_item(db, item, vocab)
+        retag_item(db, item, vocab, stems)
     for passage in db.query(DocumentPassage).all():
-        retag_passage(db, passage, vocab)
+        retag_passage(db, passage, vocab, stems)
     db.commit()
 
 
