@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deploy MDS Team Memory to a UAT or PROD server.
+"""Deploy MDS Team Knowledge to a UAT or PROD server.
 
 Builds the frontend on this (dev) machine, assembles a self-contained release
 (backend + compiled dist), and pushes it to the configured destination.

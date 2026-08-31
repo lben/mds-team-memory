@@ -1,4 +1,4 @@
-# MDS Team Memory
+# MDS Team Knowledge
 
 Team knowledge base MVP built around a single main window: a knowledge graph on
 top that grows with every contribution, one input whose text becomes a Search,

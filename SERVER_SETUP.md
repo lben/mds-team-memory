@@ -1,4 +1,4 @@
-# MDS Team Memory — server setup
+# MDS Team Knowledge — server setup
 
 The server only needs **Python 3.12+**. No Node, Docker, or admin rights required.
 Works on Windows 11 (PowerShell), macOS, and Linux.

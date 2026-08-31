@@ -88,12 +88,12 @@ onMounted(() => {
 <template>
   <div class="app">
     <aside class="sidebar">
-      <div class="brand"><strong>MDS</strong><span>Team Memory</span></div>
+      <div class="brand"><strong>MDS</strong><span>Team Knowledge</span></div>
       <nav class="nav" aria-label="Main navigation">
         <router-link to="/" exact-active-class="active"><span class="nav-dot"></span>Home</router-link>
-        <router-link to="/scratchpad" active-class="active"><span class="nav-dot"></span>Scratchpad</router-link>
-        <router-link to="/documents" active-class="active"><span class="nav-dot"></span>Documents</router-link>
         <router-link to="/leaderboard" active-class="active"><span class="nav-dot"></span>Leaderboard</router-link>
+        <router-link to="/documents" active-class="active"><span class="nav-dot"></span>Documents</router-link>
+        <router-link to="/scratchpad" active-class="active"><span class="nav-dot"></span>Scratchpad</router-link>
       </nav>
       <div class="nav-label">Admin</div>
       <nav class="nav" data-testid="admin-nav">
@@ -129,7 +129,7 @@ onMounted(() => {
 
     <main class="main">
       <header class="topbar">
-        <div class="crumb">MDS Team Memory / <strong>{{ crumb }}</strong></div>
+        <div class="crumb">MDS Team Knowledge / <strong>{{ crumb }}</strong></div>
         <div class="top-actions">
           <button class="btn bell" @click="openNotifications" aria-label="Notifications" data-testid="bell">
             🔔<span v-if="store.unread" class="badge">{{ store.unread }}</span>

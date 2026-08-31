@@ -8,7 +8,7 @@ from . import config
 from .routers import admin, documents, feed, graph, impact, items, notifications, profile, questions, scratchpad
 from .routers import search as search_router
 
-app = FastAPI(title="MDS Team Memory")
+app = FastAPI(title="MDS Team Knowledge")
 
 for r in (
     profile.router,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Entry point for MDS Team Memory management commands.
+"""Entry point for MDS Team Knowledge management commands.
 
     python manage.py create-admin
     python manage.py list-admins
