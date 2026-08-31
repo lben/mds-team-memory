@@ -210,7 +210,9 @@ def global_graph(db: Session = Depends(get_db)):
     rows = _team_subject_concepts(db)
     counts = Counter(c for _, _, c in rows)
     links = _visible_concept_links(db)
-    concepts = {c.id: c for c in db.query(Concept).all() if counts.get(c.id, 0) > 0}
+    # Every concept an admin defined is shown, including ones nothing mentions
+    # yet, so the count in the header matches what is on screen.
+    concepts = {c.id: c for c in db.query(Concept).all()}
 
     neighbors: dict[str, set[str]] = defaultdict(set)
     for link in links:
@@ -230,10 +232,14 @@ def global_graph(db: Session = Depends(get_db)):
             component.append(node)
             stack.extend(neighbors[node] - set(component))
         members = sorted(component, key=lambda cid: (-counts[cid], concepts[cid].name))
+        # Naming a cluster after one member reads as that concept rather than a
+        # group, so say how many others it holds.
+        lead = concepts[members[0]].name
+        label = lead if len(members) == 1 else f"{lead} + {len(members) - 1} more"
         clusters.append(
             {
                 "id": members[0],
-                "label": concepts[members[0]].name,
+                "label": label,
                 "concepts": [
                     {"id": cid, "name": concepts[cid].name, "size": counts[cid]} for cid in members
                 ],

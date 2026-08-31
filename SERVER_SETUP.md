@@ -69,7 +69,7 @@ confirming.
 | `MDS_DATA_DIR` | `./data` next to the app | SQLite database and uploaded files |
 | `MDS_SECURE_COOKIES` | `0` | set `1` when serving over HTTPS |
 | `MDS_SIMILARITY_THRESHOLD` | `0.95` | duplicate-grouping similarity (0–1) |
-| `MDS_COOCCURRENCE_MIN` | `3` | co-mentions before a concept link is suggested |
+| `MDS_COOCCURRENCE_MIN` | `1` | co-mentions before a concept link is suggested; raise it if the map gets noisy |
 | `MDS_MAX_UPLOAD_BYTES` | `26214400` | upload size limit (25 MB) |
 
 The `data/` folder holds everything worth backing up.

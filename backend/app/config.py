@@ -8,7 +8,7 @@ DATABASE_URL = os.environ.get("MDS_DATABASE_URL", f"sqlite:///{DB_PATH}")
 
 SECURE_COOKIES = os.environ.get("MDS_SECURE_COOKIES", "0") == "1"
 SIMILARITY_THRESHOLD = float(os.environ.get("MDS_SIMILARITY_THRESHOLD", "0.95"))
-COOCCURRENCE_MIN = int(os.environ.get("MDS_COOCCURRENCE_MIN", "3"))
+COOCCURRENCE_MIN = int(os.environ.get("MDS_COOCCURRENCE_MIN", "1"))
 MAX_UPLOAD_BYTES = int(os.environ.get("MDS_MAX_UPLOAD_BYTES", str(25 * 1024 * 1024)))
 ADMIN_SESSION_HOURS = int(os.environ.get("MDS_ADMIN_SESSION_HOURS", "12"))
 

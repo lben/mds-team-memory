@@ -36,6 +36,8 @@ const focusNames = ref<string[]>([])
 const graphEl = ref<HTMLDivElement | null>(null)
 let cy: Core | null = null
 
+const trim = (t: string, n: number) => (t.length > n ? t.slice(0, n).trimEnd() + '…' : t)
+
 const NODE_COLORS: Record<string, string> = {
   concept: '#27a3d0',
   item: '#47a979',
@@ -91,6 +93,13 @@ function initCy() {
           'curve-style': 'bezier',
         },
       },
+      {
+        // Content labels sit under their node: inside a small circle they
+        // overflowed and collided with neighbours.
+        selector: 'node[nodeType = "item"], node[nodeType = "question"], node[nodeType = "document"]',
+        style: { 'text-valign': 'bottom', 'text-margin-y': 5, 'text-max-width': '150', 'font-size': '10px' },
+      },
+      { selector: 'node[mentions = 0]', style: { 'background-opacity': 0.45, 'font-size': '10px' } },
       { selector: 'edge[lineStyle="dashed"]', style: { 'line-style': 'dashed' } },
       { selector: 'edge:selected', style: { 'line-color': '#d83a52', width: 3, color: '#fff' } },
       { selector: 'node:selected', style: { 'border-color': '#d83a52', 'border-width': 4 } },
@@ -136,10 +145,11 @@ async function loadFull() {
         data: {
           id: `c:${concept.id}`,
           ...(grouped ? { parent: `cl:${cluster.id}` } : {}),
-          label: `${concept.name}\n${concept.size}`,
+          label: concept.size ? `${concept.name}\n${concept.size}` : concept.name,
           color: NODE_COLORS.concept,
           size: Math.min(92, 54 + concept.size * 5),
           nodeType: 'concept',
+          mentions: concept.size,
         },
         position: grouped
           ? { x: cxPos + Math.cos(inner) * 70 * spread, y: cyPos + Math.sin(inner) * 60 * spread }
@@ -179,7 +189,7 @@ async function focus(conceptIds: string[]) {
       cy!.add({
         data: {
           id: n.id,
-          label: n.label + (n.sublabel ? `\n${n.sublabel}` : ''),
+          label: (n.type === 'concept' ? n.label : trim(n.label, 52)) + (n.sublabel ? `\n${n.sublabel}` : ''),
           color: n.center ? '#d83a52' : NODE_COLORS[n.type] || '#596f91',
           size: n.center ? 88 : n.type === 'concept' ? 68 : 54,
           nodeType: n.type,

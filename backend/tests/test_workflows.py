@@ -617,16 +617,22 @@ def test_link_discovery_review_and_reversal(make_client, admin_client):
     left = _concept(admin_client, f"Alpha{suffix}")
     right = _concept(admin_client, f"Beta{suffix}")
 
-    # Below the threshold (3) nothing is suggested.
-    for _ in range(2):
-        author.post("/api/capture", data={"body": f"Alpha{suffix} feeds Beta{suffix} nightly. {uuid.uuid4().hex}"})
+    # Nothing mentions both concepts yet, so there is nothing to suggest.
+    author.post("/api/capture", data={"body": f"Alpha{suffix} runs on its own. {uuid.uuid4().hex}"})
     assert _link_between(admin_client, left["id"], right["id"]) is None
 
-    author.post("/api/capture", data={"body": f"Alpha{suffix} and Beta{suffix} share a window. {uuid.uuid4().hex}"})
+    # One contribution stating the relationship is enough to suggest it: real
+    # prose says a thing once, and a suggestion is dashed and reviewable.
+    author.post("/api/capture", data={"body": f"Alpha{suffix} feeds Beta{suffix} nightly. {uuid.uuid4().hex}"})
     link = _link_between(admin_client, left["id"], right["id"])
     assert link["state"] == "suggested"
-    assert link["occurrence_count"] == 3
+    assert link["occurrence_count"] == 1
     assert link["type_name"] == "related to"
+
+    # More evidence raises the count without changing the state.
+    for _ in range(2):
+        author.post("/api/capture", data={"body": f"Alpha{suffix} and Beta{suffix} share a window. {uuid.uuid4().hex}"})
+    assert _link_between(admin_client, left["id"], right["id"])["occurrence_count"] == 3
 
     # Suggested links are dashed and visible to everyone.
     graph = reader.get("/api/graph/local", params={"concept_id": left["id"]}).json()

@@ -67,10 +67,10 @@ tools appear only after a successful sign-in, in that browser.
 ## The knowledge graph
 
 Concepts and their aliases are defined by an admin; any contribution, answer, or
-extracted document passage mentioning one is tagged automatically. When enough
-team content mentions two concepts together (three by default,
-`MDS_COOCCURRENCE_MIN`), a link between them is **suggested** and drawn dashed
-for everyone. Solid edges are confirmed; dashed edges are automatically detected.
+extracted document passage mentioning one is tagged automatically. When team content mentions two
+concepts together (once by default, `MDS_COOCCURRENCE_MIN`), a link between
+them is **suggested** and drawn dashed for everyone; raise the threshold if the
+map gets noisy. Solid edges are confirmed; dashed edges are automatically detected.
 
 The graph lives at the top of the Home page: the full map by default, focused on
 the concepts a search mentions. Admins curate links, concepts, and relationship
