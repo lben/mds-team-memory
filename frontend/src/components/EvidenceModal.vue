@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../api'
+import { store } from '../store'
 
 interface Evidence {
   link_id: string
@@ -17,6 +18,13 @@ const emit = defineEmits<{ close: []; openItem: [string] }>()
 
 const router = useRouter()
 const evidence = ref<Evidence | null>(null)
+const isAdmin = computed(() => store.admin.logged_in)
+
+/** Jump from the graph to this link's row in the admin curation table. */
+function manageLink() {
+  emit('close')
+  router.push({ path: '/admin/expertise', query: { link: props.linkId } })
+}
 
 function openPassage(documentId: string, passageId: string) {
   emit('close')
@@ -76,6 +84,9 @@ onMounted(async () => {
         </p>
       </template>
       <div class="modal-actions">
+        <button v-if="isAdmin" class="btn" data-testid="manage-link" @click="manageLink">
+          Manage this link
+        </button>
         <button class="btn" @click="emit('close')">Close</button>
       </div>
     </div>

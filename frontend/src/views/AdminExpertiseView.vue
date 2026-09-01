@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { ApiError, api } from '../api'
 import EvidenceModal from '../components/EvidenceModal.vue'
 import MapAdminPanel from '../components/MapAdminPanel.vue'
@@ -7,6 +8,10 @@ import { identityNote, initialsFor } from '../profile'
 import { store } from '../store'
 
 const evidenceLinkId = ref<string | null>(null)
+const route = useRoute()
+// Arriving from the graph: select the record that was clicked.
+const selectedLink = computed(() => (typeof route.query.link === 'string' ? route.query.link : null))
+const selectedConcept = computed(() => (typeof route.query.concept === 'string' ? route.query.concept : null))
 
 interface AdminState {
   logged_in: boolean
@@ -193,8 +198,8 @@ onMounted(loadState)
       <MapAdminPanel
         style="margin-top: 16px"
         center-concept-id=""
-        :selected-link-id="null"
-        :selected-concept-id="null"
+        :selected-link-id="selectedLink"
+        :selected-concept-id="selectedConcept"
         @changed="loadData"
         @evidence="evidenceLinkId = $event"
       />

@@ -79,6 +79,9 @@ async function loadAll() {
   if (!selectableTypes.value.some((t2) => t2.id === linkType.value)) {
     linkType.value = selectableTypes.value.find((t2) => t2.is_default)?.id ?? selectableTypes.value[0]?.id ?? ''
   }
+  // A selection can arrive before the rows exist, so honour it once they do.
+  if (props.selectedLinkId) focusRow('links', props.selectedLinkId)
+  else if (props.selectedConceptId) focusRow('concepts', props.selectedConceptId)
 }
 
 function fail(e: unknown, fallback: string) {

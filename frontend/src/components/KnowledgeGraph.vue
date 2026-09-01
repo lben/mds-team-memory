@@ -124,7 +124,7 @@ async function loadFull() {
   mode.value = 'full'
   const graph = await api.get<{
     clusters: { id: string; label: string; concepts: { id: string; name: string; size: number }[] }[]
-    edges: { source: string; target: string; count: number }[]
+    edges: { source: string; target: string; count: number; link_id: string; state: string; label: string }[]
   }>('/api/graph/global')
   cy.elements().remove()
   const clusterCount = graph.clusters.length || 1
@@ -159,7 +159,14 @@ async function loadFull() {
   })
   cy.add(
     graph.edges.map((e) => ({
-      data: { id: `g:${e.source}->${e.target}`, source: `c:${e.source}`, target: `c:${e.target}`, label: '', lineStyle: 'dashed' },
+      data: {
+        id: `g:${e.source}->${e.target}`,
+        source: `c:${e.source}`,
+        target: `c:${e.target}`,
+        label: e.label,
+        lineStyle: e.state === 'suggested' ? 'dashed' : 'solid',
+        linkId: e.link_id,
+      },
     })),
   )
   cy.resize()
@@ -244,7 +251,7 @@ defineExpose({ refresh })
       </strong>
       <div class="row gap8">
         <span class="muted" style="font-size: 10px; color: #8ea7c9">
-          {{ concepts.length }} concepts · dashed = detected, solid = confirmed
+          {{ concepts.length }} concepts · dashed = detected, solid = confirmed · click a link to see why
         </span>
         <button v-if="mode === 'focused'" class="btn small" data-testid="graph-full" @click="loadFull">
           Full map

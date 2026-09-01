@@ -247,7 +247,14 @@ def global_graph(db: Session = Depends(get_db)):
         )
     clusters.sort(key=lambda cl: -sum(c["size"] for c in cl["concepts"]))
     edges = [
-        {"source": link.src_id, "target": link.dst_id, "count": link.occurrence_count}
+        {
+            "source": link.src_id,
+            "target": link.dst_id,
+            "count": link.occurrence_count,
+            "link_id": link.id,
+            "state": link.state,
+            "label": link.relationship_type.name,
+        }
         for link in links
         if link.src_id in concepts and link.dst_id in concepts
     ]
