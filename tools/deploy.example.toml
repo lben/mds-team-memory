@@ -1,11 +1,31 @@
-# Copy this file to tools/deploy.toml and adjust the destinations.
-# A destination is either:
-#   - a directory path: a local folder, a mounted network share, or a Windows
-#     UNC path such as '\\\\fileserver\\apps\\mds-team-memory-uat'
-#   - "user@host:/path" to copy over SSH with scp
+# Copy this file to tools/deploy.toml (it is gitignored) and fill in your
+# servers. Only host and root are required; the rest have working defaults.
+#
+# The account you connect as needs nothing but SSH access and a writable home:
+# no root, no sudo, no systemd. Set up key-based login first, otherwise every
+# step of a deploy asks for your password.
+#
+# A non-default SSH port, a jump host, or a specific key is best kept in a Host
+# entry in ~/.ssh/config. ssh_options below is passed to both ssh and scp, so
+# every option must be valid for both: use "-o", "Port=2222" rather than "-p",
+# which means something else to scp.
 
 [uat]
-destination = "/path/to/uat/mds-team-memory"
+host = "deployer@uat-server.example.com"
+root = "/home/deployer/apps/mds-uat"     # absolute, no spaces; created on first deploy
+port = 8000
 
 [prod]
-destination = "/path/to/prod/mds-team-memory"
+host = "deployer@prod-server.example.com"
+root = "/home/deployer/apps/mds-prod"
+port = 8000
+
+# bind = "0.0.0.0"        # interface uvicorn listens on
+# uv = "uv"               # full path if uv is not on the PATH of a non-login ssh shell,
+#                         # e.g. "/home/deployer/.local/bin/uv"
+# python = "3.12"         # Python version uv builds the release environment with
+# keep_releases = 5       # older releases are deleted after a successful deploy
+# ssh_options = ["-o", "ConnectTimeout=10"]
+#
+# [prod.env]              # extra MDS_* settings written into <root>/app.env
+# MDS_SECURE_COOKIES = "1"

@@ -1,0 +1,2 @@
+# The server runs these; a CRLF checkout on Windows would break them on RHEL.
+*.sh text eol=lf

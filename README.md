@@ -121,15 +121,34 @@ Playwright browsers install once with `./.venv/bin/playwright install chromium`.
 
 ## Deployment (UAT / PROD)
 
-Configure once: copy `tools/deploy.example.toml` to `tools/deploy.toml` and set
-the destinations. Then:
+The servers are RedHat boxes reached over SSH, running as an ordinary user: no
+root, no systemd, no Node. Configure them once — copy
+`tools/deploy.example.toml` to `tools/deploy.toml` (gitignored) and fill in the
+host, the directory to deploy into, and the port. Deploys are run from the
+Windows work machine in PowerShell, through the same uv-managed Python 3.12 you
+develop with; it also needs `ssh`, `scp` and `npm`.
 
-```bash
-python tools/deploy.py uat    # or: prod
+```powershell
+uv run --python 3.12 tools\deploy.py         # UAT, the default
+uv run --python 3.12 tools\deploy.py prod    # asks you to type 'prod' first
 ```
 
-This builds the frontend, assembles a Node-free release, and copies it to the
-target. Server-side steps are in `SERVER_SETUP.md`.
+A deploy builds the frontend here, ships one archive, builds that release's
+Python 3.12 environment with `uv` on the server while the old release keeps
+serving, then migrates the database and swaps over. It waits for `/api/health`
+before reporting success, and restores the previous release if the new one does
+not come up. Releases are kept side by side so a rollback is a symlink away.
 
-The first administrator is created with `python manage.py create-admin` on the
-server. Contributors sign themselves up in the app. See **Accounts** above.
+```powershell
+uv run --python 3.12 tools\serverctl.py                # deployed release, process, health
+uv run --python 3.12 tools\serverctl.py start          # after a server reboot
+uv run --python 3.12 tools\serverctl.py restart prod
+uv run --python 3.12 tools\serverctl.py health         # exits non-zero if it is not serving
+uv run --python 3.12 tools\serverctl.py logs --lines 200
+uv run --python 3.12 tools\serverctl.py rollback       # back to the previous release
+```
+
+The same commands are available on the server itself as
+`bash <root>/mdsctl.sh <command>`, which is how you bring it back up without the
+dev machine. `SERVER_SETUP.md` covers the layout, the first administrator,
+resetting a UAT instance, and restarting after a reboot.
