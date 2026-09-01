@@ -13,7 +13,6 @@ from ..models import (
     ExpertiseMapping,
     KnowledgeItem,
     Profile,
-    Relationship,
     Revision,
     utcnow,
 )
@@ -220,31 +219,3 @@ def adopt_correction(
         )
     db.commit()
     return {"adopted": True, "impact_created": created}
-
-
-@router.get("/items/{item_id}/relationships")
-def item_relationships(
-    item_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
-):
-    _get_item(db, item_id, profile)
-    rels = (
-        db.query(Relationship)
-        .filter(
-            ((Relationship.src_kind == "item") & (Relationship.src_id == item_id))
-            | ((Relationship.dst_kind == "item") & (Relationship.dst_id == item_id))
-        )
-        .all()
-    )
-    return [
-        {
-            "id": r.id,
-            "src_kind": r.src_kind,
-            "src_id": r.src_id,
-            "rel_type": r.relationship_type.name,
-            "dst_kind": r.dst_kind,
-            "dst_id": r.dst_id,
-            "evidence": r.evidence,
-            "state": r.state,
-        }
-        for r in rels
-    ]
