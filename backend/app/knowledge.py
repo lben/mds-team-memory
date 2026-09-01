@@ -7,7 +7,15 @@ from sqlalchemy.orm import Session
 from . import config
 from .concepts import match_concepts, retag_item, route_question
 from .impact import already_helped
-from .models import CORROBORATES_ID, ImpactEvent, KnowledgeItem, Profile, Relationship
+from .models import (
+    CORROBORATES_ID,
+    ImpactEvent,
+    KnowledgeItem,
+    Notification,
+    Profile,
+    Relationship,
+    Revision,
+)
 from .relationships import refresh_for_item
 from .text import normalized_hash, query_terms, similarity
 
@@ -103,10 +111,24 @@ def group_info(db: Session, item: KnowledgeItem) -> dict:
     }
 
 
-def endorsed(db: Session, item: KnowledgeItem) -> bool:
+def endorsement_count(db: Session, item: KnowledgeItem) -> int:
     return (
         db.query(ImpactEvent)
         .filter(ImpactEvent.event_type == "sme_endorsed", ImpactEvent.item_id == item.id)
+        .count()
+    )
+
+
+def endorsed_by(db: Session, item: KnowledgeItem, profile: Profile | None) -> bool:
+    if profile is None:
+        return False
+    return (
+        db.query(ImpactEvent)
+        .filter(
+            ImpactEvent.event_type == "sme_endorsed",
+            ImpactEvent.item_id == item.id,
+            ImpactEvent.actor_profile_id == profile.id,
+        )
         .first()
         is not None
     )
@@ -131,6 +153,9 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         "body": item.body,
         "visibility": item.visibility,
         "author": author.label if author else "Unknown",
+        # Whether the name means a person or just a browser: the difference the
+        # reader cares about when deciding how much to trust attribution.
+        "author_verified": bool(author and author.has_account),
         "author_id": item.author_profile_id,
         "is_mine": bool(profile and item.author_profile_id == profile.id),
         "parent_id": item.parent_id,
@@ -139,7 +164,11 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         "group_size": info["group_size"],
         "helped": helped_count(db, item),
         "marked_helped": marked,
-        "endorsed": endorsed(db, item),
+        # Anyone may endorse, so the count is the signal an admin reads. Hiding
+        # the button after the first endorsement capped every item at one.
+        "endorsements": endorsement_count(db, item),
+        "endorsed": endorsement_count(db, item) > 0,
+        "endorsed_by_me": endorsed_by(db, item, profile),
         "question_status": item.question_status,
         "accepted_answer_id": item.accepted_answer_id,
         "correction_state": item.correction_state,
@@ -148,3 +177,53 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         "created_at": item.created_at.isoformat() + "Z",
         "updated_at": item.updated_at.isoformat() + "Z",
     }
+
+
+def dependents_by_others(db: Session, item: KnowledgeItem) -> int:
+    """Answers and corrections other people attached to this item.
+
+    Deleting your own contribution must not destroy a teammate's, which is the
+    same rule the question delete has always enforced.
+    """
+    return (
+        db.query(KnowledgeItem)
+        .filter(
+            KnowledgeItem.parent_id == item.id,
+            KnowledgeItem.author_profile_id != item.author_profile_id,
+        )
+        .count()
+    )
+
+
+def delete_item(db: Session, item: KnowledgeItem) -> None:
+    """Remove a contribution and everything that pointed at it.
+
+    One place, so a new caller cannot forget a table: the FTS index is kept by
+    triggers, tags cascade, and the rest is cleaned here. Impact already earned
+    by other people from this item goes with it — the item it was earned on no
+    longer exists.
+    """
+    own_children = (
+        db.query(KnowledgeItem).filter(KnowledgeItem.parent_id == item.id).all()
+    )
+    child_ids = [c.id for c in own_children]
+    ids = [item.id] + child_ids
+
+    db.query(Revision).filter(
+        (Revision.item_id.in_(ids)) | (Revision.correction_id.in_(ids))
+    ).delete(synchronize_session=False)
+    db.query(Notification).filter(Notification.item_id.in_(ids)).delete(
+        synchronize_session=False
+    )
+    db.query(ImpactEvent).filter(ImpactEvent.item_id.in_(ids)).delete(
+        synchronize_session=False
+    )
+    db.query(Relationship).filter(
+        ((Relationship.src_kind == "item") & (Relationship.src_id.in_(ids)))
+        | ((Relationship.dst_kind == "item") & (Relationship.dst_id.in_(ids)))
+    ).delete(synchronize_session=False)
+
+    for child in own_children:
+        db.delete(child)
+    db.delete(item)
+    db.commit()

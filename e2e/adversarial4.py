@@ -29,6 +29,24 @@ def check(name, condition, detail=""):
     else:
         FAILS.append(f"{name} — {detail}"); print(f"   FAIL {name} :: {detail}", flush=True)
 
+
+def answer_ask(pg, text=None, cancel=False):
+    """Answer the app's own confirm/prompt.
+
+    These actions used to raise a native `window.confirm`/`window.prompt`, which
+    Playwright auto-dismisses — so a harness that forgot to handle it saw the
+    action correctly do nothing and read it as a dead button. They are now the
+    app's own modal, which has to be answered by clicking, exactly like a person.
+    """
+    pg.wait_for_selector("[data-testid=ask-modal]", timeout=6000)
+    if cancel:
+        pg.get_by_test_id("ask-cancel").click()
+    else:
+        if text is not None and pg.get_by_test_id("ask-input").count():
+            pg.get_by_test_id("ask-input").fill(text)
+        pg.get_by_test_id("ask-confirm").click()
+    pg.wait_for_timeout(700)
+
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     A = b.new_context(viewport={"width":1500,"height":950}).new_page()
@@ -81,13 +99,13 @@ with sync_playwright() as pw:
           U.get_by_test_id("item-detail").get_by_role("link", name="Open source document").count() > 0,
           U.get_by_test_id("item-detail").inner_text()[:160])
 
-    # A document cannot be deleted in this product: there is no control for it
-    # and no endpoint behind one. Prove that rather than assume it, because a
-    # deletion that silently did nothing is exactly how a hollow test passes.
-    st = U.evaluate(f"()=>fetch('/api/documents/{doc}',{{method:'DELETE'}}).then(r=>r.status)")
-    check("the server offers no way to delete a document", st == 405, f"status {st}")
-    check("and the interface offers no delete control either",
-          U.get_by_role("button", name="Delete").count() == 0 or U.locator(".doc-row").count() == 0)
+    # A document can now be removed by whoever uploaded it, and by nobody else.
+    # Assert the refusal really is a refusal, not a silent no-op.
+    A.goto(base+"/documents"); A.wait_for_timeout(1500)
+    st = A.evaluate(f"()=>fetch('/api/documents/{doc}',{{method:'DELETE'}}).then(r=>r.status)")
+    check("someone else cannot delete another person's document", st == 403, f"status {st}")
+    still = A.evaluate(f"()=>fetch('/api/documents/{doc}').then(r=>r.status)")
+    check("and the refusal left the document in place", still == 200, f"status {still}")
 
     # So the source link can never dangle. Verify it actually resolves.
     U.get_by_test_id("item-detail").get_by_role("link", name="Open source document").click()
@@ -163,8 +181,8 @@ with sync_playwright() as pw:
     # The admin deletes the concept out from under them.
     cid = A.evaluate("()=>fetch('/api/admin/concepts').then(r=>r.json()).then(c=>c.find(x=>x.name==='Zeal').id)")
     A.reload(); A.wait_for_timeout(2000); A.get_by_test_id("tab-concepts").click(); A.wait_for_timeout(700)
-    A.once("dialog", lambda d: d.accept())
     A.locator(f"#row-{cid}").get_by_role("button", name="Delete").click(); A.wait_for_timeout(2000)
+    answer_ask(A)
     check("the concept is deleted", A.locator(f"#row-{cid}").count() == 0)
 
     # The stale page still has the old link on screen. Click it.
@@ -205,6 +223,70 @@ with sync_playwright() as pw:
     check("its details open with no reference to the vanished concept",
           U.get_by_test_id("item-detail").count() > 0 and "undefined" not in U.get_by_test_id("item-detail").inner_text(),
           U.get_by_test_id("item-detail").inner_text()[:140])
+
+    print("\n### 49. Fixing and withdrawing your own contribution", flush=True)
+    U.goto(base+"/"); U.wait_for_timeout(1800)
+    U.get_by_test_id("home-input").fill("The Epoch is repaired at the End of Tyme, at 7am.")
+    U.get_by_test_id("do-capture").click(); U.wait_for_timeout(2500)
+    if U.locator(".modal-backdrop").count():
+        U.get_by_role("button", name="Add another").click(); U.wait_for_timeout(1200)
+    U.goto(base+"/"); U.wait_for_timeout(2000)
+    mine = U.get_by_test_id("knowledge-column").locator(".card.result").filter(has_text="End of Tyme").first
+    mine.get_by_role("button", name="Details").click(); U.wait_for_timeout(1800)
+    check("my own contribution offers a way to fix it", U.get_by_test_id("edit-item").count() > 0)
+    check("and a way to withdraw it", U.get_by_test_id("delete-item").count() > 0)
+
+    U.get_by_test_id("edit-item").click(); U.wait_for_timeout(700)
+    U.get_by_test_id("edit-body").fill("The Epoch is repaired at the End of Tyme, at 7pm.")
+    U.get_by_test_id("save-edit").dblclick(); U.wait_for_timeout(2500)
+    body = U.get_by_test_id("item-detail").locator(".detail-body").inner_text()
+    check("the correction is saved", "7pm" in body and "7am" not in body, body[:110])
+    stored = U.evaluate("()=>fetch('/api/feed').then(r=>r.json()).then(f=>f.filter(i=>i.body.includes('End of Tyme')).length)")
+    check("and double-clicking Save did not leave two copies", stored == 1, f"{stored} copies")
+    U.keyboard.press("Escape"); U.wait_for_timeout(600)
+    found = U.evaluate("()=>fetch('/api/search?q=Epoch').then(r=>r.json()).then(r=>r.items.map(i=>i.body).join(' '))")
+    check("search finds the corrected text, not the old one", "7pm" in found and "7am" not in found, found[:120])
+
+    A.goto(base+"/"); A.wait_for_timeout(2200)
+    theirs = A.get_by_test_id("knowledge-column").locator(".card.result").filter(has_text="End of Tyme").first
+    theirs.get_by_role("button", name="Details").click(); A.wait_for_timeout(1800)
+    check("somebody else is offered neither control on it",
+          A.get_by_test_id("edit-item").count() == 0 and A.get_by_test_id("delete-item").count() == 0)
+    A.keyboard.press("Escape"); A.wait_for_timeout(500)
+
+    U.goto(base+"/"); U.wait_for_timeout(1800)
+    mine = U.get_by_test_id("knowledge-column").locator(".card.result").filter(has_text="End of Tyme").first
+    mine.get_by_role("button", name="Details").click(); U.wait_for_timeout(1600)
+    U.get_by_test_id("delete-item").click(); U.wait_for_timeout(800)
+    check("deleting asks before it destroys anything", U.locator("[data-testid=ask-modal]").count() > 0)
+    answer_ask(U, cancel=True)
+    left = U.evaluate("()=>fetch('/api/feed').then(r=>r.json()).then(f=>f.filter(i=>i.body.includes('End of Tyme')).length)")
+    check("cancelling that dialog keeps the contribution", left == 1, f"{left} left")
+
+    U.goto(base+"/"); U.wait_for_timeout(1800)
+    U.get_by_test_id("knowledge-column").locator(".card.result").filter(has_text="End of Tyme").first \
+        .get_by_role("button", name="Details").click()
+    U.wait_for_timeout(1600)
+    U.get_by_test_id("delete-item").click(); U.wait_for_timeout(700)
+    answer_ask(U)
+    U.wait_for_timeout(2000)
+    # Assert the row is really gone before asserting anything about the page.
+    left = U.evaluate("()=>fetch('/api/feed').then(r=>r.json()).then(f=>f.filter(i=>i.body.includes('End of Tyme')).length)")
+    check("confirming really removes it", left == 0, f"{left} left")
+    U.goto(base+"/"); U.wait_for_timeout(2000)
+    check("and it is gone from the team's feed too",
+          "End of Tyme" not in U.get_by_test_id("knowledge-column").inner_text())
+    gone = U.evaluate("()=>fetch('/api/search?q=Epoch').then(r=>r.json()).then(r=>r.items.length)")
+    check("and search no longer returns it", gone == 0, f"{gone} hits")
+
+    print("\n### 50. The admin's evidence for who the experts are", flush=True)
+    A.goto(base+"/admin/expertise"); A.wait_for_timeout(2200)
+    if A.get_by_test_id("tab-endorsed").count():
+        A.get_by_test_id("tab-endorsed").click(); A.wait_for_timeout(1800)
+        panel = A.get_by_test_id("endorsed-panel")
+        check("the most-endorsed tab opens and says something", panel.count() > 0 and panel.inner_text().strip() != "",
+              panel.inner_text()[:120] if panel.count() else "missing")
+        check("it does not render undefined", "undefined" not in panel.inner_text())
 
     check("no server error anywhere in this pass", not [c for c in crashes if "HTTP 5" in c], str(crashes[:4]))
     b.close()

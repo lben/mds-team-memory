@@ -52,6 +52,7 @@ export interface Item {
   body: string
   visibility: string
   author: string
+  author_verified: boolean
   author_id: string
   is_mine: boolean
   parent_id: string | null
@@ -61,6 +62,8 @@ export interface Item {
   helped: number
   marked_helped: boolean
   endorsed: boolean
+  endorsements: number
+  endorsed_by_me: boolean
   question_status: string | null
   accepted_answer_id: string | null
   correction_state: string | null

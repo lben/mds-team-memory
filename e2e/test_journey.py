@@ -5,6 +5,17 @@ import re
 from playwright.sync_api import Browser, expect
 
 
+def _answer_ask(pg, text=None, cancel=False):
+    """Answer the app's own confirm/prompt (it replaced the native dialogs)."""
+    pg.wait_for_selector("[data-testid=ask-modal]", timeout=6000)
+    if cancel:
+        pg.get_by_test_id("ask-cancel").click()
+    else:
+        if text is not None and pg.get_by_test_id("ask-input").count():
+            pg.get_by_test_id("ask-input").fill(text)
+        pg.get_by_test_id("ask-confirm").click()
+    pg.wait_for_timeout(500)
+
 def test_critical_journey(browser: Browser, base_url_server):
     base = base_url_server.url
 
@@ -21,7 +32,15 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(a.get_by_test_id("knowledge-column")).to_be_visible()
     expect(a.get_by_test_id("questions-column")).to_be_visible()
     b.goto(base + "/")
+    # B is the expert, so B needs an account: expertise is only routable to
+    # someone whose name survives a cookie clear.
+    b.get_by_test_id("profile-button").click()
+    b.get_by_test_id("auth-username").fill("bernard")
+    b.get_by_test_id("auth-password").fill("a-good-password")
+    b.get_by_test_id("do-sign-up").click()
+    b.wait_for_timeout(3000)
     b_label = b.evaluate("() => fetch('/api/profile').then(r => r.json()).then(p => p.label)")
+    assert b_label == "bernard", b_label
 
     # ---- Admin: link visible to all, gated by credentials; curation lives here.
     expect(a.get_by_test_id("admin-nav")).to_be_visible()
@@ -72,8 +91,8 @@ def test_critical_journey(browser: Browser, base_url_server):
     a.get_by_test_id("do-ask").click()
     mistaken = a.locator(".question-card", has_text="Oops wrong question").first
     expect(mistaken).to_be_visible()
-    a.once("dialog", lambda d: d.accept())
     mistaken.get_by_test_id("delete-question").click()
+    _answer_ask(a)
     expect(a.locator(".question-card", has_text="Oops wrong question")).to_have_count(0)
 
     # ---- A asks for real (W2 spirit: same box, no retyping) — routed to B (W10).
@@ -115,7 +134,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     shareable = "The AQUA runbook lives in the operations shared drive."
     editor = a.get_by_test_id("scratch-editor")
     editor.fill(secret + "\n" + shareable)
-    expect(a.locator(".autosave")).to_contain_text("Saved automatically")
+    expect(a.locator(".autosave")).to_contain_text("Saved")
 
     b.get_by_test_id("home-input").fill("topsecret-alpha")
     b.get_by_test_id("do-search").click()
@@ -141,8 +160,8 @@ def test_critical_journey(browser: Browser, base_url_server):
     # A failed search becomes a team question without retyping (PRD 2).
     b.get_by_test_id("ask-from-search").click()
     expect(b.locator(".question-card", has_text="topsecret-alpha")).to_have_count(1)
-    b.once("dialog", lambda d: d.accept())
     b.locator(".question-card", has_text="topsecret-alpha").first.get_by_test_id("delete-question").click()
+    _answer_ask(b)
     expect(b.locator(".question-card", has_text="topsecret-alpha")).to_have_count(0)
 
     # ---- Documents (W8) — separate screen; exact passage from a home search.
@@ -182,7 +201,10 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(b).to_have_url(re.compile("/leaderboard$"))
     expect(b.locator("h1")).to_have_text("Leaderboard")
     row = b.locator(".leader-row.me")
-    expect(row).to_contain_text("You · unverified")
+    expect(row).to_contain_text("You")
+    expect(row).to_contain_text("bernard")
+    # B has an account, so the row must not carry the no-account marker.
+    expect(row).not_to_contain_text("No account")
     expect(row.locator(".score")).to_contain_text("3")
 
     for ctx in (admin_ctx, a_ctx, b_ctx):

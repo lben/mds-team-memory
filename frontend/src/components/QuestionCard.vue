@@ -2,12 +2,16 @@
 import { ref, watch } from 'vue'
 import { ApiError, api, type Item } from '../api'
 import { store } from '../store'
+import AskModal from './AskModal.vue'
+import { useAsk } from '../ask'
 
 interface QuestionDetail extends Item {
   answers: Item[]
   concepts: { id: string; name: string }[]
   suggested_experts: string[]
 }
+
+const { ask, askUser, answerAsk } = useAsk()
 
 const props = defineProps<{ question: Item & { answer_count?: number; matches_me?: boolean }; expanded?: boolean }>()
 const emit = defineEmits<{ changed: []; deleted: [] }>()
@@ -59,19 +63,6 @@ async function accept(answer: Item) {
   }
 }
 
-async function markHelped(answer: Item) {
-  try {
-    const r = await api.post<{ created: boolean }>(`/api/items/${answer.id}/helped`)
-    answer.marked_helped = true
-    if (r.created) {
-      answer.helped += 1
-      store.notify('Contributor impact increased')
-    }
-  } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not mark as helpful')
-  }
-}
-
 async function endorse(answer: Item) {
   try {
     await api.post(`/api/items/${answer.id}/endorse`)
@@ -83,7 +74,13 @@ async function endorse(answer: Item) {
 }
 
 async function deleteQuestion() {
-  if (!window.confirm('Delete this question? This only works while nobody has answered.')) return
+  const answer = await askUser({
+    title: 'Delete this question?',
+    message: 'This is permanent, and only works while nobody has answered it.',
+    confirmLabel: 'Delete question',
+    danger: true,
+  })
+  if (answer === null) return
   try {
     await api.delete(`/api/questions/${props.question.id}`)
     store.notify('Question deleted')
@@ -116,6 +113,15 @@ if (open.value) loadDetail()
 
 <template>
   <article :id="`question-${question.id}`" class="card question-card" :data-testid="`question-${question.id}`">
+    <AskModal
+      v-if="ask"
+      :title="ask.title"
+      :message="ask.message"
+      :input-label="ask.inputLabel"
+      :confirm-label="ask.confirmLabel"
+      :danger="ask.danger"
+      @resolve="answerAsk"
+    />
     <div class="q-head" @click="toggle">
       <div class="row gap8 wrap">
         <span class="chip" :class="statusChip(question.question_status)">
@@ -150,7 +156,7 @@ if (open.value) loadDetail()
         <div class="answer-toolbar">
           <div class="row gap8 wrap">
             <span v-if="answer.id === detail.accepted_answer_id" class="chip good">ACCEPTED</span>
-            <span v-if="answer.endorsed" class="chip good">SME ENDORSED</span>
+            <span v-if="answer.endorsed" class="chip good">ENDORSED{{ answer.endorsements > 1 ? ` ×${answer.endorsements}` : '' }}</span>
           </div>
           <span class="muted" style="font-size: 10px">{{ answer.author }} · {{ fmt(answer.created_at) }}</span>
         </div>
@@ -161,7 +167,7 @@ if (open.value) loadDetail()
             class="btn small"
             :class="{ success: answer.marked_helped }"
             :disabled="answer.is_mine"
-            @click="markHelped(answer)"
+            @click="store.markHelped(answer)"
           >
             {{ answer.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
           </button>
@@ -173,7 +179,7 @@ if (open.value) loadDetail()
           >
             Accept answer
           </button>
-          <button v-if="!answer.is_mine && !answer.endorsed" class="btn small" @click="endorse(answer)">
+          <button v-if="!answer.is_mine && !answer.endorsed_by_me" class="btn small" @click="endorse(answer)">
             Endorse as expert
           </button>
         </div>

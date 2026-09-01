@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { api } from './api'
+import { ApiError, api, type Item } from './api'
 
 interface Profile {
   id: string
@@ -16,17 +16,44 @@ interface Profile {
   }
 }
 
-interface AdminState {
-  logged_in: boolean
+interface AuthState {
+  signed_in: boolean
   username: string | null
+  is_admin: boolean
 }
 
 export const store = reactive({
   profile: null as Profile | null,
-  admin: { logged_in: false, username: null } as AdminState,
+  auth: { signed_in: false, username: null, is_admin: false } as AuthState,
   toast: '' as string,
   toastTimer: 0 as number,
   unread: 0,
+
+  /** The one implementation of "Helped me".
+   *
+   * Three copies disagreed on the aftermath: two incremented the counter
+   * locally whatever the server said, so marking something already marked
+   * showed a number the server never had. The server's `created` flag is the
+   * only thing that decides whether the count moved.
+   */
+  async markHelped(item: Item): Promise<void> {
+    try {
+      const r = await api.post<{ created: boolean }>(`/api/items/${item.id}/helped`)
+      item.marked_helped = true
+      if (r.created) {
+        item.helped += 1
+        this.notify('Contributor impact increased')
+      }
+    } catch (e) {
+      this.notify(e instanceof ApiError ? e.message : 'Could not mark as helpful')
+    }
+  },
+
+  /** Report a failed request. Loaders used to have no catch at all, so a failed
+   * read left the screen showing state the server no longer agreed with. */
+  fail(e: unknown, fallback: string) {
+    this.notify(e instanceof ApiError ? e.message : fallback)
+  },
 
   notify(message: string) {
     this.toast = message
@@ -35,15 +62,24 @@ export const store = reactive({
   },
 
   async loadProfile() {
-    this.profile = await api.get<Profile>('/api/profile')
+    try {
+      this.profile = await api.get<Profile>('/api/profile')
+    } catch (e) {
+      this.fail(e, 'Could not load your profile')
+    }
   },
 
-  async loadAdmin() {
+  async loadAuth() {
     try {
-      this.admin = await api.get<AdminState>('/api/admin/state')
+      this.auth = await api.get<AuthState>('/api/auth/state')
     } catch {
-      this.admin = { logged_in: false, username: null }
+      this.auth = { signed_in: false, username: null, is_admin: false }
     }
+  },
+
+  /** Who you are and what you may do move together: signing in changes both. */
+  async refreshIdentity() {
+    await Promise.all([this.loadProfile(), this.loadAuth()])
   },
 
   async refreshUnread() {

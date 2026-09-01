@@ -91,7 +91,7 @@ onMounted(load)
           <span class="avatar">{{ initialsFor(entry.label) }}</span>
           <span>
             <strong>{{ entry.label }}</strong>
-            <span>{{ entry.is_me ? 'You · unverified' : 'Unverified' }}</span>
+            <span>{{ entry.is_me ? 'You' : '' }}{{ entry.is_me && !entry.verified ? ' · ' : '' }}{{ entry.verified ? '' : 'No account' }}</span>
           </span>
         </div>
         <div>{{ entry.shared }}</div>
@@ -102,7 +102,7 @@ onMounted(load)
       </div>
     </div>
     <p class="muted" style="font-size: 10px; margin-top: 9px">
-      Pilot leaderboard — identities are not yet verified. Sharing an item alone earns 0 points.
+      Sharing an item alone earns 0 points. "No account" means that name lives in one browser only.
     </p>
   </section>
 </template>

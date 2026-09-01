@@ -83,6 +83,28 @@ before trusting any new suite.
   not produce results". Grep `backend/tests` and `e2e` too, and when only a test
   reaches a field, decide whether it is dead surface or a diagnostic before
   deleting it.
+- **An unanswered in-app modal silently swallows every later click.** The four
+  admin curation actions moved from `window.confirm`/`prompt` to the app's own
+  modal. A driver that only knows how to answer *native* dialogs no longer sees
+  anything to answer, the modal stays open, and the next click times out after
+  30s against an invisible backdrop with no error. Two admin personas lost most
+  of a session to this and reported it as the app hanging. The persona kit now
+  has `p.confirm()` / `p.confirm(cancel=True)`; harnesses use `answer_ask(pg)`.
+  **When a confirmation moves from the browser to the app, every driver has to
+  be taught the new door on the same commit.**
+- **`Control+a` selects nothing on macOS — the shortcut is `Meta+a`.** Two
+  personas in two different rounds reported "Select any text… but the Share
+  button stays disabled and nothing explains why". Measured: after `Control+a`
+  the textarea selection is `[0, 0]`; after `Meta+a` it is the whole field and
+  the button enables. The app was right both times. **Check the selection
+  actually happened before believing the control ignored it.**
+- **Text that looks corrupted may be faithfully stored.** Four personas
+  independently reported an excerpt reading `uki Tanaka is a technical writer
+  rev` as an off-by-one truncation bug. The scratchpad row held the full
+  sentence and the excerpt row held exactly what had been selected — a bad
+  drag-selection, published verbatim. **Read the stored row before diagnosing a
+  rendering bug**; and note that one person's bad input becomes everybody's
+  "obvious bug" when it is shared.
 - **A dark backdrop over a dark sidebar looks like a missing backdrop.** The
   modal overlay is `inset:0` and does cover the sidebar; navy-at-48%-opacity
   over navy simply does not visibly change. Read the CSS before filing a layout
@@ -123,6 +145,22 @@ confirms the app is right. Screenshot every significant screen and state —
 including modals, error states, empty states and the graph at realistic size —
 and read the images.
 
+## 2c. Running personas against one shared instance
+
+Worth the noise, but know what the noise looks like:
+
+- **Rows move under you.** Another persona posts while you are clicking, the
+  feed reorders, and a click aimed at a fixed position lands on nothing. Target
+  by id or by text, never by position, and re-find the row after any wait.
+- **Two admins editing the same thing is real and unguarded.** One approved a
+  link the other had just rejected and only found out by coming back to it. The
+  app says nothing when a row changes underneath you.
+- **Never rebuild `frontend/dist` while a shared instance is being used.** The
+  chunk filenames are hashed, so a rebuild 404s the bundle the open tabs are
+  still asking for and the app goes blank white with no error state. Two
+  personas reported the app as broken; it was the build. Results from a round
+  where this happened are contaminated — rerun them.
+
 ## 3. What has actually broken here
 
 Every real defect found so far came from one of four causes. Look for these
@@ -140,6 +178,15 @@ first in any new code.
   Fix in the shared failure handler, not per call site.
 - **A control that silently does nothing.** Three "Add" buttons ignored an
   empty field with no message. Reads as broken.
+
+- **One fact resolved in two places, only one of which was updated.** When
+  identity moved from the browser cookie to the account session, every REST
+  route changed — and the notification websocket, which resolved identity
+  separately from the same cookie, did not. A signed-in person's socket was
+  refused and they silently dropped to 30-second polling; the docstring above it
+  still asserted the two agreed. **After changing what decides who someone is,
+  grep for every place that answers that question, including the ones that are
+  not routes.**
 
 **Root-cause rule (standing instruction):** when one of these is found, fix the
 whole class at the shared choke point and check every other place the cause
@@ -230,6 +277,6 @@ fail the run on them independently of the assertions.
 
 ---
 
-*Last updated: 2026-09-01, after round 1 of the quality loop: 278 adversarial
-checks, 32 API tests, 100% endpoint coverage, one read-only code audit and six
-fresh dogfooding personas on a single shared instance.*
+*Last updated: 2026-09-01, after round 2 of the quality loop: 301 adversarial
+checks, 45 API tests, 100% endpoint coverage (61 endpoints), two read-only code
+audits and twelve fresh dogfooding personas across two shared instances.*

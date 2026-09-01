@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { ApiError, api } from '../api'
+import AskModal from './AskModal.vue'
+import { useAsk } from '../ask'
 import { store } from '../store'
 
 export interface LinkRow {
@@ -38,12 +40,31 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ changed: []; evidence: [string] }>()
 
-const tab = ref<'links' | 'concepts' | 'types'>('links')
+const tab = ref<'links' | 'concepts' | 'types' | 'endorsed'>('links')
 const scopeAll = ref(false)
 const links = ref<LinkRow[]>([])
 const concepts = ref<ConceptRow[]>([])
 const types = ref<TypeRow[]>([])
+const endorsed = ref<EndorsedRow[]>([])
 const loadError = ref('')
+
+interface EndorsedRow {
+  profile_id: string
+  label: string
+  has_account: boolean
+  endorsements: number
+  topics: string[]
+}
+
+/** Anyone can endorse, so this is what the team actually thinks, and it is the
+ * evidence to map expertise from. Loaded only when the tab is opened. */
+async function loadEndorsed() {
+  try {
+    endorsed.value = await api.get<EndorsedRow[]>('/api/admin/endorsements')
+  } catch (e) {
+    fail(e, 'Could not load endorsements')
+  }
+}
 const selectableTypes = computed(() => types.value.filter((t) => t.selectable))
 
 const newConceptName = ref('')
@@ -86,6 +107,8 @@ async function loadAll() {
 /** A failed action usually means this table is out of date — another tab
  * deleted the row, or the admin session ended. Resync so what is on screen is
  * true, instead of leaving a row that can only ever fail again. */
+const { ask, askUser, answerAsk } = useAsk()
+
 async function fail(e: unknown, fallback: string) {
   store.notify(e instanceof ApiError ? e.message : fallback)
   await loadAll()
@@ -94,13 +117,17 @@ async function fail(e: unknown, fallback: string) {
 async function setState(link: LinkRow, state: string) {
   // Both decisions can carry a reason. Recording only why something is wrong,
   // never why it is right, left the endorsement unexplained in the evidence view.
-  const ask =
-    state === 'rejected'
-      ? 'Why is this link wrong? (optional, kept with the record)'
-      : 'Why is this link right? (optional, shown as the evidence)'
   // Cancel must abort the decision. The note is optional, so an empty string
-  // from OK still goes through; only null means the admin backed out.
-  const note = window.prompt(ask)
+  // from Confirm still goes through; only null means the admin backed out.
+  const note = await askUser({
+    title: state === 'confirmed' ? 'Approve this link' : 'Reject this link',
+    message:
+      state === 'rejected'
+        ? 'It stays in this table and keeps counting occurrences, so you can reinstate it later.'
+        : 'It becomes a solid line on the map for everyone.',
+    inputLabel: state === 'rejected' ? 'Why is this link wrong? (optional)' : 'Why is this link right? (optional, shown as the evidence)',
+    confirmLabel: state === 'confirmed' ? 'Approve' : 'Reject',
+  })
   if (note === null) return
 
   try {
@@ -124,7 +151,13 @@ async function changeType(link: LinkRow, typeId: string) {
 }
 
 async function deleteLink(link: LinkRow) {
-  if (!window.confirm(`Delete the link ${link.src_name} — ${link.dst_name} permanently? Rejecting keeps it inspectable instead.`)) return
+  const answer = await askUser({
+    title: `Delete ${link.src_name} — ${link.dst_name}?`,
+    message: 'This is permanent. Rejecting the link instead keeps it inspectable and it carries on counting.',
+    confirmLabel: 'Delete permanently',
+    danger: true,
+  })
+  if (answer === null) return
   try {
     await api.delete(`/api/graph/links/${link.id}`)
     await loadAll()
@@ -197,7 +230,13 @@ async function saveConcept(concept: ConceptRow) {
 }
 
 async function deleteConcept(concept: ConceptRow) {
-  if (!window.confirm(`Delete "${concept.name}"? Its links and tags are removed from the map.`)) return
+  const answer = await askUser({
+    title: `Delete "${concept.name}"?`,
+    message: 'Its links, tags and expertise mappings are removed from the map. This cannot be undone.',
+    confirmLabel: 'Delete concept',
+    danger: true,
+  })
+  if (answer === null) return
   try {
     await api.delete(`/api/admin/concepts/${concept.id}`)
     await loadAll()
@@ -222,13 +261,17 @@ async function createType() {
 }
 
 async function renameType(row: TypeRow) {
-  const next = window.prompt(
-    row.usage
-      ? `"${row.name}" is used by ${row.usage} link${row.usage === 1 ? '' : 's'}. Renaming updates all of them on the map.`
-      : `Rename "${row.name}"`,
-    row.name,
-  )
-  if (!next?.trim() || next.trim() === row.name) return
+  const next = await askUser({
+    title: `Rename "${row.name}"`,
+    message: row.usage
+      ? `It is used by ${row.usage} link${row.usage === 1 ? '' : 's'}. Renaming updates all of them on the map.`
+      : undefined,
+    inputLabel: 'New name',
+    confirmLabel: 'Rename',
+  })
+  if (next === null) return
+  if (!next.trim()) return void store.notify('Give the relationship type a name')
+  if (next.trim() === row.name) return
   try {
     await api.put(`/api/admin/relationship-types/${row.id}`, { name: next.trim() })
     store.notify('Relationship type renamed')
@@ -240,6 +283,13 @@ async function renameType(row: TypeRow) {
 }
 
 async function deleteType(row: TypeRow) {
+  const answer = await askUser({
+    title: `Delete the relationship type "${row.name}"?`,
+    message: 'Only a type nothing uses can be deleted.',
+    confirmLabel: 'Delete type',
+    danger: true,
+  })
+  if (answer === null) return
   try {
     await api.delete(`/api/admin/relationship-types/${row.id}`)
     store.notify('Relationship type deleted')
@@ -282,10 +332,26 @@ loadAll()
 
 <template>
   <div class="card admin-panel" data-testid="map-admin-panel">
+    <AskModal
+      v-if="ask"
+      :title="ask.title"
+      :message="ask.message"
+      :input-label="ask.inputLabel"
+      :confirm-label="ask.confirmLabel"
+      :danger="ask.danger"
+      @resolve="answerAsk"
+    />
     <div class="panel-tabs">
       <button :class="{ active: tab === 'links' }" data-testid="tab-links" @click="tab = 'links'">Links</button>
       <button :class="{ active: tab === 'concepts' }" data-testid="tab-concepts" @click="tab = 'concepts'">Concepts</button>
       <button :class="{ active: tab === 'types' }" data-testid="tab-types" @click="tab = 'types'">Relationship types</button>
+      <button
+        :class="{ active: tab === 'endorsed' }"
+        data-testid="tab-endorsed"
+        @click="tab = 'endorsed'; loadEndorsed()"
+      >
+        Most endorsed
+      </button>
       <span v-if="loadError" class="form-error" style="margin-left: 10px" data-testid="panel-error">{{ loadError }}</span>
       <label v-if="tab === 'links' && centerConceptId" class="scope-toggle">
         <input v-model="scopeAll" type="checkbox" /> Show all concepts
@@ -336,6 +402,27 @@ loadAll()
           <button v-if="link.state !== 'rejected'" class="btn small" :data-testid="`reject-${link.id}`" @click="setState(link, 'rejected')">Reject</button>
           <button class="btn small ghost" @click="deleteLink(link)">Delete</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Most endorsed: who the team treats as an expert -->
+    <div v-else-if="tab === 'endorsed'" data-testid="endorsed-panel">
+      <p class="muted empty" style="padding-bottom: 0">
+        Anyone can endorse a contribution. This is who the team has actually endorsed, and on what —
+        use it to decide who to map as an expert above.
+      </p>
+      <div class="panel-head concepts"><div>Teammate</div><div>Endorsed on</div><div>Endorsements</div></div>
+      <p v-if="!endorsed.length" class="muted empty">Nobody has been endorsed yet.</p>
+      <div v-for="e in endorsed" :key="e.profile_id" class="panel-body concepts">
+        <div>
+          <strong>{{ e.label }}</strong>
+          <span v-if="!e.has_account" class="chip warn" style="margin-left: 6px">NO ACCOUNT</span>
+        </div>
+        <div>
+          <span v-for="t in e.topics" :key="t" class="chip">{{ t }}</span>
+          <span v-if="!e.topics.length" class="muted">—</span>
+        </div>
+        <div><strong>{{ e.endorsements }}</strong></div>
       </div>
     </div>
 

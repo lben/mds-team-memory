@@ -5,6 +5,8 @@ import uuid
 
 import pytest
 
+from conftest import ADMIN_CREDENTIALS
+
 
 def unique(text: str) -> str:
     return f"{text} {uuid.uuid4().hex[:8]}"
@@ -418,12 +420,19 @@ def test_admin_auth_gates(make_client, admin_client):
     intruder = {"username": "x_intruder", "password": "password123"}
     assert anonymous.post("/api/admin/setup", json=intruder).status_code != 200
     # ...and nothing was created by trying.
-    assert anonymous.post("/api/admin/login", json=intruder).status_code == 401
+    assert anonymous.post("/api/auth/login", json=intruder).status_code == 401
     assert anonymous.get("/api/admin/concepts").status_code == 401
     assert anonymous.get("/api/admin/expertise").status_code == 401
     # Anonymous visitors are told nothing about whether admin accounts exist.
-    state = anonymous.get("/api/admin/state").json()
-    assert state == {"logged_in": False, "username": None}
+    state = anonymous.get("/api/auth/state").json()
+    assert state == {"signed_in": False, "username": None, "is_admin": False}
+
+    # Signing yourself up is a contributor account and never an admin one.
+    joiner = make_client()
+    r = joiner.post("/api/auth/signup", json={"username": f"joiner{uuid.uuid4().hex[:5]}", "password": "a-good-password"})
+    assert r.status_code == 200 and r.json()["is_admin"] is False
+    assert joiner.get("/api/auth/state").json()["is_admin"] is False
+    assert joiner.get("/api/admin/concepts").status_code == 401
 
     r = admin_client.post(
         "/api/admin/admins", json={"username": f"second{uuid.uuid4().hex[:5]}", "password": "another-pass-1"}
@@ -431,7 +440,7 @@ def test_admin_auth_gates(make_client, admin_client):
     assert r.status_code == 200
 
     assert anonymous.post(
-        "/api/admin/login", json={"username": "rootadmin", "password": "wrong-password"}
+        "/api/auth/login", json={"username": "rootadmin", "password": "wrong-password"}
     ).status_code == 401
 
 
@@ -849,7 +858,7 @@ def test_manage_command_creates_admin(make_client):
     assert f"Created admin '{username}'" in result.stdout
 
     client = make_client()
-    assert client.post("/api/admin/login", json={"username": username, "password": password}).status_code == 200
+    assert client.post("/api/auth/login", json={"username": username, "password": password}).status_code == 200
     assert client.get("/api/admin/concepts").status_code == 200
 
     # Re-running for the same username fails instead of silently replacing the account.
@@ -982,3 +991,274 @@ def test_you_are_never_routed_your_own_question(make_client, admin_client):
     detail = other_expert.get(f"/api/questions/{question['id']}").json()
     assert f"Asker {suffix}" not in detail["suggested_experts"], "the asker was suggested as their own expert"
     assert f"Other {suffix}" in detail["suggested_experts"]
+
+
+def _signup(client, name: str) -> dict:
+    r = client.post("/api/auth/signup", json={"username": name, "password": "a-good-password"})
+    assert r.status_code == 200, r.text
+    return r.json()
+
+
+def test_signing_in_changes_who_the_app_thinks_you_are(make_client, admin_client):
+    """Admin login and contributor identity used to be separate systems, so a
+    signed-in admin's own contributions were credited to a hex code."""
+    me = admin_client.get("/api/profile").json()
+    assert me["label"] == ADMIN_CREDENTIALS["username"]
+    assert me["verified"] is True
+
+    body = unique("The admin wrote this down")
+    admin_client.post("/api/capture", data={"body": body})
+    feed = admin_client.get("/api/feed").json()
+    mine = next(i for i in feed if body in i["body"])
+    assert mine["author"] == ADMIN_CREDENTIALS["username"]
+    assert "Browser profile" not in mine["author"]
+
+
+def test_an_account_keeps_the_work_you_did_before_you_had_one(make_client):
+    """Use it first, sign up later: the point of anonymous access is lost if
+    signing up orphans everything you already contributed."""
+    person = make_client()
+    body = unique("Written before I had an account")
+    person.post("/api/capture", data={"body": body})
+    anon = person.get("/api/profile").json()
+    assert anon["verified"] is False
+
+    name = f"claimer{uuid.uuid4().hex[:6]}"
+    _signup(person, name)
+
+    now = person.get("/api/profile").json()
+    assert now["id"] == anon["id"], "signing up started a new identity instead of claiming"
+    assert now["label"] == name and now["verified"] is True
+    assert now["totals"]["shared"] == anon["totals"]["shared"]
+    mine = next(i for i in person.get("/api/feed").json() if body in i["body"])
+    assert mine["author"] == name and mine["is_mine"] is True
+
+
+def test_only_the_first_sign_in_on_a_machine_claims_its_anonymous_work(make_client):
+    """A colleague signing in on your machine must not absorb your
+    contributions. The claim is a one-shot per browser."""
+    machine = make_client()
+    body = unique("Work done anonymously on this machine")
+    machine.post("/api/capture", data={"body": body})
+    anon_id = machine.get("/api/profile").json()["id"]
+
+    first = f"first{uuid.uuid4().hex[:6]}"
+    _signup(machine, first)
+    assert machine.get("/api/profile").json()["id"] == anon_id  # claimed
+
+    machine.post("/api/auth/logout")
+    second = f"second{uuid.uuid4().hex[:6]}"
+    _signup(machine, second)
+    after = machine.get("/api/profile").json()
+    assert after["label"] == second
+    assert after["id"] != anon_id, "the second person absorbed the first person's profile"
+    assert after["totals"]["shared"] == 0, "the second person inherited someone else's contributions"
+
+    # And the work is still the first person's.
+    machine.post("/api/auth/logout")
+    machine.post("/api/auth/login", json={"username": first, "password": "a-good-password"})
+    assert machine.get("/api/profile").json()["id"] == anon_id
+
+
+def test_the_claim_is_spent_even_when_the_first_sign_in_claims_nothing(make_client):
+    """The one-shot is spent by the first sign-in on a machine, not by the first
+    successful claim. Someone who already has a profile from another machine
+    signs in here and claims nothing — and the anonymous work on this machine
+    must still not fall to the next person who signs up on it.
+    """
+    elsewhere = make_client()
+    visitor = f"visitor{uuid.uuid4().hex[:6]}"
+    _signup(elsewhere, visitor)  # this account already owns a profile
+
+    machine = make_client()
+    body = unique("Anonymous work belonging to whoever uses this machine")
+    machine.post("/api/capture", data={"body": body})
+    anon = machine.get("/api/profile").json()
+    assert anon["totals"]["shared"] == 1
+
+    # The visitor signs in here. They keep their own profile; nothing is claimed.
+    machine.post("/api/auth/login", json={"username": visitor, "password": "a-good-password"})
+    assert machine.get("/api/profile").json()["id"] != anon["id"]
+    machine.post("/api/auth/logout")
+
+    # The next person to sign up on this machine must not inherit that work.
+    latecomer = f"late{uuid.uuid4().hex[:6]}"
+    _signup(machine, latecomer)
+    got = machine.get("/api/profile").json()
+    assert got["id"] != anon["id"], "a later sign-up absorbed the machine's anonymous profile"
+    assert got["totals"]["shared"] == 0, "a later sign-up inherited someone else's contributions"
+
+
+def test_expertise_can_only_be_routed_to_someone_with_an_account(make_client, admin_client):
+    """An anonymous browser profile is unanswerable as an expert and its
+    mapping would die with a cookie clear."""
+    anonymous = make_client()
+    anonymous.get("/api/profile")
+    named = make_client()
+    account = f"expert{uuid.uuid4().hex[:6]}"
+    _signup(named, account)
+
+    listed = admin_client.get("/api/admin/profiles").json()
+    labels = [p["label"] for p in listed]
+    assert account in labels
+    assert not any(l.startswith("Browser profile") for l in labels), labels
+    assert all(p["verified"] for p in listed)
+
+
+def test_anyone_can_endorse_and_the_admin_sees_who_the_team_endorsed(make_client, admin_client):
+    """Endorsement is the evidence an admin maps expertise from, so it cannot
+    require the endorser to already be a mapped expert."""
+    author, endorser = make_client(), make_client()
+    suffix = uuid.uuid4().hex[:6]
+    _concept(admin_client, f"Ledger{suffix}", [f"ldg-{suffix}"])
+    item = author.post(
+        "/api/capture", data={"body": f"The ldg-{suffix} close runs on the first working day."}
+    ).json()["item"]
+
+    r = endorser.post(f"/api/items/{item['id']}/endorse")
+    assert r.status_code == 200, f"a plain teammate could not endorse: {r.text}"
+    assert r.json()["created"] is True
+    assert author.post(f"/api/items/{item['id']}/endorse").status_code == 400  # still not your own
+
+    ranking = admin_client.get("/api/admin/endorsements").json()
+    row = next(e for e in ranking if e["profile_id"] == item["author_id"])
+    assert row["endorsements"] >= 1
+    assert f"Ledger{suffix}" in row["topics"]
+
+
+def test_a_new_concept_finds_links_in_content_that_already_exists(make_client, admin_client):
+    """Discovery used to run only when somebody posted, so an admin who defined
+    two concepts that already co-occur was shown an empty map."""
+    author = make_client()
+    suffix = uuid.uuid4().hex[:6]
+    author.post(
+        "/api/capture",
+        data={"body": f"The nightly qux{suffix} job reconciles against the zar{suffix} ledger."},
+    )
+    first = _concept(admin_client, f"Qux{suffix}", [f"qux{suffix}"])
+    # Nothing to pair with yet.
+    assert _link_between(admin_client, first["id"], first["id"]) is None
+    second = _concept(admin_client, f"Zar{suffix}", [f"zar{suffix}"])
+
+    link = _link_between(admin_client, second["id"], first["id"])
+    assert link is not None, "the two concepts co-occur in existing content but no link was found"
+    assert link["occurrence_count"] >= 1
+
+
+def test_the_author_can_fix_and_remove_their_own_contribution(make_client):
+    """A typo used to be permanent and nothing could be taken back."""
+    author, reader = make_client(), make_client()
+    marker = uuid.uuid4().hex[:8]
+    item = author.post("/api/capture", data={"body": f"The nightly job runs at 7am {marker}"}).json()["item"]
+
+    r = author.put(f"/api/items/{item['id']}", json={"body": f"The nightly job runs at 7pm {marker}"})
+    assert r.status_code == 200
+    assert "7pm" in reader.get(f"/api/items/{item['id']}").json()["body"]
+    # The corrected text is what the team now finds.
+    found = reader.get("/api/search", params={"q": marker}).json()["items"]
+    assert found and "7pm" in found[0]["body"] and "7am" not in found[0]["body"]
+
+    assert reader.put(f"/api/items/{item['id']}", json={"body": "not mine to edit"}).status_code == 403
+    assert reader.delete(f"/api/items/{item['id']}").status_code == 403
+
+    assert author.delete(f"/api/items/{item['id']}").status_code == 200
+    assert reader.get(f"/api/items/{item['id']}").status_code == 404
+    assert not reader.get("/api/search", params={"q": marker}).json()["items"]
+
+
+def test_deleting_your_own_contribution_cannot_destroy_a_teammates(make_client):
+    """The rule the question delete has always had, applied to everything."""
+    asker, answerer = make_client(), make_client()
+    q = asker.post("/api/questions", json={"body": unique("Who owns the nightly job?")}).json()
+    answerer.post(f"/api/questions/{q['id']}/answers", json={"body": "The platform team does."})
+
+    r = asker.delete(f"/api/items/{q['id']}")
+    assert r.status_code == 400
+    assert "teammate" in r.json()["detail"]
+    assert asker.get(f"/api/items/{q['id']}").status_code == 200
+
+
+def test_the_uploader_can_delete_a_document_without_destroying_shared_excerpts(make_client):
+    """Uploads used to be permanent; a wrong file was there forever."""
+    uploader, reader = make_client(), make_client()
+    marker = uuid.uuid4().hex[:8]
+    doc = uploader.post(
+        "/api/documents",
+        files={"file": ("notes.txt", io.BytesIO(f"A passage worth keeping {marker}.\n".encode()), "text/plain")},
+    ).json()
+    passages = uploader.get(f"/api/documents/{doc['id']}").json()["passages"]
+    shared = reader.post(f"/api/passages/{passages[0]['id']}/share", json={}).json()["item"]
+
+    assert reader.delete(f"/api/documents/{doc['id']}").status_code == 403
+    r = uploader.delete(f"/api/documents/{doc['id']}")
+    assert r.status_code == 200, r.text
+    assert r.json()["kept_shared_excerpts"] == 1
+
+    assert reader.get(f"/api/documents/{doc['id']}").status_code == 404
+    assert all(d["id"] != doc["id"] for d in reader.get("/api/documents").json())
+    # The excerpt someone shared is team knowledge and survives, with no link
+    # to a file that no longer exists.
+    kept = reader.get(f"/api/items/{shared['id']}").json()
+    assert marker in kept["body"]
+    assert kept["source_document_id"] is None
+
+
+def test_signing_out_really_makes_you_anonymous_again(make_client):
+    """Claiming a browser profile binds it to an account. If the browser cookie
+    still resolved to it afterwards, signing out would leave you posting as the
+    account you just signed out of."""
+    person = make_client()
+    person.post("/api/capture", data={"body": unique("Written while signed in")})
+    name = f"leaver{uuid.uuid4().hex[:6]}"
+    _signup(person, name)
+    signed_in = person.get("/api/profile").json()
+    assert signed_in["verified"] is True and signed_in["label"] == name
+
+    person.post("/api/auth/logout")
+    after = person.get("/api/profile").json()
+    assert after["verified"] is False, "still shown as signed in after signing out"
+    assert after["label"] != name, "still carrying the account's name after signing out"
+    assert after["id"] != signed_in["id"], "still the account's profile after signing out"
+
+    body = unique("Written after signing out")
+    person.post("/api/capture", data={"body": body})
+    posted = next(i for i in person.get("/api/feed").json() if body in i["body"])
+    assert posted["author"] != name, "a signed-out person is still posting as the account"
+
+    # And signing back in returns you to your own work.
+    person.post("/api/auth/login", json={"username": name, "password": "a-good-password"})
+    assert person.get("/api/profile").json()["id"] == signed_in["id"]
+
+
+def test_the_notification_socket_knows_who_is_signed_in(make_client):
+    """The socket identified people by the browser cookie while every REST route
+    identifies them by the session. A signed-in person's profile has no browser
+    token at all, so their socket was refused and they silently fell back to
+    polling."""
+    person = make_client()
+    with person.websocket_connect("/ws/notifications") as ws:
+        assert ws.receive_json()["type"] == "ready"  # anonymous still works
+
+    _signup(person, f"socket{uuid.uuid4().hex[:6]}")
+    with person.websocket_connect("/ws/notifications") as ws:
+        assert ws.receive_json()["type"] == "ready", "a signed-in person cannot open the socket"
+
+
+def test_more_than_one_person_can_endorse_the_same_contribution(make_client, admin_client):
+    """Endorsement is the count an admin reads to decide who the experts are, so
+    hiding the control after the first one capped every item at a single voice."""
+    author, first, second = make_client(), make_client(), make_client()
+    item = author.post("/api/capture", data={"body": unique("Restarting the sweep needs the lock released first")}).json()["item"]
+
+    assert first.post(f"/api/items/{item['id']}/endorse").json()["created"] is True
+    assert second.post(f"/api/items/{item['id']}/endorse").json()["created"] is True
+
+    seen_by_third = make_client().get(f"/api/items/{item['id']}").json()
+    assert seen_by_third["endorsements"] == 2
+    assert seen_by_third["endorsed_by_me"] is False, "someone who has not endorsed is told they have"
+
+    seen_by_first = first.get(f"/api/items/{item['id']}").json()
+    assert seen_by_first["endorsed_by_me"] is True, "an endorser is offered the action again"
+
+    ranking = admin_client.get("/api/admin/endorsements").json()
+    assert next(e for e in ranking if e["profile_id"] == item["author_id"])["endorsements"] == 2

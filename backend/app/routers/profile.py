@@ -20,7 +20,10 @@ def me(profile: Profile = Depends(get_profile), db: Session = Depends(get_db)):
         "id": profile.id,
         "label": profile.label,
         "display_name": profile.display_name,
-        "verified": False,
+        # No longer a hardcoded lie: it is true exactly when this profile
+        # belongs to an account, which is also what protects it from a
+        # cookie clear.
+        "verified": profile.has_account,
         "totals": profile_totals(db, profile.id),
     }
 
@@ -33,4 +36,4 @@ def set_display_name(
 ):
     profile.display_name = payload.display_name.strip()
     db.commit()
-    return {"label": profile.label, "verified": False}
+    return {"label": profile.label, "verified": profile.has_account}

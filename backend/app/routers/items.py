@@ -7,10 +7,9 @@ from ..concepts import match_concepts
 from ..db import get_db
 from ..docstore import save_uploaded_document
 from ..impact import mark_helped, notify, record_event, shared_count
-from ..knowledge import item_dict, process_after_save
+from ..knowledge import delete_item, dependents_by_others, item_dict, process_after_save
 from ..models import (
-    AdminUser,
-    ExpertiseMapping,
+    Account,
     KnowledgeItem,
     Profile,
     Revision,
@@ -21,6 +20,10 @@ router = APIRouter(prefix="/api", tags=["items"])
 
 
 class CorrectionIn(BaseModel):
+    body: str = Field(min_length=1, max_length=20000)
+
+
+class BodyIn(BaseModel):
     body: str = Field(min_length=1, max_length=20000)
 
 
@@ -100,6 +103,50 @@ def item_detail(
     return data
 
 
+@router.put("/items/{item_id}")
+def edit_item(
+    item_id: str,
+    payload: BodyIn,
+    profile: Profile = Depends(get_profile),
+    db: Session = Depends(get_db),
+):
+    """Fix your own contribution. A typo used to be permanent."""
+    item = _get_item(db, item_id, profile)
+    if item.author_profile_id != profile.id:
+        raise HTTPException(403, "Only the author can edit this")
+    body = payload.body.strip()
+    if not body:
+        raise HTTPException(400, "Write something")
+    item.body = body
+    item.updated_at = utcnow()
+    db.commit()
+    # The text decides its tags, its links and which contributions corroborate
+    # it, so rerun exactly what a new contribution runs rather than leaving the
+    # old derivations behind.
+    process_after_save(db, item)
+    db.commit()
+    return item_dict(db, item, profile)
+
+
+@router.delete("/items/{item_id}")
+def remove_item(
+    item_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
+):
+    """Delete your own contribution — unless a teammate has built on it."""
+    item = _get_item(db, item_id, profile)
+    if item.author_profile_id != profile.id:
+        raise HTTPException(403, "Only the author can delete this")
+    attached = dependents_by_others(db, item)
+    if attached:
+        raise HTTPException(
+            400,
+            f"A teammate has added {attached} answer or correction to this, "
+            "so deleting it would destroy their work too",
+        )
+    delete_item(db, item)
+    return {"deleted": True}
+
+
 @router.post("/items/{item_id}/helped")
 def helped(
     item_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
@@ -118,22 +165,10 @@ def endorse(
     item = _get_item(db, item_id, profile)
     if item.author_profile_id == profile.id:
         raise HTTPException(400, "You cannot endorse your own contribution")
-    subject_text = (item.title or "") + " " + item.body
-    parent = db.get(KnowledgeItem, item.parent_id) if item.parent_id else None
-    if parent:
-        subject_text += " " + (parent.title or "") + " " + parent.body
-    concept_ids = [c.id for c in match_concepts(db, subject_text)]
-    is_sme = (
-        db.query(ExpertiseMapping)
-        .filter(
-            ExpertiseMapping.profile_id == profile.id,
-            ExpertiseMapping.concept_id.in_(concept_ids or [""]),
-        )
-        .first()
-        is not None
-    )
-    if not is_sme:
-        raise HTTPException(403, "Only a mapped expert for this topic can endorse")
+    # Anyone may endorse. Requiring the endorser to already be a mapped expert
+    # meant most clicks failed with a 403 the button could not predict, and it
+    # had the direction backwards: endorsements are the evidence an admin uses
+    # to decide who the experts are, not something only experts may give.
     created = record_event(
         db, "sme_endorsed", item.author_profile_id, f"sme:{profile.id}:{item.id}", profile.id, item.id
     )
@@ -179,7 +214,7 @@ def add_correction(
 def adopt_correction(
     correction_id: str,
     profile: Profile = Depends(get_profile),
-    admin: AdminUser | None = Depends(get_admin),
+    admin: Account | None = Depends(get_admin),
     db: Session = Depends(get_db),
 ):
     correction = db.get(KnowledgeItem, correction_id)

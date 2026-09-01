@@ -29,6 +29,44 @@ def check(name, condition, detail=""):
     else:
         FAILS.append(f"{name} — {detail}"); print(f"   FAIL {name} :: {detail}", flush=True)
 
+
+def answer_ask(pg, text=None, cancel=False):
+    """Answer the app's own confirm/prompt.
+
+    These actions used to raise a native `window.confirm`/`window.prompt`, which
+    Playwright auto-dismisses — so a harness that forgot to handle it saw the
+    action correctly do nothing and read it as a dead button. They are now the
+    app's own modal, which has to be answered by clicking, exactly like a person.
+    """
+    pg.wait_for_selector("[data-testid=ask-modal]", timeout=6000)
+    if cancel:
+        pg.get_by_test_id("ask-cancel").click()
+    else:
+        if text is not None and pg.get_by_test_id("ask-input").count():
+            pg.get_by_test_id("ask-input").fill(text)
+        pg.get_by_test_id("ask-confirm").click()
+    pg.wait_for_timeout(700)
+
+
+def sign_out(pg):
+    """Signing out lives with the account in the sidebar now, not in the admin
+    nav: admin rights and identity are one thing."""
+    pg.get_by_test_id("profile-button").click()
+    pg.wait_for_timeout(500)
+    pg.get_by_test_id("sign-out").click()
+    pg.wait_for_timeout(1800)
+
+
+def sign_up(pg, username, password="a-good-password"):
+    """Create an account the way a person does: the profile button in the
+    sidebar. Expertise can only be routed to someone who has one."""
+    pg.get_by_test_id("profile-button").click()
+    pg.wait_for_timeout(600)
+    pg.get_by_test_id("auth-username").fill(username)
+    pg.get_by_test_id("auth-password").fill(password)
+    pg.get_by_test_id("do-sign-up").click()
+    pg.wait_for_timeout(3000)  # signing in reloads, so every screen agrees on who you are
+
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     A = b.new_context(viewport={"width":1500,"height":950}).new_page()
@@ -58,13 +96,13 @@ with sync_playwright() as pw:
     U.get_by_test_id("home-input").fill("A question I will regret asking about Lavos?")
     U.get_by_test_id("do-ask").click(); U.wait_for_timeout(2200)
     card = U.locator(".question-card", has_text="regret asking").first
-    U.once("dialog", lambda d: d.dismiss())
     card.get_by_test_id("delete-question").click(); U.wait_for_timeout(1400)
+    answer_ask(U, cancel=True)
     check("cancelling the delete confirmation keeps the question",
           U.locator(".question-card", has_text="regret asking").count() == 1)
     card = U.locator(".question-card", has_text="regret asking").first
-    U.once("dialog", lambda d: d.accept())
     card.get_by_test_id("delete-question").click(); U.wait_for_timeout(2000)
+    answer_ask(U)
     check("confirming really deletes it", U.locator(".question-card", has_text="regret asking").count() == 0)
     left = U.evaluate("()=>fetch('/api/questions').then(r=>r.json()).then(q=>q.filter(x=>x.body.includes('regret asking')).length)")
     check("and it is gone from the server too, not just hidden", left == 0, f"{left} left")
@@ -92,11 +130,20 @@ with sync_playwright() as pw:
     ucard.locator(".q-head").click(); U.wait_for_timeout(1200)
     endorse = ucard.get_by_role("button", name="Endorse as expert")
     check("someone else's answer offers an endorse action", endorse.count() > 0, ucard.inner_text()[:120])
-    endorse.first.click(); U.wait_for_timeout(2000)
-    check("endorsing without being a mapped expert is refused, and says so",
-          "SME ENDORSED" not in ucard.inner_text() and "expert" in toast(U).lower(), f"toast={toast(U)!r}")
+    endorse.first.click(); U.wait_for_timeout(2500)
+    # Endorsement used to require the endorser to already be a mapped expert,
+    # so most clicks failed with a 403 the button could not predict. It is now
+    # what any teammate can say, and the evidence an admin maps expertise from.
+    U.reload(); U.wait_for_timeout(2200)
+    ucard = U.locator(".question-card", has_text="How many endings").first
+    ucard.locator(".q-head").click(); U.wait_for_timeout(1400)
+    check("a plain teammate's endorsement is accepted and shows on the answer",
+          "ENDORSED" in ucard.inner_text(), ucard.inner_text()[:160])
 
-    # Now make this person a real expert for the topic and try again.
+    # Now make this person a real expert for the topic and try again. Expertise
+    # only goes to people with accounts, so they make one first.
+    U.goto(base+"/"); U.wait_for_timeout(1500); sign_up(U, "uma")
+    V.goto(base+"/"); V.wait_for_timeout(1500); sign_up(V, "vera")
     login(A)
     profiles = A.get_by_test_id("map-profile").locator("option").all_inner_texts()
     check("the answering people appear as mappable profiles", len(profiles) > 2, str(profiles))
@@ -107,9 +154,12 @@ with sync_playwright() as pw:
     U.reload(); U.wait_for_timeout(2200)
     ucard = U.locator(".question-card", has_text="How many endings").first
     ucard.locator(".q-head").click(); U.wait_for_timeout(1200)
-    ucard.get_by_role("button", name="Endorse as expert").first.click(); U.wait_for_timeout(2200)
-    check("a mapped expert's endorsement shows on the answer",
-          "SME ENDORSED" in ucard.inner_text(), ucard.inner_text()[:180])
+    # Anyone may endorse, so the count is the point: the action stops being
+    # offered to the person who already used it, not to everybody else.
+    check("the person who already endorsed is not offered it again",
+          ucard.get_by_role("button", name="Endorse as expert").count() == 0,
+          ucard.inner_text()[:180])
+    check("and it still shows as endorsed", "ENDORSED" in ucard.inner_text(), ucard.inner_text()[:180])
     V.reload(); V.wait_for_timeout(2000)
     vcard = V.locator(".question-card", has_text="How many endings").first
     vcard.locator(".q-head").click(); V.wait_for_timeout(1200)
@@ -175,12 +225,12 @@ with sync_playwright() as pw:
     U.get_by_role("button", name="Find").click(); U.wait_for_timeout(1600)
     check("a find with no matches says so rather than breaking",
           U.locator(".sidebar").count() > 0 and "undefined" not in U.locator(".page").inner_text())
-    U.once("dialog", lambda d: d.dismiss())
     U.get_by_role("button", name="Create another scratchpad").click(); U.wait_for_timeout(1400)
+    answer_ask(U, cancel=True)
     pads = U.evaluate("()=>fetch('/api/scratchpad').then(r=>r.json()).then(s=>1+s.others.length)")
     check("cancelling the name prompt creates no pad", pads == 1, f"{pads} pads")
-    U.once("dialog", lambda d: d.accept("Route notes"))
     U.get_by_role("button", name="Create another scratchpad").click(); U.wait_for_timeout(2200)
+    answer_ask(U, "Route notes")
     pads = U.evaluate("()=>fetch('/api/scratchpad').then(r=>r.json()).then(s=>1+s.others.length)")
     check("naming it creates a second pad", pads == 2, f"{pads} pads")
     check("the second pad is visible in the interface", "Route notes" in U.locator(".page").inner_text())
@@ -212,8 +262,11 @@ with sync_playwright() as pw:
     box.press("Enter"); A.wait_for_timeout(2000)
     txt = A.locator(".page").inner_text()
     check("the routing preview names the detected concept", "Chrono Trigger" in txt)
-    check("and it names somebody to route to",
-          "Browser profile" in txt or "Benito" in txt, txt[txt.find("Chrono Trigger"):][:160])
+    # Experts are account holders now, so the preview must name a person, never
+    # the hex code of a browser profile.
+    routed = txt[txt.find("Chrono Trigger"):][:200]
+    check("and it names somebody to route to", "uma" in routed or "vera" in routed, routed[:160])
+    check("and never routes to an anonymous browser profile", "Browser profile" not in routed, routed[:160])
     box.fill("a question about something nobody has any expertise in at all")
     box.press("Enter"); A.wait_for_timeout(2000)
     check("a question that routes nowhere says so instead of erroring",
@@ -223,19 +276,19 @@ with sync_playwright() as pw:
     A.get_by_test_id("tab-types").click(); A.wait_for_timeout(900)
     A.get_by_test_id("type-name").fill("inspired"); A.get_by_test_id("add-type").click(); A.wait_for_timeout(1200)
     row = A.get_by_test_id("map-admin-panel").locator(".panel-body.types", has_text="inspired").first
-    A.once("dialog", lambda d: d.dismiss())
     row.get_by_role("button", name="Rename").click(); A.wait_for_timeout(1200)
+    answer_ask(A, cancel=True)
     check("cancelling a rename changes nothing",
           "inspired" in A.get_by_test_id("map-admin-panel").inner_text())
-    A.once("dialog", lambda d: d.accept("corroborates"))
     A.get_by_test_id("map-admin-panel").locator(".panel-body.types", has_text="inspired").first \
         .get_by_role("button", name="Rename").click()
+    answer_ask(A, "corroborates")
     A.wait_for_timeout(1600)
     names = A.evaluate("()=>fetch('/api/graph/relationship-types').then(r=>r.json()).then(t=>t.map(x=>x.name))")
     check("renaming a type onto a built-in name is refused", len(names) == len(set(names)), str(names))
-    A.once("dialog", lambda d: d.accept("directly inspired"))
     A.get_by_test_id("map-admin-panel").locator(".panel-body.types", has_text="inspired").first \
         .get_by_role("button", name="Rename").click()
+    answer_ask(A, "directly inspired")
     A.wait_for_timeout(1800)
     check("a real rename goes through", "directly inspired" in A.get_by_test_id("map-admin-panel").inner_text(),
           A.get_by_test_id("map-admin-panel").inner_text()[:150])
@@ -253,7 +306,9 @@ with sync_playwright() as pw:
     check("a type in use reports its usage", "1" in used.inner_text(), used.inner_text()[:80])
     del_btn = used.get_by_role("button", name="Delete")
     if del_btn.count() and not del_btn.first.is_disabled():
-        del_btn.first.click(); A.wait_for_timeout(1800)
+        del_btn.first.click()
+        answer_ask(A)          # this Delete asks first now, like its two neighbours
+        A.wait_for_timeout(1800)
     still = A.evaluate("()=>fetch('/api/graph/relationship-types').then(r=>r.json()).then(t=>t.filter(x=>x.name==='directly inspired').length)")
     check("a relationship type still in use cannot be silently deleted out from under its links",
           still == 1 and toast(A) != "", f"remaining={still}, toast={toast(A)!r}")
@@ -261,13 +316,13 @@ with sync_playwright() as pw:
     print("\n### 45. Deleting a link permanently, from the table", flush=True)
     A.get_by_test_id("tab-links").click(); A.wait_for_timeout(1200)
     before = A.get_by_test_id("map-admin-panel").locator(".panel-body.links").count()
-    A.once("dialog", lambda d: d.dismiss())
     A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Delete").click()
+    answer_ask(A, cancel=True)
     A.wait_for_timeout(1400)
     check("cancelling the delete confirmation keeps the link",
           A.get_by_test_id("map-admin-panel").locator(".panel-body.links").count() == before)
-    A.once("dialog", lambda d: d.accept())
     A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Delete").click()
+    answer_ask(A)
     A.wait_for_timeout(2000)
     check("confirming deletes it", A.get_by_test_id("map-admin-panel").locator(".panel-body.links").count() == before-1,
           f"{A.get_by_test_id('map-admin-panel').locator('.panel-body.links').count()} left")
@@ -278,7 +333,9 @@ with sync_playwright() as pw:
     A.get_by_test_id("tab-types").click(); A.wait_for_timeout(1400)
     unused = A.get_by_test_id("map-admin-panel").locator(".panel-body.types", has_text="directly inspired").first
     if unused.count() and unused.get_by_role("button", name="Delete").count():
-        unused.get_by_role("button", name="Delete").first.click(); A.wait_for_timeout(1800)
+        unused.get_by_role("button", name="Delete").first.click()
+        answer_ask(A)
+        A.wait_for_timeout(1800)
     gone = A.evaluate("()=>fetch('/api/graph/relationship-types').then(r=>r.json()).then(t=>t.filter(x=>x.name==='directly inspired').length)")
     check("once nothing uses it, the type can be deleted", gone == 0, f"{gone} remaining")
 
@@ -298,7 +355,7 @@ with sync_playwright() as pw:
     n = A.evaluate("()=>fetch('/api/admin/admins').then(r=>r.json()).then(a=>a.length)")
     check("a valid second admin is created", n == 2, f"{n} admins")
     check("and is listed on screen", "marta" in A.locator(".page").inner_text())
-    A.get_by_test_id("sign-out-admin").click(); A.wait_for_timeout(1600)
+    sign_out(A)
     A.goto(base+"/admin/expertise"); A.wait_for_timeout(1600)
     A.get_by_test_id("admin-username").fill("marta"); A.get_by_test_id("admin-password").fill("a-proper-password")
     A.get_by_test_id("admin-submit").click(); A.wait_for_timeout(2200)

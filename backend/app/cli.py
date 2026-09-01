@@ -19,7 +19,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from . import config
 from .auth import hash_password
 from .db import SessionLocal, engine
-from .models import AdminUser
+from .models import Account
 
 MIN_USERNAME = 3
 MIN_PASSWORD = 8
@@ -45,7 +45,7 @@ def _read_password() -> str:
 def create_admin(username: str | None) -> None:
     db = SessionLocal()
     try:
-        existing = db.query(AdminUser).order_by(AdminUser.username).all()
+        existing = db.query(Account).filter_by(is_admin=True).order_by(Account.username).all()
         username = (username or _prompt("Username")).strip()
         if len(username) < MIN_USERNAME:
             raise SystemExit(f"error: username must be at least {MIN_USERNAME} characters")
@@ -54,7 +54,7 @@ def create_admin(username: str | None) -> None:
         password = _read_password()
         if len(password) < MIN_PASSWORD:
             raise SystemExit(f"error: password must be at least {MIN_PASSWORD} characters")
-        db.add(AdminUser(username=username, password_hash=hash_password(password)))
+        db.add(Account(username=username, password_hash=hash_password(password), is_admin=True))
         try:
             db.commit()
         except IntegrityError:
@@ -73,7 +73,7 @@ def create_admin(username: str | None) -> None:
 def list_admins() -> None:
     db = SessionLocal()
     try:
-        admins = db.query(AdminUser).order_by(AdminUser.username).all()
+        admins = db.query(Account).filter_by(is_admin=True).order_by(Account.username).all()
         if not admins:
             print("No admin accounts exist. Create one with: python manage.py create-admin")
             return

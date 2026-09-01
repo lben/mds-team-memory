@@ -60,7 +60,7 @@ def impact(
             {
                 "profile_id": pid,
                 "label": profiles[pid].label if pid in profiles else "Unknown",
-                "verified": False,
+                "verified": pid in profiles and profiles[pid].has_account,
                 "is_me": pid == profile.id,
                 **entry,
             }

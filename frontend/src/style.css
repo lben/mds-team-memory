@@ -130,7 +130,11 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .panel-body .count{font-weight:800;color:var(--navy-3);padding:4px 8px}
 .empty{padding:16px;font-size:12px}
 .home-graph{margin-bottom:16px;min-height:0}
-.home-graph .graph-box{height:380px}
+/* A modest increase only. 380px starved the fit and shrank every label; 520px
+   fixed that but pushed the composer and the feed below the fold, which is
+   worse — the graph is not what people came to the page to use. The zoom floor
+   in KnowledgeGraph.vue is what actually keeps the labels legible. */
+.home-graph .graph-box{height:430px}
 .graph-empty{display:grid;place-items:center;height:150px;color:#8ea7c9;font-size:13px;padding:0 40px;text-align:center}
 .composer{padding:16px}
 .composer-input{width:100%;min-height:76px;resize:vertical;padding:13px 15px;font-size:15px;line-height:1.5}
@@ -154,6 +158,10 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .nav-signout{border:0;background:transparent;color:#e8eef7;display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;text-align:left;font-size:14px;width:100%}
 .nav-signout:hover{background:#172f50}
 .nav-signout .who{margin-left:auto;font-size:10px;color:#8ea7c9;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-note{padding:9px 16px;font-size:11px;color:var(--muted);line-height:1.5;border-bottom:1px solid var(--border)}
+.btn.danger{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:650}
+.pop-warn{background:#fff4f4;border:1px solid #f3c9c9;color:#8a2a2a;border-radius:9px;padding:10px 11px;font-size:11px;line-height:1.5;margin-bottom:12px}
+.pop-divider{height:1px;background:var(--border);margin:14px 0 12px}
 .pop-note{font-size:10px;color:var(--muted);line-height:1.45;margin:8px 0 0}
 .auth-card{max-width:430px;margin:60px auto;padding:28px}
 .auth-card h2{margin-bottom:6px}.auth-card p{color:var(--muted);font-size:13px;line-height:1.5}

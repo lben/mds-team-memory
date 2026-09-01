@@ -29,6 +29,24 @@ def check(name, condition, detail=""):
     else:
         FAILS.append(f"{name} — {detail}"); print(f"   FAIL {name} :: {detail}", flush=True)
 
+
+def answer_ask(pg, text=None, cancel=False):
+    """Answer the app's own confirm/prompt.
+
+    These actions used to raise a native `window.confirm`/`window.prompt`, which
+    Playwright auto-dismisses — so a harness that forgot to handle it saw the
+    action correctly do nothing and read it as a dead button. They are now the
+    app's own modal, which has to be answered by clicking, exactly like a person.
+    """
+    pg.wait_for_selector("[data-testid=ask-modal]", timeout=6000)
+    if cancel:
+        pg.get_by_test_id("ask-cancel").click()
+    else:
+        if text is not None and pg.get_by_test_id("ask-input").count():
+            pg.get_by_test_id("ask-input").fill(text)
+        pg.get_by_test_id("ask-confirm").click()
+    pg.wait_for_timeout(700)
+
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     A = b.new_context(viewport={"width":1500,"height":950}).new_page()
@@ -179,8 +197,8 @@ with sync_playwright() as pw:
     n_links = A.get_by_test_id("map-admin-panel").locator(".panel-body.links").count()
     check("a link exists between the two concepts", n_links > 0, f"{n_links}")
     A.get_by_test_id("tab-concepts").click(); A.wait_for_timeout(700)
-    A.once("dialog", lambda d: d.accept())
     A.locator(f"#row-{ct}").get_by_role("button", name="Delete").click()
+    answer_ask(A)
     A.wait_for_timeout(2000)
     A.get_by_test_id("tab-links").click(); A.wait_for_timeout(900)
     check("deleting a concept takes its links with it",
@@ -203,15 +221,22 @@ with sync_playwright() as pw:
     if U.locator(".modal-backdrop").count(): U.get_by_role("button", name="Add another").click()
     U.wait_for_timeout(800)
     doc_id = U.evaluate("()=>fetch('/api/documents').then(r=>r.json()).then(d=>d[0].id)")
-    st = U.evaluate(f"()=>fetch('/api/documents/{doc_id}',{{method:'DELETE'}}).then(r=>r.status)")
-    # Uploads are permanent here: no delete control, no endpoint behind one.
-    # Assert that explicitly, so this section cannot pass by doing nothing.
-    check("a document cannot be deleted through the API", st == 405, f"status {st}")
+    # Somebody else's document is not yours to remove. Assert the refusal is a
+    # refusal and not a silent no-op, then that the owner really can.
+    st = A.evaluate(f"()=>fetch('/api/documents/{doc_id}',{{method:'DELETE'}}).then(r=>r.status)")
+    check("someone else cannot delete a document through the API", st == 403, f"status {st}")
     check("and the document survives the attempt",
           U.evaluate("()=>fetch('/api/documents').then(r=>r.json()).then(d=>d.length)") == 1)
     U.goto(base+"/documents"); U.wait_for_timeout(1800)
     check("the documents page still lists it and is consistent",
           U.locator(".doc-row").count() == 1 and "undefined" not in U.locator(".page").inner_text())
+    st = U.evaluate(f"()=>fetch('/api/documents/{doc_id}',{{method:'DELETE'}}).then(r=>r.status)")
+    check("the person who uploaded it can delete it", st == 200, f"status {st}")
+    check("and it is really gone, not just hidden",
+          U.evaluate("()=>fetch('/api/documents').then(r=>r.json()).then(d=>d.length)") == 0)
+    U.goto(base+"/documents"); U.wait_for_timeout(1800)
+    check("the documents page shows the empty state rather than a stale row",
+          U.locator(".doc-row").count() == 0 and "undefined" not in U.locator(".page").inner_text())
 
     print("\n### 33. A word with no spaces, and a wall of concepts", flush=True)
     capture(U, "Supercalifragilistic" + "expialidocious" * 40)
@@ -275,7 +300,17 @@ with sync_playwright() as pw:
     U.goto(base+"/"); U.wait_for_timeout(1200)
     U.get_by_test_id("home-input").fill("keyboard only search for chrono")
     U.keyboard.press("Enter"); U.wait_for_timeout(1800)
-    check("pressing Enter runs a search rather than adding a newline",
+    # Enter used to run a search mid-sentence while somebody was writing a
+    # contribution. Searching is now the Search button's job alone.
+    check("pressing Enter types a newline and does not search",
+          U.get_by_test_id("search-banner").count() == 0 and U.get_by_test_id("nothing-found").count() == 0,
+          "Enter still searched")
+    check("and the text the person typed is still there, now with the newline",
+          U.get_by_test_id("home-input").input_value().startswith("keyboard only search for chrono")
+          and "\n" in U.get_by_test_id("home-input").input_value(),
+          repr(U.get_by_test_id("home-input").input_value()))
+    U.get_by_test_id("do-search").click(); U.wait_for_timeout(1800)
+    check("clicking Search does run the search",
           U.get_by_test_id("search-banner").count() > 0 or U.get_by_test_id("nothing-found").count() > 0)
 
     print("\n### 36. Double-clicking every other way to create something", flush=True)

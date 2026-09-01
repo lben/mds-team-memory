@@ -26,10 +26,27 @@ cd frontend && npm install && npm run dev                     # UI on :5173 (pro
 
 For a production-like run, `npm run build` then open `http://127.0.0.1:8000`.
 
-## Administrator accounts
+## Accounts
 
-Admins are created only from the command line, on the machine running the app —
-there is no sign-up or first-run setup in the UI:
+Anyone can create a contributor account from the app itself — the profile button
+at the bottom of the sidebar. Until they do, they are identified by a cookie in
+that one browser: they can use everything, but their contributions and their
+scratchpad live in that browser only and are destroyed by clearing cookies.
+Creating an account claims the work already done in that browser, once — the
+first account to sign in on a browser absorbs its anonymous contributions, and
+nobody after that can.
+
+Signing in changes who the app thinks you are everywhere: attribution, the
+leaderboard, the scratchpad and the admin area all follow the account.
+
+Expertise can only be routed to someone with an account, because a name that
+lives in one browser disappears with its cookies.
+
+### Administrator accounts
+
+The first admin is created from the command line, on the machine running the
+app. Signing yourself up in the UI never grants admin rights; an existing admin
+can create further admins from the Expertise Routing page.
 
 ```bash
 python manage.py create-admin                 # prompts for username and password
@@ -61,7 +78,8 @@ again afterwards.
 terminal, and it refuses outright when there is no terminal.
 
 The **Expertise Routing** link stays visible in the sidebar for everyone, but
-opening it asks for admin credentials. The concept, alias, and expertise-mapping
+opening it asks for admin credentials. Someone signed in without admin rights is
+told so, rather than being shown an empty page. The concept, alias, and expertise-mapping
 tools appear only after a successful sign-in, in that browser.
 
 ## The knowledge graph
@@ -113,5 +131,5 @@ python tools/deploy.py uat    # or: prod
 This builds the frontend, assembles a Node-free release, and copies it to the
 target. Server-side steps are in `SERVER_SETUP.md`.
 
-Administrator accounts are created only with `python manage.py create-admin` on
-the server — there is no sign-up in the UI. See **Administrator accounts** above.
+The first administrator is created with `python manage.py create-admin` on the
+server. Contributors sign themselves up in the app. See **Accounts** above.

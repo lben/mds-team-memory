@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ApiError, api, type Item } from '../api'
+import AskModal from './AskModal.vue'
+import { useAsk } from '../ask'
 import { store } from '../store'
 
 interface Detail extends Item {
@@ -20,6 +22,52 @@ const error = ref('')
 // The draft clears only once the server replies, so an impatient second click
 // would otherwise propose the same correction twice.
 const busy = ref(false)
+const editing = ref(false)
+const bodyDraft = ref('')
+const savingEdit = ref(false)
+const { ask, askUser, answerAsk } = useAsk()
+
+function startEdit() {
+  if (!detail.value) return
+  bodyDraft.value = detail.value.body
+  editing.value = true
+}
+
+async function saveEdit() {
+  if (savingEdit.value || !detail.value) return
+  if (!bodyDraft.value.trim()) return void store.notify('Write something, or cancel the edit')
+  savingEdit.value = true
+  try {
+    await api.put(`/api/items/${detail.value.id}`, { body: bodyDraft.value.trim() })
+    editing.value = false
+    store.notify('Your contribution was updated')
+    await load()
+    emit('changed')
+  } catch (e) {
+    store.notify(e instanceof ApiError ? e.message : 'Could not save your change')
+  } finally {
+    savingEdit.value = false
+  }
+}
+
+async function removeItem() {
+  if (!detail.value) return
+  const answer = await askUser({
+    title: 'Delete this contribution?',
+    message: 'It is removed for the whole team and cannot be recovered.',
+    confirmLabel: 'Delete',
+    danger: true,
+  })
+  if (answer === null) return
+  try {
+    await api.delete(`/api/items/${detail.value.id}`)
+    store.notify('Your contribution was deleted')
+    emit('changed')
+    emit('close')
+  } catch (e) {
+    store.notify(e instanceof ApiError ? e.message : 'Could not delete it')
+  }
+}
 
 async function load() {
   try {
@@ -31,14 +79,8 @@ async function load() {
 
 async function markHelped() {
   if (!detail.value) return
-  try {
-    await api.post(`/api/items/${detail.value.id}/helped`)
-    store.notify('Contributor impact increased')
-    await load()
-    emit('changed')
-  } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not mark as helpful')
-  }
+  await store.markHelped(detail.value)
+  emit('changed')
 }
 
 async function endorse() {
@@ -87,6 +129,15 @@ onMounted(load)
 
 <template>
   <div class="modal-backdrop" @click.self="emit('close')">
+    <AskModal
+      v-if="ask"
+      :title="ask.title"
+      :message="ask.message"
+      :input-label="ask.inputLabel"
+      :confirm-label="ask.confirmLabel"
+      :danger="ask.danger"
+      @resolve="answerAsk"
+    />
     <div class="modal wide" data-testid="item-detail">
       <p v-if="error" class="form-error">{{ error }}</p>
       <template v-if="detail">
@@ -94,25 +145,55 @@ onMounted(load)
           <span class="chip" :class="detail.visibility === 'team' ? 'team' : 'private'">{{ detail.visibility.toUpperCase() }}</span>
           <span class="chip">{{ detail.kind.toUpperCase() }}</span>
           <span v-if="detail.contributors > 1" class="chip good">{{ detail.contributors }} CONTRIBUTORS</span>
-          <span v-if="detail.endorsed" class="chip good">SME ENDORSED</span>
+          <span v-if="detail.endorsed" class="chip good">
+            ENDORSED{{ detail.endorsements > 1 ? ` ×${detail.endorsements}` : '' }}
+          </span>
           <span v-for="c in detail.concepts" :key="c.id" class="chip">{{ c.name }}</span>
         </div>
-        <div class="detail-body" style="margin-top: 14px">{{ detail.body }}</div>
+        <div v-if="!editing" class="detail-body" style="margin-top: 14px">{{ detail.body }}</div>
+        <div v-else style="margin-top: 14px">
+          <textarea
+            v-model="bodyDraft"
+            style="width: 100%; height: 120px"
+            data-testid="edit-body"
+          ></textarea>
+          <div class="modal-actions" style="margin-top: 8px">
+            <button class="btn small" data-testid="cancel-edit" @click="editing = false">Cancel</button>
+            <button class="btn small primary" :disabled="savingEdit" data-testid="save-edit" @click="saveEdit">
+              Save change
+            </button>
+          </div>
+        </div>
         <div class="meta" style="margin-top: 12px">
-          <span>{{ detail.author }}<template v-if="!detail.is_mine"> · unverified</template></span>
+          <span>{{ detail.author }}<template v-if="!detail.author_verified"> · no account</template></span>
           <span>·</span>
           <span>Created {{ fmt(detail.created_at) }}</span>
           <span>·</span>
           <span>Updated {{ fmt(detail.updated_at) }}</span>
           <span>·</span>
           <span>{{ detail.helped }} Helpful marks</span>
-          <span v-if="detail.source_item_id">· From your private scratchpad (only you can see this link)</span>
+          <!-- The excerpt is team-visible like anything else shared; only the
+               fact that it came from your scratchpad is private. Saying
+               "private" without that distinction read as a broken promise. -->
+          <span v-if="detail.source_item_id">
+            · You shared this from your scratchpad — the excerpt is team-visible, and only you
+            can see where it came from
+          </span>
         </div>
         <div class="result-actions">
           <button class="btn small" :class="{ success: detail.marked_helped }" :disabled="detail.is_mine" @click="markHelped">
             {{ detail.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
           </button>
-          <button v-if="!detail.is_mine && !detail.endorsed" class="btn small" @click="endorse">Endorse as expert</button>
+          <button
+            v-if="!detail.is_mine && !detail.endorsed_by_me"
+            class="btn small"
+            data-testid="endorse"
+            @click="endorse"
+          >
+            Endorse as expert
+          </button>
+          <button v-if="detail.is_mine && !editing" class="btn small" data-testid="edit-item" @click="startEdit">Edit</button>
+          <button v-if="detail.is_mine" class="btn small ghost" data-testid="delete-item" @click="removeItem">Delete</button>
           <router-link
             v-if="detail.source_document_id"
             class="btn small"

@@ -24,39 +24,60 @@ def utcnow() -> datetime:
 
 
 class Profile(Base):
-    """Anonymous browser profile. token_hash identifies the cookie holder.
+    """Who a contribution belongs to.
 
-    account_id is reserved so a future password account can claim profiles
-    without schema changes or data loss.
+    One machine per person is the intended mapping, so an unclaimed profile is
+    identified by the browser cookie whose hash this holds. Signing in binds a
+    profile to an account; from then on the account, not the cookie, decides
+    who you are, and `token_hash` is null for a profile that was never a
+    browser's.
+
+    `claim_locked` spends the one-shot: the first account to sign in on a
+    browser absorbs its anonymous work, and nobody after that can.
     """
 
     __tablename__ = "profiles"
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
-    token_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    token_hash: Mapped[str | None] = mapped_column(String(64), unique=True, index=True)
     display_name: Mapped[str | None] = mapped_column(String(80))
-    account_id: Mapped[str | None] = mapped_column(String(32))
+    account_id: Mapped[str | None] = mapped_column(ForeignKey("accounts.id", ondelete="SET NULL"))
+    claim_locked: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     @property
     def label(self) -> str:
         return self.display_name or f"Browser profile {self.id[:4].upper()}"
 
+    @property
+    def has_account(self) -> bool:
+        return self.account_id is not None
 
-class AdminUser(Base):
-    __tablename__ = "admin_users"
+
+class Account(Base):
+    """One identity system for everyone.
+
+    Contributors sign themselves up in the app; admins are still made only with
+    `manage.py create-admin`, which sets `is_admin`. Both are accounts, so
+    signing in as an admin makes you that person everywhere — the previous split
+    between admin login and contributor identity is what made an admin's own
+    contributions show up under a hex code.
+    """
+
+    __tablename__ = "accounts"
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
     username: Mapped[str] = mapped_column(String(80), unique=True)
     password_hash: Mapped[str] = mapped_column(String(256))
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
-class AdminSession(Base):
-    __tablename__ = "admin_sessions"
+class Session(Base):
+    __tablename__ = "sessions"
 
     token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
-    admin_user_id: Mapped[str] = mapped_column(ForeignKey("admin_users.id", ondelete="CASCADE"))
+    account_id: Mapped[str] = mapped_column(ForeignKey("accounts.id", ondelete="CASCADE"))
     expires_at: Mapped[datetime] = mapped_column(DateTime)
 
 

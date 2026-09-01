@@ -3,6 +3,7 @@ import cytoscape, { type Core } from 'cytoscape'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../api'
+import { store } from '../store'
 
 interface ConceptRow {
   id: string
@@ -33,6 +34,7 @@ const concepts = ref<ConceptRow[]>([])
 const mode = ref<'full' | 'focused'>('full')
 const focusIds = ref<string[]>([])
 const focusNames = ref<string[]>([])
+const overflowing = ref(false)
 const graphEl = ref<HTMLDivElement | null>(null)
 let cy: Core | null = null
 
@@ -94,10 +96,13 @@ function initCy() {
         },
       },
       {
-        // Content labels sit under their node: inside a small circle they
-        // overflowed and collided with neighbours.
-        selector: 'node[nodeType = "item"], node[nodeType = "question"], node[nodeType = "document"]',
-        style: { 'text-valign': 'bottom', 'text-margin-y': 5, 'text-max-width': '150', 'font-size': '10px' },
+        // Labels sit under their node, never inside it. A concept name is
+        // wider than the circle that carries it, and the whole map is drawn at
+        // whatever zoom makes it fit, so a centred label overflowed its node
+        // and was measured rendering at 7.4px — small enough that "Payments"
+        // was read as "Paymenta" and a two-letter name looked like an icon.
+        selector: 'node[nodeType = "concept"], node[nodeType = "item"], node[nodeType = "question"], node[nodeType = "document"]',
+        style: { 'text-valign': 'bottom', 'text-margin-y': 5, 'text-max-width': '150', 'font-size': '11px' },
       },
       { selector: 'node[mentions = 0]', style: { 'background-opacity': 0.45, 'font-size': '10px' } },
       { selector: 'edge[lineStyle="dashed"]', style: { 'line-style': 'dashed' } },
@@ -119,13 +124,41 @@ function initCy() {
   })
 }
 
+// The node label style, and the smallest size at which a concept name is still
+// readable on screen. `fit()` scales labels along with the drawing: on this
+// panel it settled at 7.4px, small enough that "Payments" was misread as
+// "Paymenta" and a two-letter name looked like an icon rather than text.
+const LABEL_PX = 11
+const MIN_READABLE_PX = 9.5
+
+/** Fit the map, but never shrink the names past readable. If that means the
+ * drawing no longer fits, say so — a clipped node with nothing explaining it
+ * reads as broken rendering rather than as "there is more over here". */
+function fitWithLegibleLabels() {
+  if (!cy) return
+  cy.fit(undefined, 30)
+  const floor = MIN_READABLE_PX / LABEL_PX
+  if (cy.zoom() < floor) {
+    cy.zoom(floor)
+    cy.center()
+  }
+  const box = graphEl.value?.getBoundingClientRect()
+  const drawn = cy.elements().renderedBoundingBox()
+  overflowing.value = !!box && (drawn.w > box.width || drawn.h > box.height)
+}
+
 async function loadFull() {
   if (!cy) return
   mode.value = 'full'
-  const graph = await api.get<{
+  let graph: {
     clusters: { id: string; label: string; concepts: { id: string; name: string; size: number }[] }[]
     edges: { source: string; target: string; count: number; link_id: string; state: string; label: string }[]
-  }>('/api/graph/global')
+  }
+  try {
+    graph = await api.get<typeof graph>('/api/graph/global')
+  } catch (e) {
+    return void store.fail(e, 'Could not load the knowledge graph')
+  }
   cy.elements().remove()
   const clusterCount = graph.clusters.length || 1
   graph.clusters.forEach((cluster, ci) => {
@@ -170,16 +203,21 @@ async function loadFull() {
     })),
   )
   cy.resize()
-  cy.fit(undefined, 30)
+  fitWithLegibleLabels()
 }
 
 async function focus(conceptIds: string[]) {
   if (!cy || !conceptIds.length) return
   mode.value = 'focused'
   focusIds.value = conceptIds
-  const graphs = await Promise.all(
-    conceptIds.map((id) => api.get<{ nodes: GraphNode[]; edges: GraphEdge[] }>(`/api/graph/local?concept_id=${id}`)),
-  )
+  let graphs: { nodes: GraphNode[]; edges: GraphEdge[] }[]
+  try {
+    graphs = await Promise.all(
+      conceptIds.map((id) => api.get<{ nodes: GraphNode[]; edges: GraphEdge[] }>(`/api/graph/local?concept_id=${id}`)),
+    )
+  } catch (e) {
+    return void store.fail(e, 'Could not focus the graph on that concept')
+  }
   focusNames.value = graphs.map((g) => g.nodes[0]?.label ?? '')
   cy.elements().remove()
   const seenNodes = new Set<string>()
@@ -216,11 +254,15 @@ async function focus(conceptIds: string[]) {
     })
   })
   cy.resize()
-  cy.fit(undefined, 30)
+  fitWithLegibleLabels()
 }
 
 async function refresh() {
-  concepts.value = await api.get<ConceptRow[]>('/api/graph/concepts')
+  try {
+    concepts.value = await api.get<ConceptRow[]>('/api/graph/concepts')
+  } catch (e) {
+    return void store.fail(e, 'Could not refresh the knowledge graph')
+  }
   // The container may have just become visible; init and size against its
   // real dimensions or the fit is computed on a zero-height canvas.
   await nextTick()
@@ -251,7 +293,11 @@ defineExpose({ refresh })
       </strong>
       <div class="row gap8">
         <span class="muted" style="font-size: 10px; color: #8ea7c9">
-          {{ concepts.length }} concepts · dashed = detected, solid = confirmed · click a link to see why
+          {{ concepts.length }} concepts · dashed = detected, solid = confirmed · click a link to see why<template
+            v-if="overflowing"
+          >
+            · <strong data-testid="graph-pan-hint">drag to see the rest</strong></template
+          >
         </span>
         <button v-if="mode === 'focused'" class="btn small" data-testid="graph-full" @click="loadFull">
           Full map

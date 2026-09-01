@@ -29,6 +29,44 @@ def check(name, condition, detail=""):
     else:
         FAILS.append(f"{name} — {detail}"); print(f"   FAIL {name} :: {detail}", flush=True)
 
+
+def answer_ask(pg, text=None, cancel=False):
+    """Answer the app's own confirm/prompt.
+
+    These actions used to raise a native `window.confirm`/`window.prompt`, which
+    Playwright auto-dismisses — so a harness that forgot to handle it saw the
+    action correctly do nothing and read it as a dead button. They are now the
+    app's own modal, which has to be answered by clicking, exactly like a person.
+    """
+    pg.wait_for_selector("[data-testid=ask-modal]", timeout=6000)
+    if cancel:
+        pg.get_by_test_id("ask-cancel").click()
+    else:
+        if text is not None and pg.get_by_test_id("ask-input").count():
+            pg.get_by_test_id("ask-input").fill(text)
+        pg.get_by_test_id("ask-confirm").click()
+    pg.wait_for_timeout(700)
+
+
+def sign_out(pg):
+    """Signing out lives with the account in the sidebar now, not in the admin
+    nav: admin rights and identity are one thing."""
+    pg.get_by_test_id("profile-button").click()
+    pg.wait_for_timeout(500)
+    pg.get_by_test_id("sign-out").click()
+    pg.wait_for_timeout(1800)
+
+
+def sign_up(pg, username, password="a-good-password"):
+    """Create an account the way a person does: the profile button in the
+    sidebar. Expertise can only be routed to someone who has one."""
+    pg.get_by_test_id("profile-button").click()
+    pg.wait_for_timeout(600)
+    pg.get_by_test_id("auth-username").fill(username)
+    pg.get_by_test_id("auth-password").fill(password)
+    pg.get_by_test_id("do-sign-up").click()
+    pg.wait_for_timeout(3000)  # signing in reloads, so every screen agrees on who you are
+
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     admin_ctx = b.new_context(viewport={"width":1500,"height":950})
@@ -193,8 +231,8 @@ with sync_playwright() as pw:
     injected = A.get_by_test_id("map-admin-panel").locator(".panel-body.concepts").filter(has_text="__adminpwned")
     check("the injected concept is listed as one ordinary row", injected.count() == 1, f"{injected.count()}")
     if injected.count():
-        A.once("dialog", lambda d: d.accept())
         injected.first.get_by_role("button", name="Delete").click(); A.wait_for_timeout(1200)
+        answer_ask(A)
     remaining = A.get_by_test_id("map-admin-panel").locator(".panel-body.concepts")
     check("deleting it leaves exactly the three real concepts",
           remaining.count() == 3 and "__adminpwned" not in remaining.all_inner_texts().__str__(),
@@ -209,25 +247,25 @@ with sync_playwright() as pw:
     check("links were detected from what people wrote", links_n > 0, f"{links_n} links")
     if links_n:
         row = A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first
-        A.once("dialog", lambda d: d.accept("these really do go together"))
         row.get_by_role("button", name="Approve").click(); A.wait_for_timeout(1400)
+        answer_ask(A, "these really do go together")
         check("approving marks it confirmed",
               "CONFIRMED" in A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text(),
               A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text()[:90])
-        A.once("dialog", lambda d: d.dismiss())
         A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Reject").click()
+        answer_ask(A, cancel=True)
         A.wait_for_timeout(1200)
         check("cancelling the reason prompt cancels the whole decision",
               "CONFIRMED" in A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text(),
               A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text()[:90])
-        A.once("dialog", lambda d: d.accept(""))
         A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Reject").click()
+        answer_ask(A, "")
         A.wait_for_timeout(1200)
         check("but confirming with no reason typed still rejects it",
               "REJECTED" in A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text(),
               A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text()[:90])
-        A.once("dialog", lambda d: d.accept("restoring for the rest of the run"))
         A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Approve").click()
+        answer_ask(A, "restoring for the rest of the run")
         A.wait_for_timeout(1200)
 
     print("\n### 10. Relationship types, including the built-in ones", flush=True)
@@ -248,14 +286,14 @@ with sync_playwright() as pw:
     cid = A.evaluate("()=>fetch('/api/admin/concepts').then(r=>r.json()).then(c=>{const s=c.find(x=>x.name==='Speedrun');return s?s.id:(c[0]?c[0].id:'')})")
     check("the concept we are about to attack is really there", bool(cid))
     A.get_by_test_id("tab-concepts").click(); A.wait_for_timeout(600)
-    A.once("dialog", lambda d: d.accept())
     A.locator(f"#row-{cid}").get_by_role("button", name="Delete").click(); A.wait_for_timeout(1400)
+    answer_ask(A)
     check("the concept is gone from the acting tab", A.locator(f"#row-{cid}").count() == 0)
     ghost = A2.locator(f"#row-{cid}")
     check("the stale tab still shows the ghost row (so we can attack it)", ghost.count() > 0)
     if ghost.count():
-        A2.once("dialog", lambda d: d.accept())
         ghost.get_by_role("button", name="Delete").click(); A2.wait_for_timeout(1600)
+        answer_ask(A2)
         check("deleting an already-deleted concept says so instead of breaking", toast(A2) != "", "silent")
         check("the stale tab recovers a correct list", A2.locator(f"#row-{cid}").count() == 0)
     A2.close()
@@ -290,9 +328,11 @@ with sync_playwright() as pw:
     print("\n### 13. Signing out while another tab is still open", flush=True)
     A.goto(base+"/admin/expertise"); A.wait_for_timeout(1600)
     A3 = admin_ctx.new_page(); A3.goto(base+"/admin/expertise"); A3.wait_for_timeout(2000)
-    A.get_by_test_id("sign-out-admin").click(); A.wait_for_timeout(1600)
+    sign_out(A)
     check("signing out leaves the curation panel behind", A.get_by_test_id("map-admin-panel").count() == 0, A.url.split(base)[-1])
-    check("the Sign out button is gone once signed out", A.get_by_test_id("sign-out-admin").count() == 0)
+    A.get_by_test_id("profile-button").click(); A.wait_for_timeout(500)
+    check("the Sign out button is gone once signed out", A.get_by_test_id("sign-out").count() == 0)
+    A.keyboard.press("Escape"); A.get_by_test_id("profile-button").click(); A.wait_for_timeout(300)
     check("the Expertise Routing link is still there for everyone", A.get_by_test_id("admin-nav").count() > 0)
     A.go_back(); A.wait_for_timeout(1800)
     check("pressing Back into the admin page after signing out shows the login, not a cached panel",
@@ -443,10 +483,11 @@ with sync_playwright() as pw:
     U.goto(base+"/"); U.wait_for_timeout(1400)
     U.get_by_test_id("profile-button").click(); U.wait_for_timeout(800)
     check("the profile panel opens", U.locator(".profile-pop").count() > 0)
-    U.locator(".profile-pop input").fill("   ")
+    U.get_by_test_id("display-name").fill("   ")
     U.get_by_role("button", name="Save name").click(); U.wait_for_timeout(1000)
-    check("a whitespace-only display name is refused", U.locator(".profile-pop").count() > 0, toast(U))
-    U.locator(".profile-pop input").fill("Benito")
+    check("a whitespace-only display name is refused, and says so",
+          U.locator(".profile-pop").count() > 0 and toast(U) != "", f"toast={toast(U)!r}")
+    U.get_by_test_id("display-name").fill("Benito")
     U.get_by_role("button", name="Save name").click(); U.wait_for_timeout(1500)
     check("the new name shows in the sidebar", "Benito" in U.get_by_test_id("profile-button").inner_text(),
           U.get_by_test_id("profile-button").inner_text()[:60])
@@ -513,8 +554,17 @@ with sync_playwright() as pw:
     check("the admin session is still valid on the expertise screen", A.get_by_test_id("mapping-table").count() > 0)
     A.get_by_test_id("add-mapping").click(); A.wait_for_timeout(900)
     check("adding a mapping with nothing selected is refused", toast(A) != "", "silent")
+
+    # Only someone with an account can be an expert, so the contributor makes
+    # one. Before this the admin was asked to pick from a list of hex codes.
+    U.goto(base+"/"); U.wait_for_timeout(1500)
+    sign_up(U, "ursula")
+    A.goto(base+"/admin/expertise"); A.wait_for_timeout(2000)
     opts = A.get_by_test_id("map-profile").locator("option").all_inner_texts()
-    check("real contributors are offered as experts", len([o for o in opts if "Select" not in o]) > 0, str(opts[:4]))
+    real = [o for o in opts if "Select" not in o]
+    check("real contributors are offered as experts", len(real) > 0, str(opts[:4]))
+    check("and nobody without an account is offered",
+          not [o for o in real if o.startswith("Browser profile")], str(real))
     A.get_by_test_id("map-profile").select_option(index=1)
     A.get_by_test_id("map-concept").select_option(label="Roguelike")
     A.get_by_test_id("add-mapping").click(); A.wait_for_timeout(1600)

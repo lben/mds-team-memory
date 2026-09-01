@@ -55,15 +55,16 @@ def admin_client(make_client, app_modules):
     admin creation is a server-side command, not an HTTP endpoint."""
     from app.auth import hash_password
     from app.db import SessionLocal
-    from app.models import AdminUser
+    from app.models import Account
 
     db = SessionLocal()
     try:
-        if not db.query(AdminUser).filter_by(username=ADMIN_CREDENTIALS["username"]).first():
+        if not db.query(Account).filter_by(username=ADMIN_CREDENTIALS["username"]).first():
             db.add(
-                AdminUser(
+                Account(
                     username=ADMIN_CREDENTIALS["username"],
                     password_hash=hash_password(ADMIN_CREDENTIALS["password"]),
+                    is_admin=True,
                 )
             )
             db.commit()
@@ -71,5 +72,5 @@ def admin_client(make_client, app_modules):
         db.close()
 
     client = make_client()
-    assert client.post("/api/admin/login", json=ADMIN_CREDENTIALS).status_code == 200
+    assert client.post("/api/auth/login", json=ADMIN_CREDENTIALS).status_code == 200
     return client

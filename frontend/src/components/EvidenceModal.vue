@@ -18,7 +18,7 @@ const emit = defineEmits<{ close: []; openItem: [string] }>()
 
 const router = useRouter()
 const evidence = ref<Evidence | null>(null)
-const isAdmin = computed(() => store.admin.logged_in)
+const isAdmin = computed(() => store.auth.is_admin)
 
 /** Jump from the graph to this link's row in the admin curation table. */
 function manageLink() {

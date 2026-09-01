@@ -1,28 +1,24 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from ..auth import (
-    clear_admin_session,
-    create_admin_session,
-    get_admin,
-    hash_password,
-    require_admin,
-    verify_password,
-)
+from ..auth import hash_password, require_admin
 from ..concepts import match_concepts, normalize_term, retag_everything
 from ..db import get_db
 from ..models import (
-    AdminUser,
+    Account,
     Concept,
+    ImpactEvent,
+    ItemConcept,
     ConceptTerm,
     ExpertiseMapping,
     Profile,
     Relationship,
     RelationshipType,
 )
-from ..relationships import type_usage
+from ..relationships import refresh_for_concept, type_usage
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -51,32 +47,13 @@ class RelationshipTypeIn(BaseModel):
     name: str = Field(min_length=1, max_length=60)
 
 
-@router.get("/state")
-def state(admin: AdminUser | None = Depends(get_admin)):
-    """Whether this browser holds an admin session. Deliberately reveals nothing
-    about whether admin accounts exist — accounts are created on the server with
-    `python manage.py create-admin`."""
-    return {"logged_in": admin is not None, "username": admin.username if admin else None}
-
-
-@router.post("/login")
-def login(payload: CredentialsIn, response: Response, db: Session = Depends(get_db)):
-    admin = db.query(AdminUser).filter_by(username=payload.username.strip()).first()
-    if not admin or not verify_password(payload.password, admin.password_hash):
-        raise HTTPException(401, "Invalid username or password")
-    create_admin_session(db, response, admin)
-    return {"ok": True, "username": admin.username}
-
-
-@router.post("/logout")
-def logout(request: Request, response: Response, db: Session = Depends(get_db)):
-    clear_admin_session(request, response, db)
-    return {"ok": True}
-
-
 @router.post("/admins", dependencies=[Depends(require_admin)])
 def add_admin(payload: CredentialsIn, db: Session = Depends(get_db)):
-    admin = AdminUser(username=payload.username.strip(), password_hash=hash_password(payload.password))
+    admin = Account(
+        username=payload.username.strip(),
+        password_hash=hash_password(payload.password),
+        is_admin=True,
+    )
     db.add(admin)
     try:
         db.commit()
@@ -88,7 +65,8 @@ def add_admin(payload: CredentialsIn, db: Session = Depends(get_db)):
 
 @router.get("/admins", dependencies=[Depends(require_admin)])
 def list_admins(db: Session = Depends(get_db)):
-    return [{"id": a.id, "username": a.username} for a in db.query(AdminUser).order_by(AdminUser.username)]
+    admins = db.query(Account).filter_by(is_admin=True).order_by(Account.username)
+    return [{"id": a.id, "username": a.username} for a in admins]
 
 
 def _concept_dict(concept: Concept) -> dict:
@@ -151,6 +129,7 @@ def create_concept(payload: ConceptIn, db: Session = Depends(get_db)):
     db.flush()
     _set_terms(db, concept, payload.name, payload.aliases)
     retag_everything(db)
+    refresh_for_concept(db, concept.id)
     return _concept_dict(concept)
 
 
@@ -160,8 +139,10 @@ def update_concept(concept_id: str, payload: ConceptUpdateIn, db: Session = Depe
     if not concept:
         raise HTTPException(404, "Concept not found")
     _set_terms(db, concept, payload.name, payload.aliases)
-    # Renaming or re-aliasing changes what the text matches, so rebuild the tags.
+    # Renaming or re-aliasing changes what the text matches, so rebuild the tags
+    # and re-run discovery: the new wording may match content the old one missed.
     retag_everything(db)
+    refresh_for_concept(db, concept.id)
     return _concept_dict(concept)
 
 
@@ -232,8 +213,70 @@ def delete_relationship_type(type_id: str, db: Session = Depends(get_db)):
 
 @router.get("/profiles", dependencies=[Depends(require_admin)])
 def list_profiles(db: Session = Depends(get_db)):
-    profiles = db.query(Profile).order_by(Profile.created_at).all()
-    return [{"id": p.id, "label": p.label, "verified": False} for p in profiles]
+    """Only people with an account can be routed expertise.
+
+    Routing to an anonymous browser profile asked the admin to pick an expert
+    from a list of hex codes, which is unanswerable, and the mapping would be
+    destroyed the moment that person cleared their cookies.
+    """
+    profiles = (
+        db.query(Profile)
+        .filter(Profile.account_id.isnot(None))
+        .order_by(Profile.display_name)
+        .all()
+    )
+    return [{"id": p.id, "label": p.label, "verified": True} for p in profiles]
+
+
+@router.get("/endorsements", dependencies=[Depends(require_admin)])
+def endorsement_ranking(db: Session = Depends(get_db)):
+    """Who the team actually treats as an expert, and on what.
+
+    Anyone can endorse, so this is the evidence an admin maps expertise from.
+    """
+    rows = (
+        db.query(ImpactEvent.beneficiary_profile_id, func.count())
+        .filter(ImpactEvent.event_type == "sme_endorsed")
+        .group_by(ImpactEvent.beneficiary_profile_id)
+        .all()
+    )
+    counts = dict(rows)
+    profiles = {
+        p.id: p for p in db.query(Profile).filter(Profile.id.in_(list(counts) or [""])).all()
+    }
+    # A concept's name is a derived property, not a column, so the topics are
+    # resolved from concept ids rather than selected in the join.
+    topic_rows = (
+        db.query(ImpactEvent.beneficiary_profile_id, ItemConcept.concept_id)
+        .join(ItemConcept, ItemConcept.item_id == ImpactEvent.item_id)
+        .filter(ImpactEvent.event_type == "sme_endorsed")
+        .distinct()
+        .all()
+    )
+    names = {
+        c.id: c.name
+        for c in db.query(Concept)
+        .filter(Concept.id.in_([cid for _, cid in topic_rows] or [""]))
+        .all()
+    }
+    concepts_by_profile: dict[str, set[str]] = {}
+    for pid, cid in topic_rows:
+        if cid in names:
+            concepts_by_profile.setdefault(pid, set()).add(names[cid])
+
+    return sorted(
+        (
+            {
+                "profile_id": pid,
+                "label": profiles[pid].label if pid in profiles else "Unknown",
+                "has_account": pid in profiles and profiles[pid].has_account,
+                "endorsements": count,
+                "topics": sorted(concepts_by_profile.get(pid, ())),
+            }
+            for pid, count in counts.items()
+        ),
+        key=lambda e: (-e["endorsements"], e["label"]),
+    )
 
 
 @router.get("/expertise", dependencies=[Depends(require_admin)])

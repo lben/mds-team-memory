@@ -20,11 +20,16 @@ export function initialsFor(label: string | null | undefined): string {
   )
 }
 
-/** How a profile's identity should be described. Names are self-declared:
- * there is no login for contributors yet, so nothing is verified. */
-export function identityNote(label: string | null | undefined): string {
+/** How a profile's identity should be described.
+ *
+ * An account is the only thing that survives a cookie clear, so it is the
+ * distinction worth showing: signed in, a self-declared name on this machine
+ * only, or nothing at all.
+ */
+export function identityNote(label: string | null | undefined, verified = false): string {
+  if (verified) return 'Signed in · your work is safe'
   const trimmed = (label ?? '').trim()
   return /^Browser profile\s+\S+$/i.test(trimmed)
-    ? 'Anonymous · no name set'
-    : 'Self-declared name · not verified'
+    ? 'This browser only · no account'
+    : 'Name on this machine only · no account'
 }

@@ -4,6 +4,8 @@ import { useRoute } from 'vue-router'
 import { ApiError, api, type Corroboration, type Item } from '../api'
 import SuccessModal from '../components/SuccessModal.vue'
 import { store } from '../store'
+import AskModal from '../components/AskModal.vue'
+import { useAsk } from '../ask'
 
 interface Pad {
   id: string
@@ -24,13 +26,19 @@ const selection = ref('')
 // The selection clears only once the share succeeds, so without this a second
 // click would post the same private excerpt to the team twice.
 const sharing = ref(false)
-const success = ref<Corroboration | null>(null)
+const success = ref<{ corroboration: Corroboration; sharedTotal: number } | null>(null)
 let saveTimer = 0
 
+const { ask, askUser, answerAsk } = useAsk()
+
 async function load() {
-  const data = await api.get<{ default: Pad; others: Pad[] }>('/api/scratchpad')
-  pads.value = [data.default, ...data.others]
-  current.value = pads.value[0]
+  try {
+    const data = await api.get<{ default: Pad; others: Pad[] }>('/api/scratchpad')
+    pads.value = [data.default, ...data.others]
+    current.value = pads.value[0]
+  } catch (e) {
+    store.fail(e, 'Could not load your scratchpad')
+  }
 }
 
 function onEdit() {
@@ -55,9 +63,15 @@ async function find() {
     matches.value = []
     return
   }
-  const data = await api.get<{ matches: typeof matches.value }>(
-    `/api/scratchpad/${current.value.id}/find?q=${encodeURIComponent(findQuery.value.trim())}`,
-  )
+  let data: { matches: typeof matches.value }
+  try {
+    data = await api.get<{ matches: typeof matches.value }>(
+      `/api/scratchpad/${current.value.id}/find?q=${encodeURIComponent(findQuery.value.trim())}`,
+    )
+  } catch (e) {
+    matches.value = []
+    return void store.fail(e, 'Could not search your scratchpad')
+  }
   matches.value = data.matches
 }
 
@@ -84,11 +98,11 @@ async function shareSelection() {
   try {
     window.clearTimeout(saveTimer)
     await save()
-    const result = await api.post<{ item: Item; corroboration: Corroboration }>(
+    const result = await api.post<{ item: Item; corroboration: Corroboration; shared_total: number }>(
       `/api/scratchpad/${current.value.id}/share`,
       { text: selection.value },
     )
-    success.value = result.corroboration
+    success.value = { corroboration: result.corroboration, sharedTotal: result.shared_total }
     selection.value = ''
   } catch (e) {
     store.notify(e instanceof ApiError ? e.message : 'Could not share that excerpt')
@@ -98,9 +112,18 @@ async function shareSelection() {
 }
 
 async function createPad() {
-  const name = window.prompt('Name for the additional scratchpad:')
-  if (!name?.trim()) return
-  await api.post<Pad>('/api/scratchpad', { name: name.trim() })
+  const name = await askUser({
+    title: 'New scratchpad',
+    inputLabel: 'Name for the additional scratchpad',
+    confirmLabel: 'Create',
+  })
+  if (name === null) return
+  if (!name.trim()) return void store.notify('Give the scratchpad a name')
+  try {
+    await api.post<Pad>('/api/scratchpad', { name: name.trim() })
+  } catch (e) {
+    return void store.fail(e, 'Could not create that scratchpad')
+  }
   await load()
   current.value = pads.value[pads.value.length - 1]
 }
@@ -121,14 +144,34 @@ onMounted(async () => {
 
 <template>
   <section class="page">
+    <AskModal
+      v-if="ask"
+      :title="ask.title"
+      :message="ask.message"
+      :input-label="ask.inputLabel"
+      :confirm-label="ask.confirmLabel"
+      :danger="ask.danger"
+      @resolve="answerAsk"
+    />
     <div class="page-head">
       <div>
         <div class="eyebrow">Private</div>
         <h1>My scratchpad</h1>
-        <p class="lead">One long, searchable file for random knowledge. No notes, titles, folders, or categorization required.</p>
+        <p class="lead">
+          Long, searchable files for random knowledge. No notes, titles, folders, or
+          categorization required — start with this one and add more if you want them.
+        </p>
+        <p v-if="!store.profile?.verified" class="lead" style="color: var(--accent)">
+          You have no account, so this file lives in this browser only. Clearing your cookies
+          destroys it, and nobody can get it back for you.
+        </p>
       </div>
       <div class="row gap8">
-        <span class="chip private">PRIVATE TO THIS BROWSER PROFILE</span>
+        <!-- What "private" is tied to changed when accounts arrived: with an
+             account it follows you, without one it dies with the cookie. -->
+        <span class="chip private" data-testid="privacy-chip">
+          {{ store.profile?.verified ? 'PRIVATE TO YOU' : 'PRIVATE TO THIS BROWSER ONLY' }}
+        </span>
       </div>
     </div>
 
@@ -145,7 +188,7 @@ onMounted(async () => {
           @keyup.enter="find"
         />
         <button class="btn" @click="find">Find</button>
-        <span class="autosave">{{ saveState === 'saving' ? '● Saving…' : saveState === 'saved' ? '● Saved automatically' : '● Autosaves as you type' }}</span>
+        <span class="autosave">{{ saveState === 'saving' ? '● Saving…' : saveState === 'saved' ? '● Saved' : '● Saves as you type' }}</span>
       </div>
       <div class="scratch-layout">
         <div class="scratch-editor-wrap">
@@ -191,7 +234,8 @@ onMounted(async () => {
 
     <SuccessModal
       v-if="success"
-      :corroboration="success"
+      :corroboration="success.corroboration"
+      :shared-total="success.sharedTotal"
       @close="success = null"
       @view="success = null; $router.push('/')"
       @another="success = null"

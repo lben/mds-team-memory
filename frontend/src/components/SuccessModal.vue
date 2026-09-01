@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Corroboration } from '../api'
 
-defineProps<{ corroboration: Corroboration | null; sharedTotal?: number | null }>()
+defineProps<{ corroboration: Corroboration | null; sharedTotal?: number | null; canView?: boolean }>()
 
 function ordinal(n: number): string {
   const rest = n % 100
@@ -25,7 +25,7 @@ const emit = defineEmits<{ close: []; view: []; another: [] }>()
         All {{ corroboration.contributors }} contributor{{ corroboration.contributors === 1 ? '' : 's' }} will receive impact when this knowledge helps someone.
       </div>
       <div class="modal-actions">
-        <button class="btn" @click="emit('view')">View contribution</button>
+        <button v-if="canView !== false" class="btn" data-testid="view-contribution" @click="emit('view')">View contribution</button>
         <button class="btn primary" @click="emit('another')">Add another</button>
       </div>
     </div>

@@ -2,13 +2,16 @@
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ApiError, api, type Corroboration, type Item } from '../api'
+import AskModal from '../components/AskModal.vue'
 import SuccessModal from '../components/SuccessModal.vue'
+import { useAsk } from '../ask'
 import { store } from '../store'
 
 interface Doc {
   id: string
   filename: string
   uploader: string
+  is_mine: boolean
   uploaded_at: string
   status: string
   passage_count: number
@@ -22,12 +25,44 @@ const current = ref<Doc | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const uploading = ref(false)
 const matchedPassage = ref<string | null>(null)
-const success = ref<Corroboration | null>(null)
+const success = ref<{ corroboration: Corroboration; sharedTotal: number } | null>(null)
 // Holds the passage being shared, so a second click cannot post it twice.
 const sharing = ref('')
 
+const { ask, askUser, answerAsk } = useAsk()
+
+async function removeDocument() {
+  if (!current.value) return
+  const answer = await askUser({
+    title: `Delete "${current.value.filename}"?`,
+    message:
+      'The file and its extracted text are removed for good. Passages a teammate has already shared with the team stay, without their link back to this file.',
+    confirmLabel: 'Delete document',
+    danger: true,
+  })
+  if (answer === null) return
+  try {
+    const r = await api.delete<{ kept_shared_excerpts: number }>(`/api/documents/${current.value.id}`)
+    store.notify(
+      r.kept_shared_excerpts
+        ? `Document deleted. ${r.kept_shared_excerpts} shared excerpt${r.kept_shared_excerpts === 1 ? '' : 's'} kept.`
+        : 'Document deleted',
+    )
+    current.value = null
+    matchedPassage.value = null
+    await load()
+    router.push('/documents')
+  } catch (e) {
+    store.fail(e, 'Could not delete that document')
+  }
+}
+
 async function load() {
-  docs.value = await api.get<Doc[]>('/api/documents')
+  try {
+    docs.value = await api.get<Doc[]>('/api/documents')
+  } catch (e) {
+    store.fail(e, 'Could not load the document list')
+  }
 }
 
 async function open(id: string, passage?: string) {
@@ -76,11 +111,11 @@ async function sharePassage(passageId: string) {
   if (sharing.value) return
   sharing.value = passageId
   try {
-    const result = await api.post<{ item: Item; corroboration: Corroboration }>(
+    const result = await api.post<{ item: Item; corroboration: Corroboration; shared_total: number }>(
       `/api/passages/${passageId}/share`,
       {},
     )
-    success.value = result.corroboration
+    success.value = { corroboration: result.corroboration, sharedTotal: result.shared_total }
   } catch (e) {
     store.notify(e instanceof ApiError ? e.message : 'Could not share that passage')
   } finally {
@@ -112,6 +147,15 @@ onMounted(async () => {
 
 <template>
   <section class="page">
+    <AskModal
+      v-if="ask"
+      :title="ask.title"
+      :message="ask.message"
+      :input-label="ask.inputLabel"
+      :confirm-label="ask.confirmLabel"
+      :danger="ask.danger"
+      @resolve="answerAsk"
+    />
     <div class="page-head">
       <div>
         <div class="eyebrow">Uploaded sources</div>
@@ -162,6 +206,14 @@ onMounted(async () => {
           <div class="row gap8">
             <span class="chip good">SOURCE</span>
             <a class="btn small" :href="`/api/documents/${current.id}/file`">Download original</a>
+            <button
+              v-if="current.is_mine"
+              class="btn small ghost"
+              data-testid="delete-document"
+              @click="removeDocument"
+            >
+              Delete
+            </button>
           </div>
         </div>
         <div class="paper">
@@ -183,7 +235,8 @@ onMounted(async () => {
 
     <SuccessModal
       v-if="success"
-      :corroboration="success"
+      :corroboration="success.corroboration"
+      :shared-total="success.sharedTotal"
       @close="success = null"
       @view="success = null; router.push('/')"
       @another="success = null"

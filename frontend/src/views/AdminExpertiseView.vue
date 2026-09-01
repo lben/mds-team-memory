@@ -13,10 +13,7 @@ const route = useRoute()
 const selectedLink = computed(() => (typeof route.query.link === 'string' ? route.query.link : null))
 const selectedConcept = computed(() => (typeof route.query.concept === 'string' ? route.query.concept : null))
 
-interface AdminState {
-  logged_in: boolean
-  username: string | null
-}
+
 interface ConceptRow {
   id: string
   name: string
@@ -32,7 +29,7 @@ interface ProfileRow {
   label: string
 }
 
-const state = ref<AdminState | null>(null)
+const loaded = ref(false)
 const username = ref('')
 const password = ref('')
 const authError = ref('')
@@ -49,27 +46,33 @@ const newAdminPass = ref('')
 const admins = ref<{ id: string; username: string }[]>([])
 
 async function loadState() {
-  await store.loadAdmin()
-  state.value = store.admin
-  if (state.value.logged_in) await loadData()
+  await store.loadAuth()
+  loaded.value = true
+  if (store.auth.is_admin) await loadData()
 }
 
 async function loadData() {
-  ;[concepts.value, mappings.value, profiles.value, admins.value] = await Promise.all([
-    api.get<ConceptRow[]>('/api/admin/concepts'),
-    api.get<MappingRow[]>('/api/admin/expertise'),
-    api.get<ProfileRow[]>('/api/admin/profiles'),
-    api.get<{ id: string; username: string }[]>('/api/admin/admins'),
-  ])
+  try {
+    ;[concepts.value, mappings.value, profiles.value, admins.value] = await Promise.all([
+      api.get<ConceptRow[]>('/api/admin/concepts'),
+      api.get<MappingRow[]>('/api/admin/expertise'),
+      api.get<ProfileRow[]>('/api/admin/profiles'),
+      api.get<{ id: string; username: string }[]>('/api/admin/admins'),
+    ])
+  } catch (e) {
+    store.fail(e, 'Could not load the admin data')
+  }
 }
 
 async function submitAuth() {
   authError.value = ''
   try {
-    await api.post('/api/admin/login', { username: username.value.trim(), password: password.value })
+    await api.post('/api/auth/login', { username: username.value.trim(), password: password.value })
     password.value = ''
+    // Signing in changes who you are, not only what you may do.
+    await store.refreshIdentity()
     await loadState()
-    store.notify('Signed in as admin')
+    store.notify(`Signed in as ${store.auth.username}`)
   } catch (e) {
     authError.value = e instanceof ApiError ? e.message : 'Authentication failed'
   }
@@ -90,17 +93,28 @@ async function addMapping() {
 }
 
 async function removeMapping(mappingId: string) {
-  await api.delete(`/api/admin/expertise/${mappingId}`)
+  try {
+    await api.delete(`/api/admin/expertise/${mappingId}`)
+  } catch (e) {
+    store.fail(e, 'Could not remove that expertise area')
+  }
   await loadData()
 }
 
 async function runPreview() {
-  if (!previewQuery.value.trim()) return
-  preview.value = await api.get(`/api/admin/routing-preview?q=${encodeURIComponent(previewQuery.value.trim())}`)
+  if (!previewQuery.value.trim()) return void store.notify('Paste a question to preview first')
+  try {
+    preview.value = await api.get(`/api/admin/routing-preview?q=${encodeURIComponent(previewQuery.value.trim())}`)
+  } catch (e) {
+    preview.value = null
+    store.fail(e, 'Could not preview the routing')
+  }
 }
 
 async function addAdmin() {
-  if (!newAdminUser.value.trim() || !newAdminPass.value) return
+  if (!newAdminUser.value.trim() || !newAdminPass.value) {
+    return void store.notify('Give the new admin a username and a password')
+  }
   try {
     await api.post('/api/admin/admins', { username: newAdminUser.value.trim(), password: newAdminPass.value })
     newAdminUser.value = ''
@@ -121,17 +135,22 @@ onMounted(loadState)
       <div>
         <div class="eyebrow">Admin</div>
         <h1>Expertise routing</h1>
-        <p class="lead">Map pilot profiles to expertise areas so matching questions appear in the right queue.</p>
+        <p class="lead">Map teammates to expertise areas so matching questions appear in the right queue.</p>
       </div>
-      <div v-if="state?.logged_in" class="row gap8">
-        <span class="chip good">ADMIN · {{ state.username }}</span>
+      <div v-if="store.auth.is_admin" class="row gap8">
+        <span class="chip good">ADMIN · {{ store.auth.username }}</span>
       </div>
     </div>
 
     <!-- First-run onboarding / login -->
-    <div v-if="state && !state.logged_in" class="card auth-card" data-testid="admin-auth">
+    <div v-if="loaded && !store.auth.is_admin" class="card auth-card" data-testid="admin-auth">
       <h2>Admin sign in</h2>
-      <p>Admin access is required to manage concepts and expertise mappings.</p>
+      <p v-if="store.auth.signed_in">
+        You are signed in as <strong>{{ store.auth.username }}</strong>, which is not an administrator
+        account. Administrator accounts are created on the server with
+        <code>manage.py create-admin</code>.
+      </p>
+      <p v-else>Admin access is required to manage concepts and expertise mappings.</p>
       <label>Username</label>
       <input v-model="username" type="text" autocomplete="username" data-testid="admin-username" />
       <label>Password</label>
@@ -142,7 +161,7 @@ onMounted(loadState)
       </div>
     </div>
 
-    <template v-if="state?.logged_in">
+    <template v-if="store.auth.is_admin">
       <div class="grid-2">
         <div class="card card-pad">
           <h3>How tagging works</h3>
@@ -169,10 +188,17 @@ onMounted(loadState)
 
       <div class="card admin-table" style="margin-top: 16px" data-testid="mapping-table">
         <div class="admin-head">
-          <div>Profile</div>
+          <div>Teammate</div>
           <div>Expertise areas</div>
           <div>Add area</div>
         </div>
+        <p class="admin-note" data-testid="account-required-note">
+          <em>
+            Your expert is not showing up? Please check with him if he/she has created a full
+            account first — expertise can only be routed to someone with an account, because a
+            name that lives only in a browser disappears when its cookies are cleared.
+          </em>
+        </p>
         <div class="admin-row">
           <select v-model="mapProfile" data-testid="map-profile">
             <option value="" disabled>Select profile…</option>
@@ -187,7 +213,7 @@ onMounted(loadState)
         <div v-for="m in mappings" :key="m.profile_id" class="admin-row">
           <div class="person">
             <span class="avatar">{{ initialsFor(m.label) }}</span>
-            <span><strong>{{ m.label }}</strong><span>{{ identityNote(m.label) }}</span></span>
+            <span><strong>{{ m.label }}</strong><span>{{ identityNote(m.label, true) }}</span></span>
           </div>
           <div class="area-chips">
             <span v-for="a in m.areas" :key="a.mapping_id" class="chip">

@@ -97,6 +97,40 @@ def refresh_for_item(db: Session, concept_ids: list[str]) -> None:
         db.rollback()
 
 
+def refresh_for_concept(db: Session, concept_id: str) -> None:
+    """Discover links for one concept against content that already exists.
+
+    Creating or renaming a concept retags everything, but discovery only ran
+    when somebody posted, so an admin who defined two concepts that already
+    co-occur in fifty notes was shown an empty map with no explanation. Scoped
+    to this concept's own pairs, so the cost is bounded by how much content
+    mentions it rather than by the size of the vocabulary.
+    """
+    subjects = _team_subject_ids(db, concept_id)
+    if not subjects:
+        return
+    item_ids = [sid for kind, sid in subjects if kind == "item"]
+    passage_ids = [sid for kind, sid in subjects if kind == "passage"]
+    others: set[str] = set()
+    if item_ids:
+        others |= {
+            cid
+            for (cid,) in db.query(ItemConcept.concept_id)
+            .filter(ItemConcept.item_id.in_(item_ids))
+            .distinct()
+        }
+    if passage_ids:
+        others |= {
+            cid
+            for (cid,) in db.query(PassageConcept.concept_id)
+            .filter(PassageConcept.passage_id.in_(passage_ids))
+            .distinct()
+        }
+    others.discard(concept_id)
+    for other in sorted(others):
+        refresh_for_item(db, [concept_id, other])
+
+
 def evidence_text(link: Relationship) -> str:
     """Derived at read time so the sentence can never go stale as content grows."""
     parts = []

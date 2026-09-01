@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from ..auth import PROFILE_COOKIE, get_profile, hash_token
+from ..auth import get_profile, profile_from_cookies
 from ..db import SessionLocal, get_db
 from ..live import hub
 from ..models import Notification, Profile
@@ -17,18 +17,17 @@ ws_router = APIRouter()
 async def notifications_socket(websocket: WebSocket):
     """Push a wake-up when this profile gets a notification.
 
-    Identified by the same HttpOnly profile cookie as the REST API, so a
-    browser can only ever subscribe to its own notifications.
+    Resolved from the same HttpOnly cookies, in the same order, as the REST API,
+    so a browser can only ever subscribe to its own notifications — and so a
+    signed-in person subscribes to the account they are signed in as rather than
+    to the browser profile they used before signing in.
     """
-    token = websocket.cookies.get(PROFILE_COOKIE)
-    profile_id = None
-    if token:
-        db = SessionLocal()
-        try:
-            profile = db.query(Profile).filter_by(token_hash=hash_token(token)).first()
-            profile_id = profile.id if profile else None
-        finally:
-            db.close()
+    db = SessionLocal()
+    try:
+        profile = profile_from_cookies(db, websocket.cookies)
+        profile_id = profile.id if profile else None
+    finally:
+        db.close()
     if not profile_id:
         # 1008 = policy violation; the browser falls back to polling.
         await websocket.close(code=1008)

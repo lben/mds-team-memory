@@ -10,7 +10,7 @@ from ..db import get_db
 from ..models import (
     CORROBORATES_ID,
     RELATED_TO_ID,
-    AdminUser,
+    Account,
     Concept,
     Document,
     DocumentPassage,
@@ -294,7 +294,7 @@ def list_links(
 
 @router.post("/links")
 def create_link(
-    payload: LinkIn, admin: AdminUser = Depends(require_admin), db: Session = Depends(get_db)
+    payload: LinkIn, admin: Account = Depends(require_admin), db: Session = Depends(get_db)
 ):
     if payload.src_id == payload.dst_id:
         raise HTTPException(400, "A link needs two different concepts")
@@ -333,7 +333,7 @@ def create_link(
 def update_link(
     link_id: str,
     payload: LinkPatch,
-    admin: AdminUser = Depends(require_admin),
+    admin: Account = Depends(require_admin),
     db: Session = Depends(get_db),
 ):
     link = _get_link(db, link_id)

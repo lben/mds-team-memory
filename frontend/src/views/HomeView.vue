@@ -44,7 +44,7 @@ const results = ref<SearchResults | null>(null)
 const detailId = ref<string | null>(null)
 const evidenceLinkId = ref<string | null>(null)
 const expandedQuestion = ref<string | null>(null)
-const success = ref<{ corroboration: Corroboration; sharedTotal: number } | null>(null)
+const success = ref<{ corroboration: Corroboration; sharedTotal: number; itemId: string | null } | null>(null)
 const graph = ref<InstanceType<typeof KnowledgeGraph> | null>(null)
 
 const focusConceptIds = computed(() => results.value?.concepts.map((c) => c.id) ?? [])
@@ -132,6 +132,7 @@ async function capture() {
     success.value = {
       corroboration: result.corroboration,
       sharedTotal: result.item ? result.shared_total : 0,
+      itemId: result.item?.id ?? null,
     }
     await Promise.all([loadFeed(), store.loadProfile()])
     graph.value?.refresh() // the graph grows with each contribution
@@ -142,18 +143,7 @@ async function capture() {
   }
 }
 
-async function markHelped(item: Item) {
-  try {
-    const r = await api.post<{ created: boolean }>(`/api/items/${item.id}/helped`)
-    item.marked_helped = true
-    if (r.created) {
-      item.helped += 1
-      store.notify('Contributor impact increased')
-    }
-  } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not mark as helpful')
-  }
-}
+
 
 async function expandQuestion(id: string) {
   expandedQuestion.value = id
@@ -224,7 +214,6 @@ onMounted(async () => {
         class="composer-input"
         placeholder="Search the team's memory, ask a question, or share what you know…"
         data-testid="home-input"
-        @keydown.enter.exact.prevent="runSearch"
       ></textarea>
       <div class="composer-actions">
         <div class="row gap8">
@@ -235,7 +224,7 @@ onMounted(async () => {
         <div class="row gap8">
           <input ref="fileInput" type="file" accept=".pdf,.docx,.txt,.md" style="display: none" @change="onFile" />
           <button class="btn small ghost" @click="pickFile">＋ Attach</button>
-          <span class="muted" style="font-size: 11px">{{ file ? file.name : 'Enter searches · Capture is team-shared' }}</span>
+          <span class="muted" style="font-size: 11px">{{ file ? file.name : 'Capture is team-shared' }}</span>
         </div>
       </div>
     </div>
@@ -269,7 +258,7 @@ onMounted(async () => {
                 <span class="chip team">TEAM</span>
                 <span class="chip">{{ item.kind.toUpperCase() }}</span>
                 <span v-if="item.contributors > 1" class="chip good">{{ item.contributors }} CONTRIBUTORS</span>
-                <span v-if="item.endorsed" class="chip good">SME ENDORSED</span>
+                <span v-if="item.endorsed" class="chip good">ENDORSED{{ item.endorsements > 1 ? ` ×${item.endorsements}` : '' }}</span>
               </div>
               <button v-if="item.question" class="answered-question" @click="expandQuestion(item.question.id)">
                 <span class="chip warn">ANSWERING</span>
@@ -282,7 +271,7 @@ onMounted(async () => {
                 <span>{{ item.helped }} Helpful marks</span>
               </div>
               <div class="result-actions">
-                <button class="btn small" :class="{ success: item.marked_helped }" :disabled="item.is_mine" @click="markHelped(item)">
+                <button class="btn small" :class="{ success: item.marked_helped }" :disabled="item.is_mine" @click="store.markHelped(item)">
                   {{ item.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
                 </button>
                 <button v-if="item.kind === 'answer'" class="btn small" @click="item.parent_id && expandQuestion(item.parent_id)">
@@ -327,7 +316,7 @@ onMounted(async () => {
               <div class="row gap8 wrap">
                 <span class="chip">{{ item.kind.toUpperCase() }}</span>
                 <span v-if="item.contributors > 1" class="chip good">{{ item.contributors }} CONTRIBUTORS</span>
-                <span v-if="item.endorsed" class="chip good">SME ENDORSED</span>
+                <span v-if="item.endorsed" class="chip good">ENDORSED{{ item.endorsements > 1 ? ` ×${item.endorsements}` : '' }}</span>
               </div>
               <button v-if="item.question" class="answered-question" @click="expandQuestion(item.question.id)">
                 <span class="chip warn">ANSWERING</span>
@@ -342,7 +331,7 @@ onMounted(async () => {
                 <span>{{ item.helped }} Helpful marks</span>
               </div>
               <div class="result-actions">
-                <button class="btn small" :class="{ success: item.marked_helped }" :disabled="item.is_mine" @click="markHelped(item)">
+                <button class="btn small" :class="{ success: item.marked_helped }" :disabled="item.is_mine" @click="store.markHelped(item)">
                   {{ item.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
                 </button>
                 <button v-if="item.kind === 'answer'" class="btn small" @click="item.parent_id && expandQuestion(item.parent_id)">
@@ -376,8 +365,9 @@ onMounted(async () => {
       v-if="success"
       :corroboration="success.corroboration"
       :shared-total="success.sharedTotal"
+      :can-view="!!success.itemId"
       @close="success = null"
-      @view="success = null"
+      @view="detailId = success!.itemId; success = null"
       @another="success = null"
     />
     <ItemDetailModal v-if="detailId" :item-id="detailId" @close="detailId = null" @changed="onChanged" />
