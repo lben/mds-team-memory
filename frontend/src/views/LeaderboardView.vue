@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { api } from '../api'
 import { initialsFor } from '../profile'
+import { store } from '../store'
 
 interface LeaderEntry {
   profile_id: string
@@ -34,7 +35,11 @@ const period = ref<'30d' | 'all'>('30d')
 const data = ref<ImpactData | null>(null)
 
 async function load() {
-  data.value = await api.get<ImpactData>(`/api/impact?period=${period.value}`)
+  try {
+    data.value = await api.get<ImpactData>(`/api/impact?period=${period.value}`)
+  } catch (e) {
+    store.fail(e, 'Could not load the leaderboard')
+  }
 }
 
 function setPeriod(p: '30d' | 'all') {
@@ -64,8 +69,8 @@ onMounted(load)
       <div class="card impact-metric" data-testid="my-shared">
         <strong>{{ data.me.shared }}</strong><span>Knowledge you shared</span>
       </div>
-      <div class="card impact-metric"><strong>{{ data.me.helped }}</strong><span>Your Helpful marks</span></div>
-      <div class="card impact-metric"><strong>{{ data.me.accepted }}</strong><span>Your accepted answers</span></div>
+      <div class="card impact-metric"><strong>{{ data.me.helped }}</strong><span>Times your knowledge helped someone</span></div>
+      <div class="card impact-metric"><strong>{{ data.me.accepted }}</strong><span>Your answers marked as the answer</span></div>
       <div class="card impact-metric">
         <strong>{{ data.me.rank ? `#${data.me.rank}` : '—' }}</strong>
         <span>{{ data.me.rank ? 'Your current rank' : 'Ranked once your knowledge helps someone' }}</span>

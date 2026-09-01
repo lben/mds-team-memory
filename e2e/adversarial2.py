@@ -313,6 +313,28 @@ with sync_playwright() as pw:
     check("clicking Search does run the search",
           U.get_by_test_id("search-banner").count() > 0 or U.get_by_test_id("nothing-found").count() > 0)
 
+    print("\n### 35b. Typing in the scratchpad and leaving straight away", flush=True)
+    # The save is debounced. Leaving inside that window used to destroy the text
+    # with no warning, while the status pill claimed it was "Saving…" — the one
+    # screen holding things people have no other copy of.
+    U.goto(base+"/scratchpad"); U.wait_for_timeout(2200)
+    U.get_by_test_id("scratch-editor").fill("A line I typed and immediately walked away from.")
+    U.wait_for_timeout(150)   # well inside the debounce
+    pill = U.locator(".autosave").inner_text()
+    check("the status does not claim to be saving before anything has been sent",
+          "Saving" not in pill, f"pill says {pill!r}")
+    U.goto(base+"/"); U.wait_for_timeout(2200)
+    U.goto(base+"/scratchpad"); U.wait_for_timeout(2500)
+    kept = U.get_by_test_id("scratch-editor").input_value()
+    check("text typed just before navigating away is still there",
+          "immediately walked away" in kept, f"scratchpad holds {kept[:60]!r}")
+    U.get_by_test_id("scratch-editor").fill("A second line, then a hard reload.")
+    U.wait_for_timeout(150)
+    U.reload(); U.wait_for_timeout(2500)
+    kept = U.get_by_test_id("scratch-editor").input_value()
+    check("and text typed just before a reload is still there",
+          "hard reload" in kept, f"scratchpad holds {kept[:60]!r}")
+
     print("\n### 36. Double-clicking every other way to create something", flush=True)
     U.goto(base+"/scratchpad"); U.wait_for_timeout(2000)
     U.get_by_test_id("scratch-editor").fill("A shareable line about Lavos and the endings.\nAnother private line.")

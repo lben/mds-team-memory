@@ -216,6 +216,96 @@ the item is sitting in the public feed. All reworded to say what is true.
 
 ---
 
+# Fixed in round 3
+
+## 30. The scratchpad silently destroyed what you had just typed — fixed
+
+The most serious defect found in three rounds. The save is debounced by 800ms;
+typing and then navigating away or reloading inside that window lost the text
+with **no warning and no recovery** — and the status pill said **"● Saving…"**
+the whole time, which was simply untrue: nothing had been sent. Found by a
+security-engineer persona who typed a note, watched it claim to save, reloaded,
+and found an empty scratchpad. This is the one screen holding things people have
+no other copy of.
+
+Three parts to the fix: the pill now says "Unsaved changes" until a request is
+actually in flight; leaving the screen inside the app flushes the pending save;
+and a `pagehide` handler re-sends it with `keepalive`, the one request a browser
+promises to finish after the page is gone. Covered by three checks in
+`adversarial2.py`, all three watched failing first — on the second attempt,
+after the first "red" run turned out to have tested a stale bundle because the
+build had failed.
+
+## 31. Deleting a question with a correction on it returned a 500 — fixed
+
+`delete_question` predated `knowledge.delete_item` and cleaned up less: it
+removed the row and its notifications but not the corrections, revisions or
+impact events pointing at it, so the foreign keys refused and the asker got a
+500. Found by the round-3 audit as "a second delete path". Question deletion now
+goes through the single `delete_item`, and refuses first if a teammate has
+attached anything. Proven by a test watched failing.
+
+## 32. Dead columns removed — fixed (item 17)
+
+Migration `0006` drops `knowledge_items.title` (NULL for every row ever created,
+yet concatenated defensively at five call sites and holding a slot in the search
+index), `relationships.evidence` (written once, read nowhere) and
+`documents.status` (never anything but its default). The FTS index and its
+triggers were rebuilt without `title`.
+
+## 33. Quality fixes from the round-2 and round-3 audits — fixed (item 29)
+
+`store.fail` is now used by the 18 call sites that inlined its body, and the
+eight loaders that had no `catch` at all (`HomeView.loadFeed`,
+`LeaderboardView.load`, `QuestionCard.loadDetail`, `EvidenceModal`'s mount and
+four in `App.vue`) now report instead of rejecting unhandled. The group dedup
+key format exists once. `items.helped` branches on a refusal rather than on the
+wording of a user-facing sentence produced in another file. `item_dict` counts
+endorsements once per row instead of twice.
+
+## 34. Copy and labels that misled — fixed
+
+The graph's empty state said both "the graph grows as knowledge is shared" and
+"concepts are defined by an admin", which a director read as a promise the app
+does not keep — it now says only what is true. "Your Helpful marks" counted
+marks *received* while reading as marks *given*; it now says "Times your
+knowledge helped someone". Edge labels in dense clusters sat on top of node
+names; they now follow their edge and carry a background.
+
+---
+
+# Newly found in round 3, needing the owner's decision
+
+## 35. Anyone anonymous can post to the shared feed, and endorse — open
+
+A security-engineer persona: *"I typed a note and hit Capture and it posted
+immediately, publicly, attributed only to 'Browser profile 1060' — no account,
+no name, no confirmation of any kind"*, and separately that a nameless profile
+could add an "ENDORSED" badge to someone else's work "with zero verification
+that I have any actual expertise". Both follow directly from decisions already
+made (open access is the point; endorsement is deliberately everyone's signal).
+Recorded because the *word* "expert" is what creates the friction, not the
+mechanism — "Endorse as expert" claims more than the action means.
+
+## 36. Contributors still cannot see who is mapped to what — open
+
+Raised independently in round 1 and again in round 3: expertise routing is
+admin-only, so an ordinary contributor cannot find out who to ask. *"As a
+contributor I could at least see who's mapped to which topic, even read-only, so
+I'd know who to ping about prod access."* This is the second time a persona has
+been stopped by it.
+
+## 37. The graph layout still crowds and clips — open
+
+Three personas this round described the dense cluster the same way: eight
+concepts crammed into one box with edges crossing, and one or two nodes clipped
+at the panel edge with no visible label. Edge labels are fixed (item 34) and the
+overflow now says "drag to see the rest", but the layout itself still packs a
+cluster tightly while leaving the panel's width unused. This is the remaining
+part of item 5 and is a layout design question.
+
+---
+
 # Newly found in round 2, needing the owner's decision
 
 ## 23. A stale bundle after a deploy shows a blank white page — open
@@ -265,7 +355,7 @@ the app faithfully stored exactly what was selected, and four separate people
 then read it as a rendering bug. Editing it afterwards is now possible (item 2),
 but nothing shows you what you are about to share before you share it.
 
-## 29. Quality findings from the round-2 audit, not yet applied — open
+## 29. Quality findings from the round-2 audit — fixed in round 3 (see item 33)
 
 Each is real and each changes code the owner may want to review together:
 `store.fail` was introduced as the single failure reporter and then not used by
@@ -371,7 +461,7 @@ inconsistency is what the next person copies.
 
 **Fixed in round 2**: all three ask, through the same modal (item 10).
 
-## 17. Dead surface that needs a migration to remove — decided (2026-09-01)
+## 17. Dead surface that needs a migration to remove — fixed (2026-09-01)
 
 **Owner's ruling: backwards compatibility is not a concern while this is in
 development.** Delete these with ordinary migrations; the owner will say when

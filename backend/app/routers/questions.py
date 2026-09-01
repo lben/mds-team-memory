@@ -7,7 +7,7 @@ from ..auth import get_profile
 from ..concepts import match_concepts
 from ..db import get_db
 from ..impact import notify, record_event
-from ..knowledge import item_dict, process_after_save
+from ..knowledge import delete_item, dependents_by_others, item_dict, process_after_save
 from ..models import ExpertiseMapping, ItemConcept, KnowledgeItem, Notification, Profile
 
 router = APIRouter(prefix="/api/questions", tags=["questions"])
@@ -154,7 +154,14 @@ def delete_question(
     question_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
 ):
     """The asker can delete a question posted by mistake — but only while nobody
-    has answered, so a teammate's contribution is never destroyed with it."""
+    has answered, so a teammate's contribution is never destroyed with it.
+
+    The removal itself goes through `knowledge.delete_item`, the one place that
+    knows every table pointing at a contribution. This used to delete the row
+    directly after clearing only its notifications, so a question carrying a
+    correction, a revision or an impact event failed its foreign keys and the
+    asker got a 500.
+    """
     question = _question(db, question_id)
     if question.author_profile_id != profile.id:
         raise HTTPException(403, "Only the asker can delete their question")
@@ -165,9 +172,14 @@ def delete_question(
     )
     if answers:
         raise HTTPException(400, "This question already has answers and cannot be deleted")
-    db.query(Notification).filter(Notification.item_id == question.id).delete()
-    db.delete(question)
-    db.commit()
+    attached = dependents_by_others(db, question)
+    if attached:
+        raise HTTPException(
+            400,
+            f"A teammate has added {attached} correction to this question, "
+            "so deleting it would destroy their work too",
+        )
+    delete_item(db, question)
     return {"deleted": True}
 
 

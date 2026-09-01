@@ -44,7 +44,7 @@ async function saveEdit() {
     await load()
     emit('changed')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not save your change')
+    store.fail(e, 'Could not save your change')
   } finally {
     savingEdit.value = false
   }
@@ -65,7 +65,7 @@ async function removeItem() {
     emit('changed')
     emit('close')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not delete it')
+    store.fail(e, 'Could not delete it')
   }
 }
 
@@ -90,7 +90,7 @@ async function endorse() {
     store.notify('Endorsed as an expert')
     await load()
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not endorse')
+    store.fail(e, 'Could not endorse')
   }
 }
 
@@ -103,7 +103,7 @@ async function submitCorrection() {
     store.notify('Correction proposed')
     await load()
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not propose the correction')
+    store.fail(e, 'Could not propose the correction')
   } finally {
     busy.value = false
   }
@@ -116,7 +116,7 @@ async function adopt(correctionId: string) {
     await load()
     emit('changed')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not adopt the correction')
+    store.fail(e, 'Could not adopt the correction')
   }
 }
 

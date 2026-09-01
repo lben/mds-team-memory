@@ -37,7 +37,12 @@ function openQuestion(item: Evidence['items'][number]) {
 }
 
 onMounted(async () => {
-  evidence.value = await api.get<Evidence>(`/api/graph/links/${props.linkId}/evidence`)
+  try {
+    evidence.value = await api.get<Evidence>(`/api/graph/links/${props.linkId}/evidence`)
+  } catch (e) {
+    store.fail(e, 'Could not load the evidence for this link')
+    emit('close')
+  }
 })
 </script>
 

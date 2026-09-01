@@ -93,7 +93,7 @@ def mark_helped(db: Session, item: KnowledgeItem, actor: Profile) -> tuple[bool,
     formation; grouped duplicates by the same author pay once; other
     contributors in the group each earn +1 once."""
     if item.author_profile_id == actor.id:
-        return False, "You cannot mark your own contribution"
+        return False, "You cannot mark your own contribution"  # a refusal
     if already_helped(db, item, actor.id):
         created = False
     else:
@@ -123,11 +123,13 @@ def mark_helped(db: Session, item: KnowledgeItem, actor: Profile) -> tuple[bool,
                 .filter(ImpactEvent.dedup_key.in_(_helped_keys(db, item, actor.id, other_id)))
                 .first()
             )
+            # _helped_keys owns this format; writing it a second time here is
+            # how idempotency breaks with no symptom at the call site.
             if existing is None and record_event(
                 db,
                 "group_helped",
                 other_id,
-                f"helped:{actor.id}:group:{item.group_id}:{other_id}",
+                _helped_keys(db, item, actor.id, other_id)[0],
                 actor.id,
                 item.id,
             ):
@@ -139,7 +141,10 @@ def mark_helped(db: Session, item: KnowledgeItem, actor: Profile) -> tuple[bool,
                     item.id,
                 )
     db.commit()
-    return created, None if created else "Already marked"
+    # (created, refusal). Already-marked is not a refusal — it is the same
+    # answer as marking it, so the caller must not turn it into an error. The
+    # router used to tell them apart by comparing this sentence's wording.
+    return created, None
 
 
 # Contributions that add knowledge. Asking a question is not sharing.

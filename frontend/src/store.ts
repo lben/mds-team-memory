@@ -45,7 +45,7 @@ export const store = reactive({
         this.notify('Contributor impact increased')
       }
     } catch (e) {
-      this.notify(e instanceof ApiError ? e.message : 'Could not mark as helpful')
+      this.fail(e, 'Could not mark as helpful')
     }
   },
 

@@ -1262,3 +1262,18 @@ def test_more_than_one_person_can_endorse_the_same_contribution(make_client, adm
 
     ranking = admin_client.get("/api/admin/endorsements").json()
     assert next(e for e in ranking if e["profile_id"] == item["author_id"])["endorsements"] == 2
+
+
+def test_deleting_a_question_that_carries_a_correction_does_not_explode(make_client):
+    """`delete_question` predates `knowledge.delete_item` and cleans up less: it
+    removes notifications and the row, but not the corrections, revisions or
+    impact events that point at it, so the foreign keys refuse and the caller
+    gets a 500 instead of an answer."""
+    asker, reader = make_client(), make_client()
+    q = asker.post("/api/questions", json={"body": unique("Which box runs the sweep?")}).json()
+    reader.post(f"/api/items/{q['id']}/corrections", json={"body": "It is the batch host, not the sweep host."})
+
+    r = asker.delete(f"/api/questions/{q['id']}")
+    assert r.status_code < 500, f"deleting the question returned {r.status_code}"
+    if r.status_code == 200:
+        assert reader.get(f"/api/items/{q['id']}").status_code == 404

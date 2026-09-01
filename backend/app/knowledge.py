@@ -9,6 +9,7 @@ from .concepts import match_concepts, retag_item, route_question
 from .impact import already_helped
 from .models import (
     CORROBORATES_ID,
+    Concept,
     ImpactEvent,
     KnowledgeItem,
     Notification,
@@ -48,7 +49,9 @@ def process_after_save(db: Session, item: KnowledgeItem) -> dict:
     """
     item.normalized_hash = normalized_hash(item.body)
     concept_ids = retag_item(db, item)
-    concepts = match_concepts(db, (item.title or "") + " " + item.body) if concept_ids else []
+    concepts = (
+        db.query(Concept).filter(Concept.id.in_(concept_ids)).all() if concept_ids else []
+    )
 
     corroboration = {"group_size": 1, "contributors": 1}
     if item.visibility == "team" and item.kind in GROUPABLE_KINDS:
@@ -73,7 +76,6 @@ def process_after_save(db: Session, item: KnowledgeItem) -> dict:
                                 dst_id=m.id,
                                 relationship_type_id=CORROBORATES_ID,
                                 state="confirmed",
-                                evidence=f"Content is {int(similarity(item.body, m.body) * 100)}% similar after normalization.",
                             )
                         )
                 except IntegrityError:
@@ -145,11 +147,11 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         parent = db.get(KnowledgeItem, item.parent_id)
         if parent:
             question = {"id": parent.id, "body": parent.body, "status": parent.question_status}
+    endorsements = endorsement_count(db, item)
     return {
         "id": item.id,
         "kind": item.kind,
         "question": question,
-        "title": item.title,
         "body": item.body,
         "visibility": item.visibility,
         "author": author.label if author else "Unknown",
@@ -166,8 +168,8 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         "marked_helped": marked,
         # Anyone may endorse, so the count is the signal an admin reads. Hiding
         # the button after the first endorsement capped every item at one.
-        "endorsements": endorsement_count(db, item),
-        "endorsed": endorsement_count(db, item) > 0,
+        "endorsements": endorsements,
+        "endorsed": endorsements > 0,
         "endorsed_by_me": endorsed_by(db, item, profile),
         "question_status": item.question_status,
         "accepted_answer_id": item.accepted_answer_id,

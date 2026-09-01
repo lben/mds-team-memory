@@ -105,6 +105,20 @@ before trusting any new suite.
   drag-selection, published verbatim. **Read the stored row before diagnosing a
   rendering bug**; and note that one person's bad input becomes everybody's
   "obvious bug" when it is shared.
+- **A failed frontend build makes a red/green run meaningless.** Removing a fix
+  left an unused function, `vue-tsc` refused, `dist` was never rewritten, and
+  the harness happily tested the *previous* bundle — so three checks that should
+  have gone red stayed green and nearly convinced me they were too weak.
+  **Assert `✓ built` before believing any browser run**, especially the run
+  where you have deliberately broken something.
+- **Reverting a fix needs the same assertion as applying one.** The first
+  attempt at that revert silently matched nothing; only the second, with
+  `assert s != before` on every replacement, actually changed the file.
+- **`batch_alter_table` on SQLite recreates the table and drops its triggers.**
+  Dropping a column from `knowledge_items` destroyed the three FTS sync triggers
+  created moments earlier in the same migration, and search returned nothing for
+  every new item. Do the column drops first and (re)create the index and its
+  triggers afterwards, against the table that will actually exist.
 - **A dark backdrop over a dark sidebar looks like a missing backdrop.** The
   modal overlay is `inset:0` and does cover the sidebar; navy-at-48%-opacity
   over navy simply does not visibly change. Read the CSS before filing a layout
@@ -277,6 +291,6 @@ fail the run on them independently of the assertions.
 
 ---
 
-*Last updated: 2026-09-01, after round 2 of the quality loop: 301 adversarial
-checks, 45 API tests, 100% endpoint coverage (61 endpoints), two read-only code
-audits and twelve fresh dogfooding personas across two shared instances.*
+*Last updated: 2026-09-01, after round 3 of the quality loop: 308 adversarial
+checks, 46 API tests, 100% endpoint coverage, three read-only code audits and
+eighteen fresh dogfooding personas across three shared instances.*

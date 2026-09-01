@@ -70,7 +70,7 @@ def _item_hits(db: Session, match: str, profile: Profile, terms: list[str], alia
                 .filter(KnowledgeItem.kind == "answer", KnowledgeItem.parent_id == item.id)
                 .count()
             )
-        d["coverage"] = _coverage(f"{item.title or ''} {item.body}", terms, aliases)
+        d["coverage"] = _coverage(item.body, terms, aliases)
         d["score"] = -rank + _signals(d, item.updated_at)
         hits.append(d)
     return hits

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { ApiError, api, type Corroboration, type Item } from '../api'
+import { api, type Corroboration, type Item } from '../api'
 import SuccessModal from '../components/SuccessModal.vue'
 import { store } from '../store'
 import AskModal from '../components/AskModal.vue'
@@ -19,7 +19,7 @@ const route = useRoute()
 const pads = ref<Pad[]>([])
 const current = ref<Pad | null>(null)
 const editor = ref<HTMLTextAreaElement | null>(null)
-const saveState = ref<'saved' | 'saving' | 'idle'>('idle')
+const saveState = ref<'saved' | 'saving' | 'pending' | 'idle'>('idle')
 const findQuery = ref((route.query.find as string) || '')
 const matches = ref<{ line: number; text: string }[]>([])
 const selection = ref('')
@@ -42,19 +42,57 @@ async function load() {
 }
 
 function onEdit() {
-  saveState.value = 'saving'
+  // Nothing has been sent yet, so do not claim it is being saved. Saying
+  // "Saving…" here is what made silently losing the text so much worse.
+  saveState.value = 'pending'
   window.clearTimeout(saveTimer)
   saveTimer = window.setTimeout(save, 800)
 }
 
 async function save() {
   if (!current.value) return
+  window.clearTimeout(saveTimer)
+  saveState.value = 'saving'
   try {
     await api.put(`/api/scratchpad/${current.value.id}`, { content: current.value.content })
     saveState.value = 'saved'
   } catch (e) {
-    saveState.value = 'idle'
-    store.notify(e instanceof ApiError ? e.message : 'Could not save')
+    saveState.value = 'pending'
+    store.fail(e, 'Could not save your scratchpad')
+  }
+}
+
+/** Typing and leaving inside the debounce window used to destroy the text with
+ * no warning: the timer died with the component and nothing had been sent. The
+ * scratchpad is the one place people keep things they have no other copy of. */
+function flushPendingSave() {
+  if (saveState.value === 'pending') {
+    window.clearTimeout(saveTimer)
+    void save()
+  }
+}
+
+/** Send the pending text as the page goes away.
+ *
+ * `onBeforeUnmount` covers moving between screens inside the app, but a reload
+ * or a closed tab tears the page down without running it, and an ordinary fetch
+ * is cancelled mid-flight. `keepalive` is the one request the browser promises
+ * to finish after the page is gone, so it is used directly here rather than
+ * through `api`, which has no reason to know about unload.
+ */
+function saveOnUnload() {
+  if (!current.value || (saveState.value !== 'pending' && saveState.value !== 'saving')) return
+  window.clearTimeout(saveTimer)
+  try {
+    fetch(`/api/scratchpad/${current.value.id}`, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: current.value.content }),
+      keepalive: true,
+    })
+  } catch {
+    /* the page is going away; there is nowhere left to report this */
   }
 }
 
@@ -105,7 +143,7 @@ async function shareSelection() {
     success.value = { corroboration: result.corroboration, sharedTotal: result.shared_total }
     selection.value = ''
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not share that excerpt')
+    store.fail(e, 'Could not share that excerpt')
   } finally {
     sharing.value = false
   }
@@ -136,7 +174,14 @@ function switchPad(id: string) {
   }
 }
 
+onBeforeUnmount(() => {
+  window.removeEventListener('pagehide', saveOnUnload)
+  flushPendingSave()
+})
+
 onMounted(async () => {
+  // pagehide fires for reloads, navigations and closed tabs alike.
+  window.addEventListener('pagehide', saveOnUnload)
   await load()
   if (findQuery.value) await find()
 })
@@ -188,7 +233,15 @@ onMounted(async () => {
           @keyup.enter="find"
         />
         <button class="btn" @click="find">Find</button>
-        <span class="autosave">{{ saveState === 'saving' ? '● Saving…' : saveState === 'saved' ? '● Saved' : '● Saves as you type' }}</span>
+        <span class="autosave" data-testid="autosave">{{
+          saveState === 'saving'
+            ? '● Saving…'
+            : saveState === 'pending'
+              ? '● Unsaved changes'
+              : saveState === 'saved'
+                ? '● Saved'
+                : '● Saves as you type'
+        }}</span>
       </div>
       <div class="scratch-layout">
         <div class="scratch-editor-wrap">

@@ -89,7 +89,7 @@ def item_detail(
             .order_by(KnowledgeItem.created_at)
             .all()
         ]
-    concepts = match_concepts(db, (item.title or "") + " " + item.body)
+    concepts = match_concepts(db, item.body)
     data = item_dict(db, item, profile)
     data["concepts"] = [{"id": c.id, "name": c.name} for c in concepts]
     data["corrections"] = [item_dict(db, c, profile) for c in corrections]
@@ -152,10 +152,10 @@ def helped(
     item_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
 ):
     item = _get_item(db, item_id, profile)
-    created, message = mark_helped(db, item, profile)
-    if not created and message != "Already marked":
-        raise HTTPException(400, message)
-    return {"created": created, "detail": message}
+    created, refusal = mark_helped(db, item, profile)
+    if refusal:
+        raise HTTPException(400, refusal)
+    return {"created": created}
 
 
 @router.post("/items/{item_id}/endorse")

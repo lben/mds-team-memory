@@ -88,7 +88,6 @@ class KnowledgeItem(Base):
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
     kind: Mapped[str] = mapped_column(String(16), index=True)  # note|question|answer|excerpt|correction
-    title: Mapped[str | None] = mapped_column(String(300))
     body: Mapped[str] = mapped_column(Text)
     visibility: Mapped[str] = mapped_column(String(8), default="team", index=True)  # team|private
     author_profile_id: Mapped[str] = mapped_column(ForeignKey("profiles.id"), index=True)
@@ -125,7 +124,6 @@ class Document(Base):
     filename: Mapped[str] = mapped_column(String(300))
     stored_path: Mapped[str] = mapped_column(String(500))
     uploader_profile_id: Mapped[str] = mapped_column(ForeignKey("profiles.id"))
-    status: Mapped[str] = mapped_column(String(12), default="extracted")  # extracted|failed
     uploaded_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     uploader: Mapped[Profile] = relationship()
@@ -287,7 +285,7 @@ class RelationshipType(Base):
 
 
 class Relationship(Base):
-    """Stored relationships with evidence and review state.
+    """Stored relationships with their review state.
 
     Structural links that already exist as foreign keys (answer->question,
     excerpt->passage) are not duplicated here; this table holds derived and
@@ -307,7 +305,6 @@ class Relationship(Base):
     # admin-asserted (solid), rejected = hidden from the map but still counted.
     state: Mapped[str] = mapped_column(String(12), default="suggested", index=True)
     occurrence_count: Mapped[int] = mapped_column(Integer, default=0)
-    evidence: Mapped[str] = mapped_column(Text, default="")
     reviewed_by: Mapped[str | None] = mapped_column(String(80))
     reviewed_at: Mapped[datetime | None] = mapped_column(DateTime)
     review_note: Mapped[str | None] = mapped_column(Text)

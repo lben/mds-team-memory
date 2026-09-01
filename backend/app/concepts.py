@@ -93,7 +93,7 @@ def _sync(db: Session, existing: dict[str, object], wanted: set[str], make) -> N
 
 def retag_item(db: Session, item: KnowledgeItem, vocab=None, stems=None) -> set[str]:
     """Recompute an item's tags from scratch, adding and removing as needed."""
-    wanted = match_concept_ids(db, f"{item.title or ''} {item.body}", vocab, stems)
+    wanted = match_concept_ids(db, item.body, vocab, stems)
     existing = {
         row.concept_id: row
         for row in db.query(ItemConcept).filter(ItemConcept.item_id == item.id).all()

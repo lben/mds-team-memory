@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { ApiError, api, type Item } from '../api'
+import { api, type Item } from '../api'
 import { store } from '../store'
 import AskModal from './AskModal.vue'
 import { useAsk } from '../ask'
@@ -24,7 +24,11 @@ const answerDraft = ref('')
 const busy = ref(false)
 
 async function loadDetail() {
-  detail.value = await api.get<QuestionDetail>(`/api/questions/${props.question.id}`)
+  try {
+    detail.value = await api.get<QuestionDetail>(`/api/questions/${props.question.id}`)
+  } catch (e) {
+    store.fail(e, 'Could not open that question')
+  }
 }
 
 async function toggle() {
@@ -42,7 +46,7 @@ async function postAnswer() {
     await loadDetail()
     emit('changed')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not post the answer')
+    store.fail(e, 'Could not post the answer')
   } finally {
     busy.value = false
   }
@@ -57,7 +61,7 @@ async function accept(answer: Item) {
     await loadDetail()
     emit('changed')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not accept the answer')
+    store.fail(e, 'Could not accept the answer')
   } finally {
     busy.value = false
   }
@@ -69,7 +73,7 @@ async function endorse(answer: Item) {
     answer.endorsed = true
     store.notify('Endorsed as an expert')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not endorse')
+    store.fail(e, 'Could not endorse')
   }
 }
 
@@ -86,7 +90,7 @@ async function deleteQuestion() {
     store.notify('Question deleted')
     emit('deleted')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not delete the question')
+    store.fail(e, 'Could not delete the question')
   }
 }
 

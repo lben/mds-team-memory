@@ -88,6 +88,13 @@ function initCy() {
           label: 'data(label)',
           'font-size': '9px',
           color: '#a8bbd2',
+          // Follow the edge instead of sitting horizontally across whatever is
+          // behind it: in a dense cluster these labels landed on top of node
+          // names and on each other.
+          'text-rotation': 'autorotate',
+          'text-background-color': '#0f213b',
+          'text-background-opacity': 0.85,
+          'text-background-padding': '2',
           'text-outline-color': '#0f213b',
           'text-outline-width': 2,
           'line-color': '#527094',
@@ -305,7 +312,7 @@ defineExpose({ refresh })
       </div>
     </div>
     <div v-if="!concepts.length" class="graph-empty">
-      The graph grows as knowledge is shared. Concepts are defined by an admin under Expertise Routing.
+      An admin defines the concepts under Expertise Routing. Once they exist, anything the team writes that mentions one is tagged automatically and appears here.
     </div>
     <div v-show="concepts.length" ref="graphEl" class="graph-box" data-testid="graph"></div>
   </div>

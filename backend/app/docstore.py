@@ -65,7 +65,6 @@ def document_dict(document: Document, with_passages: bool = False, profile=None)
         # Only the person who uploaded it may remove it.
         "is_mine": bool(profile and document.uploader_profile_id == profile.id),
         "uploaded_at": document.uploaded_at.isoformat() + "Z",
-        "status": document.status,
         "passage_count": len(document.passages),
     }
     if with_passages:

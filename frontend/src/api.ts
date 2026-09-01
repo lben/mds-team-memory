@@ -48,7 +48,6 @@ export const api = {
 export interface Item {
   id: string
   kind: string
-  title: string | null
   body: string
   visibility: string
   author: string

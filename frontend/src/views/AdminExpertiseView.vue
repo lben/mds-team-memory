@@ -88,7 +88,7 @@ async function addMapping() {
     await loadData()
     store.notify('Expertise mapping added')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not add the mapping')
+    store.fail(e, 'Could not add the mapping')
   }
 }
 
@@ -122,7 +122,7 @@ async function addAdmin() {
     await loadData()
     store.notify('Additional admin created')
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not create the admin')
+    store.fail(e, 'Could not create the admin')
   }
 }
 

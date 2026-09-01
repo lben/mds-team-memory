@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ApiError, api, type Corroboration, type Item } from '../api'
+import { api, type Corroboration, type Item } from '../api'
 import AskModal from '../components/AskModal.vue'
 import SuccessModal from '../components/SuccessModal.vue'
 import { useAsk } from '../ask'
@@ -13,7 +13,6 @@ interface Doc {
   uploader: string
   is_mine: boolean
   uploaded_at: string
-  status: string
   passage_count: number
   passages?: { id: string; ord: number; text: string; locator: string }[]
 }
@@ -74,7 +73,7 @@ async function open(id: string, passage?: string) {
     // "nothing selected" state and say what happened.
     current.value = null
     matchedPassage.value = null
-    store.notify(e instanceof ApiError ? e.message : 'Could not open that document')
+    store.fail(e, 'Could not open that document')
     return
   }
   matchedPassage.value = passage ?? null
@@ -100,7 +99,7 @@ async function upload(e: Event) {
     await load()
     router.push(`/documents/${doc.id}`)
   } catch (err) {
-    store.notify(err instanceof ApiError ? err.message : 'Upload failed')
+    store.fail(err, 'Upload failed')
   } finally {
     uploading.value = false
     if (fileInput.value) fileInput.value.value = ''
@@ -117,7 +116,7 @@ async function sharePassage(passageId: string) {
     )
     success.value = { corroboration: result.corroboration, sharedTotal: result.shared_total }
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not share that passage')
+    store.fail(e, 'Could not share that passage')
   } finally {
     sharing.value = ''
   }

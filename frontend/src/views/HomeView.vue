@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ApiError, api, type Corroboration, type Item } from '../api'
+import { api, type Corroboration, type Item } from '../api'
 import EvidenceModal from '../components/EvidenceModal.vue'
 import ItemDetailModal from '../components/ItemDetailModal.vue'
 import KnowledgeGraph from '../components/KnowledgeGraph.vue'
@@ -72,10 +72,14 @@ const knowledgeResults = computed(
 )
 
 async function loadFeed() {
-  ;[feed.value, questions.value] = await Promise.all([
-    api.get<Item[]>('/api/feed'),
-    api.get<QuestionRow[]>('/api/questions'),
-  ])
+  try {
+    ;[feed.value, questions.value] = await Promise.all([
+      api.get<Item[]>('/api/feed'),
+      api.get<QuestionRow[]>('/api/questions'),
+    ])
+  } catch (e) {
+    store.fail(e, 'Could not load the latest knowledge')
+  }
 }
 
 async function runSearch() {
@@ -85,7 +89,7 @@ async function runSearch() {
   try {
     results.value = await api.get<SearchResults>(`/api/search?q=${encodeURIComponent(q)}`)
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Search failed')
+    store.fail(e, 'Search failed')
   } finally {
     busy.value = false
   }
@@ -107,7 +111,7 @@ async function ask() {
     await loadFeed()
     expandQuestion(question.id)
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not post the question')
+    store.fail(e, 'Could not post the question')
   } finally {
     busy.value = false
   }
@@ -137,7 +141,7 @@ async function capture() {
     await Promise.all([loadFeed(), store.loadProfile()])
     graph.value?.refresh() // the graph grows with each contribution
   } catch (e) {
-    store.notify(e instanceof ApiError ? e.message : 'Could not save your knowledge')
+    store.fail(e, 'Could not save your knowledge')
   } finally {
     busy.value = false
   }
