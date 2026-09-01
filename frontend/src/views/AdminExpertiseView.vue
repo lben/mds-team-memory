@@ -76,7 +76,10 @@ async function submitAuth() {
 }
 
 async function addMapping() {
-  if (!mapProfile.value || !mapConcept.value) return
+  if (!mapProfile.value || !mapConcept.value) {
+    store.notify('Pick a person and an expertise area')
+    return
+  }
   try {
     await api.post('/api/admin/expertise', { profile_id: mapProfile.value, concept_id: mapConcept.value })
     await loadData()

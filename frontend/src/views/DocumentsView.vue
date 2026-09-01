@@ -23,6 +23,8 @@ const fileInput = ref<HTMLInputElement | null>(null)
 const uploading = ref(false)
 const matchedPassage = ref<string | null>(null)
 const success = ref<Corroboration | null>(null)
+// Holds the passage being shared, so a second click cannot post it twice.
+const sharing = ref('')
 
 async function load() {
   docs.value = await api.get<Doc[]>('/api/documents')
@@ -61,11 +63,19 @@ async function upload(e: Event) {
 }
 
 async function sharePassage(passageId: string) {
-  const result = await api.post<{ item: Item; corroboration: Corroboration }>(
-    `/api/passages/${passageId}/share`,
-    {},
-  )
-  success.value = result.corroboration
+  if (sharing.value) return
+  sharing.value = passageId
+  try {
+    const result = await api.post<{ item: Item; corroboration: Corroboration }>(
+      `/api/passages/${passageId}/share`,
+      {},
+    )
+    success.value = result.corroboration
+  } catch (e) {
+    store.notify(e instanceof ApiError ? e.message : 'Could not share that passage')
+  } finally {
+    sharing.value = ''
+  }
 }
 
 function fmt(ts: string) {
@@ -152,7 +162,7 @@ onMounted(async () => {
             class="passage"
             :class="{ matched: p.id === matchedPassage }"
           >
-            <button class="btn small share-passage" @click="sharePassage(p.id)">Share this passage</button>
+            <button class="btn small share-passage" :disabled="!!sharing" @click="sharePassage(p.id)">Share this passage</button>
             <div class="locator">{{ p.locator }}</div>
             <p>{{ p.text }}</p>
           </div>

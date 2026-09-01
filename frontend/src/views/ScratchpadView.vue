@@ -21,6 +21,9 @@ const saveState = ref<'saved' | 'saving' | 'idle'>('idle')
 const findQuery = ref((route.query.find as string) || '')
 const matches = ref<{ line: number; text: string }[]>([])
 const selection = ref('')
+// The selection clears only once the share succeeds, so without this a second
+// click would post the same private excerpt to the team twice.
+const sharing = ref(false)
 const success = ref<Corroboration | null>(null)
 let saveTimer = 0
 
@@ -76,15 +79,22 @@ function updateSelection() {
 }
 
 async function shareSelection() {
-  if (!current.value || !selection.value) return
-  window.clearTimeout(saveTimer)
-  await save()
-  const result = await api.post<{ item: Item; corroboration: Corroboration }>(
-    `/api/scratchpad/${current.value.id}/share`,
-    { text: selection.value },
-  )
-  success.value = result.corroboration
-  selection.value = ''
+  if (sharing.value || !current.value || !selection.value) return
+  sharing.value = true
+  try {
+    window.clearTimeout(saveTimer)
+    await save()
+    const result = await api.post<{ item: Item; corroboration: Corroboration }>(
+      `/api/scratchpad/${current.value.id}/share`,
+      { text: selection.value },
+    )
+    success.value = result.corroboration
+    selection.value = ''
+  } catch (e) {
+    store.notify(e instanceof ApiError ? e.message : 'Could not share that excerpt')
+  } finally {
+    sharing.value = false
+  }
 }
 
 async function createPad() {
@@ -168,7 +178,7 @@ onMounted(async () => {
           <button
             class="btn primary"
             style="width: 100%; margin-top: 12px"
-            :disabled="!selection"
+            :disabled="sharing || !selection"
             data-testid="share-selection"
             @click="shareSelection"
           >

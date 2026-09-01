@@ -17,6 +17,9 @@ const emit = defineEmits<{ close: []; changed: [] }>()
 const detail = ref<Detail | null>(null)
 const correctionDraft = ref('')
 const error = ref('')
+// The draft clears only once the server replies, so an impatient second click
+// would otherwise propose the same correction twice.
+const busy = ref(false)
 
 async function load() {
   try {
@@ -50,11 +53,18 @@ async function endorse() {
 }
 
 async function submitCorrection() {
-  if (!detail.value || !correctionDraft.value.trim()) return
-  await api.post(`/api/items/${detail.value.id}/corrections`, { body: correctionDraft.value.trim() })
-  correctionDraft.value = ''
-  store.notify('Correction proposed')
-  await load()
+  if (busy.value || !detail.value || !correctionDraft.value.trim()) return
+  busy.value = true
+  try {
+    await api.post(`/api/items/${detail.value.id}/corrections`, { body: correctionDraft.value.trim() })
+    correctionDraft.value = ''
+    store.notify('Correction proposed')
+    await load()
+  } catch (e) {
+    store.notify(e instanceof ApiError ? e.message : 'Could not propose the correction')
+  } finally {
+    busy.value = false
+  }
 }
 
 async function adopt(correctionId: string) {
@@ -147,7 +157,7 @@ onMounted(load)
             placeholder="Suggest a correction or an update to this knowledge"
           ></textarea>
           <div class="modal-actions" style="margin-top: 8px">
-            <button class="btn small" :disabled="!correctionDraft.trim()" @click="submitCorrection">Propose correction</button>
+            <button class="btn small" :disabled="busy || !correctionDraft.trim()" @click="submitCorrection">Propose correction</button>
           </div>
         </div>
 

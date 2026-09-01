@@ -84,8 +84,12 @@ async function loadAll() {
   else if (props.selectedConceptId) focusRow('concepts', props.selectedConceptId)
 }
 
-function fail(e: unknown, fallback: string) {
+/** A failed action usually means this table is out of date — another tab
+ * deleted the row, or the admin session ended. Resync so what is on screen is
+ * true, instead of leaving a row that can only ever fail again. */
+async function fail(e: unknown, fallback: string) {
   store.notify(e instanceof ApiError ? e.message : fallback)
+  await loadAll()
 }
 
 async function setState(link: LinkRow, state: string) {
@@ -95,7 +99,10 @@ async function setState(link: LinkRow, state: string) {
     state === 'rejected'
       ? 'Why is this link wrong? (optional, kept with the record)'
       : 'Why is this link right? (optional, shown as the evidence)'
-  const note = window.prompt(ask) ?? ''
+  // Cancel must abort the decision. The note is optional, so an empty string
+  // from OK still goes through; only null means the admin backed out.
+  const note = window.prompt(ask)
+  if (note === null) return
 
   try {
     await api.patch(`/api/graph/links/${link.id}`, { state, note })
@@ -150,7 +157,10 @@ async function createLink() {
 }
 
 async function createConcept() {
-  if (!newConceptName.value.trim()) return
+  if (!newConceptName.value.trim()) {
+    store.notify('Give the concept a name')
+    return
+  }
   try {
     await api.post('/api/admin/concepts', {
       name: newConceptName.value.trim(),
@@ -199,7 +209,10 @@ async function deleteConcept(concept: ConceptRow) {
 }
 
 async function createType() {
-  if (!newTypeName.value.trim()) return
+  if (!newTypeName.value.trim()) {
+    store.notify('Give the relationship type a name')
+    return
+  }
   try {
     await api.post('/api/admin/relationship-types', { name: newTypeName.value.trim() })
     newTypeName.value = ''

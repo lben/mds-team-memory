@@ -15,6 +15,9 @@ const emit = defineEmits<{ changed: []; deleted: [] }>()
 const open = ref(props.expanded ?? false)
 const detail = ref<QuestionDetail | null>(null)
 const answerDraft = ref('')
+// The draft is only cleared once the server replies, so without this an
+// impatient second click posts the same answer twice.
+const busy = ref(false)
 
 async function loadDetail() {
   detail.value = await api.get<QuestionDetail>(`/api/questions/${props.question.id}`)
@@ -26,15 +29,24 @@ async function toggle() {
 }
 
 async function postAnswer() {
-  if (!detail.value || !answerDraft.value.trim()) return
-  await api.post(`/api/questions/${detail.value.id}/answers`, { body: answerDraft.value.trim() })
-  answerDraft.value = ''
-  store.notify('Answer posted to the whole team')
-  await loadDetail()
-  emit('changed')
+  if (busy.value || !detail.value || !answerDraft.value.trim()) return
+  busy.value = true
+  try {
+    await api.post(`/api/questions/${detail.value.id}/answers`, { body: answerDraft.value.trim() })
+    answerDraft.value = ''
+    store.notify('Answer posted to the whole team')
+    await loadDetail()
+    emit('changed')
+  } catch (e) {
+    store.notify(e instanceof ApiError ? e.message : 'Could not post the answer')
+  } finally {
+    busy.value = false
+  }
 }
 
 async function accept(answer: Item) {
+  if (busy.value) return
+  busy.value = true
   try {
     await api.post(`/api/questions/${props.question.id}/accept`, { answer_id: answer.id })
     store.notify('Answer accepted')
@@ -42,6 +54,8 @@ async function accept(answer: Item) {
     emit('changed')
   } catch (e) {
     store.notify(e instanceof ApiError ? e.message : 'Could not accept the answer')
+  } finally {
+    busy.value = false
   }
 }
 
@@ -181,7 +195,7 @@ if (open.value) loadDetail()
             Delete question
           </button>
           <span v-else class="muted" style="font-size: 10px">Visible to the whole team immediately.</span>
-          <button class="btn small primary" :disabled="!answerDraft.trim()" data-testid="post-answer" @click="postAnswer">
+          <button class="btn small primary" :disabled="busy || !answerDraft.trim()" data-testid="post-answer" @click="postAnswer">
             Post answer
           </button>
         </div>
