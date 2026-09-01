@@ -86,10 +86,14 @@ function fail(e: unknown, fallback: string) {
 }
 
 async function setState(link: LinkRow, state: string) {
-  let note: string | null = null
-  if (state === 'rejected') {
-    note = window.prompt('Why is this link wrong? (optional, kept with the record)') ?? ''
-  }
+  // Both decisions can carry a reason. Recording only why something is wrong,
+  // never why it is right, left the endorsement unexplained in the evidence view.
+  const ask =
+    state === 'rejected'
+      ? 'Why is this link wrong? (optional, kept with the record)'
+      : 'Why is this link right? (optional, shown as the evidence)'
+  const note = window.prompt(ask) ?? ''
+
   try {
     await api.patch(`/api/graph/links/${link.id}`, { state, note })
     store.notify(state === 'confirmed' ? 'Link approved' : 'Link rejected — it stays here and keeps counting')
