@@ -49,6 +49,12 @@ before trusting any new suite.
 - **Substring matches on the whole page.** Searching for a secret and grepping
   `.page` text hits the search banner echoing your own query. Scope assertions
   to the results region, and prefer asserting on API payloads for privacy.
+- **Asserting a status code without asserting the content type.** A burst check
+  hammered eight URLs and asserted `status == 200`. One of them,
+  `/api/leaderboard`, does not exist; the SPA fallback answered it with
+  index.html and a 200, so the check passed on HTML and would have passed with
+  every real endpoint deleted. **Assert what came back, not just that something
+  did.** (The fallback itself was the defect — see OPEN_ITEMS.)
 - **Harness bugs that look like product bugs.** Repeatedly. Before changing
   product code, prove the failure by hand. Known traps: a row's name moves into
   an `<input>` in edit mode so `has_text` stops matching (hold the row id and
@@ -56,6 +62,31 @@ before trusting any new suite.
   text inflates counts (read the API instead); Playwright's sync API cannot be
   called from worker threads (read cookies on the main thread, then race with
   plain HTTP).
+- **Native dialogs are auto-dismissed, which silently disables the action
+  behind them.** `Approve`, `Reject`, `Delete link` and `Delete concept` all
+  raise a `window.prompt`/`window.confirm` first. Playwright dismisses dialogs
+  by default, so `prompt()` returns `null`, the handler correctly aborts, and
+  **no request is made** — which reads exactly like a dead button. A whole
+  dogfooding round reported these four controls as broken with "zero POST/PATCH
+  fired"; driving them by hand with `page.on("dialog", ...)` showed all four
+  working. **Any driver must answer dialogs, and a report of "the button does
+  nothing" must be re-run with a dialog handler before it is believed.**
+- **A brand-new Chromium profile directory loses the cookies written in its
+  first session.** A persona's identity therefore changes once, between their
+  first and second script, and is stable forever after. Three personas
+  independently reported this as the app losing their account. It is not: the
+  profile cookie is `max-age` ten years and survives crashes. **Warm a fresh
+  profile dir with one throwaway open-and-close before using it.**
+- **"Nothing reaches it" has to include the tests.** The search response's
+  `terms` field was deleted as dead surface on frontend-only evidence; a backend
+  regression test used it as the only observation point for "function words must
+  not produce results". Grep `backend/tests` and `e2e` too, and when only a test
+  reaches a field, decide whether it is dead surface or a diagnostic before
+  deleting it.
+- **A dark backdrop over a dark sidebar looks like a missing backdrop.** The
+  modal overlay is `inset:0` and does cover the sidebar; navy-at-48%-opacity
+  over navy simply does not visibly change. Read the CSS before filing a layout
+  bug seen in a screenshot.
 
 ---
 
@@ -76,6 +107,15 @@ Others in this class: overlapping or clipped elements, misaligned columns, poor
 contrast, a control that looks disabled but is not (or the reverse), a modal
 behind its backdrop, text overflowing its container, and screens that simply look
 unfinished.
+
+What looking found this round that no assertion could: concept labels in the
+knowledge graph render at **7.4px** on screen and overflow their circles, because
+the graph fits a roughly square layout into a wide, short letterbox panel and
+zooms to 0.675 to do it. Two personas reported it as separate glitches — one read
+"Payments" as "Paymenta", another saw a node as "a pin icon with no label at
+all". Both were reading the same illegible text. Measure the rendered zoom and
+the effective font size (`cy.zoom()` × the style's `font-size`) rather than
+trusting the model values.
 
 **The rule: anyone testing this must take screenshots and actually view them**,
 not just assert on the DOM. Text checks confirm the words are right; only looking
@@ -116,10 +156,18 @@ Measure, do not assert. The method that works:
    `app.routes` does not work, routers are wrapped in `_IncludedRouter`.
 3. Normalise ids (`/[0-9a-f]{16,}` → `/{id}`) and diff.
 
+This is now implemented as `e2e/coverage.py`: run the harnesses, then
+`.venv/bin/python e2e/coverage.py`. It reads `e2e/adv/access*.log`, ignores 404s
+and 405s (a route that was never executed is not covered), and prints both what
+was never reached and **what was requested but is not in the spec** — the second
+list is how the `/api/leaderboard` phantom above was caught.
+
 This is what found that 22% of endpoints were untouched after two passes that
 felt thorough, and that `GET /api/items/{id}/relationships` had no caller at all
 (since deleted). **Reach every endpoint by clicking, not by calling it.** An
 endpoint no UI can reach is dead surface — delete it rather than test it.
+
+Standing at 56/56 (100%) across `adversarial{,2,3,4}.py`.
 
 ---
 
@@ -171,8 +219,17 @@ fail the run on them independently of the assertions.
 - `manage.py create-admin` seeds admins; `reset-database` wipes and remigrates.
 - The frontend must be rebuilt (`npm run build`) before any browser test — the
   server serves `frontend/dist`, which is gitignored.
+- The e2e harnesses derive their own `ROOT` from `__file__`; they no longer
+  hardcode one laptop's path, so they run from any checkout.
+- The admin's four curation actions (approve, reject, delete link, delete
+  concept) each raise a native dialog before doing anything. Cancelling is a
+  deliberate, tested no-op.
+- `e2e/sensecheck.py` screenshots every screen it walks into `e2e/adv/sense/`
+  and prints the index. Reading its log is half the pass; the images are the
+  other half.
 
 ---
 
-*Last updated: 2026-08-31, after four adversarial passes (276 checks) plus a
-coherence walkthrough.*
+*Last updated: 2026-09-01, after round 1 of the quality loop: 278 adversarial
+checks, 32 API tests, 100% endpoint coverage, one read-only code audit and six
+fresh dogfooding personas on a single shared instance.*

@@ -9,3 +9,4 @@ tools/deploy.toml
 .pytest_cache/
 test-results/
 .DS_Store
+e2e/adv/

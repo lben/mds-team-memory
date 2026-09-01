@@ -31,7 +31,17 @@ async function load() {
 }
 
 async function open(id: string, passage?: string) {
-  current.value = await api.get<Doc>(`/api/documents/${id}`)
+  try {
+    current.value = await api.get<Doc>(`/api/documents/${id}`)
+  } catch (e) {
+    // Leaving the previous document on screen under the new id tells the reader
+    // they are looking at a file they are not. Fall back to the page's own
+    // "nothing selected" state and say what happened.
+    current.value = null
+    matchedPassage.value = null
+    store.notify(e instanceof ApiError ? e.message : 'Could not open that document')
+    return
+  }
   matchedPassage.value = passage ?? null
   if (passage) {
     await nextTick()

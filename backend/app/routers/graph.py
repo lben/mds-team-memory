@@ -28,6 +28,7 @@ from ..relationships import (
     link_dict,
     recount,
     set_state,
+    type_usage,
 )
 
 router = APIRouter(prefix="/api/graph", tags=["graph"])
@@ -313,8 +314,7 @@ def create_link(
         state="confirmed",
         # A concept link's evidence is derived at read time from its live
         # occurrence count and this note; storing the note twice would be a
-        # second copy to keep in step. `evidence` stays empty here and is only
-        # used by the automatic item-to-item corroboration rows.
+        # second copy to keep in step.
         reviewed_by=admin.username,
         review_note=payload.note.strip(),
     )
@@ -362,8 +362,6 @@ def delete_link(link_id: str, db: Session = Depends(get_db)):
 
 @router.get("/relationship-types")
 def list_relationship_types(db: Session = Depends(get_db)):
-    from ..relationships import type_usage
-
     types = db.query(RelationshipType).order_by(RelationshipType.name).all()
     return [
         {

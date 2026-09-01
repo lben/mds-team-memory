@@ -32,32 +32,31 @@ def _question(db: Session, question_id: str) -> KnowledgeItem:
     return q
 
 
-@router.get("")
-def list_questions(
-    mine_expertise: bool = False,
-    profile: Profile = Depends(get_profile),
-    db: Session = Depends(get_db),
-):
-    query = db.query(KnowledgeItem).filter(KnowledgeItem.kind == "question")
-    if mine_expertise:
-        my_concepts = db.query(ExpertiseMapping.concept_id).filter(
-            ExpertiseMapping.profile_id == profile.id
+def _my_concept_ids(db: Session, profile_id: str) -> list[str]:
+    return [
+        cid
+        for (cid,) in db.query(ExpertiseMapping.concept_id).filter(
+            ExpertiseMapping.profile_id == profile_id
         )
-        matching = db.query(ItemConcept.item_id).filter(ItemConcept.concept_id.in_(my_concepts))
-        query = query.filter(KnowledgeItem.id.in_(matching))
-    questions = query.order_by(KnowledgeItem.created_at.desc()).limit(200).all()
+    ]
+
+
+@router.get("")
+def list_questions(profile: Profile = Depends(get_profile), db: Session = Depends(get_db)):
+    questions = (
+        db.query(KnowledgeItem)
+        .filter(KnowledgeItem.kind == "question")
+        .order_by(KnowledgeItem.created_at.desc())
+        .limit(200)
+        .all()
+    )
     answer_counts = dict(
         db.query(KnowledgeItem.parent_id, func.count())
         .filter(KnowledgeItem.kind == "answer")
         .group_by(KnowledgeItem.parent_id)
         .all()
     )
-    my_concepts = [
-        cid
-        for (cid,) in db.query(ExpertiseMapping.concept_id).filter(
-            ExpertiseMapping.profile_id == profile.id
-        )
-    ]
+    my_concepts = _my_concept_ids(db, profile.id)
     matching_mine: set[str] = set()
     if my_concepts:
         matching_mine = {
@@ -70,7 +69,9 @@ def list_questions(
     for q in questions:
         d = item_dict(db, q, profile)
         d["answer_count"] = answer_counts.get(q.id, 0)
-        d["matches_me"] = q.id in matching_mine
+        # You are never routed your own question: the person who asked is not
+        # one of the people who should answer.
+        d["matches_me"] = q.id in matching_mine and q.author_profile_id != profile.id
         result.append(d)
     return result
 
@@ -106,7 +107,11 @@ def question_detail(
     concepts = match_concepts(db, question.body)
     experts = (
         db.query(ExpertiseMapping)
-        .filter(ExpertiseMapping.concept_id.in_([c.id for c in concepts] or [""]))
+        .filter(
+            ExpertiseMapping.concept_id.in_([c.id for c in concepts] or [""]),
+            # Same rule as `matches_me`: never suggest the asker to themselves.
+            ExpertiseMapping.profile_id != question.author_profile_id,
+        )
         .all()
     )
     data = item_dict(db, question, profile)

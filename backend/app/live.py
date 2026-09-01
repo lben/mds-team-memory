@@ -36,9 +36,6 @@ class NotificationHub:
         if not listeners:
             self._queues.pop(profile_id, None)
 
-    def listeners(self, profile_id: str) -> int:
-        return len(self._queues.get(profile_id, ()))
-
     def publish(self, profile_id: str) -> None:
         """Wake a profile's open tabs. Safe to call from a worker thread."""
         loop = self._loop

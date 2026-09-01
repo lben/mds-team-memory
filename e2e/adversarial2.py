@@ -3,7 +3,7 @@ import os, socket, subprocess, sys, tempfile, threading, time, urllib.error, url
 from pathlib import Path
 from playwright.sync_api import sync_playwright, Error as PWError
 
-ROOT = Path("/Users/bleon/ClaudeCodexWorkspace/WorkKnowledgeBase/mds-team-memory")
+ROOT = Path(__file__).resolve().parents[1]
 VENV = ROOT / ".venv/bin"
 OUT = Path(__file__).parent / "adv"; OUT.mkdir(exist_ok=True)
 
@@ -320,16 +320,40 @@ with sync_playwright() as pw:
     check("double-clicking Propose correction proposes it once", n == 1, f"{n} corrections")
 
     print("\n### 37. Sustained hammering of the server", flush=True)
+    # Each URL must be one the app really serves, and each reply must really be
+    # JSON: this check once used /api/leaderboard, which does not exist, and
+    # passed on the index.html the SPA fallback returned with a 200.
     burst = U.evaluate("""async () => {
         const urls = ['/api/feed','/api/questions','/api/search?q=chrono','/api/graph/global',
-                      '/api/leaderboard','/api/documents','/api/scratchpad','/api/notifications'];
+                      '/api/impact?period=30d','/api/documents','/api/scratchpad','/api/notifications'];
         const out = [];
         for (let round = 0; round < 6; round++)
-            out.push(...await Promise.all(urls.map(u => fetch(u).then(r => r.status).catch(() => 0))));
+            out.push(...await Promise.all(urls.map(u => fetch(u)
+                .then(r => `${u.split('?')[0]} ${r.status} ${(r.headers.get('content-type')||'').split(';')[0]}`)
+                .catch(e => `${u} threw ${e}`))));
         return out;
     }""")
-    bad = [s for s in burst if s != 200]
-    check("48 rapid requests across every screen all succeeded", not bad, f"{len(bad)} non-200: {bad[:8]}")
+    bad = [r for r in burst if not r.endswith("200 application/json")]
+    check("48 rapid requests across every screen all returned JSON 200", not bad,
+          f"{len(bad)} bad: {bad[:8]}")
+
+    print("\n### 37b. A path the server does not serve", flush=True)
+    # The SPA fallback must not answer for the server's own namespaces: HTML
+    # with a 200 makes a removed endpoint look alive and breaks res.json().
+    ghosts = U.evaluate("""async () => {
+        const out = {};
+        for (const u of ['/api/leaderboard', '/api/nope', '/ws/nope'])
+            out[u] = await fetch(u).then(r => `${r.status} ${(r.headers.get('content-type')||'').split(';')[0]}`);
+        return out;
+    }""")
+    check("an endpoint the server does not have answers 404 in JSON, not the SPA",
+          all(v == "404 application/json" for v in ghosts.values()), str(ghosts))
+    spa_ok = U.evaluate("""async () => {
+        const r = await fetch('/leaderboard');
+        return `${r.status} ${(r.headers.get('content-type')||'').split(';')[0]}`;
+    }""")
+    check("a real client-side route is still served the application",
+          spa_ok == "200 text/html", spa_ok)
 
     A.screenshot(path=str(OUT/"round2_admin.png"), full_page=True)
     U.goto(base+"/"); U.wait_for_timeout(2500); U.screenshot(path=str(OUT/"round2_home.png"), full_page=True)

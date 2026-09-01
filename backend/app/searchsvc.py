@@ -153,6 +153,10 @@ def search_all(db: Session, profile: Profile, query: str) -> dict:
     matched = match_concepts(db, query)
     return {
         "query": query,
+        # The meaningful words the query reduced to. No screen renders this, but
+        # it is the only place the "function words must not produce results"
+        # rule is observable, and test_natural_language_query_ranks_on_meaningful_words
+        # asserts on it. It is a diagnostic, not dead surface.
         "terms": terms,
         "concepts": [{"id": c.id, "name": c.name} for c in matched],
         "items": _rank(items, group=True),

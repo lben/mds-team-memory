@@ -3,7 +3,7 @@ import os, socket, subprocess, sys, tempfile, time, urllib.request
 from pathlib import Path
 from playwright.sync_api import sync_playwright, Error as PWError
 
-ROOT = Path("/Users/bleon/ClaudeCodexWorkspace/WorkKnowledgeBase/mds-team-memory")
+ROOT = Path(__file__).resolve().parents[1]
 VENV = ROOT / ".venv/bin"
 OUT = Path(__file__).parent / "adv"; OUT.mkdir(exist_ok=True)
 
@@ -110,6 +110,23 @@ with sync_playwright() as pw:
     check("a document id that never existed leaves a usable page, not a blank shell",
           U.locator(".sidebar").count() > 0 and "Upload or select" in body and not js_errors(),
           f"page={body[-120:]!r}")
+
+    # The check above reloads the page, so there is never anything stale to keep.
+    # Navigating inside the app is the case that can misinform: if the fetch for
+    # the new id fails and nothing clears the pane, the PREVIOUS document stays
+    # on screen under the new URL and the reader believes they are reading it.
+    U.goto(base+"/documents"); U.wait_for_timeout(1800)
+    U.locator("input[type=file]").set_input_files({"name":"a-real-file.txt","mimeType":"text/plain",
+        "buffer":b"The real contents of a real document.\n"})
+    U.wait_for_timeout(3000)
+    opened = U.get_by_test_id("doc-viewer").locator("h2").inner_text() if U.get_by_test_id("doc-viewer").count() else ""
+    check("a freshly uploaded document opens in the viewer", "a-real-file.txt" in opened, repr(opened))
+    U.evaluate("""() => { window.history.pushState({}, '', '/documents/deadbeefdeadbeefdeadbeefdeadbeef');
+                          window.dispatchEvent(new PopStateEvent('popstate')); }""")
+    U.wait_for_timeout(2500)
+    still = U.get_by_test_id("doc-viewer").locator("h2").inner_text() if U.get_by_test_id("doc-viewer").count() else ""
+    check("navigating in-app to a missing document does not keep showing the previous one",
+          "a-real-file.txt" not in still, f"viewer still reads {still!r} under a dead id")
 
     U.goto(base+"/"); U.wait_for_timeout(1400)
     U.get_by_test_id("home-input").fill("Ocean Palace")

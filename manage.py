@@ -3,6 +3,7 @@
 
     python manage.py create-admin
     python manage.py list-admins
+    python manage.py reset-database
 """
 
 import sys

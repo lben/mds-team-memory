@@ -15,7 +15,6 @@ export interface LinkRow {
   occurrence_count: number
   evidence: string
   reviewed_by: string | null
-  reviewed_at: string | null
   review_note: string | null
 }
 interface ConceptRow {
@@ -278,7 +277,6 @@ watch(
   (id) => id && focusRow('concepts', id),
 )
 
-defineExpose({ loadAll })
 loadAll()
 </script>
 

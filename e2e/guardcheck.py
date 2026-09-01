@@ -5,7 +5,7 @@ import os, socket, subprocess, sys, tempfile, time, urllib.request
 from pathlib import Path
 from playwright.sync_api import sync_playwright, Error as PWError
 
-ROOT = Path("/Users/bleon/ClaudeCodexWorkspace/WorkKnowledgeBase/mds-team-memory")
+ROOT = Path(__file__).resolve().parents[1]
 VENV = ROOT / ".venv/bin"
 data = Path(tempfile.mkdtemp())
 env = {**os.environ, "MDS_DATA_DIR": str(data), "MDS_DATABASE_URL": f"sqlite:///{data/'x.sqlite3'}"}

@@ -71,12 +71,14 @@ def impact(
         # by volume.
         key=lambda e: (-e["score"], -e["shared"], e["label"]),
     )
-    for rank, entry in enumerate(leaderboard, start=1):
-        entry["rank"] = rank
     # Rank reflects impact, so someone who has only shared so far is not ranked
     # last for it — their shared count is what the page shows them instead.
+    # This is the only place that rule is expressed: the table renders whatever
+    # comes back, so the server and the page cannot drift apart.
+    for position, entry in enumerate(leaderboard, start=1):
+        entry["rank"] = position if entry["score"] > 0 else None
     me = next((e for e in leaderboard if e["is_me"]), None)
-    my_rank = me["rank"] if me and me["score"] > 0 else None
+    my_rank = me["rank"] if me else None
     return {
         "period": period,
         "me": {**profile_totals(db, profile.id), "rank": my_rank},

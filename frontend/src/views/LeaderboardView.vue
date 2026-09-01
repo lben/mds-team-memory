@@ -14,7 +14,7 @@ interface LeaderEntry {
   corrections: number
   endorsements: number
   score: number
-  rank: number
+  rank: number | null
 }
 interface ImpactData {
   period: string
@@ -86,7 +86,7 @@ onMounted(load)
         Nothing shared in this period yet.
       </p>
       <div v-for="entry in data.leaderboard" :key="entry.profile_id" class="leader-row" :class="{ me: entry.is_me }">
-        <div class="rank">{{ entry.score > 0 ? entry.rank : '—' }}</div>
+        <div class="rank">{{ entry.rank ?? '—' }}</div>
         <div class="person">
           <span class="avatar">{{ initialsFor(entry.label) }}</span>
           <span>

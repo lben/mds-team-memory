@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -37,8 +37,17 @@ FRONTEND_DIST = Path(__file__).resolve().parents[2] / "frontend" / "dist"
 if FRONTEND_DIST.exists():
     app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
 
+    # Namespaces the server owns. The SPA has no client-side route under these,
+    # so a request that gets here is for something that does not exist — and it
+    # must say so. Answering it with index.html returns HTTP 200 and HTML to a
+    # caller expecting JSON, which surfaces as a JSON parse error instead of a
+    # 404 and makes a removed or mistyped endpoint look like it still works.
+    SERVER_NAMESPACES = ("api/", "ws/")
+
     @app.get("/{full_path:path}", include_in_schema=False)
     def spa(full_path: str):
+        if full_path.startswith(SERVER_NAMESPACES):
+            raise HTTPException(404, "Not found")
         candidate = FRONTEND_DIST / full_path
         if full_path and candidate.is_file() and candidate.resolve().is_relative_to(FRONTEND_DIST):
             return FileResponse(candidate)

@@ -397,8 +397,10 @@ def test_expertise_routing(make_client, admin_client):
         "/api/questions", json={"body": f"Why is the oly-{suffix} feed late today?"}
     ).json()
 
-    queue = expert.get("/api/questions", params={"mine_expertise": True}).json()
-    assert any(q["id"] == question["id"] for q in queue)
+    # The UI never filters server-side; it reads the `matches_me` flag the list
+    # already returns and floats those questions to the top itself.
+    queue = expert.get("/api/questions").json()
+    assert any(q["id"] == question["id"] and q["matches_me"] for q in queue)
     notes = expert.get("/api/notifications").json()
     assert any(n["item_id"] == question["id"] for n in notes["notifications"])
 
@@ -934,3 +936,49 @@ def test_correction_lifecycle(make_client, admin_client):
     assert detail["corrections"][0]["correction_state"] == "adopted"
     assert len(detail["revisions"]) == 1
     assert corrector.get("/api/profile").json()["totals"]["corrections"] == 1
+
+
+def test_unknown_api_path_is_a_json_404_not_the_spa(make_client):
+    """A path under a namespace the server owns must 404 in JSON. Serving
+    index.html here returns 200 and HTML to a caller expecting JSON, so a
+    removed or mistyped endpoint reads as working."""
+    client = make_client()
+    for path in ("/api/leaderboard", "/api/does-not-exist", "/ws/nope"):
+        r = client.get(path)
+        assert r.status_code == 404, f"{path} -> {r.status_code}"
+        assert r.headers["content-type"].startswith("application/json"), f"{path} -> {r.headers['content-type']}"
+
+    # The SPA itself must still be served for real client-side routes.
+    assert client.get("/leaderboard").status_code == 200
+    assert client.get("/api/feed").status_code == 200
+
+
+def test_you_are_never_routed_your_own_question(make_client, admin_client):
+    """The person who asked is not one of the people who should answer. Both
+    routing surfaces — the 'needs your expertise' flag on the list and the
+    suggested-experts line on the detail — must exclude the asker, while still
+    routing the question to every other mapped expert."""
+    asker, other_expert = make_client(), make_client()
+    suffix = uuid.uuid4().hex[:6]
+    concept = _concept(admin_client, f"Kepler{suffix}", [f"kep-{suffix}"])
+    for client in (asker, other_expert):
+        admin_client.post(
+            "/api/admin/expertise",
+            json={"profile_id": client.get("/api/profile").json()["id"], "concept_id": concept["id"]},
+        )
+    asker.put("/api/profile", json={"display_name": f"Asker {suffix}"})
+    other_expert.put("/api/profile", json={"display_name": f"Other {suffix}"})
+
+    question = asker.post(
+        "/api/questions", json={"body": f"How do I restart the kep-{suffix} pipeline?"}
+    ).json()
+
+    mine = next(q for q in asker.get("/api/questions").json() if q["id"] == question["id"])
+    assert mine["matches_me"] is False, "the asker was told their own question needs their expertise"
+
+    theirs = next(q for q in other_expert.get("/api/questions").json() if q["id"] == question["id"])
+    assert theirs["matches_me"] is True, "a real expert stopped being routed the question"
+
+    detail = other_expert.get(f"/api/questions/{question['id']}").json()
+    assert f"Asker {suffix}" not in detail["suggested_experts"], "the asker was suggested as their own expert"
+    assert f"Other {suffix}" in detail["suggested_experts"]
