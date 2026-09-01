@@ -99,43 +99,22 @@ endpoint no UI can reach is dead surface — delete it rather than test it.
 
 ---
 
-## 5. The open coherence problem: there are no people in this app
+## 5. Coherence findings live in `OPEN_ITEMS.md`
 
-This is the biggest known gap and it is a product-level issue, not a bug.
-Identity is a per-browser cookie. Everything human-facing inherits that:
+Everything currently known-wrong or known-undecided — the identity problem, what
+cannot be edited or deleted, the endorsement button, the composer's Enter key,
+the graph's empty space, and the mobile decision — is tracked in `OPEN_ITEMS.md`,
+which is the single source of truth for them. Do not copy them back here; one
+list, one place to update.
 
-- A contributor is `Browser profile 3135`. Every name carries `unverified` /
-  `Anonymous · no name set` forever, because nobody is ever verified.
-- **Signing in as admin does not change who you are.** Signed in as `benito`,
-  the sidebar still says `Browser profile 5E8D · Anonymous · no name set`, and
-  the admin's own contributions are credited to a hex code.
-- The expertise routing screen — the admin area's whole purpose — asks the
-  admin to pick an expert from a list of six hex codes. Unanswerable.
-- The leaderboard ranks hex codes, and shows rank `—` for everyone with zero
-  impact.
-- The same person on a laptop and a desktop is two contributors. Clearing
-  cookies creates a third and **permanently destroys their scratchpad**, which
-  has no login, no export and no recovery.
+**Never put that file's contents into a dogfooding subagent's prompt.** A persona
+told what to expect will not discover it independently, and the "what the hell"
+count stops measuring anything.
 
-Until this is decided, "makes sense" cannot be fully certified. It is the
-user's call, not a defect to quietly fix.
-
-## 5b. Smaller "what the hell" moments on the record
-
-- Pressing **Enter** while writing a contribution runs a **search**; the text
-  survives in the box, but the person expected to be typing, not searching.
-  (Shift+Enter does insert a newline.)
-- **Nothing is editable or deletable by its author.** Your own contribution
-  offers only `Helped me` (disabled, it is yours) and `Details`. A typo is
-  permanent. A wrongly uploaded document can never be removed.
-- **"Endorse as expert" is offered to everyone** and fails for anyone who is
-  not a mapped expert for that topic. The client has no signal for whether it
-  will work.
-- The knowledge graph fills about **30% of its panel** with 15 concepts and no
-  links — a large dark area of mostly nothing.
-- Mobile is **out of scope by decision** (2026-08-31). The sidebar takes 190px
-  of 390px and clips the primary button. Do not file it again; do not test it
-  as pass/fail. Measure and note only.
+The lesson worth keeping *here* is the method: a walkthrough that records what a
+person actually sees, read as prose, found a product-level hole that 276 passing
+adversarial checks could not. Robustness and coherence are separate axes and need
+separate passes.
 
 ---
 
