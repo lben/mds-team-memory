@@ -59,6 +59,30 @@ before trusting any new suite.
 
 ---
 
+## 2b. A whole class of defect our harnesses structurally cannot see
+
+Every assertion we write reads `inner_text()`, counts elements, or inspects JSON.
+None of that **looks** at the app. An entire family of "what the hell" moments is
+invisible to it, and the ones found so far were all caught by a human looking at
+a screen:
+
+- Avatar initials rendering as `NI` for "Benito", and sitting off-centre in their
+  circle. The text assertion would have returned `"NI"` and passed.
+- The phone layout, where a check that the page did not scroll sideways passed on
+  a screen with the primary button clipped off the edge.
+- The knowledge graph filling ~30% of a large dark panel — perfectly valid DOM.
+
+Others in this class: overlapping or clipped elements, misaligned columns, poor
+contrast, a control that looks disabled but is not (or the reverse), a modal
+behind its backdrop, text overflowing its container, and screens that simply look
+unfinished.
+
+**The rule: anyone testing this must take screenshots and actually view them**,
+not just assert on the DOM. Text checks confirm the words are right; only looking
+confirms the app is right. Screenshot every significant screen and state —
+including modals, error states, empty states and the graph at realistic size —
+and read the images.
+
 ## 3. What has actually broken here
 
 Every real defect found so far came from one of four causes. Look for these
