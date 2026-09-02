@@ -5,7 +5,20 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import config
-from .routers import admin, auth, documents, feed, graph, impact, items, notifications, profile, questions, scratchpad
+from .routers import (
+    admin,
+    auth,
+    documents,
+    expertise,
+    feed,
+    graph,
+    impact,
+    items,
+    notifications,
+    profile,
+    questions,
+    scratchpad,
+)
 from .routers import search as search_router
 
 app = FastAPI(title="MDS Team Knowledge")
@@ -13,6 +26,7 @@ app = FastAPI(title="MDS Team Knowledge")
 for r in (
     auth.router,
     profile.router,
+    expertise.router,
     feed.router,
     items.router,
     questions.router,

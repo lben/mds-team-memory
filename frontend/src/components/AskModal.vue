@@ -23,6 +23,16 @@ const emit = defineEmits<{ resolve: [string | null] }>()
 
 const text = ref('')
 const field = ref<HTMLInputElement | null>(null)
+const openedAt = Date.now()
+
+/** Ignore a backdrop click that is really the tail of the double click that
+ * opened this. Double-clicking Share opened the confirmation and dismissed it
+ * in the same gesture, so an impatient click did nothing at all and said
+ * nothing about why. */
+function dismissFromBackdrop() {
+  if (Date.now() - openedAt < 400) return
+  emit('resolve', null)
+}
 
 onMounted(async () => {
   await nextTick()
@@ -31,7 +41,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="modal-backdrop" data-testid="ask-modal" @click.self="emit('resolve', null)">
+  <div class="modal-backdrop" data-testid="ask-modal" @click.self="dismissFromBackdrop">
     <div class="modal" @keyup.esc="emit('resolve', null)">
       <h2>{{ props.title }}</h2>
       <p v-if="props.message">{{ props.message }}</p>

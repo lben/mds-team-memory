@@ -165,6 +165,17 @@ def endorse(
     item = _get_item(db, item_id, profile)
     if item.author_profile_id == profile.id:
         raise HTTPException(400, "You cannot endorse your own contribution")
+    author = db.get(Profile, item.author_profile_id)
+    if author is None or not author.has_account:
+        # An endorsement is evidence for mapping expertise, and expertise can
+        # only be routed to an account. Recording one against a browser profile
+        # led nowhere and said nothing, so refuse it and say what would fix it.
+        raise HTTPException(
+            400,
+            "This was written from a browser with no account, so an endorsement "
+            "cannot be recorded for it. Ask them to create an account — their "
+            "contributions, their endorsements and their expertise all depend on it.",
+        )
     # Anyone may endorse. Requiring the endorser to already be a mapped expert
     # meant most clicks failed with a 403 the button could not predict, and it
     # had the direction backwards: endorsements are the evidence an admin uses

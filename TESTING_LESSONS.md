@@ -271,23 +271,46 @@ fail the run on them independently of the assertions.
 
 ## 7. Facts about this app worth not rediscovering
 
-- Documents cannot be deleted: no endpoint, no UI. Uploads are permanent.
-- Endorsement requires the endorser to be a mapped expert for a concept
-  detected in that item (403 otherwise).
+**These go stale.** Four entries here were still describing the app as it was
+before accounts arrived — that documents could not be deleted, that endorsement
+needed a mapped expert, that admin login and contributor identity were separate,
+and that the curation actions raised native dialogs. All four were false, and a
+file whose whole purpose is to stop the next tester rediscovering things had
+started actively misleading them instead. **Re-read this list at the end of every
+round and delete what the round made untrue.**
+
+Current as of round 4:
+
+- Identity is an account. Anyone can sign up in the app; the first account to
+  sign in on a browser claims that browser's anonymous work, once. Signing in
+  changes attribution everywhere; signing out really makes you anonymous again.
+- Admins are accounts with `is_admin`. `manage.py create-admin` makes the first
+  one; an existing admin can make more in the UI.
+- Authors can edit and delete their own contributions; uploaders can delete
+  their documents. Both refuse when a teammate has attached something.
+- Anyone can endorse, but only a contribution whose **author has an account** —
+  otherwise the app says so instead of offering the button.
+- Expertise is only routable to an account holder, and the server enforces that
+  as well as the interface.
+- Everyone can read who is mapped to what (`GET /api/expertise`); only admins
+  can change it.
+- Confirmations are the app's own `AskModal`, not native dialogs. Cancel
+  resolves to `null`, an empty note is still a real answer, and a driver that
+  does not answer it will hang on its next click.
 - Corroboration folds identical contributions into one feed row.
 - The feed/search UI escapes content; injected markup becomes inert text.
-- Admin login and contributor identity are entirely separate systems.
-- `manage.py create-admin` seeds admins; `reset-database` wipes and remigrates.
+- `reset-database` wipes and remigrates.
 - The frontend must be rebuilt (`npm run build`) before any browser test — the
-  server serves `frontend/dist`, which is gitignored.
-- The e2e harnesses derive their own `ROOT` from `__file__`; they no longer
-  hardcode one laptop's path, so they run from any checkout.
-- The admin's four curation actions (approve, reject, delete link, delete
-  concept) each raise a native dialog before doing anything. Cancelling is a
-  deliberate, tested no-op.
+  server serves `frontend/dist`, which is gitignored — and the build must
+  actually succeed, or the run silently tests the previous bundle.
+- The e2e harnesses derive their own `ROOT` from `__file__`, so they run from
+  any checkout.
 - `e2e/sensecheck.py` screenshots every screen it walks into `e2e/adv/sense/`
   and prints the index. Reading its log is half the pass; the images are the
   other half.
+- **`tools/`, `SERVER_SETUP.md`, `.gitattributes` and the Deployment section of
+  `README.md` are off limits** — the owner maintains deployment separately and
+  edits it elsewhere. Never `git add -A`; stage explicit paths.
 
 ---
 

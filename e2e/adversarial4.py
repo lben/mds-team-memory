@@ -288,6 +288,28 @@ with sync_playwright() as pw:
               panel.inner_text()[:120] if panel.count() else "missing")
         check("it does not render undefined", "undefined" not in panel.inner_text())
 
+    print("\n### 51. A deploy under an open tab", flush=True)
+    # Chunk filenames carry a content hash, so a deploy renames them and a tab
+    # opened beforehand asks for files that are gone. What people saw was a
+    # blank white page: no text, no error, nothing to click.
+    U.route("**/assets/index-*.js", lambda route: route.fulfill(status=404, body=""))
+    U.goto(base+"/"); U.wait_for_timeout(3000)
+    empty = U.evaluate("()=>document.getElementById('app').innerHTML.trim() === ''")
+    check("the entry bundle really did fail to load", empty, "the app mounted anyway")
+    check("a tab whose app cannot load says so instead of going blank",
+          U.get_by_test_id("stale-version").count() > 0,
+          U.locator("body").inner_text()[:80])
+    check("and it offers a way out", U.get_by_test_id("stale-version-reload").count() > 0)
+    U.unroute("**/assets/index-*.js")
+
+    U.goto(base+"/"); U.wait_for_timeout(2500)
+    U.route("**/assets/*View-*.js", lambda route: route.fulfill(status=404, body=""))
+    U.get_by_role("link", name="Leaderboard").click(); U.wait_for_timeout(3500)
+    check("a screen that cannot load after a deploy says so too",
+          U.get_by_test_id("stale-version").count() > 0,
+          U.locator("body").inner_text()[:80])
+    U.unroute("**/assets/*View-*.js")
+
     check("no server error anywhere in this pass", not [c for c in crashes if "HTTP 5" in c], str(crashes[:4]))
     b.close()
 

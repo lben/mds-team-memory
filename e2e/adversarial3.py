@@ -125,11 +125,15 @@ with sync_playwright() as pw:
     vcard.locator(".q-head").click(); V.wait_for_timeout(1000)
     vcard.get_by_test_id("answer-text").fill("Thirteen, including the developer room ending.")
     vcard.get_by_test_id("post-answer").click(); V.wait_for_timeout(2200)
+    # Endorsement is only recorded for someone with an account, so the person
+    # being endorsed needs one before the action is offered at all.
+    V.goto(base+"/"); V.wait_for_timeout(1500); sign_up(V, "vera")
     U.reload(); U.wait_for_timeout(2200)
     ucard = U.locator(".question-card", has_text="How many endings").first
     ucard.locator(".q-head").click(); U.wait_for_timeout(1200)
     endorse = ucard.get_by_role("button", name="Endorse as expert")
-    check("someone else's answer offers an endorse action", endorse.count() > 0, ucard.inner_text()[:120])
+    check("an answer from someone with an account offers an endorse action",
+          endorse.count() > 0, ucard.inner_text()[:120])
     endorse.first.click(); U.wait_for_timeout(2500)
     # Endorsement used to require the endorser to already be a mapped expert,
     # so most clicks failed with a 403 the button could not predict. It is now
@@ -143,7 +147,6 @@ with sync_playwright() as pw:
     # Now make this person a real expert for the topic and try again. Expertise
     # only goes to people with accounts, so they make one first.
     U.goto(base+"/"); U.wait_for_timeout(1500); sign_up(U, "uma")
-    V.goto(base+"/"); V.wait_for_timeout(1500); sign_up(V, "vera")
     login(A)
     profiles = A.get_by_test_id("map-profile").locator("option").all_inner_texts()
     check("the answering people appear as mappable profiles", len(profiles) > 2, str(profiles))

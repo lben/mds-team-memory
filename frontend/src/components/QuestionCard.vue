@@ -67,16 +67,6 @@ async function accept(answer: Item) {
   }
 }
 
-async function endorse(answer: Item) {
-  try {
-    await api.post(`/api/items/${answer.id}/endorse`)
-    answer.endorsed = true
-    store.notify('Endorsed as an expert')
-  } catch (e) {
-    store.fail(e, 'Could not endorse')
-  }
-}
-
 async function deleteQuestion() {
   const answer = await askUser({
     title: 'Delete this question?',
@@ -183,7 +173,7 @@ if (open.value) loadDetail()
           >
             Accept answer
           </button>
-          <button v-if="!answer.is_mine && !answer.endorsed_by_me" class="btn small" @click="endorse(answer)">
+          <button v-if="!answer.is_mine && !answer.endorsed_by_me && answer.author_verified" class="btn small" @click="store.endorse(answer)">
             Endorse as expert
           </button>
         </div>

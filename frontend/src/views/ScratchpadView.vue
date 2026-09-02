@@ -31,11 +31,37 @@ let saveTimer = 0
 
 const { ask, askUser, answerAsk } = useAsk()
 
+/** Which pad this browser was last writing in.
+ *
+ * Reload always reopened the default pad, so anything written in a second one
+ * looked like it had vanished — the text was safe on the server, but the editor
+ * showed a different file and said nothing. On the one screen people keep
+ * things they have no other copy of, that reads as data loss.
+ */
+const LAST_PAD_KEY = 'mds.scratchpad.last'
+
+function rememberPad(id: string) {
+  try {
+    localStorage.setItem(LAST_PAD_KEY, id)
+  } catch {
+    /* private windows refuse storage; falling back to the default pad is fine */
+  }
+}
+
+function lastPadId(): string | null {
+  try {
+    return localStorage.getItem(LAST_PAD_KEY)
+  } catch {
+    return null
+  }
+}
+
 async function load() {
   try {
     const data = await api.get<{ default: Pad; others: Pad[] }>('/api/scratchpad')
     pads.value = [data.default, ...data.others]
-    current.value = pads.value[0]
+    const remembered = pads.value.find((p) => p.id === lastPadId())
+    current.value = remembered ?? pads.value[0]
   } catch (e) {
     store.fail(e, 'Could not load your scratchpad')
   }
@@ -132,6 +158,16 @@ function updateSelection() {
 
 async function shareSelection() {
   if (sharing.value || !current.value || !selection.value) return
+  // Show what is about to be published. A drag selection can start mid-word or
+  // catch a line you never meant to send, and sharing put it in front of the
+  // whole team with nothing in between.
+  const excerpt = selection.value
+  const confirmed = await askUser({
+    title: 'Share this with the team?',
+    message: `“${excerpt.length > 400 ? excerpt.slice(0, 400) + '…' : excerpt}”`,
+    confirmLabel: 'Share it',
+  })
+  if (confirmed === null) return
   sharing.value = true
   try {
     window.clearTimeout(saveTimer)
@@ -164,6 +200,7 @@ async function createPad() {
   }
   await load()
   current.value = pads.value[pads.value.length - 1]
+  rememberPad(current.value.id)
 }
 
 function switchPad(id: string) {
@@ -171,6 +208,7 @@ function switchPad(id: string) {
   if (pad) {
     current.value = pad
     matches.value = []
+    rememberPad(pad.id)
   }
 }
 

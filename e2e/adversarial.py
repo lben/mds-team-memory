@@ -527,7 +527,9 @@ with sync_playwright() as pw:
     }""")
     U.wait_for_timeout(800)
     if not U.get_by_test_id("share-selection").is_disabled():
-        U.get_by_test_id("share-selection").click(); U.wait_for_timeout(2000)
+        U.get_by_test_id("share-selection").click(); U.wait_for_timeout(1200)
+        answer_ask(U)   # it shows what is about to be published first
+        U.wait_for_timeout(2000)
         if U.locator(".modal-backdrop").count(): U.get_by_role("button", name="Add another").click()
         U.wait_for_timeout(800)
         shared = N.evaluate("()=>fetch('/api/feed').then(r=>r.json()).then(f=>JSON.stringify(f.map(i=>i.body)))")

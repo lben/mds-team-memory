@@ -85,13 +85,7 @@ async function markHelped() {
 
 async function endorse() {
   if (!detail.value) return
-  try {
-    await api.post(`/api/items/${detail.value.id}/endorse`)
-    store.notify('Endorsed as an expert')
-    await load()
-  } catch (e) {
-    store.fail(e, 'Could not endorse')
-  }
+  await store.endorse(detail.value)
 }
 
 async function submitCorrection() {
@@ -185,13 +179,24 @@ onMounted(load)
             {{ detail.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
           </button>
           <button
-            v-if="!detail.is_mine && !detail.endorsed_by_me"
+            v-if="!detail.is_mine && !detail.endorsed_by_me && detail.author_verified"
             class="btn small"
             data-testid="endorse"
             @click="endorse"
           >
             Endorse as expert
           </button>
+          <!-- Saying why beats an inert button: an endorsement is what an admin
+               maps expertise from, and expertise needs an account behind it. -->
+          <span
+            v-else-if="!detail.is_mine && !detail.author_verified"
+            class="muted"
+            style="font-size: 11px"
+            data-testid="endorse-needs-account"
+          >
+            {{ detail.author }} has no account yet, so endorsements cannot be recorded for them —
+            ask them to create one.
+          </span>
           <button v-if="detail.is_mine && !editing" class="btn small" data-testid="edit-item" @click="startEdit">Edit</button>
           <button v-if="detail.is_mine" class="btn small ghost" data-testid="delete-item" @click="removeItem">Delete</button>
           <router-link

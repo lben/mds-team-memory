@@ -216,6 +216,58 @@ the item is sitting in the public feed. All reworded to say what is true.
 
 ---
 
+# Fixed in round 4
+
+## 38. The rule about accounts and expertise was never enforced — fixed
+
+The app states it three times — the dropdown lists only account holders, the
+note under it explains why, the README repeats it — and the server accepted a
+mapping to any profile id. A mapping made that way would have disappeared the
+moment that browser's cookies were cleared. Found by the round-4 audit as "a
+claim enforced by nothing". `POST /api/admin/expertise` now refuses, with the
+same sentence the interface uses. Proven by a test watched failing first.
+
+## 39. A second scratchpad looked like it had been lost — fixed
+
+Reload always reopened the *default* pad, so anything written in another one was
+still safely on the server but simply not on screen, with nothing explaining
+why. A junior-engineer persona reported exactly that: *"my half-formed thought
+was gone with no warning, no undo"*. Reproduced, then fixed by remembering which
+pad you were writing in. On the one screen holding things people have no other
+copy of, looking lost is nearly as damaging as being lost.
+
+## 40. The app told you a teammate's work was safe — fixed
+
+`identityNote(label, true)` renders "Signed in · your work is safe" — addressed
+to you — and both the admin mapping table and the new public expertise table
+printed it under *other people's* names. Spotted independently by the round-4
+audit and by an admin persona. Those tables now say "Has an account".
+
+## 41. Endorse was implemented twice again — fixed
+
+`QuestionCard.endorse` patched its own copy of the item while
+`ItemDetailModal.endorse` reloaded, so the count and the button could disagree
+with the server — the same divergence `store.markHelped` was created to end,
+reintroduced beside it. There is now one `store.endorse`.
+
+## 42. Round 4's decisions, implemented
+
+- **#25** endorsement is refused when the author has no account, and the reason
+  is shown in place of the button, so the dead end argues for making one.
+- **#36** `GET /api/expertise` and a read-only table let anyone see who is
+  mapped to what; changing it stays an admin action.
+- **#27** approving or rejecting a link names the other admin whose decision you
+  would replace, and quotes their note. An admin persona called it *"genuinely
+  the best-designed confirmation I've seen in this app"*.
+- **#28** sharing a scratchpad selection shows the exact text first. Fixing this
+  exposed a second defect: a double-click opened the confirmation and dismissed
+  it in the same gesture, so an impatient click did nothing at all.
+- **#23** a failed chunk load after a deploy shows a reload bar. Covered in two
+  places, because the case actually reported was the *entry* bundle failing,
+  where `main.ts` never runs — that fallback lives inline in `index.html`.
+
+---
+
 # Fixed in round 3
 
 ## 30. The scratchpad silently destroyed what you had just typed — fixed
@@ -274,9 +326,49 @@ names; they now follow their edge and carry a background.
 
 ---
 
+# Newly found in round 4, needing the owner's decision
+
+## 43. There is no way to leave — open
+
+A compliance officer went looking for it: you can delete contributions one at a
+time, and that works cleanly, but there is no way to delete an account or to
+remove everything a person wrote. *"Individual items can be deleted one at a
+time … but there is no such control anywhere I could find."* For a tool holding
+people's private scratchpads this is the gap a data-protection review would open
+with. *Recommendation: an account-deletion path that also says what happens to
+contributions the team has come to rely on.*
+
+## 44. "Administrators may still have system-level access" cannot be checked — open
+
+The scratchpad says it, and the same officer flagged it as *"exactly the kind of
+thing a compliance review flags as unverifiable-as-stated"* — there is no way to
+see, from the interface, what an admin can actually reach. The sentence is
+honest; the point is that honesty without evidence still fails a review.
+
+## 45. Uploaded documents are public with no warning — open
+
+The Documents page never claims privacy, and it is not misleading — but it is
+also silent: a file is readable and downloadable in full by everyone the moment
+it is uploaded, and nothing on the upload control says so. Contrast the
+scratchpad, which is explicit about exactly what it does and does not protect.
+*Recommendation: one line on the upload card, matching the scratchpad's
+directness.*
+
+## 46. Retroactive re-attribution looks like a bug from outside — open
+
+When someone signs up, their earlier anonymous contributions become theirs —
+which is the point of the claim rule. But a bystander sees the same item
+attributed to `Browser profile 058A` on one load and to `ruth.ellery` on the
+next, with no explanation, and a persona read it as *"a serious data-handling
+problem"*. The behaviour is right; nothing tells the reader it happened.
+
+---
+
 # Newly found in round 3, needing the owner's decision
 
-## 35. Anyone anonymous can post to the shared feed, and endorse — open
+## 35. Anyone anonymous can post to the shared feed, and endorse — decided (2026-09-01)
+
+**Owner's ruling: leave it.** Open posting and open endorsement are the point; the wording stays as it is.
 
 A security-engineer persona: *"I typed a note and hit Capture and it posted
 immediately, publicly, attributed only to 'Browser profile 1060' — no account,
@@ -287,7 +379,9 @@ made (open access is the point; endorsement is deliberately everyone's signal).
 Recorded because the *word* "expert" is what creates the friction, not the
 mechanism — "Endorse as expert" claims more than the action means.
 
-## 36. Contributors still cannot see who is mapped to what — open
+## 36. Contributors still cannot see who is mapped to what — decided (2026-09-01)
+
+**Owner's ruling: add a read-only view**, without breaking anything else. Contributors can see who is mapped to what; only admins can change it.
 
 Raised independently in round 1 and again in round 3: expertise routing is
 admin-only, so an ordinary contributor cannot find out who to ask. *"As a
@@ -295,7 +389,9 @@ contributor I could at least see who's mapped to which topic, even read-only, so
 I'd know who to ping about prod access."* This is the second time a persona has
 been stopped by it.
 
-## 37. The graph layout still crowds and clips — open
+## 37. The graph layout still crowds and clips — decided (2026-09-01)
+
+**Owner's ruling: leave the layout as it is for now.** The legibility fixes were the part that mattered.
 
 Three personas this round described the dense cluster the same way: eight
 concepts crammed into one box with edges crossing, and one or two nodes clipped
@@ -308,7 +404,9 @@ part of item 5 and is a layout design question.
 
 # Newly found in round 2, needing the owner's decision
 
-## 23. A stale bundle after a deploy shows a blank white page — open
+## 23. A stale bundle after a deploy shows a blank white page — decided (2026-09-01)
+
+**Owner's ruling: detect the failed load and offer a reload.**
 
 Two personas hit a completely blank app with no text and no error: a hashed JS
 chunk 404'd because the frontend was rebuilt while their tabs were open. In this
@@ -318,7 +416,9 @@ anyone with the app already open. There is no error state at all — an empty
 load and offers a reload, or filename-stable chunks. The owner may reasonably
 decide a pilot does not need this.*
 
-## 24. The best contributor could not be routed anything — open
+## 24. The best contributor could not be routed anything — decided (2026-09-01)
+
+**Owner's ruling: leave it.** People who contribute the most will understand that clearing cookies destroys their work, so they will make an account — and worst case the team asks them to.
 
 The team lead went looking for the person who had written the most useful notes
 and could not map her, because she never made an account. The explanatory note
@@ -327,28 +427,36 @@ routing skips the people who contribute most until somebody chases them to sign
 up. *Recommendation: show no-account contributors in the dropdown greyed out
 with the reason, so the admin sees who they are missing rather than an absence.*
 
-## 25. Endorsing someone with no account leads nowhere — open
+## 25. Endorsing someone with no account leads nowhere — decided (2026-09-01)
+
+**Owner's ruling: do not allow endorsing someone with no account,** and say why. The dead end becomes an argument for creating a full account rather than a silent nothing.
 
 An admin endorsed a no-account contributor: the app said "Endorsed as an expert"
 and recorded it correctly, and the Most-endorsed tab shows them with a NO
 ACCOUNT badge — but they still cannot be routed anything. The endorsement is
 honest, the dead end is not signposted at the moment of the click.
 
-## 26. Nothing on the page says what the app is — open
+## 26. Nothing on the page says what the app is — decided (2026-09-01)
+
+**Owner's ruling: leave it.** People will be trained on the tool.
 
 A first-day engineer: *"the sidebar just says MDS / TEAM KNOWLEDGE with no
 tagline or description anywhere on the home page — I had to infer what this was
 from the search/ask/capture boxes"*. The empty state asks for a contribution
 before it explains what the tool is for.
 
-## 27. Two admins editing the same row are not told — open
+## 27. Two admins editing the same row are not told — decided (2026-09-01)
+
+**Owner's ruling: do it, and name the other admin** — not "someone" — so the two of them can go and talk about it.
 
 One admin approved a link the other had just rejected, and only discovered it on
 coming back. The curation table gives no signal that a row changed underneath
 you. *Recommendation: at minimum, refresh the row and say so after a failed or
 superseded action.*
 
-## 28. Sharing a selection shows no preview of what will be published — open
+## 28. Sharing a selection shows no preview of what will be published — decided (2026-09-01)
+
+**Owner's ruling: add the confirm step before publishing.**
 
 A mis-drag published `uki Tanaka is a technical writer rev` to the whole team —
 the app faithfully stored exactly what was selected, and four separate people

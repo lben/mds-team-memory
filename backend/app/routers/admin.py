@@ -295,8 +295,19 @@ def list_mappings(db: Session = Depends(get_db)):
 
 @router.post("/expertise", dependencies=[Depends(require_admin)])
 def add_mapping(payload: MappingIn, db: Session = Depends(get_db)):
-    if not db.get(Profile, payload.profile_id):
+    profile = db.get(Profile, payload.profile_id)
+    if not profile:
         raise HTTPException(404, "Profile not found")
+    if not profile.has_account:
+        # The dropdown only offers account holders and the note under it says
+        # why, but nothing here enforced it — so the rule the interface states
+        # three times could be broken by any caller, leaving a mapping that
+        # disappears when that browser's cookies are cleared.
+        raise HTTPException(
+            400,
+            "Expertise can only be routed to someone with an account, because a "
+            "name that lives in one browser disappears when its cookies are cleared.",
+        )
     if not db.get(Concept, payload.concept_id):
         raise HTTPException(404, "Concept not found")
     mapping = ExpertiseMapping(profile_id=payload.profile_id, concept_id=payload.concept_id)

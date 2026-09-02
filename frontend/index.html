@@ -9,5 +9,31 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <script>
+      // The entry bundle carries a content hash, so a deploy renames it. A tab
+      // opened before that deploy asks for a file that no longer exists, main.ts
+      // never runs, and the page sits there completely blank — no text, no error,
+      // nothing to click. This lives in the HTML precisely because it has to
+      // survive the bundle failing to load at all.
+      window.addEventListener('error', function (e) {
+        var el = e.target
+        if (!el || el.tagName !== 'SCRIPT' || document.getElementById('stale-version')) return
+        var bar = document.createElement('div')
+        bar.id = 'stale-version'
+        bar.setAttribute('data-testid', 'stale-version')
+        bar.style.cssText =
+          'position:fixed;inset:auto 0 0 0;z-index:400;display:flex;gap:14px;align-items:center;' +
+          'justify-content:center;padding:14px 18px;background:#16213e;color:#fff;font:13px system-ui'
+        bar.textContent = 'A new version of this app has been released, so this page could not load.'
+        var b = document.createElement('button')
+        b.textContent = 'Reload'
+        b.setAttribute('data-testid', 'stale-version-reload')
+        b.style.cssText =
+          'border:0;border-radius:8px;padding:8px 16px;background:#d83a52;color:#fff;font-weight:650;cursor:pointer'
+        b.onclick = function () { location.reload() }
+        bar.appendChild(b)
+        document.body.appendChild(bar)
+      }, true)
+    </script>
   </body>
 </html>

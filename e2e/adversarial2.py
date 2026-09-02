@@ -143,6 +143,13 @@ with sync_playwright() as pw:
           V.get_by_test_id("map-admin-panel").count() == 0 and V.get_by_test_id("admin-auth").count() > 0)
     st = V.evaluate("()=>fetch('/api/admin/concepts').then(r=>r.status)")
     check("and the server refuses it too", st == 401, f"status {st}")
+    # Knowing who to ask is not an admin privilege: the mapping is readable by
+    # everyone, while changing it is not.
+    check("a non-admin can still see who is mapped to what",
+          V.get_by_test_id("public-expertise").count() > 0,
+          V.locator(".page").inner_text()[:100])
+    check("and is offered nothing on it to change",
+          V.get_by_test_id("public-expertise").get_by_role("button").count() == 0)
     V.context.clear_cookies(); V.goto(base+"/"); V.wait_for_timeout(2000)
     check("losing your profile cookie gives you a fresh identity, not a crash",
           V.get_by_test_id("home-input").count() > 0 and V.get_by_test_id("profile-button").count() > 0)
@@ -346,7 +353,9 @@ with sync_playwright() as pw:
         ta.dispatchEvent(new Event('mouseup', {bubbles: true}));
     }""")
     U.wait_for_timeout(700)
-    U.get_by_test_id("share-selection").dblclick(); U.wait_for_timeout(3000)
+    U.get_by_test_id("share-selection").dblclick(); U.wait_for_timeout(1500)
+    answer_ask(U)   # sharing shows what is about to be published first
+    U.wait_for_timeout(2500)
     if U.locator(".modal-backdrop").count(): U.get_by_role("button", name="Add another").click()
     U.wait_for_timeout(900)
     g = U.evaluate("""()=>fetch('/api/feed').then(r=>r.json()).then(f=>{

@@ -119,12 +119,21 @@ async function setState(link: LinkRow, state: string) {
   // never why it is right, left the endorsement unexplained in the evidence view.
   // Cancel must abort the decision. The note is optional, so an empty string
   // from Confirm still goes through; only null means the admin backed out.
+  // Two admins curate the same table. Overwriting a colleague's decision
+  // without knowing whose it was is how one approval quietly reversed another;
+  // naming them is what lets the two of them go and talk about it.
+  const reviewer = link.reviewed_by && link.reviewed_by !== store.auth.username ? link.reviewed_by : ''
+  const theirs = reviewer
+    ? ` ${reviewer} already ${link.state === 'confirmed' ? 'approved' : 'rejected'} this` +
+      (link.review_note ? ` — “${link.review_note}”` : '') +
+      '. Your decision replaces theirs.'
+    : ''
   const note = await askUser({
     title: state === 'confirmed' ? 'Approve this link' : 'Reject this link',
     message:
-      state === 'rejected'
+      (state === 'rejected'
         ? 'It stays in this table and keeps counting occurrences, so you can reinstate it later.'
-        : 'It becomes a solid line on the map for everyone.',
+        : 'It becomes a solid line on the map for everyone.') + theirs,
     inputLabel: state === 'rejected' ? 'Why is this link wrong? (optional)' : 'Why is this link right? (optional, shown as the evidence)',
     confirmLabel: state === 'confirmed' ? 'Approve' : 'Reject',
   })

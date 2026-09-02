@@ -160,6 +160,8 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .nav-signout .who{margin-left:auto;font-size:10px;color:#8ea7c9;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .admin-note{padding:9px 16px;font-size:11px;color:var(--muted);line-height:1.5;border-bottom:1px solid var(--border)}
 .btn.danger{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:650}
+#stale-version{position:fixed;left:0;right:0;bottom:0;z-index:400;display:flex;align-items:center;justify-content:center;gap:14px;padding:14px 18px;background:var(--navy);color:#fff;font-size:13px;box-shadow:0 -6px 24px rgba(6,17,31,.28)}
+#stale-version button{border:0;border-radius:8px;padding:8px 16px;background:var(--accent);color:#fff;font-weight:650;cursor:pointer}
 .pop-warn{background:#fff4f4;border:1px solid #f3c9c9;color:#8a2a2a;border-radius:9px;padding:10px 11px;font-size:11px;line-height:1.5;margin-bottom:12px}
 .pop-divider{height:1px;background:var(--border);margin:14px 0 12px}
 .pop-note{font-size:10px;color:var(--muted);line-height:1.45;margin:8px 0 0}

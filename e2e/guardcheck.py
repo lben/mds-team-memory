@@ -39,7 +39,15 @@ with sync_playwright() as pw:
         ta.dispatchEvent(new Event('mouseup', {bubbles: true}));
     }""")
     U.wait_for_timeout(700)
-    U.get_by_test_id("share-selection").dblclick(); U.wait_for_timeout(3000)
+    # Sharing a selection now shows what is about to be published first, so the
+    # double click lands on the confirmation rather than on two shares. Answer it
+    # once and the guard still has to make sure only one item is stored.
+    U.get_by_test_id("share-selection").dblclick(); U.wait_for_timeout(1500)
+    U.wait_for_selector("[data-testid=ask-modal]", timeout=6000)
+    shown = U.locator("[data-testid=ask-modal]").inner_text()
+    check("the confirmation shows the text that is about to be shared",
+          "Lavos and the endings" in shown, shown.replace("\n", " ")[:120])
+    U.get_by_test_id("ask-confirm").click(); U.wait_for_timeout(3000)
     if U.locator(".modal-backdrop").count(): U.get_by_role("button", name="Add another").click()
     U.wait_for_timeout(900)
     g = U.evaluate("()=>fetch('/api/feed').then(r=>r.json()).then(f=>{const m=f.filter(i=>i.body.includes('Lavos and the endings'));return {rows:m.length, stored:m.reduce((s,i)=>s+(i.group_size||1),0)}})")

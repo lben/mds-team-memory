@@ -147,6 +147,9 @@ def test_critical_journey(browser: Browser, base_url_server):
         {"start": start, "end": start + len(shareable)},
     )
     a.get_by_test_id("share-selection").click()
+    # Sharing shows the exact text first, so a mis-drag cannot reach the team.
+    expect(a.get_by_test_id("ask-modal")).to_contain_text(shareable)
+    _answer_ask(a)
     expect(a.get_by_test_id("success-modal")).to_be_visible()
     a.get_by_role("button", name="Add another").click()
 

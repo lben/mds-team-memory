@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { ApiError, api } from '../api'
 import EvidenceModal from '../components/EvidenceModal.vue'
 import MapAdminPanel from '../components/MapAdminPanel.vue'
-import { identityNote, initialsFor } from '../profile'
+import { initialsFor } from '../profile'
 import { store } from '../store'
 
 const evidenceLinkId = ref<string | null>(null)
@@ -44,11 +44,23 @@ const preview = ref<{ detected: string[]; experts: string[] } | null>(null)
 const newAdminUser = ref('')
 const newAdminPass = ref('')
 const admins = ref<{ id: string; username: string }[]>([])
+// Readable by everyone: knowing who to ask is the point of routing, and it used
+// to be locked behind the admin sign-in with nowhere else to look.
+const publicMap = ref<{ label: string; areas: string[] }[]>([])
+
+async function loadPublicMap() {
+  try {
+    publicMap.value = await api.get<{ label: string; areas: string[] }[]>('/api/expertise')
+  } catch (e) {
+    store.fail(e, 'Could not load who is mapped to what')
+  }
+}
 
 async function loadState() {
   await store.loadAuth()
   loaded.value = true
   if (store.auth.is_admin) await loadData()
+  else await loadPublicMap()
 }
 
 async function loadData() {
@@ -161,6 +173,27 @@ onMounted(loadState)
       </div>
     </div>
 
+    <!-- Everyone can see who is mapped to what; only admins can change it. -->
+    <div v-if="loaded && !store.auth.is_admin" class="card admin-table" style="margin-top: 16px" data-testid="public-expertise">
+      <div class="admin-head"><div>Teammate</div><div>Expertise areas</div><div></div></div>
+      <p class="admin-note">
+        Who the team has been mapped to, so you know who to ask. Changing this is an admin action.
+      </p>
+      <p v-if="!publicMap.length" class="muted" style="padding: 14px 16px; font-size: 12px">
+        Nobody has been mapped to a topic yet.
+      </p>
+      <div v-for="row in publicMap" :key="row.label" class="admin-row">
+        <div class="person">
+          <span class="avatar">{{ initialsFor(row.label) }}</span>
+          <span><strong>{{ row.label }}</strong><span>Has an account</span></span>
+        </div>
+        <div class="area-chips">
+          <span v-for="a in row.areas" :key="a" class="chip">{{ a }}</span>
+        </div>
+        <div></div>
+      </div>
+    </div>
+
     <template v-if="store.auth.is_admin">
       <div class="grid-2">
         <div class="card card-pad">
@@ -213,7 +246,7 @@ onMounted(loadState)
         <div v-for="m in mappings" :key="m.profile_id" class="admin-row">
           <div class="person">
             <span class="avatar">{{ initialsFor(m.label) }}</span>
-            <span><strong>{{ m.label }}</strong><span>{{ identityNote(m.label, true) }}</span></span>
+            <span><strong>{{ m.label }}</strong><span>Has an account</span></span>
           </div>
           <div class="area-chips">
             <span v-for="a in m.areas" :key="a.mapping_id" class="chip">

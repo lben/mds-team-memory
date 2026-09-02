@@ -49,6 +49,26 @@ export const store = reactive({
     }
   },
 
+  /** The one implementation of "Endorse as expert".
+   *
+   * The second copy of this updated only its own local flag, so the count and
+   * the button disagreed with the server — the same divergence `markHelped`
+   * was centralised to end, reintroduced next to it.
+   */
+  async endorse(item: Item): Promise<void> {
+    try {
+      const r = await api.post<{ created: boolean }>(`/api/items/${item.id}/endorse`)
+      item.endorsed_by_me = true
+      if (r.created) {
+        item.endorsements += 1
+        item.endorsed = true
+      }
+      this.notify('Endorsed as an expert')
+    } catch (e) {
+      this.fail(e, 'Could not endorse')
+    }
+  },
+
   /** Report a failed request. Loaders used to have no catch at all, so a failed
    * read left the screen showing state the server no longer agreed with. */
   fail(e: unknown, fallback: string) {

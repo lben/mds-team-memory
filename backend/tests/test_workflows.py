@@ -386,6 +386,7 @@ def test_expertise_routing(make_client, admin_client):
     """W10: deterministic alias matching routes a question to the mapped expert."""
     asker, expert = make_client(), make_client()
     suffix = uuid.uuid4().hex[:6]
+    _signup(expert, f"expert{suffix}")   # expertise only goes to account holders
     concept = admin_client.post(
         "/api/admin/concepts",
         json={"name": f"Olymp{suffix}", "aliases": [f"oly-{suffix}"]},
@@ -969,14 +970,15 @@ def test_you_are_never_routed_your_own_question(make_client, admin_client):
     routing the question to every other mapped expert."""
     asker, other_expert = make_client(), make_client()
     suffix = uuid.uuid4().hex[:6]
+    # Both need accounts: expertise is only routable to an account holder.
+    _signup(asker, f"asker{suffix}")
+    _signup(other_expert, f"other{suffix}")
     concept = _concept(admin_client, f"Kepler{suffix}", [f"kep-{suffix}"])
     for client in (asker, other_expert):
         admin_client.post(
             "/api/admin/expertise",
             json={"profile_id": client.get("/api/profile").json()["id"], "concept_id": concept["id"]},
         )
-    asker.put("/api/profile", json={"display_name": f"Asker {suffix}"})
-    other_expert.put("/api/profile", json={"display_name": f"Other {suffix}"})
 
     question = asker.post(
         "/api/questions", json={"body": f"How do I restart the kep-{suffix} pipeline?"}
@@ -989,8 +991,8 @@ def test_you_are_never_routed_your_own_question(make_client, admin_client):
     assert theirs["matches_me"] is True, "a real expert stopped being routed the question"
 
     detail = other_expert.get(f"/api/questions/{question['id']}").json()
-    assert f"Asker {suffix}" not in detail["suggested_experts"], "the asker was suggested as their own expert"
-    assert f"Other {suffix}" in detail["suggested_experts"]
+    assert f"asker{suffix}" not in detail["suggested_experts"], "the asker was suggested as their own expert"
+    assert f"other{suffix}" in detail["suggested_experts"]
 
 
 def _signup(client, name: str) -> dict:
@@ -1110,6 +1112,8 @@ def test_anyone_can_endorse_and_the_admin_sees_who_the_team_endorsed(make_client
     require the endorser to already be a mapped expert."""
     author, endorser = make_client(), make_client()
     suffix = uuid.uuid4().hex[:6]
+    # Endorsement is only recorded for someone with an account.
+    _signup(author, f"ledgerkeeper{suffix}")
     _concept(admin_client, f"Ledger{suffix}", [f"ldg-{suffix}"])
     item = author.post(
         "/api/capture", data={"body": f"The ldg-{suffix} close runs on the first working day."}
@@ -1248,6 +1252,7 @@ def test_more_than_one_person_can_endorse_the_same_contribution(make_client, adm
     """Endorsement is the count an admin reads to decide who the experts are, so
     hiding the control after the first one capped every item at a single voice."""
     author, first, second = make_client(), make_client(), make_client()
+    _signup(author, f"sweeper{uuid.uuid4().hex[:6]}")
     item = author.post("/api/capture", data={"body": unique("Restarting the sweep needs the lock released first")}).json()["item"]
 
     assert first.post(f"/api/items/{item['id']}/endorse").json()["created"] is True
@@ -1277,3 +1282,72 @@ def test_deleting_a_question_that_carries_a_correction_does_not_explode(make_cli
     assert r.status_code < 500, f"deleting the question returned {r.status_code}"
     if r.status_code == 200:
         assert reader.get(f"/api/items/{q['id']}").status_code == 404
+
+
+def test_endorsement_needs_an_account_on_the_receiving_end(make_client):
+    """Endorsement is the evidence an admin maps expertise from, and expertise
+    can only be routed to an account. Recording one against a browser profile
+    led nowhere silently; it is now refused, with the reason."""
+    anonymous, endorser = make_client(), make_client()
+    item = anonymous.post("/api/capture", data={"body": unique("Written with no account")}).json()["item"]
+    assert item["author_verified"] is False
+
+    r = endorser.post(f"/api/items/{item['id']}/endorse")
+    assert r.status_code == 400
+    assert "create an account" in r.json()["detail"]
+
+    # And once they have one, the same endorsement works.
+    _signup(anonymous, f"named{uuid.uuid4().hex[:6]}")
+    again = endorser.post(f"/api/items/{item['id']}/endorse")
+    assert again.status_code == 200 and again.json()["created"] is True
+
+
+def test_who_knows_what_is_readable_without_being_an_admin(make_client, admin_client):
+    """Knowing who to ask is the point of routing, and it was locked behind the
+    admin sign-in with nowhere else to look. Reading is open; changing is not."""
+    contributor, expert = make_client(), make_client()
+    suffix = uuid.uuid4().hex[:6]
+    concept = _concept(admin_client, f"Ledgers{suffix}")
+    name = f"keeper{suffix}"
+    _signup(expert, name)
+    admin_client.post(
+        "/api/admin/expertise",
+        json={"profile_id": expert.get("/api/profile").json()["id"], "concept_id": concept["id"]},
+    )
+
+    listed = contributor.get("/api/expertise")
+    assert listed.status_code == 200
+    row = next(r for r in listed.json() if r["label"] == name)
+    assert f"Ledgers{suffix}" in row["areas"]
+
+    # Reading it does not hand out anything that can be acted on, and the
+    # admin-only doors stay shut.
+    assert "mapping_id" not in row and "profile_id" not in row
+    assert contributor.get("/api/admin/expertise").status_code == 401
+    assert contributor.post(
+        "/api/admin/expertise", json={"profile_id": "x", "concept_id": concept["id"]}
+    ).status_code == 401
+
+
+def test_expertise_cannot_be_routed_to_a_profile_without_an_account(make_client, admin_client):
+    """The app tells people this in three places — the dropdown only lists
+    account holders, the note under it explains why, and the README repeats it.
+    Nothing on the server enforced it, so any caller could create the mapping
+    the interface refuses to offer."""
+    anonymous = make_client()
+    profile_id = anonymous.get("/api/profile").json()["id"]
+    concept = _concept(admin_client, f"Ledgering{uuid.uuid4().hex[:6]}")
+
+    r = admin_client.post(
+        "/api/admin/expertise", json={"profile_id": profile_id, "concept_id": concept["id"]}
+    )
+    assert r.status_code == 400, f"the mapping was accepted: {r.status_code}"
+    assert "account" in r.json()["detail"].lower()
+    assert all(row["label"] != "Unknown" for row in admin_client.get("/api/admin/expertise").json())
+
+    # And it works the moment they have one.
+    _signup(anonymous, f"realname{uuid.uuid4().hex[:6]}")
+    assert admin_client.post(
+        "/api/admin/expertise",
+        json={"profile_id": anonymous.get("/api/profile").json()["id"], "concept_id": concept["id"]},
+    ).status_code == 200
