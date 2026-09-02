@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDialog } from '../dialog'
 import { nextTick, onMounted, ref } from 'vue'
 
 /** The app's own confirm/prompt.
@@ -38,10 +39,13 @@ onMounted(async () => {
   await nextTick()
   field.value?.focus()
 })
+
+const dialogRoot = ref<HTMLElement | null>(null)
+useDialog(dialogRoot, () => emit('resolve', null))
 </script>
 
 <template>
-  <div class="modal-backdrop" data-testid="ask-modal" @click.self="dismissFromBackdrop">
+  <div ref="dialogRoot" role="dialog" aria-modal="true" class="modal-backdrop" data-testid="ask-modal" @click.self="dismissFromBackdrop">
     <div class="modal" @keyup.esc="emit('resolve', null)">
       <h2>{{ props.title }}</h2>
       <p v-if="props.message">{{ props.message }}</p>
@@ -53,6 +57,7 @@ onMounted(async () => {
           type="text"
           maxlength="300"
           data-testid="ask-input"
+            :aria-label="props.inputLabel"
           @keyup.enter="emit('resolve', text)"
         />
       </template>

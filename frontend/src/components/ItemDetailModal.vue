@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDialog } from '../dialog'
 import { onMounted, ref } from 'vue'
 import { ApiError, api, type Item } from '../api'
 import AskModal from './AskModal.vue'
@@ -119,10 +120,13 @@ function fmt(ts: string) {
 }
 
 onMounted(load)
+
+const dialogRoot = ref<HTMLElement | null>(null)
+useDialog(dialogRoot, () => emit('close'))
 </script>
 
 <template>
-  <div class="modal-backdrop" @click.self="emit('close')">
+  <div ref="dialogRoot" role="dialog" aria-modal="true" class="modal-backdrop" @click.self="emit('close')">
     <AskModal
       v-if="ask"
       :title="ask.title"

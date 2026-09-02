@@ -187,10 +187,24 @@ with sync_playwright() as pw:
           U.get_by_test_id("item-detail").inner_text()[:200])
     if adopt.count():
         adopt.first.click(); U.wait_for_timeout(2200)
-        body = U.get_by_test_id("item-detail").inner_text()
-        check("adopting rewrites the entry to the corrected text", "thirteen endings, not twelve" in body, body[:200])
+        detail = U.get_by_test_id("item-detail")
+        # Adoption does NOT rewrite the contribution — it marks the correction
+        # accepted and records a revision. The previous check here asserted the
+        # rewrite, and passed only because the correction's own text is on
+        # screen either way: a check that could not fail, naming a behaviour the
+        # app has never had.
+        check("adopting marks that correction adopted",
+              detail.locator(".correction.adopted").count() == 1,
+              detail.inner_text()[:200])
+        check("and records it in the revision history",
+              "Revision history" in detail.inner_text() and "Correction adopted" in detail.inner_text(),
+              detail.inner_text()[-200:])
+        original = detail.locator(".detail-body").inner_text()
+        check("while the original contribution is left as its author wrote it",
+              "twelve endings" in original and "thirteen endings, not twelve" not in original,
+              original[:160])
         check("and the correction cannot be adopted a second time",
-              U.get_by_test_id("item-detail").get_by_role("button", name="Adopt").count() == 0)
+              detail.get_by_role("button", name="Adopt").count() == 0)
     U.keyboard.press("Escape"); U.wait_for_timeout(600)
 
     print("\n### 40. Focusing the map on one concept", flush=True)

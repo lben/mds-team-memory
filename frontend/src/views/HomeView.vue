@@ -218,6 +218,7 @@ onMounted(async () => {
         class="composer-input"
         placeholder="Search the team's memory, ask a question, or share what you know…"
         data-testid="home-input"
+            aria-label="Search the team's memory, ask a question, or share what you know"
       ></textarea>
       <div class="composer-actions">
         <div class="row gap8">

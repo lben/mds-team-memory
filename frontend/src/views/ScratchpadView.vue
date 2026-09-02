@@ -174,7 +174,10 @@ async function shareSelection() {
     await save()
     const result = await api.post<{ item: Item; corroboration: Corroboration; shared_total: number }>(
       `/api/scratchpad/${current.value.id}/share`,
-      { text: selection.value },
+      // Send what was confirmed, not what is selected now: opening the
+      // confirmation moves focus off the textarea, which collapses the
+      // selection, so reading it again here shared nothing at all.
+      { text: excerpt },
     )
     success.value = { corroboration: result.corroboration, sharedTotal: result.shared_total }
     selection.value = ''
@@ -291,6 +294,7 @@ onMounted(async () => {
             spellcheck="false"
             placeholder="Append anything worth remembering: URLs, commands, contacts, timings…"
             data-testid="scratch-editor"
+            aria-label="Your private scratchpad"
             @input="onEdit"
             @mouseup="updateSelection"
             @keyup="updateSelection"

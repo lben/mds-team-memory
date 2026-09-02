@@ -162,8 +162,14 @@ async function changeType(link: LinkRow, typeId: string) {
 async function deleteLink(link: LinkRow) {
   const answer = await askUser({
     title: `Delete ${link.src_name} — ${link.dst_name}?`,
-    message: 'This is permanent. Rejecting the link instead keeps it inspectable and it carries on counting.',
-    confirmLabel: 'Delete permanently',
+    // Deleting is the weaker of the two, not the stronger: discovery puts the
+    // link straight back the next time anything mentions both concepts. Only a
+    // rejection is remembered. Calling this "permanent" was simply untrue.
+    message:
+      'This only removes the record. While team content still mentions both concepts it will be ' +
+      'suggested again. Reject it instead to make the decision stick — a rejected link stays in ' +
+      'this table, keeps counting, and can be reinstated.',
+    confirmLabel: 'Delete anyway',
     danger: true,
   })
   if (answer === null) return

@@ -216,6 +216,57 @@ the item is sitting in the public feed. All reworded to say what is true.
 
 ---
 
+# Fixed in round 5
+
+## 47. No modal could be used without a mouse — fixed
+
+Nothing in five rounds had tried. Opening a dialog left the keyboard on the
+button behind it; Tab walked out into the dimmed page after five presses,
+reaching other items' buttons, the sidebar and the search box; and Escape did
+nothing, so a keyboard-only person could open a dialog and neither use it nor
+leave it. The admin sign-in fields had no `id`, `name`, `aria-label` or
+`label[for]` — a screen reader announced "edit text" twice. Found by an
+accessibility specialist, the first persona given a *constraint* rather than a
+job.
+
+One `useDialog` composable now moves focus into the dialog, keeps Tab inside it
+and closes on Escape, applied to all four modals; the fields people must type
+into carry labels. Three checks in `adversarial4.py`, all watched failing first.
+
+## 48. "Delete permanently" was the weaker of the two options — fixed
+
+Deleting a detected link said "This is permanent" and offered rejection as the
+softer alternative that "keeps it inspectable". The opposite is true: discovery
+re-creates a deleted link the moment anything mentions both concepts again,
+while a rejection is remembered. An admin persona watched a link she had deleted
+reappear on its own minutes later and read it as the app ignoring her. The
+confirmation now says what deleting actually does and points at rejection as the
+decision that sticks. Proven by
+`test_a_deleted_link_comes_straight_back_while_the_content_still_mentions_both`.
+
+## 49. Two fixes that broke each other — fixed
+
+Confirming a share (item 28) and moving focus into dialogs (item 47) were each
+correct alone. Together they were not: opening the confirmation took focus off
+the textarea, which collapses its selection, and the share then read the
+selection again and sent nothing. `guardcheck` caught it — the one harness whose
+whole purpose is proving a guard can fail. The share now sends the text the
+person was actually shown, not whatever is selected by the time they answer.
+
+**The lesson is about sequencing, not about either fix**: both were verified on
+their own, and the regression only existed where they met. A full run after each
+change is what found it.
+
+## 50. A check that named a behaviour the app has never had — fixed
+
+`adversarial3.py` asserted "adopting rewrites the entry to the corrected text".
+Adoption does not touch the original body; it marks the correction adopted and
+records a revision. The check passed for five rounds because the correction's
+own text is on screen either way. It now asserts what adoption does, including
+that the original is left as its author wrote it.
+
+---
+
 # Fixed in round 4
 
 ## 38. The rule about accounts and expertise was never enforced — fixed
@@ -323,6 +374,55 @@ does not keep — it now says only what is true. "Your Helpful marks" counted
 marks *received* while reading as marks *given*; it now says "Times your
 knowledge helped someone". Edge labels in dense clusters sat on top of node
 names; they now follow their edge and carry a background.
+
+---
+
+# Newly found in round 5, needing the owner's decision
+
+## 51. There is no password recovery — open
+
+An engineer back from parental leave could not sign in and found *"no
+forgot-password link, no reset-by-email, no 'contact an admin' hint anywhere"*.
+Combined with item 43 (no way to delete an account) this is the whole
+account-lifecycle gap: you can create one, and that is all. *Recommendation: at
+minimum, tell people in the sign-in box who can reset it for them; an admin CLI
+reset is probably enough for a pilot.*
+
+## 52. Extra scratchpads cannot be renamed or removed — open
+
+You can create them; there is no rename and no delete, only a dropdown to switch.
+An admin created one called `asdf` while testing and it is in her switcher
+permanently. The same "nothing is removable" complaint that item 2 fixed for
+contributions and documents, still true one level down.
+
+## 53. Near-duplicates are only caught when they are exact — open
+
+A support lead posted the same fact in different words and it was accepted as an
+unrelated note, while an exact repost was correctly folded into a corroboration
+group. He is the persona who would feel this most: *"as far as the app is
+concerned these are two different things"*. Corroboration already has a
+similarity threshold — this is a question of where it is set and whether the
+person is told at capture time.
+
+## 54. Asking does not look for the existing answer — open
+
+The same lead asked a question that had already been answered in the feed, and
+the app posted it unanswered three cards below its own answer. Search finds it;
+Ask does not look. *Recommendation: run the search behind Ask and show what it
+found before posting, the way the empty-search state already offers Ask.*
+
+## 55. A correction is invisible from the feed — open
+
+A proposed correction sits inside the Details modal with a PROPOSED badge, and
+the feed card for the corrected note reads exactly as before. *"Anyone who
+doesn't open Details will never know."*
+
+## 56. The bell only ever tells you about yourself — open
+
+Notifications carry recognition for your own contributions. An admin curating
+alongside another admin gets nothing when they change something she reviewed —
+she only found out by re-reading the table. Item 27 tells her *at the moment she
+would overwrite them*, which she praised; this is the other half.
 
 ---
 

@@ -164,9 +164,11 @@ onMounted(loadState)
       </p>
       <p v-else>Admin access is required to manage concepts and expertise mappings.</p>
       <label>Username</label>
-      <input v-model="username" type="text" autocomplete="username" data-testid="admin-username" />
+      <input v-model="username" type="text" autocomplete="username" data-testid="admin-username"
+            aria-label="Admin username" />
       <label>Password</label>
-      <input v-model="password" type="password" autocomplete="current-password" data-testid="admin-password" @keyup.enter="submitAuth" />
+      <input v-model="password" type="password" autocomplete="current-password" data-testid="admin-password"
+            aria-label="Admin password" @keyup.enter="submitAuth" />
       <p v-if="authError" class="form-error">{{ authError }}</p>
       <div class="modal-actions">
         <button class="btn primary" data-testid="admin-submit" @click="submitAuth">Sign in</button>

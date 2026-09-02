@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDialog } from '../dialog'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../api'
@@ -44,10 +45,13 @@ onMounted(async () => {
     emit('close')
   }
 })
+
+const dialogRoot = ref<HTMLElement | null>(null)
+useDialog(dialogRoot, () => emit('close'))
 </script>
 
 <template>
-  <div class="modal-backdrop" @click.self="emit('close')">
+  <div ref="dialogRoot" role="dialog" aria-modal="true" class="modal-backdrop" @click.self="emit('close')">
     <div class="modal wide" data-testid="evidence-modal">
       <template v-if="evidence">
         <h2>Why these are connected</h2>

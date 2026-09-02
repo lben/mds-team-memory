@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDialog } from '../dialog'
+import { ref } from 'vue'
 import type { Corroboration } from '../api'
 
 defineProps<{ corroboration: Corroboration | null; sharedTotal?: number | null; canView?: boolean }>()
@@ -9,10 +11,13 @@ function ordinal(n: number): string {
   return `${n}${['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`
 }
 const emit = defineEmits<{ close: []; view: []; another: [] }>()
+
+const dialogRoot = ref<HTMLElement | null>(null)
+useDialog(dialogRoot, () => emit('close'))
 </script>
 
 <template>
-  <div class="modal-backdrop" @click.self="emit('close')">
+  <div ref="dialogRoot" role="dialog" aria-modal="true" class="modal-backdrop" @click.self="emit('close')">
     <div class="modal" data-testid="success-modal">
       <div class="success-icon">✓</div>
       <h2>Thank you. Your knowledge is now helping the team.</h2>

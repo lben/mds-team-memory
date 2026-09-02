@@ -1351,3 +1351,43 @@ def test_expertise_cannot_be_routed_to_a_profile_without_an_account(make_client,
         "/api/admin/expertise",
         json={"profile_id": anonymous.get("/api/profile").json()["id"], "concept_id": concept["id"]},
     ).status_code == 200
+
+
+def test_a_deleted_link_comes_straight_back_while_the_content_still_mentions_both(make_client, admin_client):
+    """The confirmation calls deleting a link permanent and offers rejection as
+    the weaker option that 'keeps it inspectable'. In fact deletion is the
+    weaker one: discovery re-creates the link the next time anything mentions
+    both concepts, while a rejection is remembered."""
+    author = make_client()
+    suffix = uuid.uuid4().hex[:6]
+    a = _concept(admin_client, f"Alpha{suffix}", [f"alp{suffix}"])
+    b = _concept(admin_client, f"Beta{suffix}", [f"bet{suffix}"])
+    author.post("/api/capture", data={"body": f"The alp{suffix} job feeds the bet{suffix} report."})
+
+    link = _link_between(admin_client, a["id"], b["id"])
+    assert link is not None
+    assert admin_client.delete(f"/api/graph/links/{link['id']}").status_code == 200
+    assert _link_between(admin_client, a["id"], b["id"]) is None
+
+    author.post("/api/capture", data={"body": f"Another note where alp{suffix} and bet{suffix} appear together."})
+    back = _link_between(admin_client, a["id"], b["id"])
+    assert back is not None, "deleting is described as permanent"
+    assert back["state"] == "suggested"
+
+
+def test_a_hyphenated_alias_matches_the_words_people_actually_type(make_client, admin_client):
+    """An alias containing punctuation still matches the text people write.
+
+    An admin reported the opposite, having defined 'currency rates' and expected
+    'currency-rate' to match it — but those are different terms, and the panel
+    says plainly that matching is deterministic and nothing else. The app is
+    right; this pins the behaviour that actually exists so a future change to
+    tokenisation cannot quietly break aliases that contain a hyphen.
+    """
+    author = make_client()
+    suffix = uuid.uuid4().hex[:6]
+    concept = _concept(admin_client, f"Currency rates {suffix}", [f"currency-rate-{suffix}"])
+    author.post("/api/capture", data={"body": f"The currency-rate-{suffix} import runs at 0600."})
+    hyphenated = author.get("/api/search", params={"q": f"currency-rate-{suffix}"}).json()
+    assert hyphenated["concepts"], "the alias as written did not match its own concept"
+    assert hyphenated["concepts"][0]["id"] == concept["id"]

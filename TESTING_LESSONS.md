@@ -105,6 +105,20 @@ before trusting any new suite.
   drag-selection, published verbatim. **Read the stored row before diagnosing a
   rendering bug**; and note that one person's bad input becomes everybody's
   "obvious bug" when it is shared.
+- **A check whose *name* asserts a behaviour the app has never had.** "Adopting
+  rewrites the entry to the corrected text" passed for five rounds. Adoption
+  does not touch the original body — it marks the correction adopted and records
+  a revision — and the check passed only because the correction's own text is on
+  screen either way. Worse than a weak check: the next reader believes the
+  product works that way. **Read a check's name as a claim about the product and
+  ask whether the code makes it true.**
+- **Two correct fixes can be wrong together.** Confirming a share and moving
+  focus into dialogs were each verified on their own. Together, opening the
+  confirmation took focus off the textarea, collapsing its selection, so the
+  share read the selection again and sent nothing. Neither change's own check
+  could see it. **Run the whole suite after each change, not only the checks
+  for the thing you changed** — and when a handler reads live UI state after an
+  `await`, capture what the person was shown instead.
 - **A failed frontend build makes a red/green run meaningless.** Removing a fix
   left an unused function, `vue-tsc` refused, `dist` was never rewritten, and
   the harness happily tested the *previous* bundle — so three checks that should
@@ -174,6 +188,21 @@ Worth the noise, but know what the noise looks like:
   still asking for and the app goes blank white with no error state. Two
   personas reported the app as broken; it was the build. Results from a round
   where this happened are contaminated — rerun them.
+
+## 2d. What nobody had looked for until round 5
+
+Five rounds of personas judged what the app *said* and how it *looked*. None had
+tried to use it without a mouse, and it turned out no modal was usable that way
+at all: opening one left the keyboard on the button behind it, Tab walked out
+into the dimmed page after five presses — reaching other items' buttons, the
+sidebar, the search box — and Escape did nothing. The admin sign-in fields had
+no `id`, `name`, `aria-label` or `label[for]`, so a screen reader announced
+"edit text" twice.
+
+None of it was visible in a screenshot or a text assertion. **Give at least one
+persona a constraint rather than a job** — no mouse, low vision, a language, a
+slow connection — because a whole class of defect only appears when the way you
+are working is different, not when what you are trying to do is different.
 
 ## 3. What has actually broken here
 
@@ -314,6 +343,6 @@ Current as of round 4:
 
 ---
 
-*Last updated: 2026-09-01, after round 3 of the quality loop: 308 adversarial
-checks, 46 API tests, 100% endpoint coverage, three read-only code audits and
-eighteen fresh dogfooding personas across three shared instances.*
+*Last updated: 2026-09-02, after round 5 of the quality loop: 320 adversarial
+checks, 51 API tests, 100% endpoint coverage (62 endpoints), five read-only code
+audits and thirty fresh dogfooding personas across five shared instances.*

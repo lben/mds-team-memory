@@ -310,6 +310,44 @@ with sync_playwright() as pw:
           U.locator("body").inner_text()[:80])
     U.unroute("**/assets/*View-*.js")
 
+    print("\n### 52. Using a dialog without a mouse", flush=True)
+    # Opening a modal left focus on the button behind it, Tab walked out into
+    # the dimmed page after five presses, and Escape did nothing — so a
+    # keyboard-only person could open a dialog and neither use it nor leave it.
+    U.goto(base+"/"); U.wait_for_timeout(2000)
+    U.get_by_test_id("home-input").fill("Something to open the details of.")
+    U.get_by_test_id("do-capture").click(); U.wait_for_timeout(2500)
+    if U.locator(".modal-backdrop").count(): U.get_by_role("button", name="Add another").click()
+    U.wait_for_timeout(1200)
+    U.get_by_test_id("knowledge-column").locator(".card.result").first.get_by_role("button", name="Details").click()
+    U.wait_for_timeout(1500)
+
+    def focus_inside(pg):
+        return pg.evaluate("""() => {
+            const m = document.querySelector('.modal-backdrop');
+            return !!(m && document.activeElement && m.contains(document.activeElement));
+        }""")
+
+    check("opening a dialog puts the keyboard inside it", focus_inside(U),
+          U.evaluate("()=>document.activeElement.tagName + ':' + (document.activeElement.innerText||'').slice(0,20)"))
+    escaped = False
+    for _ in range(14):
+        U.keyboard.press("Tab"); U.wait_for_timeout(70)
+        if not focus_inside(U):
+            escaped = True
+            break
+    check("and tabbing cannot wander out of it into the page behind", not escaped,
+          U.evaluate("()=>document.activeElement.tagName + ':' + (document.activeElement.innerText||'').slice(0,30)"))
+    U.keyboard.press("Escape"); U.wait_for_timeout(900)
+    check("and Escape closes it", U.get_by_test_id("item-detail").count() == 0)
+
+    U.goto(base+"/admin/expertise"); U.wait_for_timeout(1800)
+    unlabelled = U.evaluate("""() => ['admin-username','admin-password'].filter(t => {
+        const el = document.querySelector(`[data-testid=${t}]`);
+        return !el || !(el.getAttribute('aria-label') || el.labels?.length);
+      })""")
+    check("the sign-in fields tell a screen reader what they are", not unlabelled, str(unlabelled))
+
     check("no server error anywhere in this pass", not [c for c in crashes if "HTTP 5" in c], str(crashes[:4]))
     b.close()
 

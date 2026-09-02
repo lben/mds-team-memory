@@ -154,7 +154,8 @@ onMounted(() => {
             way to get them back. Create an account and they stay yours.
           </p>
           <label>Username</label>
-          <input v-model="username" type="text" maxlength="80" autocomplete="username" data-testid="auth-username" />
+          <input v-model="username" type="text" maxlength="80" autocomplete="username" data-testid="auth-username"
+            aria-label="Username" />
           <label style="margin-top: 8px">Password</label>
           <input
             v-model="password"
@@ -162,6 +163,7 @@ onMounted(() => {
             maxlength="200"
             autocomplete="current-password"
             data-testid="auth-password"
+            aria-label="Password"
             @keyup.enter="submitAuth('signup')"
           />
           <p v-if="authError" class="form-error" data-testid="auth-error">{{ authError }}</p>
@@ -176,7 +178,8 @@ onMounted(() => {
 
           <div class="pop-divider"></div>
           <label>Or just a display name, on this machine</label>
-          <input v-model="nameDraft" type="text" maxlength="80" placeholder="e.g. Jane S." data-testid="display-name" @keyup.enter="saveName" />
+          <input v-model="nameDraft" type="text" maxlength="80" placeholder="e.g. Jane S." data-testid="display-name"
+            aria-label="Display name, on this machine only" @keyup.enter="saveName" />
           <p class="pop-note">A name set here is not an account and does not survive a cookie clear.</p>
           <div class="modal-actions" style="margin-top: 10px">
             <button class="btn small" @click="showProfile = false">Close</button>
