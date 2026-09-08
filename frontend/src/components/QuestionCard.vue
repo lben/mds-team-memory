@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { api, type Item } from '../api'
-import { store } from '../store'
+import { knowledgeRevision, store } from '../store'
 import AskModal from './AskModal.vue'
 import { useAsk } from '../ask'
 
@@ -103,6 +103,7 @@ watch(
   },
 )
 if (open.value) loadDetail()
+watch(knowledgeRevision, () => { if (open.value) loadDetail() })
 </script>
 
 <template>

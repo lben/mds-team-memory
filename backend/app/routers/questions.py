@@ -9,6 +9,8 @@ from ..db import get_db
 from ..impact import notify, record_event
 from ..knowledge import delete_item, dependents_by_others, item_dict, process_after_save
 from ..models import ExpertiseMapping, ItemConcept, KnowledgeItem, Notification, Profile
+from ..ml import effective
+from ..concepts import source_concepts
 
 router = APIRouter(prefix="/api/questions", tags=["questions"])
 
@@ -35,7 +37,7 @@ def _question(db: Session, question_id: str) -> KnowledgeItem:
 def _my_concept_ids(db: Session, profile_id: str) -> list[str]:
     return [
         cid
-        for (cid,) in db.query(ExpertiseMapping.concept_id).filter(
+        for (cid,) in effective.expertise(db).with_entities(ExpertiseMapping.concept_id).filter(
             ExpertiseMapping.profile_id == profile_id
         )
     ]
@@ -104,9 +106,9 @@ def question_detail(
         .order_by(KnowledgeItem.created_at)
         .all()
     )
-    concepts = match_concepts(db, question.body)
+    concepts = source_concepts(db, "item", question.id, question.body)
     experts = (
-        db.query(ExpertiseMapping)
+        effective.expertise(db)
         .filter(
             ExpertiseMapping.concept_id.in_([c.id for c in concepts] or [""]),
             # Same rule as `matches_me`: never suggest the asker to themselves.

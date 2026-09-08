@@ -7,7 +7,7 @@ import ItemDetailModal from '../components/ItemDetailModal.vue'
 import KnowledgeGraph from '../components/KnowledgeGraph.vue'
 import QuestionCard from '../components/QuestionCard.vue'
 import SuccessModal from '../components/SuccessModal.vue'
-import { store } from '../store'
+import { knowledgeRevision, store } from '../store'
 
 interface PassageHit {
   id: string
@@ -195,6 +195,19 @@ async function consumeQuery() {
 // Deep links (notifications, old bookmarks) must work when Home is already
 // mounted, not only on first load.
 watch(() => route.query, consumeQuery)
+watch(knowledgeRevision, async () => {
+  await loadFeed()
+  graph.value?.refresh()
+  if (results.value) {
+    const query = results.value.query
+    try {
+      const refreshed = await api.get<SearchResults>(`/api/search?q=${encodeURIComponent(query)}`)
+      if (results.value?.query === query) results.value = refreshed
+    } catch {
+      /* The next revision or manual search retries. */
+    }
+  }
+})
 
 onMounted(async () => {
   await loadFeed()

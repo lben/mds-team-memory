@@ -24,6 +24,9 @@ interface GraphEdge {
   style: string
   evidence: string
   link_id: string | null
+  origin?: string
+  state?: string
+  directed?: boolean
 }
 
 const props = defineProps<{ focusConceptIds: string[] }>()
@@ -35,10 +38,40 @@ const mode = ref<'full' | 'focused'>('full')
 const focusIds = ref<string[]>([])
 const focusNames = ref<string[]>([])
 const overflowing = ref(false)
+const showWeak = ref(false)
+const omittedNodes = ref(0)
+const omittedEdges = ref(0)
+const totalEdges = ref(0)
 const graphEl = ref<HTMLDivElement | null>(null)
 let cy: Core | null = null
+let requestId = 0
 
 const trim = (t: string, n: number) => (t.length > n ? t.slice(0, n).trimEnd() + '…' : t)
+const edgeLabel = (edge: GraphEdge) => {
+  if (!edge.origin) return edge.label
+  const state = edge.state === 'held' ? 'awaiting evidence' : edge.state === 'weak' ? 'association' : 'active'
+  return `${edge.label}\n${edge.origin} · ${state}`
+}
+
+function savedView(preserve: boolean) {
+  if (!preserve || !cy || !cy.nodes().length) return null
+  return { zoom: cy.zoom(), pan: { ...cy.pan() },
+    positions: new Map(cy.nodes().map((node) => [node.id(), { ...node.position() }] as const)),
+    selected: cy.$(':selected').map((element) => element.id()) }
+}
+
+function finishLayout(view: ReturnType<typeof savedView>) {
+  if (!cy) return
+  cy.resize()
+  if (!view) return fitWithLegibleLabels()
+  cy.nodes().forEach((node) => {
+    const position = view.positions.get(node.id())
+    if (position && !node.isParent()) node.position(position)
+  })
+  cy.zoom(view.zoom)
+  cy.pan(view.pan)
+  view.selected.forEach((id) => cy!.getElementById(id).select())
+}
 
 const NODE_COLORS: Record<string, string> = {
   concept: '#27a3d0',
@@ -113,6 +146,8 @@ function initCy() {
       },
       { selector: 'node[mentions = 0]', style: { 'background-opacity': 0.45, 'font-size': '10px' } },
       { selector: 'edge[lineStyle="dashed"]', style: { 'line-style': 'dashed' } },
+      { selector: 'edge[lineStyle="dotted"]', style: { 'line-style': 'dotted', opacity: 0.65 } },
+      { selector: 'edge[directed = 1]', style: { 'target-arrow-shape': 'triangle', 'target-arrow-color': '#527094' } },
       { selector: 'edge:selected', style: { 'line-color': '#d83a52', width: 3, color: '#fff' } },
       { selector: 'node:selected', style: { 'border-color': '#d83a52', 'border-width': 4 } },
     ],
@@ -154,18 +189,28 @@ function fitWithLegibleLabels() {
   overflowing.value = !!box && (drawn.w > box.width || drawn.h > box.height)
 }
 
-async function loadFull() {
+async function loadFull(preserveView = false) {
   if (!cy) return
+  const currentRequest = ++requestId
+  const view = savedView(preserveView)
   mode.value = 'full'
   let graph: {
     clusters: { id: string; label: string; concepts: { id: string; name: string; size: number }[] }[]
-    edges: { source: string; target: string; count: number; link_id: string; state: string; label: string }[]
+    edges: GraphEdge[]
+    total_nodes: number
+    total_edges: number
+    omitted_nodes: number
+    omitted_edges: number
   }
   try {
-    graph = await api.get<typeof graph>('/api/graph/global')
+    graph = await api.get<typeof graph>(`/api/graph/global?show_weak=${showWeak.value}`)
   } catch (e) {
     return void store.fail(e, 'Could not load the knowledge graph')
   }
+  if (!cy || currentRequest !== requestId) return
+  omittedNodes.value = graph.omitted_nodes
+  omittedEdges.value = graph.omitted_edges
+  totalEdges.value = graph.total_edges
   cy.elements().remove()
   const clusterCount = graph.clusters.length || 1
   graph.clusters.forEach((cluster, ci) => {
@@ -200,31 +245,34 @@ async function loadFull() {
   cy.add(
     graph.edges.map((e) => ({
       data: {
-        id: `g:${e.source}->${e.target}`,
+        id: `link:${e.link_id}`,
         source: `c:${e.source}`,
         target: `c:${e.target}`,
-        label: e.label,
-        lineStyle: e.state === 'suggested' ? 'dashed' : 'solid',
+        label: edgeLabel(e),
+        lineStyle: e.style,
+        directed: e.directed ? 1 : 0,
         linkId: e.link_id,
       },
     })),
   )
-  cy.resize()
-  fitWithLegibleLabels()
+  finishLayout(view)
 }
 
-async function focus(conceptIds: string[]) {
+async function focus(conceptIds: string[], preserveView = false) {
   if (!cy || !conceptIds.length) return
+  const currentRequest = ++requestId
+  const view = savedView(preserveView)
   mode.value = 'focused'
   focusIds.value = conceptIds
   let graphs: { nodes: GraphNode[]; edges: GraphEdge[] }[]
   try {
     graphs = await Promise.all(
-      conceptIds.map((id) => api.get<{ nodes: GraphNode[]; edges: GraphEdge[] }>(`/api/graph/local?concept_id=${id}`)),
+      conceptIds.map((id) => api.get<{ nodes: GraphNode[]; edges: GraphEdge[] }>(`/api/graph/local?concept_id=${encodeURIComponent(id)}&show_weak=${showWeak.value}`)),
     )
   } catch (e) {
     return void store.fail(e, 'Could not focus the graph on that concept')
   }
+  if (!cy || currentRequest !== requestId) return
   focusNames.value = graphs.map((g) => g.nodes[0]?.label ?? '')
   cy.elements().remove()
   const seenNodes = new Set<string>()
@@ -252,16 +300,16 @@ async function focus(conceptIds: string[]) {
       })
     })
     graph.edges.forEach((e) => {
-      const key = `${e.source}->${e.target}`
+      const key = e.link_id ? `link:${e.link_id}` : `${e.source}->${e.target}`
       if (seenEdges.has(key)) return
       seenEdges.add(key)
       cy!.add({
-        data: { id: key, source: e.source, target: e.target, label: e.label, lineStyle: e.style, linkId: e.link_id },
+        data: { id: key, source: e.source, target: e.target, label: edgeLabel(e), lineStyle: e.style,
+          directed: e.directed ? 1 : 0, linkId: e.link_id },
       })
     })
   })
-  cy.resize()
-  fitWithLegibleLabels()
+  finishLayout(view)
 }
 
 async function refresh() {
@@ -275,9 +323,12 @@ async function refresh() {
   await nextTick()
   initCy()
   cy?.resize()
-  if (mode.value === 'focused' && focusIds.value.length) await focus(focusIds.value)
-  else await loadFull()
+  const availableFocus = focusIds.value.filter((id) => concepts.value.some((concept) => concept.id === id))
+  if (mode.value === 'focused' && availableFocus.length) await focus(availableFocus, true)
+  else await loadFull(true)
 }
+
+watch(showWeak, refresh)
 
 watch(
   () => props.focusConceptIds,
@@ -288,7 +339,7 @@ watch(
 )
 
 onMounted(refresh)
-onBeforeUnmount(() => cy?.destroy())
+onBeforeUnmount(() => { requestId++; cy?.destroy(); cy = null })
 defineExpose({ refresh })
 </script>
 
@@ -300,19 +351,31 @@ defineExpose({ refresh })
       </strong>
       <div class="row gap8">
         <span class="muted" style="font-size: 10px; color: #8ea7c9">
-          {{ concepts.length }} concepts · dashed = detected, solid = confirmed · click a link to see why<template
+          {{ concepts.length }} concepts · solid = active · dashed = awaiting evidence · dotted = association · click a link to see why<template
             v-if="overflowing"
           >
             · <strong data-testid="graph-pan-hint">drag to see the rest</strong></template
           >
         </span>
-        <button v-if="mode === 'focused'" class="btn small" data-testid="graph-full" @click="loadFull">
+        <button v-if="mode === 'focused'" class="btn small" data-testid="graph-full" @click="loadFull()">
           Full map
         </button>
       </div>
     </div>
+    <div v-if="concepts.length" class="row gap8" style="padding: 0 16px 8px; flex-wrap: wrap">
+      <label class="muted"><input v-model="showWeak" type="checkbox" /> Show weak associations</label>
+      <select aria-label="Focus on a concept" value="" @change="focus([($event.target as HTMLSelectElement).value])">
+        <option value="" disabled>Focus on a concept…</option>
+        <option v-for="concept in concepts" :key="concept.id" :value="concept.id">{{ concept.name }}</option>
+      </select>
+      <span v-if="mode === 'full'" class="muted" data-testid="graph-counts">
+        {{ concepts.length - omittedNodes }} of {{ concepts.length }} concepts ·
+        {{ totalEdges - omittedEdges }} of {{ totalEdges }} links shown<template v-if="omittedNodes || omittedEdges">
+          · {{ omittedNodes }} concepts and {{ omittedEdges }} links omitted; choose a concept to focus</template>
+      </span>
+    </div>
     <div v-if="!concepts.length" class="graph-empty">
-      An admin defines the concepts under Expertise Routing. Once they exist, anything the team writes that mentions one is tagged automatically and appears here.
+      Supported concepts and relationships appear here as the team contributes knowledge. You can also define concepts under Expertise Routing.
     </div>
     <div v-show="concepts.length" ref="graphEl" class="graph-box" data-testid="graph"></div>
   </div>

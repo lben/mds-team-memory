@@ -3,12 +3,13 @@ import math
 import re
 from datetime import timedelta
 
-from sqlalchemy import text as sql_text
+from sqlalchemy import func, text as sql_text
 from sqlalchemy.orm import Session
 
 from .concepts import match_concepts, term_groups
-from .knowledge import item_dict
-from .models import DocumentPassage, KnowledgeItem, Profile, Scratchpad, utcnow
+from .knowledge import item_dict, item_dicts
+from .models import DocumentPassage, ItemConcept, KnowledgeItem, PassageConcept, Profile, Scratchpad, utcnow
+from .ml import effective
 from .text import build_fts_match, content_terms, find_matches
 
 SEARCHABLE_KINDS = ("note", "question", "answer", "excerpt")
@@ -58,18 +59,20 @@ def _item_hits(db: Session, match: str, profile: Profile, terms: list[str], alia
         ),
         {"m": match},
     ).fetchall()
+    selected = db.query(KnowledgeItem).filter(KnowledgeItem.id.in_([row[0] for row in rows])).all()
+    by_id = {item.id: item for item in selected}
+    details = {entry["id"]: entry for entry in item_dicts(db, selected, profile)}
+    question_ids = [item.id for item in selected if item.kind == "question"]
+    answers = dict(db.query(KnowledgeItem.parent_id, func.count()).filter(
+        KnowledgeItem.kind == "answer", KnowledgeItem.parent_id.in_(question_ids)).group_by(KnowledgeItem.parent_id)) if question_ids else {}
     hits = []
     for item_id, snip, rank in rows:
-        item = db.get(KnowledgeItem, item_id)
-        d = item_dict(db, item, profile)
+        item = by_id[item_id]
+        d = details[item_id]
         d["type"] = "item"
         d["snippet"] = _safe_snippet(snip)
         if item.kind == "question":
-            d["answer_count"] = (
-                db.query(KnowledgeItem)
-                .filter(KnowledgeItem.kind == "answer", KnowledgeItem.parent_id == item.id)
-                .count()
-            )
+            d["answer_count"] = answers.get(item.id, 0)
         d["coverage"] = _coverage(item.body, terms, aliases)
         d["score"] = -rank + _signals(d, item.updated_at)
         hits.append(d)
@@ -151,6 +154,31 @@ def search_all(db: Session, profile: Profile, query: str) -> dict:
 
     # Concepts the query mentions, so the knowledge graph can focus on them.
     matched = match_concepts(db, query)
+    ids = {concept.id for concept in matched}
+    if ids:
+        seen = {entry["id"] for entry in items}
+        candidates = (db.query(KnowledgeItem).join(ItemConcept, ItemConcept.item_id == KnowledgeItem.id)
+                      .filter(ItemConcept.concept_id.in_(ids), KnowledgeItem.visibility == "team",
+                              KnowledgeItem.kind.in_(SEARCHABLE_KINDS)).distinct()
+                      .order_by(KnowledgeItem.updated_at.desc()).limit(40))
+        for item in candidates:
+            if item.id in seen or not (effective.source_tags(db, "item", item.id, set()) & ids):
+                continue
+            entry = item_dict(db, item, profile)
+            entry.update(type="item", snippet=_safe_snippet(item.body[:240]), coverage=-1.0,
+                         score=0.0, match_reason="Inferred topic")
+            items.append(entry)
+        seen = {entry["id"] for entry in passages}
+        candidates = (db.query(DocumentPassage).join(PassageConcept, PassageConcept.passage_id == DocumentPassage.id)
+                      .filter(PassageConcept.concept_id.in_(ids)).distinct().order_by(DocumentPassage.id).limit(20))
+        for passage in candidates:
+            if passage.id in seen or not (effective.source_tags(db, "passage", passage.id, set()) & ids):
+                continue
+            doc = passage.document
+            passages.append({"type": "passage", "id": passage.id, "document_id": doc.id, "filename": doc.filename,
+                             "locator": passage.locator, "uploader": doc.uploader.label,
+                             "uploaded_at": doc.uploaded_at.isoformat() + "Z", "snippet": _safe_snippet(passage.text[:240]),
+                             "coverage": -1.0, "score": 0.0, "match_reason": "Inferred topic"})
     return {
         "query": query,
         # The meaningful words the query reduced to. No screen renders this, but

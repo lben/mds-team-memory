@@ -136,10 +136,10 @@ def endorsed_by(db: Session, item: KnowledgeItem, profile: Profile | None) -> bo
     )
 
 
-def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) -> dict:
-    info = group_info(db, item)
+def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None, *, signals=None) -> dict:
+    info = signals if signals is not None else group_info(db, item)
     author = db.get(Profile, item.author_profile_id)
-    marked = bool(profile) and already_helped(db, item, profile.id)
+    marked = signals["marked_helped"] if signals is not None else bool(profile) and already_helped(db, item, profile.id)
     # An answer is meaningless without the question it answers, so carry a
     # preview of it wherever the answer is shown.
     question = None
@@ -147,7 +147,7 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         parent = db.get(KnowledgeItem, item.parent_id)
         if parent:
             question = {"id": parent.id, "body": parent.body, "status": parent.question_status}
-    endorsements = endorsement_count(db, item)
+    endorsements = signals["endorsements"] if signals is not None else endorsement_count(db, item)
     return {
         "id": item.id,
         "kind": item.kind,
@@ -164,13 +164,13 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         "group_id": item.group_id,
         "contributors": info["contributors"],
         "group_size": info["group_size"],
-        "helped": helped_count(db, item),
+        "helped": signals["helped"] if signals is not None else helped_count(db, item),
         "marked_helped": marked,
         # Anyone may endorse, so the count is the signal an admin reads. Hiding
         # the button after the first endorsement capped every item at one.
         "endorsements": endorsements,
         "endorsed": endorsements > 0,
-        "endorsed_by_me": endorsed_by(db, item, profile),
+        "endorsed_by_me": signals["endorsed_by_me"] if signals is not None else endorsed_by(db, item, profile),
         "question_status": item.question_status,
         "accepted_answer_id": item.accepted_answer_id,
         "correction_state": item.correction_state,
@@ -179,6 +179,29 @@ def item_dict(db: Session, item: KnowledgeItem, profile: Profile | None = None) 
         "created_at": item.created_at.isoformat() + "Z",
         "updated_at": item.updated_at.isoformat() + "Z",
     }
+
+
+def item_dicts(db: Session, items: list[KnowledgeItem], profile: Profile | None = None) -> list[dict]:
+    """Batch list-page signals so concurrent readers do not occupy the pool
+    for hundreds of separate queries. Grouped impact keeps its existing rules.
+    """
+    # Keep strong references while serializers use the session identity map.
+    authors = db.query(Profile).filter(Profile.id.in_({item.author_profile_id for item in items})).all()
+    parents = db.query(KnowledgeItem).filter(KnowledgeItem.id.in_({item.parent_id for item in items if item.parent_id})).all()
+    signals = {item.id: {"group_size": 1, "contributors": 1, "helped": 0, "marked_helped": False,
+                         "endorsements": 0, "endorsed_by_me": False} for item in items if not item.group_id}
+    if signals:
+        events = db.query(ImpactEvent.item_id, ImpactEvent.event_type, ImpactEvent.actor_profile_id, ImpactEvent.dedup_key).filter(
+            ImpactEvent.item_id.in_(signals), ImpactEvent.event_type.in_(("helped", "sme_endorsed")))
+        for item_id, kind, actor, key in events:
+            current = signals[item_id]
+            if kind == "helped":
+                current["helped"] += 1
+                current["marked_helped"] |= bool(profile and key == f"helped:{profile.id}:item:{item_id}")
+            else:
+                current["endorsements"] += 1
+                current["endorsed_by_me"] |= bool(profile and actor == profile.id)
+    return [item_dict(db, item, profile, signals=signals.get(item.id)) for item in items]
 
 
 def dependents_by_others(db: Session, item: KnowledgeItem) -> int:

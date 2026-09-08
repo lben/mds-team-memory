@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { ApiError, api, type Item } from './api'
 
 interface Profile {
@@ -21,6 +21,8 @@ interface AuthState {
   username: string | null
   is_admin: boolean
 }
+
+export const knowledgeRevision = ref(0)
 
 export const store = reactive({
   profile: null as Profile | null,
@@ -114,6 +116,28 @@ export const store = reactive({
   /** Listen for pushed notifications, falling back to polling if a websocket
    * cannot be established — corporate proxies sometimes block them. */
   watchNotifications() {
+    if (watching) return
+    watching = true
+    let checkingRevision = false
+    const checkRevision = async () => {
+      if (checkingRevision || document.hidden) return
+      checkingRevision = true
+      try {
+        const data = await api.get<{ revision: number }>('/api/ml/revision')
+        if (data.revision !== knowledgeRevision.value) {
+          knowledgeRevision.value = data.revision
+          await store.refreshUnread()
+        }
+      } catch {
+        /* Retry after a transient connection failure. */
+      } finally {
+        checkingRevision = false
+      }
+    }
+    window.setInterval(checkRevision, 5000)
+    document.addEventListener('visibilitychange', checkRevision)
+    window.addEventListener('focus', checkRevision)
+    checkRevision()
     const startPolling = () => {
       if (pollTimer) return
       pollTimer = window.setInterval(() => store.refreshUnread(), 30000)
@@ -153,3 +177,4 @@ export const store = reactive({
 
 let pollTimer = 0
 let retryDelay = 2000
+let watching = false

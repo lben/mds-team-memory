@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ApiError, api } from '../api'
 import EvidenceModal from '../components/EvidenceModal.vue'
 import MapAdminPanel from '../components/MapAdminPanel.vue'
+import FindingsPanel from '../components/FindingsPanel.vue'
 import { initialsFor } from '../profile'
-import { store } from '../store'
+import { knowledgeRevision, store } from '../store'
 
 const evidenceLinkId = ref<string | null>(null)
 const route = useRoute()
@@ -62,6 +63,8 @@ async function loadState() {
   if (store.auth.is_admin) await loadData()
   else await loadPublicMap()
 }
+
+watch(knowledgeRevision, () => store.auth.is_admin ? loadData() : loadPublicMap())
 
 async function loadData() {
   try {
@@ -147,7 +150,7 @@ onMounted(loadState)
       <div>
         <div class="eyebrow">Admin</div>
         <h1>Expertise routing</h1>
-        <p class="lead">Map teammates to expertise areas so matching questions appear in the right queue.</p>
+        <p class="lead">Find the right people by topic. Administrators can adjust automatic knowledge and expertise when needed.</p>
       </div>
       <div v-if="store.auth.is_admin" class="row gap8">
         <span class="chip good">ADMIN · {{ store.auth.username }}</span>
@@ -197,13 +200,14 @@ onMounted(loadState)
     </div>
 
     <template v-if="store.auth.is_admin">
+      <FindingsPanel :concepts="concepts" :profiles="profiles" @changed="loadData" />
       <div class="grid-2">
         <div class="card card-pad">
           <h3>How tagging works</h3>
           <p class="muted" style="font-size: 12px; margin-top: 6px; line-height: 1.5">
-            Questions and contributions are tagged when they mention a concept or one of its aliases — deterministic
-            word matching, nothing else. Concepts, links, and relationship types are managed in the curation table
-            below; the knowledge graph itself lives on the Home page.
+            Team contributions provide evidence for concepts, topic matches, relationships, and expertise.
+            Qualified findings take effect automatically. Use the controls below to keep a decision fixed,
+            correct it, or suppress it. The knowledge graph is on the Home page.
           </p>
         </div>
 

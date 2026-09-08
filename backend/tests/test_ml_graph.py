@@ -1,0 +1,147 @@
+"""Public graph behavior with real persisted model findings and source changes."""
+
+import json
+import uuid
+
+import pytest
+
+
+@pytest.fixture
+def automated_graph(admin_client):
+    from sqlalchemy import text
+    from app.db import SessionLocal
+
+    with SessionLocal() as db:
+        previous = db.execute(text("SELECT automation_enabled FROM ml_state WHERE id=1")).scalar()
+        db.execute(text("UPDATE ml_state SET automation_enabled=1 WHERE id=1"))
+        db.commit()
+    names = [f"{name}{uuid.uuid4().hex[:8]}" for name in ("Orion", "Ledger", "Harbor")]
+    concepts = [admin_client.post("/api/admin/concepts", json={"name": name}).json() for name in names]
+    yield concepts
+    with SessionLocal() as db:
+        db.execute(text("UPDATE ml_state SET automation_enabled=:previous WHERE id=1"), {"previous": previous})
+        db.commit()
+
+
+def seed_claim(src, dst, items, *, kind="relationship", predicate="feeds", link_id=None, score=0.8):
+    from app.db import SessionLocal
+    from app.models import RELATED_TO_ID, Relationship, utcnow
+    from app.ml.models import Evidence, Finding, Source
+    from app.ml.policy import VERSION
+    from app.ml.sources import finding_key, snapshot
+
+    with SessionLocal() as db:
+        link = db.get(Relationship, link_id) if link_id else Relationship(
+            src_kind="concept", src_id=src["id"], dst_kind="concept", dst_id=dst["id"],
+            relationship_type_id=RELATED_TO_ID, state="suggested")
+        if not link_id:
+            db.add(link)
+            db.flush()
+        key = finding_key(kind, src["id"], predicate, dst["id"])
+        db.add(Finding(key=key, kind=kind, payload=json.dumps({"src_id": src["id"], "dst_id": dst["id"],
+                      "predicate": predicate}), state="active", score=score, calibrated=False,
+                      policy_version=VERSION, canonical_id=link.id, created_at=utcnow(), updated_at=utcnow()))
+        db.flush()
+        for item in items:
+            source = snapshot(db, "item", item["id"])
+            db.merge(Source(kind="item", id=source.id, content_hash=source.content_hash, valid=True,
+                            model_version="fixture-model", updated_at=utcnow()))
+            db.add(Evidence(key=finding_key("evidence", key, source.id), finding_key=key,
+                            source_kind="item", source_id=source.id, source_hash=source.content_hash,
+                            group_key=source.group_key, author_id=source.author_id, start=0, end=len(source.text),
+                            raw_score=score, polarity="positive", model_version="fixture-model",
+                            features=json.dumps({"text_hash": source.text_hash, "literal_support": True,
+                                                 "assertion_allowed": True, "locator": "", "origin": "note"})))
+        db.commit()
+        return link.id
+
+
+def capture(client, body):
+    result = client.post("/api/capture", data={"body": body})
+    assert result.status_code == 200
+    return result.json()["item"]
+
+
+def test_graph_live_claims_direction_weak_toggle_and_source_retraction(automated_graph, make_client):
+    left, right, weak = automated_graph
+    first, second, reader = make_client(), make_client(), make_client()
+    one = capture(first, f"{left['name']} feeds {right['name']} through the morning import pipeline.")
+    two = capture(second, f"The warehouse receives {left['name']} records: {right['name']} is its destination.")
+    link_id = seed_claim(left, right, [one, two])
+    seed_claim(right, left, [two], predicate="depends_on", link_id=link_id, score=0.68)
+    weak_id = seed_claim(left, weak, [one], kind="association", predicate="related_to")
+
+    graph = reader.get("/api/graph/global").json()
+    edge = next(edge for edge in graph["edges"] if edge["link_id"] == link_id)
+    assert (edge["state"], edge["style"], edge["label"], edge["directed"]) == ("active", "solid", "feeds", True)
+    assert not any(edge["link_id"] == weak_id for edge in graph["edges"])
+    shown = reader.get("/api/graph/global?show_weak=true").json()
+    association = next(edge for edge in shown["edges"] if edge["link_id"] == weak_id)
+    assert (association["state"], association["style"], association["directed"]) == ("weak", "dotted", False)
+    clusters = [{concept["id"] for concept in cluster["concepts"]} for cluster in shown["clusters"]]
+    assert any({left["id"], right["id"]} <= cluster and weak["id"] not in cluster for cluster in clusters)
+    local = reader.get("/api/graph/local", params={"concept_id": right["id"]}).json()
+    arrow = next(edge for edge in local["edges"] if edge["link_id"] == link_id)
+    assert (arrow["source"], arrow["target"]) == (f"c:{left['id']}", f"c:{right['id']}")
+
+    detail = reader.get(f"/api/graph/links/{link_id}/evidence").json()
+    assert len(detail["claims"]) == 2
+    for claim in detail["claims"]:
+        assert claim["policy_version"] and "score" not in claim
+        for source in claim["sources"]:
+            assert source["quote"] == source["text"][source["start"]:source["end"]]
+            assert source["source_hash"] and source["model_version"]
+
+    assert first.delete(f"/api/items/{one['id']}").status_code == 200
+    edge = next(edge for edge in reader.get("/api/graph/global").json()["edges"] if edge["link_id"] == link_id)
+    assert (edge["state"], edge["style"]) == ("held", "dashed")
+    assert second.put(f"/api/items/{two['id']}", json={"body": "The old pipeline account was removed."}).status_code == 200
+    assert not any(edge["link_id"] == link_id for edge in reader.get("/api/graph/global").json()["edges"])
+    detail = reader.get(f"/api/graph/links/{link_id}/evidence").json()
+    assert all(not claim["sources"] for claim in detail["claims"])
+
+
+def test_graph_manual_label_pin_reject_restore_and_delete(automated_graph, make_client, admin_client):
+    left, right, _ = automated_graph
+    author, reader = make_client(), make_client()
+    item = capture(author, f"{left['name']} feeds {right['name']} during settlement.")
+    link_id = seed_claim(left, right, [item])
+    custom = admin_client.post("/api/admin/relationship-types", json={"name": f"owns-{uuid.uuid4().hex[:8]}"}).json()
+    assert admin_client.patch(f"/api/graph/links/{link_id}", json={"type_id": custom["id"], "note": "Team decision"}).status_code == 200
+    assert author.delete(f"/api/items/{item['id']}").status_code == 200
+    edge = next(edge for edge in reader.get("/api/graph/global").json()["edges"] if edge["link_id"] == link_id)
+    assert (edge["origin"], edge["state"], edge["label"]) == ("manual", "active", custom["name"])
+    assert edge["support_count"] == 0
+    assert admin_client.patch(f"/api/graph/links/{link_id}", json={"state": "rejected"}).status_code == 200
+    assert not any(edge["link_id"] == link_id for edge in reader.get("/api/graph/global").json()["edges"])
+    assert admin_client.patch(f"/api/graph/links/{link_id}", json={"state": "suggested"}).status_code == 200
+    # Explicit restoration cannot make missing evidence active.
+    assert not any(edge["link_id"] == link_id for edge in reader.get("/api/graph/global").json()["edges"])
+    assert admin_client.patch(f"/api/graph/links/{link_id}", json={"state": "confirmed"}).status_code == 200
+    assert admin_client.delete(f"/api/graph/links/{link_id}").status_code == 200
+    capture(author, f"{left['name']} and {right['name']} are mentioned again after deletion.")
+    links = admin_client.get("/api/graph/links", params={"concept_id": left["id"]}).json()
+    assert not any(right["id"] in (link["src_id"], link["dst_id"]) for link in links)
+
+
+def test_overview_bound_and_focus_reaches_omitted_concepts(automated_graph, make_client):
+    from app.db import SessionLocal
+    from app.models import Concept, ConceptTerm
+
+    with SessionLocal() as db:
+        for _ in range(205):
+            concept = Concept()
+            db.add(concept)
+            db.flush()
+            name = f"Bounded-{uuid.uuid4().hex}"
+            db.add(ConceptTerm(concept_id=concept.id, term=name.lower(), display=name, is_canonical=True))
+        db.commit()
+    reader = make_client()
+    graph = reader.get("/api/graph/global").json()
+    shown = {concept["id"] for cluster in graph["clusters"] for concept in cluster["concepts"]}
+    assert len(shown) == 200 and len(graph["edges"]) <= 400
+    assert graph["omitted_nodes"] == graph["total_nodes"] - 200 > 0
+    omitted = next(concept for concept in reader.get("/api/graph/concepts").json() if concept["id"] not in shown)
+    local = reader.get("/api/graph/local", params={"concept_id": omitted["id"]}).json()
+    assert local["nodes"][0]["id"] == f"c:{omitted['id']}"
+    assert len(local["nodes"]) <= 13

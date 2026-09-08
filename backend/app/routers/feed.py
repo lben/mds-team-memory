@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from ..auth import get_profile
 from ..db import get_db
-from ..knowledge import item_dict
+from ..knowledge import item_dicts
 from ..models import KnowledgeItem, Profile
 
 router = APIRouter(prefix="/api/feed", tags=["feed"])
@@ -30,7 +30,7 @@ def feed(profile: Profile = Depends(get_profile), db: Session = Depends(get_db))
         if key in seen:
             continue
         seen.add(key)
-        result.append(item_dict(db, item, profile))
+        result.append(item)
         if len(result) >= 30:
             break
-    return result
+    return item_dicts(db, result, profile)

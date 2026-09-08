@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from ..db import get_db
 from ..models import ExpertiseMapping
+from ..ml import effective
 
 router = APIRouter(prefix="/api/expertise", tags=["expertise"])
 
@@ -20,7 +21,7 @@ def who_knows_what(db: Session = Depends(get_db)):
     labels are names the team already sees on every contribution.
     """
     by_profile: dict[str, dict] = {}
-    for m in db.query(ExpertiseMapping).all():
+    for m in effective.expertise(db).all():
         entry = by_profile.setdefault(m.profile_id, {"label": m.profile.label, "areas": []})
         entry["areas"].append(m.concept.name)
     for entry in by_profile.values():

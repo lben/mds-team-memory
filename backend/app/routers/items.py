@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from ..auth import get_admin, get_profile
-from ..concepts import match_concepts
+from ..concepts import source_concepts
 from ..db import get_db
 from ..docstore import save_uploaded_document
 from ..impact import mark_helped, notify, record_event, shared_count
@@ -89,7 +89,7 @@ def item_detail(
             .order_by(KnowledgeItem.created_at)
             .all()
         ]
-    concepts = match_concepts(db, item.body)
+    concepts = source_concepts(db, "item", item.id, item.body)
     data = item_dict(db, item, profile)
     data["concepts"] = [{"id": c.id, "name": c.name} for c in concepts]
     data["corrections"] = [item_dict(db, c, profile) for c in corrections]

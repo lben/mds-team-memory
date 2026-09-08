@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ApiError, api } from './api'
 import { identityNote, initialsFor } from './profile'
-import { store } from './store'
+import { knowledgeRevision, store } from './store'
 
 const route = useRoute()
 const router = useRouter()
@@ -85,6 +85,15 @@ async function markAllRead() {
   notifications.value = notifications.value.map((n) => ({ ...n, read: true }))
   store.unread = 0
 }
+
+watch(knowledgeRevision, async () => {
+  if (!showNotifications.value) return
+  try {
+    const data = await api.get<{ unread: number; notifications: typeof notifications.value }>('/api/notifications')
+    notifications.value = data.notifications
+    store.unread = data.unread
+  } catch { /* Keep the open list until the next refresh. */ }
+})
 
 async function openNotification(n: { item_id: string | null }) {
   showNotifications.value = false

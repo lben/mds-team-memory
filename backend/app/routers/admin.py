@@ -19,6 +19,7 @@ from ..models import (
     RelationshipType,
 )
 from ..relationships import refresh_for_concept, type_usage
+from ..ml import adapter, effective
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -73,10 +74,11 @@ def _concept_dict(concept: Concept) -> dict:
     return {"id": concept.id, "name": concept.name, "aliases": concept.aliases}
 
 
-def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str]) -> None:
+def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str], username: str) -> None:
     """Replace a concept's vocabulary, rejecting words another concept owns."""
     # The canonical term is the concept's identity, so it must exist even when
     # aliases would otherwise make the term set non-empty.
+    previous_terms = [term.term for term in concept.terms]
     canonical_term = normalize_term(name)
     if not canonical_term:
         raise HTTPException(400, "A concept needs a name")
@@ -109,6 +111,9 @@ def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str]) -> 
             )
         )
     try:
+        db.flush()
+        db.expire(concept, ["terms"])
+        adapter.pin_concept(db, concept, username, previous_terms=previous_terms)
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -123,22 +128,22 @@ def list_concepts(db: Session = Depends(get_db)):
 
 
 @router.post("/concepts", dependencies=[Depends(require_admin)])
-def create_concept(payload: ConceptIn, db: Session = Depends(get_db)):
+def create_concept(payload: ConceptIn, admin: Account = Depends(require_admin), db: Session = Depends(get_db)):
     concept = Concept()
     db.add(concept)
     db.flush()
-    _set_terms(db, concept, payload.name, payload.aliases)
+    _set_terms(db, concept, payload.name, payload.aliases, admin.username)
     retag_everything(db)
     refresh_for_concept(db, concept.id)
     return _concept_dict(concept)
 
 
 @router.put("/concepts/{concept_id}", dependencies=[Depends(require_admin)])
-def update_concept(concept_id: str, payload: ConceptUpdateIn, db: Session = Depends(get_db)):
+def update_concept(concept_id: str, payload: ConceptUpdateIn, admin: Account = Depends(require_admin), db: Session = Depends(get_db)):
     concept = db.get(Concept, concept_id)
     if not concept:
         raise HTTPException(404, "Concept not found")
-    _set_terms(db, concept, payload.name, payload.aliases)
+    _set_terms(db, concept, payload.name, payload.aliases, admin.username)
     # Renaming or re-aliasing changes what the text matches, so rebuild the tags
     # and re-run discovery: the new wording may match content the old one missed.
     retag_everything(db)
@@ -147,10 +152,11 @@ def update_concept(concept_id: str, payload: ConceptUpdateIn, db: Session = Depe
 
 
 @router.delete("/concepts/{concept_id}", dependencies=[Depends(require_admin)])
-def delete_concept(concept_id: str, db: Session = Depends(get_db)):
+def delete_concept(concept_id: str, admin: Account = Depends(require_admin), db: Session = Depends(get_db)):
     concept = db.get(Concept, concept_id)
     if not concept:
         raise HTTPException(404, "Concept not found")
+    adapter.suppress_concept(db, concept, admin.username)
     # Tags, terms and expertise mappings cascade; concept links are polymorphic
     # by design and are removed here.
     db.query(Relationship).filter(
@@ -163,10 +169,12 @@ def delete_concept(concept_id: str, db: Session = Depends(get_db)):
 
 
 @router.post("/relationship-types", dependencies=[Depends(require_admin)])
-def create_relationship_type(payload: RelationshipTypeIn, db: Session = Depends(get_db)):
+def create_relationship_type(payload: RelationshipTypeIn, admin: Account = Depends(require_admin), db: Session = Depends(get_db)):
     rtype = RelationshipType(name=payload.name.strip(), is_builtin=False)
     db.add(rtype)
     try:
+        db.flush()
+        adapter.fix_predicate(db, rtype, rtype.name, "pinned", admin.username)
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -176,15 +184,18 @@ def create_relationship_type(payload: RelationshipTypeIn, db: Session = Depends(
 
 @router.put("/relationship-types/{type_id}", dependencies=[Depends(require_admin)])
 def rename_relationship_type(
-    type_id: str, payload: RelationshipTypeIn, db: Session = Depends(get_db)
+    type_id: str, payload: RelationshipTypeIn, admin: Account = Depends(require_admin), db: Session = Depends(get_db)
 ):
     rtype = db.get(RelationshipType, type_id)
     if not rtype:
         raise HTTPException(404, "Relationship type not found")
     if rtype.is_builtin:
         raise HTTPException(400, f"'{rtype.name}' is built in and cannot be renamed")
+    previous_name = rtype.name
     rtype.name = payload.name.strip()
     try:
+        db.flush()
+        adapter.fix_predicate(db, rtype, previous_name, "pinned", admin.username)
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -193,7 +204,7 @@ def rename_relationship_type(
 
 
 @router.delete("/relationship-types/{type_id}", dependencies=[Depends(require_admin)])
-def delete_relationship_type(type_id: str, db: Session = Depends(get_db)):
+def delete_relationship_type(type_id: str, admin: Account = Depends(require_admin), db: Session = Depends(get_db)):
     rtype = db.get(RelationshipType, type_id)
     if not rtype:
         raise HTTPException(404, "Relationship type not found")
@@ -206,6 +217,7 @@ def delete_relationship_type(type_id: str, db: Session = Depends(get_db)):
             f"'{rtype.name}' is used by {usage} link{'s' if usage != 1 else ''}. "
             "Change or remove those links first.",
         )
+    adapter.fix_predicate(db, rtype, rtype.name, "suppressed", admin.username)
     db.delete(rtype)
     db.commit()
     return {"ok": True}
@@ -294,7 +306,7 @@ def list_mappings(db: Session = Depends(get_db)):
 
 
 @router.post("/expertise", dependencies=[Depends(require_admin)])
-def add_mapping(payload: MappingIn, db: Session = Depends(get_db)):
+def add_mapping(payload: MappingIn, admin: Account = Depends(require_admin), db: Session = Depends(get_db)):
     profile = db.get(Profile, payload.profile_id)
     if not profile:
         raise HTTPException(404, "Profile not found")
@@ -313,6 +325,8 @@ def add_mapping(payload: MappingIn, db: Session = Depends(get_db)):
     mapping = ExpertiseMapping(profile_id=payload.profile_id, concept_id=payload.concept_id)
     db.add(mapping)
     try:
+        db.flush()
+        adapter.fix_expertise(db, mapping, "pinned", admin.username)
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -321,10 +335,11 @@ def add_mapping(payload: MappingIn, db: Session = Depends(get_db)):
 
 
 @router.delete("/expertise/{mapping_id}", dependencies=[Depends(require_admin)])
-def delete_mapping(mapping_id: str, db: Session = Depends(get_db)):
+def delete_mapping(mapping_id: str, admin: Account = Depends(require_admin), db: Session = Depends(get_db)):
     mapping = db.get(ExpertiseMapping, mapping_id)
     if not mapping:
         raise HTTPException(404, "Mapping not found")
+    adapter.fix_expertise(db, mapping, "suppressed", admin.username)
     db.delete(mapping)
     db.commit()
     return {"ok": True}
@@ -334,7 +349,7 @@ def delete_mapping(mapping_id: str, db: Session = Depends(get_db)):
 def routing_preview(q: str, db: Session = Depends(get_db)):
     concepts = match_concepts(db, q)
     experts = (
-        db.query(ExpertiseMapping)
+        effective.expertise(db)
         .filter(ExpertiseMapping.concept_id.in_([c.id for c in concepts] or [""]))
         .all()
     )

@@ -7,10 +7,12 @@ patched, so they cannot drift when a term is renamed or removed.
 
 import re
 
+from sqlalchemy import text as sql_text
 from sqlalchemy.orm import Session
 
 from .impact import notify
 from .text import stem
+from .ml import effective
 from .models import (
     Concept,
     ConceptTerm,
@@ -31,17 +33,18 @@ def vocabulary(db: Session) -> list[tuple[str, str]]:
 
     Longest first so 'data governance' wins over 'data' when both are defined.
     """
-    rows = db.query(ConceptTerm.term, ConceptTerm.concept_id).all()
+    rows = effective.terms(db).with_entities(ConceptTerm.term, ConceptTerm.concept_id).all()
     return sorted(rows, key=lambda r: (-len(r[0]), r[0]))
 
 
 def term_groups(db: Session) -> dict[str, list[str]]:
     """term -> every spelling of its concept, for search query expansion."""
     by_concept: dict[str, list[str]] = {}
-    for t in db.query(ConceptTerm).all():
+    terms = effective.terms(db).all()
+    for t in terms:
         by_concept.setdefault(t.concept_id, []).append(t.display)
     groups: dict[str, list[str]] = {}
-    for t in db.query(ConceptTerm).all():
+    for t in terms:
         groups[t.term] = by_concept[t.concept_id]
     return groups
 
@@ -80,8 +83,13 @@ def match_concept_ids(db: Session, text: str, vocab=None, stems=None) -> set[str
 
 def match_concepts(db: Session, text: str) -> list[Concept]:
     ids = match_concept_ids(db, text)
-    concepts = db.query(Concept).filter(Concept.id.in_(ids or [""])).all()
+    concepts = effective.concepts(db).filter(Concept.id.in_(ids or [""])).all()
     return sorted(concepts, key=lambda c: c.name.lower())
+
+
+def source_concepts(db: Session, kind: str, source_id: str, text: str) -> list[Concept]:
+    ids = effective.source_tags(db, kind, source_id, match_concept_ids(db, text))
+    return sorted(effective.concepts(db).filter(Concept.id.in_(ids)).all(), key=lambda c: c.name.lower())
 
 
 def _sync(db: Session, existing: dict[str, object], wanted: set[str], make) -> None:
@@ -94,6 +102,7 @@ def _sync(db: Session, existing: dict[str, object], wanted: set[str], make) -> N
 def retag_item(db: Session, item: KnowledgeItem, vocab=None, stems=None) -> set[str]:
     """Recompute an item's tags from scratch, adding and removing as needed."""
     wanted = match_concept_ids(db, item.body, vocab, stems)
+    wanted = effective.source_tags(db, "item", item.id, wanted)
     existing = {
         row.concept_id: row
         for row in db.query(ItemConcept).filter(ItemConcept.item_id == item.id).all()
@@ -104,6 +113,7 @@ def retag_item(db: Session, item: KnowledgeItem, vocab=None, stems=None) -> set[
 
 def retag_passage(db: Session, passage: DocumentPassage, vocab=None, stems=None) -> set[str]:
     wanted = match_concept_ids(db, passage.text, vocab, stems)
+    wanted = effective.source_tags(db, "passage", passage.id, wanted)
     existing = {
         row.concept_id: row
         for row in db.query(PassageConcept).filter(PassageConcept.passage_id == passage.id).all()
@@ -118,6 +128,11 @@ def retag_everything(db: Session) -> None:
     Covers passages as well as items, so a concept created after a document was
     uploaded still finds it.
     """
+    if db.execute(sql_text("SELECT automation_enabled FROM ml_state WHERE id=1")).scalar():
+        from .ml.queue import request_backfill
+        request_backfill(db)
+        db.commit()
+        return
     vocab, stems = vocabulary(db), stem_index(db)
     for item in db.query(KnowledgeItem).all():
         retag_item(db, item, vocab, stems)
@@ -131,7 +146,7 @@ def route_question(db: Session, question: KnowledgeItem, concepts: list[Concept]
     if not concepts:
         return
     mappings = (
-        db.query(ExpertiseMapping)
+        effective.expertise(db)
         .filter(ExpertiseMapping.concept_id.in_([c.id for c in concepts]))
         .all()
     )

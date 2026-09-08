@@ -20,6 +20,7 @@ from .routers import (
     scratchpad,
 )
 from .routers import search as search_router
+from .ml.api import router as ml_router
 
 app = FastAPI(title="MDS Team Knowledge")
 
@@ -38,6 +39,7 @@ for r in (
     notifications.router,
     notifications.ws_router,
     admin.router,
+    ml_router,
 ):
     app.include_router(r)
 

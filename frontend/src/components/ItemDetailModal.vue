@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useDialog } from '../dialog'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { ApiError, api, type Item } from '../api'
 import AskModal from './AskModal.vue'
 import { useAsk } from '../ask'
-import { store } from '../store'
+import { knowledgeRevision, store } from '../store'
 
 interface Detail extends Item {
   concepts: { id: string; name: string }[]
@@ -77,6 +77,8 @@ async function load() {
     error.value = e instanceof ApiError ? e.message : 'Could not load the item'
   }
 }
+
+watch(knowledgeRevision, load)
 
 async function markHelped() {
   if (!detail.value) return

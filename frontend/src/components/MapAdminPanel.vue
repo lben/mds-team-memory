@@ -129,19 +129,19 @@ async function setState(link: LinkRow, state: string) {
       '. Your decision replaces theirs.'
     : ''
   const note = await askUser({
-    title: state === 'confirmed' ? 'Approve this link' : 'Reject this link',
+    title: state === 'confirmed' ? 'Keep this link fixed' : 'Suppress this link',
     message:
       (state === 'rejected'
-        ? 'It stays in this table and keeps counting occurrences, so you can reinstate it later.'
-        : 'It becomes a solid line on the map for everyone.') + theirs,
+        ? 'Automatic processing will keep it suppressed until you restore automation.'
+        : 'Your manual decision keeps it as a solid line, even if supporting evidence changes.') + theirs,
     inputLabel: state === 'rejected' ? 'Why is this link wrong? (optional)' : 'Why is this link right? (optional, shown as the evidence)',
-    confirmLabel: state === 'confirmed' ? 'Approve' : 'Reject',
+    confirmLabel: state === 'confirmed' ? 'Keep fixed' : 'Suppress',
   })
   if (note === null) return
 
   try {
     await api.patch(`/api/graph/links/${link.id}`, { state, note })
-    store.notify(state === 'confirmed' ? 'Link approved' : 'Link rejected — it stays here and keeps counting')
+    store.notify(state === 'confirmed' ? 'Link kept fixed' : 'Link suppressed until restored')
     await loadAll()
     emit('changed')
   } catch (e) {
@@ -162,14 +162,9 @@ async function changeType(link: LinkRow, typeId: string) {
 async function deleteLink(link: LinkRow) {
   const answer = await askUser({
     title: `Delete ${link.src_name} — ${link.dst_name}?`,
-    // Deleting is the weaker of the two, not the stronger: discovery puts the
-    // link straight back the next time anything mentions both concepts. Only a
-    // rejection is remembered. Calling this "permanent" was simply untrue.
     message:
-      'This only removes the record. While team content still mentions both concepts it will be ' +
-      'suggested again. Reject it instead to make the decision stick — a rejected link stays in ' +
-      'this table, keeps counting, and can be reinstated.',
-    confirmLabel: 'Delete anyway',
+      'Remove this link from the map. Automatic knowledge maintenance will keep it suppressed until you restore it in Automatic knowledge.',
+    confirmLabel: 'Delete link',
     danger: true,
   })
   if (answer === null) return
@@ -180,6 +175,15 @@ async function deleteLink(link: LinkRow) {
   } catch (e) {
     fail(e, 'Could not delete the link')
   }
+}
+
+async function reverseLink(link: LinkRow) {
+  try {
+    await api.patch(`/api/graph/links/${link.id}`, { reverse: true })
+    await loadAll()
+    emit('changed')
+    store.notify('Link direction corrected')
+  } catch (e) { fail(e, 'Could not reverse the link') }
 }
 
 async function createLink() {
@@ -413,8 +417,9 @@ loadAll()
         </div>
         <div class="muted note">{{ link.reviewed_by || '—' }}</div>
         <div class="row gap8 wrap">
-          <button v-if="link.state !== 'confirmed'" class="btn small" :data-testid="`approve-${link.id}`" @click="setState(link, 'confirmed')">Approve</button>
-          <button v-if="link.state !== 'rejected'" class="btn small" :data-testid="`reject-${link.id}`" @click="setState(link, 'rejected')">Reject</button>
+          <button class="btn small" @click="reverseLink(link)">Reverse direction</button>
+          <button v-if="link.state !== 'confirmed'" class="btn small" :data-testid="`approve-${link.id}`" @click="setState(link, 'confirmed')">Keep fixed</button>
+          <button v-if="link.state !== 'rejected'" class="btn small" :data-testid="`reject-${link.id}`" @click="setState(link, 'rejected')">Suppress</button>
           <button class="btn small ghost" @click="deleteLink(link)">Delete</button>
         </div>
       </div>
