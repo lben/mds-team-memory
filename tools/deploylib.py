@@ -107,6 +107,21 @@ def _run(command: list[str], capture: bool, cwd: str | None = None) -> subproces
         fail(f"{command[0]} not found on this machine; it is needed to reach the server")
 
 
+def local_sqlite_filesystem(directory: Path) -> str:
+    """Require the deployment's supported local storage before opening SQLite."""
+    directory = directory.expanduser().resolve()
+    mounts = []
+    for line in Path("/proc/self/mountinfo").read_text().splitlines():
+        fields, metadata = line.split(" - ", 1)
+        mount = fields.split()[4].replace("\\040", " ").replace("\\134", "\\")
+        if directory.is_relative_to(mount):
+            mounts.append((len(mount), metadata.split()[0]))
+    filesystem = max(mounts)[1] if mounts else "unknown"
+    if filesystem not in {"ext2", "ext3", "ext4", "xfs", "btrfs", "overlay", "tmpfs", "zfs"}:
+        raise ValueError(f"ML needs local SQLite storage; unsupported filesystem {filesystem}")
+    return filesystem
+
+
 def ml_preflight(data_dir: Path) -> dict:
     """Reject an unsupported ML host before allocating or starting a worker."""
     import os
@@ -142,15 +157,7 @@ def ml_preflight(data_dir: Path) -> dict:
         if Path(database_url[len("sqlite:///"):]).expanduser().resolve() != database:
             raise ValueError("ML deployment requires MDS_DATABASE_URL to use MDS_DATA_DIR/mds.sqlite3 for backup and reset")
     data_dir = database.parent
-    mounts = []
-    for line in Path("/proc/self/mountinfo").read_text().splitlines():
-        fields, metadata = line.split(" - ", 1)
-        mount = fields.split()[4].replace("\\040", " ").replace("\\134", "\\")
-        if data_dir.is_relative_to(mount):
-            mounts.append((len(mount), metadata.split()[0]))
-    filesystem = max(mounts)[1] if mounts else "unknown"
-    if filesystem not in {"ext2", "ext3", "ext4", "xfs", "btrfs", "overlay", "tmpfs", "zfs"}:
-        raise ValueError(f"ML needs local SQLite storage; unsupported filesystem {filesystem}")
+    filesystem = local_sqlite_filesystem(data_dir)
     if shutil.disk_usage(data_dir).free < 2 * 1024**3:
         raise ValueError("ML requires at least 2 GiB filesystem free space")
     return {"os": release.get("PRETTY_NAME"), "glibc": version, "python": platform.python_version(),

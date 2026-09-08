@@ -39,7 +39,6 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-
 def digest_tree(directory):
     hashes = {str(p.relative_to(directory)): hashlib.sha256(p.read_bytes()).hexdigest()
               for p in sorted(directory.rglob('*')) if p.is_file()}
@@ -110,8 +109,29 @@ def cgroup_files():
     return {name: path for name, path in files.items() if path.is_file()}
 
 
+def record_load_gates(report):
+    """Freeze acceptance facts before post-load verification can add results."""
+    samples = [sample for sample in report['samples'] if sample['phase'] == 'worker_on']
+    report['real_inference'] = {'sources': max((sample.get('sources', 0) for sample in samples), default=0),
+                                'embedding_chunks': max((sample.get('chunks', 0) for sample in samples), default=0)}
+    baseline = report['phases']['worker_off']['write']['p95_seconds']
+    active = report['phases']['worker_on']['write']['p95_seconds']
+    report['write_p95_gate_seconds'] = max(1.0, 1.25*baseline) if baseline is not None else None
+    if baseline is None or active is None or active > report['write_p95_gate_seconds']:
+        report['failures'].append('Write p95 exceeds paired acceptance gate or has no samples')
+    if any(phase['errors'] for phase in report['phases'].values()):
+        report['failures'].append('Public API requests failed')
+    if report['real_inference']['sources']==0 or report['real_inference']['embedding_chunks']==0:
+        report['failures'].append('No completed real inference during worker-on window')
+    if report['worker_exit_before_stop'] is not None:
+        report['failures'].append('Worker stopped before load phase completed')
+
+
 def run(args):
+    from deploylib import local_sqlite_filesystem
     import psutil
+
+    filesystem = local_sqlite_filesystem(args.output_parent)
     out = Path(tempfile.mkdtemp(prefix='mds-ml-load-check-', dir=args.output_parent))
     print('ARTIFACT_DIRECTORY=' + str(out), flush=True)
     root = out / 'snapshot'
@@ -128,6 +148,7 @@ def run(args):
         'driver_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'source_git_head': git.stdout.strip() if git is not None and git.returncode == 0 else None,
         'source_root': str(args.source_root), 'models': str(args.models),
+        'sqlite_filesystem': filesystem,
         'models_manifest_sha256': hashlib.sha256(manifest).hexdigest(),
         'model_pins': json.loads(manifest),
         'web_environment': environment(args.web_python),
@@ -217,6 +238,7 @@ def run(args):
                       'max_characters': max(body_lengths), 'seconds': time.monotonic()-started},
               'runtime': {'uid': os.getuid(), 'python': sys.version, 'sqlite': sqlite3.sqlite_version,
                           'migration': migration, 'machine': os.uname().machine,
+                          'sqlite_filesystem': filesystem,
                           'platform': platform.platform(), 'cpu_affinity': sorted(os.sched_getaffinity(0)),
                           'host_memory_bytes': psutil.virtual_memory().total,
                           'cgroup': Path('/proc/self/cgroup').read_text().strip(),
@@ -276,7 +298,7 @@ def run(args):
                 sample['jobs'], sample['attempts'], sample['error_jobs'], oldest = con.execute(
                     'SELECT count(*),coalesce(sum(attempts),0),coalesce(sum(error IS NOT NULL),0),min(created_at) FROM ml_jobs').fetchone()
                 sample['oldest_queue_age_seconds'] = time.time()-oldest if oldest else 0
-                sample['sources'] = con.execute('SELECT count(*) FROM ml_sources').fetchone()[0]
+                sample['sources'] = con.execute("SELECT count(*) FROM ml_sources WHERE model_version != '' AND result != '{}'").fetchone()[0]
                 sample['chunks'] = con.execute('SELECT count(*) FROM ml_embeddings').fetchone()[0]
                 sample['revision'], sample['status'] = con.execute('SELECT revision,status FROM ml_state WHERE id=1').fetchone()
         except sqlite3.OperationalError as error:
@@ -372,6 +394,7 @@ def run(args):
                                   cwd=root/'backend', stdout=worker_log, stderr=worker_log)
         run_phase('worker_on')
         report['worker_exit_before_stop'] = worker.poll()
+        record_load_gates(report)
         phase_name = 'verification'
         with sqlite3.connect(dbpath) as con:
             successful = [r for r in attempts if r['ok']]
@@ -386,32 +409,21 @@ def run(args):
                     failed_persisted.append({'error':r.get('error'),'rows':rows})
             report['integrity'] = {'successful_api_writes': len(successful), 'missing_or_wrong_writes': missing,
                                    'duplicate_writes': duplicates, 'failed_responses_with_persisted_writes': failed_persisted,
-                                   'item_count':con.execute('SELECT count(*) FROM knowledge_items').fetchone()[0],
-                                   'profile_count':con.execute('SELECT count(*) FROM profiles').fetchone()[0],
-                                   'api_corroboration_groups':sum(r.get('group_size',1)>1 for r in successful),
-                                   'foreign_key_errors':con.execute('PRAGMA foreign_key_check').fetchall(),
-                                   'quick_check':con.execute('PRAGMA quick_check').fetchone()[0]}
+                                   'api_corroboration_groups':sum(r.get('group_size',1)>1 for r in successful)}
+            if missing or duplicates or failed_persisted:
+                report['failures'].append('Write integrity or response-commit consistency failed')
+            report['integrity']['item_count'] = con.execute('SELECT count(*) FROM knowledge_items').fetchone()[0]
+            report['integrity']['profile_count'] = con.execute('SELECT count(*) FROM profiles').fetchone()[0]
             report['worker_jobs_with_errors'] = con.execute('SELECT source_kind,source_id,attempts,error FROM ml_jobs WHERE error IS NOT NULL LIMIT 20').fetchall()
-            report['real_inference'] = {'sources':con.execute("SELECT count(*) FROM ml_sources WHERE model_version != '' AND result != '{}'").fetchone()[0],
-                                       'embedding_chunks':con.execute('SELECT count(*) FROM ml_embeddings').fetchone()[0]}
+            report['post_load_inference'] = {'sources':con.execute("SELECT count(*) FROM ml_sources WHERE model_version != '' AND result != '{}'").fetchone()[0],
+                                            'embedding_chunks':con.execute('SELECT count(*) FROM ml_embeddings').fetchone()[0]}
+            report['integrity']['foreign_key_errors'] = con.execute('PRAGMA foreign_key_check').fetchall()
+            report['integrity']['quick_check'] = con.execute('PRAGMA quick_check').fetchone()[0]
+            if report['integrity']['foreign_key_errors'] or report['integrity']['quick_check']!='ok':
+                report['failures'].append('SQLite integrity failed')
         for r in successful[:10]:
             detail = request(r['client'], '/api/items/'+r['id'])
             assert detail['body'] == r['body'], 'Public item read did not preserve body'
-        baseline = report['phases']['worker_off']['write']['p95_seconds']
-        active = report['phases']['worker_on']['write']['p95_seconds']
-        report['write_p95_gate_seconds'] = max(1.0, 1.25*baseline) if baseline is not None else None
-        if baseline is None or active is None or active > report['write_p95_gate_seconds']:
-            report['failures'].append('Write p95 exceeds paired acceptance gate or has no samples')
-        if any(p['errors'] for p in report['phases'].values()):
-            report['failures'].append('Public API requests failed')
-        if missing or duplicates or failed_persisted:
-            report['failures'].append('Write integrity or response-commit consistency failed')
-        if report['integrity']['foreign_key_errors'] or report['integrity']['quick_check']!='ok':
-            report['failures'].append('SQLite integrity failed')
-        if report['real_inference']['sources']==0 or report['real_inference']['embedding_chunks']==0:
-            report['failures'].append('No completed real inference during worker-on window')
-        if worker.poll() is not None:
-            report['failures'].append('Worker stopped before load phase completed')
     except Exception as error:
         report['failures'].append(f'Driver failure: {type(error).__name__}: {error}')
         import traceback
