@@ -20,7 +20,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from deploylib import add_target_argument, ctl, load_target  # noqa: E402
 
-COMMANDS = ("status", "start", "stop", "restart", "health", "logs", "releases", "rollback")
+COMMANDS = ("status", "start", "stop", "restart", "health", "logs", "releases", "rollback",
+            "ml-status", "ml-start", "ml-stop", "ml-logs", "preflight")
 
 
 def main() -> None:
@@ -31,7 +32,7 @@ def main() -> None:
     args = parser.parse_args()
 
     target = load_target(args.target)
-    argv = ["logs", str(args.lines)] if args.command == "logs" else [args.command]
+    argv = [args.command, str(args.lines)] if args.command in ("logs", "ml-logs") else [args.command]
     print(f"{target.name}: {args.command} on {target.host}", file=sys.stderr)
     raise SystemExit(ctl(target, *argv).returncode)
 

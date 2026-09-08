@@ -27,6 +27,8 @@ PREVIOUS="$ROOT/previous"
 BACKUPS="$ROOT/backups"
 PIDFILE="$ROOT/run/app.pid"
 LOG="$ROOT/logs/app.log"
+ML_PIDFILE="$ROOT/run/ml.pid"
+ML_LOG="$ROOT/logs/ml.log"
 
 # Defaults for a hand-made server folder; deploy.py overwrites them in app.env.
 PORT=8000
@@ -40,6 +42,7 @@ if [ -f "$ROOT/app.env" ]; then
   set +a
 fi
 export MDS_DATA_DIR="${MDS_DATA_DIR:-$ROOT/data}"
+export UV_PYTHON_DOWNLOADS=never
 
 # The address to check the server on: the one it was told to bind, except for
 # the wildcards, where 127.0.0.1 is the address that actually answers.
@@ -92,6 +95,99 @@ running_pid() {
   echo "$pid"
 }
 
+running_ml_pid() {
+  [ -f "$ML_PIDFILE" ] || return 1
+  local pid args
+  pid="$(cat "$ML_PIDFILE" 2>/dev/null || true)"
+  case "$pid" in ''|*[!0-9]*) return 1;; esac
+  args="$(process_args "$pid")"
+  case "$args" in "$RELEASES/"*"/.ml-venv/bin/python -m app.ml.worker --assets "*) ;; *) return 1;; esac
+  echo "$pid"
+}
+
+cmd_ml_stop() {
+  local pid i
+  if ! pid="$(running_ml_pid)"; then
+    rm -f "$ML_PIDFILE"
+    echo "ML: stopped"
+    return 0
+  fi
+  kill "$pid" 2>/dev/null || true
+  i=0
+  while [ "$i" -lt 20 ] && running_ml_pid >/dev/null; do
+    i=$((i + 1))
+    sleep 1
+  done
+  if running_ml_pid >/dev/null; then
+    kill -9 "$pid" 2>/dev/null || true
+    sleep 1
+  fi
+  running_ml_pid >/dev/null && die "ML worker $pid did not stop; database operation refused"
+  rm -f "$ML_PIDFILE"
+  echo "ML: stopped (pid $pid)"
+}
+
+cmd_ml_start() {
+  local release assets pid args i
+  release="$(current_release)"
+  if [ ! -f "$release/ml-runtime.json" ]; then
+    running_ml_pid >/dev/null && die "a worker from another release is running; stop it first"
+    echo "ML: not configured for this release"
+    return 0
+  fi
+  if pid="$(running_ml_pid)"; then
+    args="$(process_args "$pid")"
+    case "$args" in "$release/.ml-venv/bin/python "*) echo "ML: running (pid $pid)"; return 0;; esac
+    die "a worker from another release is running; stop it before activation"
+  fi
+  "$release/.ml-venv/bin/python" "$release/tools/deploylib.py" preflight --root "$ROOT" --release "$release" >/dev/null
+  assets="$("$release/.venv/bin/python" "$release/tools/deploylib.py" ml-runtime --root "$ROOT" --release "$release")"
+  rm -f "$ML_PIDFILE"
+  (
+    cd "$release" || exit 1
+    export PYTHONPATH="$release/backend" HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+    export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 TOKENIZERS_PARALLELISM=false PYTHONDONTWRITEBYTECODE=1
+    nohup "$release/.ml-venv/bin/python" -m app.ml.worker --assets "$assets" >>"$ML_LOG" 2>&1 </dev/null &
+    echo $! >"$ML_PIDFILE"
+  )
+  i=0
+  while [ "$i" -lt 20 ]; do
+    sleep 1
+    running_ml_pid >/dev/null || break
+    if PYTHONPATH="$release/backend" "$release/.venv/bin/python" -m app.ml.worker --status 2>/dev/null \
+       | "$release/.venv/bin/python" -c 'import json,sys; s=json.load(sys.stdin); sys.exit(0 if s["worker_active"] else 1)' 2>/dev/null; then
+      echo "ML: started for $(basename "$release") (pid $(cat "$ML_PIDFILE"))"
+      return 0
+    fi
+    i=$((i + 1))
+  done
+  tail -n 20 "$ML_LOG" >&2 || true
+  cmd_ml_stop
+  die "ML worker did not acquire its queue lease; web capture remains available"
+}
+
+cmd_ml_status() {
+  local release pid args
+  release="$(current_release)"
+  if [ ! -f "$release/ml-runtime.json" ]; then
+    echo "ML: not configured for this release"
+    return 0
+  fi
+  if pid="$(running_ml_pid)"; then
+    args="$(process_args "$pid")"
+    case "$args" in "$release/.ml-venv/bin/python "*) echo "ML: running (pid $pid)";;
+      *) die "ML worker belongs to another release; restart is required";; esac
+  else
+    echo "ML: stopped; queued work is retained"
+  fi
+  PYTHONPATH="$release/backend" "$release/.venv/bin/python" -m app.ml.worker --status
+}
+
+cmd_ml_logs() {
+  [ -f "$ML_LOG" ] || { echo "no ML log yet"; return 0; }
+  tail -n "${1:-100}" "$ML_LOG"
+}
+
 health_once() {
   if command -v curl >/dev/null 2>&1; then
     curl -fsS --max-time 5 "$HEALTH_URL" >/dev/null 2>&1
@@ -126,6 +222,7 @@ cmd_start() {
   if pid="$(running_pid)"; then
     health_once || die "pid $pid is running but not answering $HEALTH_URL"
     echo "already running (pid $pid)"
+    cmd_ml_start
     return 0
   fi
   release="$(current_release)"
@@ -144,6 +241,7 @@ cmd_start() {
   )
   if wait_healthy; then
     echo "started $(basename "$release") on $BIND:$PORT (pid $(cat "$PIDFILE"))"
+    cmd_ml_start
   else
     tail -n 20 "$LOG" >&2 || true
     cmd_stop >/dev/null 2>&1 || true
@@ -152,6 +250,7 @@ cmd_start() {
 }
 
 cmd_stop() {
+  cmd_ml_stop
   if ! pid="$(running_pid)"; then
     rm -f "$PIDFILE"
     echo "not running"
@@ -202,6 +301,7 @@ cmd_status() {
     echo "health: not answering on $HEALTH_URL"
   fi
   echo "data: $MDS_DATA_DIR"
+  if [ -L "$CURRENT" ]; then cmd_ml_status; fi
 }
 
 cmd_health() {
@@ -242,9 +342,22 @@ cmd_unpack() {
 
 cmd_setup() {
   release="$(release_dir "${1:-}" setup)"
+  if [ -L "$CURRENT" ] && [ "$(current_release)" = "$release" ]; then
+    die "setup requires a new release; the current runtime must remain immutable"
+  fi
+  if [ -L "$PREVIOUS" ] && [ "$(readlink "$PREVIOUS")" = "$release" ]; then
+    die "setup cannot change the rollback release"
+  fi
+  if [ -n "${MDS_ML_GENERATION:-}" ]; then
+    interpreter="$("$UV" python find --offline --no-python-downloads "$PYTHON_VERSION")" \
+      || die "install approved uv and Python 3.12 with SQLite 3.51.3+ before offline ML setup"
+    "$interpreter" "$release/tools/deploylib.py" ml-setup --root "$ROOT" --release "$release" \
+      --generation "$MDS_ML_GENERATION" --managed-root "${MDS_ML_ROOT:-$ROOT/ml}" --uv "$UV"
+    return
+  fi
   # cd into the release so uv finds the uv.toml placed anywhere above it.
   ( cd "$release" \
-    && "$UV" venv --python "$PYTHON_VERSION" "$release/.venv" \
+    && "$UV" venv --no-python-downloads --python "$PYTHON_VERSION" "$release/.venv" \
     && "$UV" pip install --python "$release/.venv/bin/python" -r "$release/requirements.txt" )
   echo "environment ready for $1"
 }
@@ -253,6 +366,7 @@ cmd_setup() {
 # database is copied while the server is stopped and before alembic runs.
 cmd_backup() {
   [ -n "${1:-}" ] || die "backup needs a release stamp"
+  cmd_ml_stop
   db="$MDS_DATA_DIR/mds.sqlite3"
   if [ ! -f "$db" ]; then
     echo "no database yet; nothing to back up"
@@ -271,16 +385,21 @@ cmd_backup() {
 # reads and writes a database inside the release directory that nothing serves.
 cmd_manage() {
   release="$(current_release)"
+  if [ "${1:-}" = "reset-database" ]; then cmd_stop; fi
   "$release/.venv/bin/python" "$release/manage.py" "$@"
 }
 
 cmd_migrate() {
+  cmd_ml_stop
+  running_pid >/dev/null && die "stop the server before migration"
   release="$(release_dir "${1:-}" migrate)"
   "$release/.venv/bin/alembic" -c "$release/backend/alembic.ini" upgrade head
   echo "migrated to the schema of $1"
 }
 
 cmd_activate() {
+  cmd_ml_stop
+  running_pid >/dev/null && die "stop the server before activation"
   release="$(release_dir "${1:-}" activate)"
   [ -d "$release" ] || die "$release does not exist"
   # Going back to the release 'previous' already names is a rollback: keep it
@@ -300,6 +419,13 @@ cmd_rollback() {
   cmd_stop
   cmd_activate "$target"
   cmd_start
+}
+
+cmd_preflight() {
+  local release interpreter
+  release="$(current_release)"
+  interpreter="$("$UV" python find --offline --no-python-downloads "$PYTHON_VERSION")"
+  "$interpreter" "$release/tools/deploylib.py" preflight --root "$ROOT" --release "$release"
 }
 
 # Old releases are kept so rollback has somewhere to go; the current and
@@ -325,10 +451,10 @@ cmd_prune() {
 command="${1:-}"
 [ $# -gt 0 ] && shift
 case "$command" in
-  start|stop|restart|status|health|logs|releases|manage|unpack|setup|backup|migrate|activate|rollback|prune)
-    "cmd_$command" "$@"
+  start|stop|restart|status|health|logs|releases|manage|unpack|setup|backup|migrate|activate|rollback|prune|ml-start|ml-stop|ml-status|ml-logs|preflight)
+    "cmd_${command//-/_}" "$@"
     ;;
   *)
-    die "usage: mdsctl.sh {start|stop|restart|status|health|logs|releases|rollback|manage ...|unpack|setup|backup|migrate|activate|prune}"
+    die "usage: mdsctl.sh {start|stop|restart|status|health|logs|releases|rollback|ml-start|ml-stop|ml-status|ml-logs|preflight|manage ...|unpack|setup|backup|migrate|activate|prune}"
     ;;
 esac

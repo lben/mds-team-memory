@@ -40,6 +40,11 @@ RELEASE_ITEMS = [
     ("manage.py", "manage.py"),
     ("requirements.txt", "requirements.txt"),
     ("SERVER_SETUP.md", "SERVER_SETUP.md"),
+    ("tools/deploylib.py", "tools/deploylib.py"),
+    ("tools/ml_storage.py", "tools/ml_storage.py"),
+    ("tools/ml_assets.py", "tools/ml_assets.py"),
+    ("tools/ml_bundle.py", "tools/ml_bundle.py"),
+    ("tools/ml-container/requirements-linux.lock", "tools/ml-container/requirements-linux.lock"),
 ]
 
 

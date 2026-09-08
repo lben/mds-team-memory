@@ -10,12 +10,11 @@ What the account needs:
 
 - SSH access, ideally with key-based login — a deploy runs several commands and
   will otherwise ask for your password each time.
-- `uv` on the PATH, able to produce a Python 3.12 interpreter — RHEL 8 ships
-  3.6, so uv either downloads one or uses a 3.12 already installed. Check before
-  the first deploy with `ssh <server> uv python find 3.12`. If your `uv.toml`
-  sets `python-downloads = "never"`, or the server cannot reach the internet,
-  point `python` in `tools/deploy.toml` at an interpreter that exists, e.g.
-  `python = "/usr/bin/python3.12"`. A deploy
+- `uv` and an approved Python 3.12 already installed. Deployment never downloads
+  Python. Check before the first deploy with
+  `ssh <server> uv python find --offline --no-python-downloads 3.12`.
+  You can point `python` in `tools/deploy.toml` at the installed interpreter,
+  e.g. `python = "/home/deployer/python/cpython-3.12/bin/python3.12"`. A deploy
   runs over a non-interactive SSH session, which may not source the profile that
   puts `~/.local/bin` on the PATH — if `ssh <server> uv --version` fails while an
   interactive login works, set the full path as `uv` in `tools/deploy.toml`.
@@ -51,6 +50,10 @@ of `README.md` for the one-time `tools/deploy.toml` setup.
   backups/<stamp>/   database copy taken before that release's migration
   run/app.pid        pid of the running server
   logs/app.log       its output
+  run/ml.pid         pid of the optional ML worker
+  logs/ml.log        worker output
+  ml/generations/    verified immutable models, wheels and dependency locks
+  ml/runtimes/       shared ML environments, keyed by lock and Python identity
 ```
 
 Releases are self-contained and disposable; `data/` is the only directory worth
@@ -74,7 +77,10 @@ uv run --python 3.12 tools\deploy.py prod    # asks you to type 'prod' to confir
 A deploy builds the frontend, uploads one archive, creates the new release's
 environment with uv while the old release keeps serving, then stops the server,
 backs up the database, migrates it, swaps `current` over and starts the new
-release. It waits for `/api/health` to answer before calling it a success.
+release. It waits for `/api/health` and, when configured, the matching worker's
+queue lease before calling it a success. Both processes stop before the backup
+and migration. A worker start failure triggers the same release recovery as a
+web start failure.
 
 If any step fails, the deploy puts the server back the way it found it — the old
 release restarted, or never stopped at all if the failure came before that — and
@@ -148,8 +154,10 @@ server user's own crontab do it (no root needed, `crontab -e` on the server):
 
 ## Rolling back
 
-`uv run --python 3.12 tools\serverctl.py rollback` stops the server, points `current` back
-at the previous release and starts it.
+`uv run --python 3.12 tools\serverctl.py rollback` stops both processes, points
+`current` back at the previous release and starts its web server and worker.
+Each release's `ml-runtime.json` pins its own generation and runtime. A later
+asset setting in `app.env` does not change those rollback pins.
 
 Rolling back does not make the release you are leaving the next rollback target.
 That matters after a failed deploy, which rolls back on its own: `previous` keeps
@@ -183,6 +191,94 @@ Uploaded files are not part of that copy; only the database is.
 If your uv configuration is not already in `~/.config/uv/uv.toml`, put the
 `uv.toml` at the deploy root (`<root>/uv.toml`). uv discovers it from any
 release directory beneath, and deploys never overwrite it.
+
+## Offline ML installation
+
+ML is configured once per server. Contributors then use the ordinary app.
+There is no per-finding admin activation step.
+
+The approved bundle targets RHEL 8.10, x86_64, glibc 2.28 and Python 3.12.
+The installed Python must include SQLite 3.51.3 or newer. The compatibility
+container uses uv-managed Python 3.12.14 with SQLite 3.53.1. Prepare or transfer
+the approved uv and Python installation through your company's permitted route
+before setup. The models and wheel bundle does not contain uv or Python.
+Setup fails if the interpreter is missing; it cannot bootstrap through a
+blocked download endpoint.
+
+Transfer the trusted parts and manifest into `<root>/ml/transfer/`. Use
+`tools/ml_assets.py assemble` and `tools/ml_bundle.py extract` with
+`--managed-root <root>/ml` to produce a new `<root>/ml/generations/<name>/`.
+Use their `--help` for the archive and manifest arguments. Keep all transfer
+staging, unpacked generations and ML environments inside this same managed root.
+The extracted generation must contain `bundle.json`, `models/`, `wheels/`, and
+`requirements-linux.lock`. The lock must match the one shipped with the release.
+The tools verify lengths and hashes before publishing a generation.
+
+Set these entries in the target's environment table in `tools/deploy.toml`:
+
+```toml
+[uat.env]
+MDS_ML_GENERATION = "/home/deployer/apps/mds-uat/ml/generations/v1"
+# MDS_ML_ROOT defaults to /home/deployer/apps/mds-uat/ml
+```
+
+Deploy normally. Setup verifies every prepared file and installs only local
+wheels, with network access and Python downloads disabled. It creates a separate
+ML runtime and installs the web dependency subset into the release's `.venv`.
+Generations and completed runtimes are immutable; upgrades use a new generation.
+Retain the generations and runtimes referenced by every release you may roll back
+to. Release pruning does not delete shared ML assets. Remove an unused generation,
+runtime or transfer archive only after checking those release references.
+
+Managed assets, runtime and transfer staging have a combined 16 GiB ceiling.
+Every allocation must leave 2 GiB free. Setup includes both extraction and
+installation copies in its peak estimate and keeps temporary files in the managed
+root. It refuses an upgrade that cannot fit; it does not delete uploads or raise
+the budget. The web environment, database and uploads are separate application
+storage. Account for their growth independently.
+
+`serverctl.py preflight` reports the actual OS, glibc, SQLite, CPU features,
+allowed affinity, local database filesystem, free space and user process limits.
+Setup and worker start run these checks too. Unknown or network filesystems are
+rejected for ML. The deployment database must remain `MDS_DATA_DIR/mds.sqlite3`,
+the file used by backup and reset. The worker uses at most four CPUs from its
+allowed affinity, low scheduling priority and the existing 8 GiB process-tree
+RSS ceiling. RSS
+monitoring can briefly overshoot; it is not a hard kernel memory cap. Use an
+approved user-level cgroup if a hard quota is required. The container proof uses
+four CPUs and a 4 GiB hard limit without swap. It does not establish production
+Xeon throughput or host kernel and filesystem behavior.
+
+```powershell
+uv run --python 3.12 tools\serverctl.py ml-status
+uv run --python 3.12 tools\serverctl.py ml-stop
+uv run --python 3.12 tools\serverctl.py ml-start
+uv run --python 3.12 tools\serverctl.py ml-logs --lines 100
+uv run --python 3.12 tools\serverctl.py preflight
+```
+
+`stop`, `restart`, and `rollback` control both processes. `ml-stop` leaves web
+capture, ordinary search and the last published findings available. Durable work
+waits for `ml-start`; status explicitly reports a stopped worker. `health` checks
+web availability only. Backup, migration, activation and reset stop ML first.
+The database backup includes derived ML tables. A database reset deliberately
+removes them with the rest of the test data.
+
+The default policy uses conservative evidence rules. Model scores are not
+validated probabilities. Optional local fitting is available through
+`python -m app.ml.calibration fit --help` in the ML environment. Use independently
+labeled development examples, with separate training and calibration groups.
+Place its output at `models/calibration.json` before packing a new generation.
+The bundle verifies its encoder revisions and carries it through deployment and
+rollback. Fitted policies can withhold additional findings; they cannot bypass
+the source and independent-evidence requirements.
+
+Validate actual publication decisions separately with `python -m
+app.ml.evaluation --help`. Pass the fitted artifact as `--development-groups`
+to check for overlap. The frozen precision, recall and sample-size requirements
+are in `ML_IMPLEMENTATION_PLAN.md`. Fitting and integration checks do not establish
+accuracy on the team's content. Sparse evaluation data reports insufficient
+evidence, and admin silence is never a positive label.
 
 ## Resetting a UAT instance
 
