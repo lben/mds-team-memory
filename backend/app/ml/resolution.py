@@ -1,11 +1,13 @@
 """Bounded identity matching with source evidence; similarity is not identity."""
 
+import json
 import re
 
 from sqlalchemy import literal_column
 
 from ..models import ConceptTerm
 from . import policy
+from .models import Finding
 from .runtime import NEGATION, UNCERTAIN, normalize, specific_name
 
 
@@ -14,14 +16,21 @@ def spelling_key(name):
     return tuple(re.split(r"[ _-]+", normalize(name)))
 
 
-def spelling_concept(db, name):
+def spelling_match(db, name):
     compact = re.sub(r"[ _-]", "", normalize(name))
     expression = literal_column("replace(replace(replace(concept_terms.term,' ',''),'-',''),'_','')")
     candidates = db.query(ConceptTerm).filter(expression == compact).limit(33).all()
-    if len(candidates) > 32:
+    expression = literal_column("replace(replace(replace(lower(json_extract(payload,'$.name')),' ',''),'-',''),'_','')")
+    findings = db.query(Finding).filter(Finding.kind == "concept", expression == compact).limit(33).all()
+    if len(candidates) > 32 or len(findings) > 32:
         return None
-    identities = {term.concept_id for term in candidates if spelling_key(term.term) == spelling_key(name)}
-    return next(iter(identities)) if len(identities) == 1 else None
+    identities = {term.concept_id: term for term in candidates if spelling_key(term.term) == spelling_key(name)}
+    # Findings survive canonical deletion and retain its override. They also
+    # retain the identity needed when an admin explicitly restores automation.
+    for finding in findings:
+        if spelling_key(json.loads(finding.payload)["name"]) == spelling_key(name):
+            identities[finding.canonical_id or finding.key] = finding
+    return next(iter(identities.values())) if len(identities) == 1 else None
 
 
 def definitions(text, spans):

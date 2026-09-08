@@ -95,6 +95,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    op.execute("DROP INDEX IF EXISTS ix_ml_findings_name_spelling")
     op.execute("DROP INDEX IF EXISTS ix_concept_terms_spelling")
     op.execute("DROP INDEX IF EXISTS ix_knowledge_items_visibility_created_at")
     for name in ("item_update", "item_delete", "passage_update", "passage_delete",
@@ -143,6 +144,7 @@ def _derived_schema():
         op.execute(f"CREATE INDEX ix_ml_embeddings_bucket{number} ON ml_embeddings(generation,dimensions,bucket{number},key)")
     for field in ("src_id", "dst_id", "alias_key", "profile_id"):
         op.execute(f"CREATE INDEX ix_ml_findings_{field} ON ml_findings(kind,json_extract(payload,'$.{field}'))")
+    op.execute("CREATE INDEX ix_ml_findings_name_spelling ON ml_findings(kind,replace(replace(replace(lower(json_extract(payload,'$.name')),' ',''),'-',''),'_',''))")
     for table, indexes in {
         "ml_findings": ("kind", "canonical_id", "state"), "ml_overrides": ("kind",),
         "ml_sources": ("valid",), "ml_evidence": ("finding_key", "source_kind,source_id", "group_key"),

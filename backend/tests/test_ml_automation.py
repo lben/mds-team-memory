@@ -330,6 +330,23 @@ def test_alias_resolution_preserves_distinct_manual_identities_and_word_boundari
     assert len(set(_tags(client, other).values())) == 4
 
 
+def test_deleted_concept_cannot_return_through_a_new_spelling(make_client, admin_client):
+    client = make_client()
+    name, variant = "Lyra Access-Control", "Lyra Access Control"
+    original = _capture(client, f"{name} limits access to the receipt store.")
+    _apply(original, [name])
+    concept_id = _tags(client, original)[name]
+    key = _finding(admin_client, "concept", name=name)["key"]
+    assert admin_client.delete(f"/api/admin/concepts/{concept_id}").status_code == 200
+    later = _capture(client, f"The recovery guide describes {variant} for operators.")
+    _apply(later, [variant])
+    assert _tags(client, later) == {}
+    assert client.get("/api/search", params={"q": variant}).json()["concepts"] == []
+    _decision(admin_client, key, "automatic")
+    _apply(later, cached=True)
+    assert _tags(client, later) == {name: concept_id}
+
+
 def test_alias_restore_releases_removed_spelling_but_preserves_concept_suppression(make_client, admin_client):
     first, second = make_client(), make_client()
     name, alias = "Helios Batch Relay", "HBR"
