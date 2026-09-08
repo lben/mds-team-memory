@@ -200,9 +200,35 @@ def charged_state(db):
             for table in ("ml_budget", "ml_sources", "ml_findings", "ml_evidence", "ml_embeddings")}
 
 
+def test_worker_ignores_old_fitted_assets_and_clears_withdrawn_scores(worker_store):
+    from sqlalchemy import text
+    from app.ml import adapter, policy, queue
+    from app.ml.runtime import inference_version
+    from app.ml.models import Finding
+    from app.models import utcnow
+
+    db, path, assets = worker_store
+    (assets / "calibration.json").write_text("obsolete fitted policy")
+    adapter.bootstrap(db)
+    db.add(Finding(key="old-expertise", kind="expertise", payload=json.dumps({
+        "profile_id": "author", "concept_id": "removed"}), state="held", score=0.9,
+        calibrated=True, policy_version="obsolete-fitted", created_at=utcnow(), updated_at=utcnow()))
+    version = inference_version(json.loads((assets / "models.json").read_text())["models"]) + ":" + policy.VERSION
+    db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy=:policy WHERE id=1"),
+               {"version": version, "policy": '{"models": {"expertise": {}}}'})
+    queue.enqueue(db, "profile", "author", priority=-1)
+    db.commit()
+
+    assert run_once(path, assets)[0] == 0
+    assert db.execute(text("SELECT pipeline_version,decision_policy FROM ml_state WHERE id=1")).one() == (version, "{}")
+    row = db.get(Finding, "old-expertise")
+    assert (row.state, row.score, row.calibrated, row.policy_version) == ("withdrawn", 0.0, False, policy.VERSION)
+
+
 def test_cached_source_job_rolls_back_derived_growth_and_can_retract(worker_store, monkeypatch):
     from sqlalchemy import text
     from app.ml import adapter, embeddings, queue
+    from app.ml.runtime import inference_version
     from test_ml_embeddings import add_source, save
 
     db, path, assets = worker_store
@@ -211,7 +237,8 @@ def test_cached_source_job_rolls_back_derived_growth_and_can_retract(worker_stor
     cached = json.loads(db.execute(text("SELECT result FROM ml_sources WHERE id='source'")).scalar_one())
     cached.update(concepts=[{"name": "Settlement ledger", "start": 0, "end": 17,
                              "score": 0.99, "label": "technical concept"}], relations=[])
-    db.execute(text("UPDATE ml_sources SET result=:result WHERE id='source'"), {"result": json.dumps(cached)})
+    db.execute(text("UPDATE ml_sources SET result=:result,model_version=:version WHERE id='source'"),
+               {"result": json.dumps(cached), "version": inference_version(json.loads((assets / "models.json").read_text())["models"])})
     adapter.bootstrap(db)
     db.execute(text("DELETE FROM ml_jobs"))
     queue.enqueue(db, "item", "source")
@@ -378,3 +405,91 @@ def test_bootstrap_rolls_back_derived_growth_without_losing_jobs(worker_store, m
     assert db.execute(text("SELECT count(*) FROM ml_overrides")).scalar_one() == 0
     assert db.execute(text("SELECT count(*) FROM ml_jobs WHERE source_kind='profile' AND source_id='author'")).scalar_one() == 1
     assert db.execute(text("SELECT display FROM concept_terms WHERE id='term'")).scalar_one() == "Ledger"
+
+
+def test_contested_alias_backfills_drain_and_recover_after_definition_removal(worker_store):
+    """Run the real queue and supervisor with supplied extraction, not quality evidence."""
+    import threading
+    from sqlalchemy import text
+    from app.ml import api, queue, worker
+    from app.ml.models import Finding
+    from app.ml.runtime import inference_version
+    from app.models import Account
+
+    db, path, assets = worker_store
+    names = ("Signal Routing Controller", "Storage Recovery Catalog")
+    metadata = (inference_version(json.loads((assets / "models.json").read_text())["models"]), "old", 1024)
+
+    class FixedExtraction:
+        calls = 0
+        iterations = 0
+
+        def analyze(self, body, heartbeat):
+            self.calls += 1
+            return {"concepts": [{"name": name, "start": body.index(name),
+                    "end": body.index(name) + len(name), "score": 0.96, "label": "named entity"}
+                    for name in names if name in body], "relations": [], "chunks": []}, metadata
+
+        def check_memory(self):
+            self.iterations += 1
+            if self.iterations > 120:
+                raise RuntimeError("Contested alias never drained after 120 worker iterations")
+
+        def close(self):
+            pass
+
+    inference = FixedExtraction()
+
+    def drain():
+        db.commit()
+        inference.iterations = 0
+        supervisor = worker.Supervisor(path, assets, threading.Event())
+        supervisor.inference = inference
+        try:
+            assert supervisor.run("drain") == 0
+        finally:
+            supervisor.close()
+        db.expire_all()
+        assert db.execute(text("SELECT count(*) FROM ml_jobs")).scalar_one() == 0
+        assert db.execute(text("SELECT backfill_kind FROM ml_state WHERE id=1")).scalar_one() is None
+
+    for index in range(4):
+        author, item = f"alias-author-{index}", f"alias-item-{index}"
+        db.execute(text("INSERT INTO profiles(id,claim_locked,created_at) VALUES (:id,0,datetime('now'))"), {"id": author})
+        db.execute(text("""INSERT INTO knowledge_items(id,kind,body,visibility,author_profile_id,created_at,updated_at)
+          VALUES (:id,'note',:body,'team',:author,datetime('now'),datetime('now'))"""),
+          {"id": item, "body": f"{names[index // 2]} (SRC) records inspection batch {index}.", "author": author})
+        drain()
+        if index == 1:
+            assert db.execute(text("SELECT count(*) FROM concept_terms WHERE term='src'")).scalar_one() == 1
+
+    assert inference.calls == 4
+    concepts = dict(db.execute(text("SELECT display,concept_id FROM concept_terms WHERE is_canonical=1")).all())
+    assert set(concepts) == set(names) and len(set(concepts.values())) == 2
+    assert db.execute(text("SELECT count(*) FROM concept_terms WHERE term='src'")).scalar_one() == 0
+    assert db.execute(text("SELECT state FROM ml_findings WHERE kind='alias'")).scalars().all() == ["held", "held"]
+    for _ in range(3):
+        previous = db.execute(text("SELECT backfill_generation FROM ml_state WHERE id=1")).scalar_one()
+        queue.request_backfill(db)
+        drain()
+        assert db.execute(text("SELECT backfill_generation FROM ml_state WHERE id=1")).scalar_one() == previous + 1
+    assert inference.calls == 4
+
+    # Keep both concepts supported while removing only the competing definitions.
+    for item in ("alias-item-2", "alias-item-3"):
+        db.execute(text("UPDATE knowledge_items SET body=replace(body,' (SRC)','') WHERE id=:id"), {"id": item})
+        drain()
+    assert inference.calls == 6
+    assert dict(db.execute(text("SELECT display,concept_id FROM concept_terms WHERE is_canonical=1")).all()) == concepts
+    assert db.execute(text("SELECT concept_id FROM concept_terms WHERE term='src'")).scalar_one() == concepts[names[0]]
+
+    key = db.query(Finding).filter(Finding.kind == "alias",
+            text("json_extract(payload,'$.concept_id')=:id")).params(id=concepts[names[0]]).one().key
+    for mode in ("suppressed", "pinned"):
+        api.decide(key, api.Decision(mode=mode), Account(username="fixture-admin"), db)
+        drain()
+        assert db.execute(text("SELECT mode FROM ml_overrides WHERE key=:key"), {"key": key}).scalar_one() == mode
+        assert db.execute(text("SELECT count(*) FROM concept_terms WHERE term='src'")).scalar_one() == int(mode == "pinned")
+    db.execute(text("UPDATE knowledge_items SET body=replace(body,' records',' (SRC) records') WHERE id IN ('alias-item-2','alias-item-3')"))
+    drain()
+    assert db.execute(text("SELECT concept_id FROM concept_terms WHERE term='src'")).scalar_one() == concepts[names[0]]

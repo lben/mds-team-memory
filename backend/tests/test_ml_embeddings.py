@@ -9,7 +9,7 @@ import pytest
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import Session
 
-from app.ml import embeddings
+from app.ml import embeddings, policy, runtime
 from app.ml.sources import digest, snapshot
 from test_ml_queue import queue_db, queue_template
 
@@ -41,13 +41,16 @@ def chunks(source, values=(1.0, 0.0, 0.0)):
 
 
 def save(db, source, generation="old", values=(1.0, 0.0, 0.0), *, max_bytes=embeddings.MAX_BYTES, reuse=False):
+    version = runtime.inference_version({"extractor": {"revision": "extractor"}, "embeddings": {"revision": generation}})
+    db.execute(text("UPDATE ml_state SET pipeline_version=:version WHERE id=1"),
+               {"version": version + ":" + policy.VERSION})
     result = None if reuse else chunks(source, values)
     embeddings.replace_source(db, source, result, generation, len(values), max_bytes=max_bytes)
     db.execute(text("""INSERT INTO ml_sources(kind,id,content_hash,valid,model_version,result,updated_at)
       VALUES(:kind,:id,:hash,1,:version,:result,datetime('now'))
       ON CONFLICT(kind,id) DO UPDATE SET content_hash=excluded.content_hash,valid=1,
       model_version=excluded.model_version,result=excluded.result"""),
-        {"kind": source.kind, "id": source.id, "hash": source.content_hash, "version": "extractor:" + generation,
+        {"kind": source.kind, "id": source.id, "hash": source.content_hash, "version": version,
          "result": json.dumps({"text_hash": digest(source.text), "embedding_version": generation,
                                "dimensions": len(values), "embedding_count": len(chunks(source, values))})})
 
@@ -110,6 +113,33 @@ def test_replacement_reuse_private_edit_and_deletion(store):
     assert budget(store)["embedding_bytes"] == 0
 
 
+@pytest.mark.parametrize("change", ["schema", "code", "extractor"])
+def test_extraction_upgrade_invalidates_cache_without_changing_embedding_generation(store, monkeypatch, change):
+    from app.ml import adapter, runtime
+
+    models = {"extractor": {"revision": "extractor"}, "embeddings": {"revision": "old"}}
+    version = runtime.inference_version(models)
+    source = add_source(store, "source")
+    save(store, source)
+    result = json.loads(store.execute(text("SELECT result FROM ml_sources WHERE id='source'")).scalar_one())
+    result.update(concepts=[], relations=[])
+    store.execute(text("UPDATE ml_sources SET model_version=:version,result=:result WHERE id='source'"),
+                  {"version": version, "result": json.dumps(result)})
+    cached, metadata = adapter.cached_result(store, source, version)
+    assert cached["chunks"] is None and metadata[1] == "old"
+    vectors = store.execute(text("SELECT generation,vector FROM ml_embeddings")).all()
+
+    if change == "schema":
+        monkeypatch.setitem(runtime.ENTITIES, "named entity", "An updated entity definition.")
+    elif change == "code":
+        monkeypatch.setattr(runtime, "EXTRACTION_VERSION", "next-extraction-version")
+    else:
+        models["extractor"]["revision"] = "next-extractor"
+    assert adapter.cached_result(store, source, runtime.inference_version(models)) is None
+    assert store.execute(text("SELECT generation,vector FROM ml_embeddings")).all() == vectors
+    assert models["embeddings"]["revision"] == metadata[1]
+
+
 def test_rebuild_keeps_old_generation_until_every_source_is_current(store):
     one, two = add_source(store, "one"), add_source(store, "two")
     empty = add_source(store, "empty", body="")
@@ -137,6 +167,33 @@ def test_rebuild_keeps_old_generation_until_every_source_is_current(store):
     assert budget(store)["staging_reserved_bytes"] == budget(store)["staging_bytes"] == 0
     assert store.execute(text("SELECT DISTINCT generation FROM ml_embeddings")).scalars().all() == ["new"]
     assert len(embeddings.nearest(store, vector((0.0, 1.0, 0.0, 0.0)), "new")) == 3
+
+
+@pytest.mark.parametrize("mismatch", ["extraction_identity", "embedding_version", "source_hash", "vector_count"])
+def test_staging_completion_requires_coherent_current_source_metadata(store, mismatch):
+    source = add_source(store, "source")
+    save(store, source)
+    save(store, source, "new")
+    idle(store)
+    if mismatch == "extraction_identity":
+        stale = runtime.inference_version({"extractor": {"revision": "stale-extractor"},
+                                           "embeddings": {"revision": "new"}})
+        store.execute(text("UPDATE ml_sources SET model_version=:version WHERE id='source'"), {"version": stale})
+    elif mismatch == "embedding_version":
+        store.execute(text("UPDATE ml_sources SET result=json_set(result,'$.embedding_version','old') WHERE id='source'"))
+    elif mismatch == "source_hash":
+        store.execute(text("UPDATE ml_embeddings SET source_hash='stale' WHERE generation='new'"))
+    else:
+        store.execute(text("DELETE FROM ml_embeddings WHERE generation='new'"))
+    assert not embeddings.finish_generation(store)
+    assert budget(store)["active_generation"] == "old"
+    assert embeddings.nearest(store, vector(), "old")
+    assert not embeddings.nearest(store, vector(), "new")
+    save(store, source, "new")
+    finish(store)
+    assert budget(store)["active_generation"] == "new"
+    assert store.execute(text("SELECT DISTINCT generation FROM ml_embeddings")).scalars().all() == ["new"]
+    assert embeddings.nearest(store, vector(), "new")
 
 
 def test_quota_reserves_entire_rebuild_and_disk_pause_keeps_active(store, monkeypatch):

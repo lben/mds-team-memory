@@ -10,8 +10,7 @@ copies must share a group and cannot inflate the sample. `applied` means the
 actual automatic publication decision. An eligible positive that was withheld
 is a false negative. Include withheld cases, not just extracted candidates.
 
---development-groups accepts the fitted calibration artifact or a JSON array
-of all training/calibration group IDs.
+--development-groups accepts a JSON array of authored development fixture group IDs.
 The evaluator checks overlap when this inventory is supplied. It cannot verify
 label quality, representative sampling, or that data was genuinely untouched.
 Freeze data, grouping, and policy before evaluation; never tune to this report.
@@ -156,7 +155,7 @@ def summarize(records, precision_target):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("decisions", type=Path, help="independent held-out labeled decisions as JSONL")
-    parser.add_argument("--development-groups", type=Path, help="JSON array of development group IDs or the fitted calibration artifact")
+    parser.add_argument("--development-groups", type=Path, help="JSON array of authored development fixture group IDs")
     args = parser.parse_args(argv)
     try:
         development_groups = set()
@@ -164,11 +163,6 @@ def main(argv=None):
         if args.development_groups:
             data = args.development_groups.read_bytes()
             inventory = json.loads(data, object_pairs_hook=unique_object)
-            if isinstance(inventory, dict) and "schema_version" in inventory:
-                from .calibration import validate_artifact
-
-                groups = validate_artifact(inventory)["development_groups"]
-                inventory = groups["train"] + groups["calibration"]
             if not isinstance(inventory, list) or not all(identifier(value) for value in inventory):
                 raise ValueError("development groups must be a JSON array of nonempty, trimmed strings")
             if len(inventory) != len(set(inventory)):

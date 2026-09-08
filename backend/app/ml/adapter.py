@@ -61,10 +61,9 @@ def _evidence(db, row, source, start, end, score, version, polarity="positive", 
 
 def _decide(db, row):
     previous = row.state
-    fitted = policy.artifact(db)
-    row.state, row.score = policy.decide(row.kind, effective.evidence_rows(db, row.key), fitted)
-    row.calibrated = bool(fitted and row.kind in fitted["models"])
-    row.policy_version, row.updated_at = fitted.get("version", policy.VERSION), utcnow()
+    row.state, row.score = policy.decide(row.kind, effective.evidence_rows(db, row.key))
+    row.calibrated = False
+    row.policy_version, row.updated_at = policy.VERSION, utcnow()
     fixed = db.get(Override, row.key)
     if fixed:
         row.state = "active" if fixed.mode == "pinned" else "suppressed"
@@ -209,6 +208,7 @@ def _publish_concept(db, row):
 
 
 def _publish_alias(db, row):
+    changed = False
     payload = json.loads(row.payload)
     spelling = normalize(payload["alias"])
     blocked = db.get(Override, finding_key("term", spelling))
@@ -219,7 +219,7 @@ def _publish_alias(db, row):
                    if normalize(json.loads(other.payload)["alias"]) == spelling
                    and json.loads(other.payload)["concept_id"] != payload["concept_id"]
                    and effective.evidence_rows(db, other.key)]
-    if conflicting and not db.get(Override, row.key):
+    if conflicting and row.state in {"active", "held"} and not db.get(Override, row.key):
         row.state = "held"
         for other in conflicting:
             if not db.get(Override, other.key):
@@ -228,6 +228,7 @@ def _publish_alias(db, row):
                     old_term = db.get(ConceptTerm, other.canonical_id)
                     if old_term and not old_term.is_canonical:
                         db.delete(old_term)
+                        changed = True
                     other.canonical_id = None
     term = db.get(ConceptTerm, row.canonical_id) if row.canonical_id else None
     if row.state != "active":
@@ -235,7 +236,7 @@ def _publish_alias(db, row):
             db.delete(term)
             row.canonical_id = None
             return True
-        return bool(conflicting)
+        return changed
     if not effective.concepts(db).filter(Concept.id == payload["concept_id"]).first():
         return False
     existing = db.query(ConceptTerm).filter_by(term=spelling).first()
@@ -444,6 +445,11 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             enqueue(db, "vocabulary", "all")
     db.flush()
     concept_ids = set()
+    spellings = [json.loads(row.payload)["alias_key"] for row in db.query(Finding).filter(
+        Finding.key.in_(affected), Finding.kind == "alias")]
+    if spellings:
+        affected.update(key for key, in db.query(Finding.key).filter(Finding.kind == "alias",
+                        func.json_extract(Finding.payload, "$.alias_key").in_(spellings)))
     for key in affected:
         row = db.get(Finding, key)
         if not row:
@@ -570,9 +576,7 @@ def apply_profile(db, profile_id):
         actors = {event.actor_profile_id for event, _ in records}
         originals = {item.group_id or item.normalized_hash or item.id for _, item in records}
         accepted = sum(event.event_type == "answer_accepted" for event, _ in records)
-        row.score, row.calibrated = 0.0, False
         row.state = "active" if len(actors) >= 2 and len(originals) >= 3 and accepted >= 1 else "held"
-        row.policy_version, row.updated_at = policy.VERSION, utcnow()
         db.add(Evidence(key=finding_key("expertise_evidence", row.key), finding_key=row.key,
                source_kind="profile", source_id=profile_id, source_hash=source_hash,
                group_key="profile:" + profile_id, author_id=profile_id, start=0, end=0, raw_score=0.0,
@@ -581,19 +585,13 @@ def apply_profile(db, profile_id):
                                "accepted_answers": accepted, "item_ids": sorted({item.id for _, item in records}),
                                "event_ids": sorted({event.id for event, _ in records})})))
     db.flush()
-    fitted = policy.artifact(db)
     for key in affected:
         row = db.get(Finding, key)
+        row.score, row.calibrated = 0.0, False
+        row.policy_version, row.updated_at = policy.VERSION, utcnow()
         payload = json.loads(row.payload)
         if payload["concept_id"] not in by_concept or not eligible:
             row.state = "withdrawn"
-        if fitted and "expertise" in fitted["models"]:
-            from .calibration import predict
-
-            row.score = predict(fitted, "expertise", policy.features(effective.evidence_rows(db, key)))
-            row.calibrated, row.policy_version = True, fitted["version"]
-            if row.state == "active" and row.score < fitted["models"]["expertise"]["threshold"]:
-                row.state = "held"
         fixed = db.get(Override, key)
         if fixed:
             row.state = "active" if fixed.mode == "pinned" else "suppressed"

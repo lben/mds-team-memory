@@ -183,8 +183,7 @@ def relationship_claims(db: Session, link: Relationship) -> list[dict]:
         payload = json.loads(row.payload)
         predicate = effective.predicate_name(db, payload["predicate"])
         evidence = effective.evidence_rows(db, row.key)
-        fitted = policy.artifact(db)
-        state, score = policy.decide(row.kind, evidence, fitted)
+        state, score = policy.decide(row.kind, evidence)
         fixed = db.get(Override, row.key)
         if fixed:
             state = "active" if fixed.mode == "pinned" else "suppressed"
@@ -197,7 +196,7 @@ def relationship_claims(db: Session, link: Relationship) -> list[dict]:
         claims.append({"finding_key": row.key, "kind": row.kind, "src_id": payload["src_id"],
                        "dst_id": payload["dst_id"], "predicate": predicate or payload["predicate"].replace("_", " "),
                        "state": state, "origin": "manual" if fixed and fixed.mode == "pinned" else "automatic",
-                       "override": fixed.mode if fixed else "automatic", "policy_version": fitted.get("version", policy.VERSION),
+                       "override": fixed.mode if fixed else "automatic", "policy_version": policy.VERSION,
                        "support_count": policy.independent_support(positive)[0],
                        "conflicts": any(e["polarity"] == "negative" for e in evidence),
                        "_score": score, "_evidence": evidence})
@@ -248,7 +247,7 @@ def graph_link(db: Session, link: Relationship, claims: list[dict] | None = None
     )
     return {"source": src_id, "target": dst_id, "label": label, "style": style,
             "state": state, "origin": origin, "directed": directional(label), "count": count,
-            "support_count": count, "policy_version": policy.artifact(db).get("version", policy.VERSION) if claims and not manual else None,
+            "support_count": count, "policy_version": policy.VERSION if claims and not manual else None,
             "evidence": evidence, "link_id": link.id, "finding_key": winner["finding_key"] if winner else None,
             "alternative_count": max(0, len(claims) - bool(winner)), "conflicts": any(c["conflicts"] for c in claims)}
 

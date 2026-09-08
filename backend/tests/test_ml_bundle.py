@@ -71,6 +71,15 @@ def test_pack_verify_extract_cli_round_trip(tmp_path):
     assert archive.read_bytes() == archive_before
 
 
+def test_pack_omits_obsolete_fitted_policy(tmp_path):
+    arguments = pack_args(tmp_path)
+    (tmp_path / "models" / "calibration.json").write_text("obsolete fitted policy")
+    cli(*arguments)
+    with tarfile.open(arguments[1]) as archive:
+        assert "models/calibration.json" not in archive.getnames()
+    cli("verify", arguments[1])
+
+
 def hostile_archive(path, damage):
     name, content = "models/weights.bin", b"correct content"
     if damage == "traversal":

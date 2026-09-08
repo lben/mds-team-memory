@@ -2,7 +2,6 @@
 
 import argparse
 from collections import Counter
-import hashlib
 import json
 import multiprocessing
 import os
@@ -20,6 +19,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.pool import NullPool
 
 from . import queue
+from .runtime import inference_version
 
 MEMORY_CEILING = 8 * 1024**3
 
@@ -304,7 +304,7 @@ class Supervisor:
                         raise LeaseLost("Source changed during inference")
                     if result is not None:
                         models = json.loads((self.assets / "models.json").read_text())["models"]
-                        version = ":".join(models[role]["revision"] for role in ("extractor", "embeddings"))
+                        version = inference_version(models)
                         if version != metadata[0] or models["embeddings"]["revision"] != metadata[1]:
                             raise AssetsChanged("Model assets changed during inference")
                     adapter.apply_source(db, kind, source_id, current, result, *metadata)
@@ -322,7 +322,7 @@ class Supervisor:
                 previous = snapshot(db, self.claim.source_kind, self.claim.source_id)
                 if previous is not None:
                     models = json.loads((self.assets / "models.json").read_text())["models"]
-                    version = ":".join(models[role]["revision"] for role in ("extractor", "embeddings"))
+                    version = inference_version(models)
                     cached = adapter.cached_result(db, previous, version)
                     if cached is not None:
                         result, metadata = cached
@@ -351,18 +351,7 @@ class Supervisor:
             raise RuntimeError("Another ML worker holds the lease")
         self.worker_deadline = time.time() + queue.LEASE_SECONDS
         models = json.loads((self.assets / "models.json").read_text())["models"]
-        encoder_version = ":".join(models[role]["revision"] for role in ("extractor", "embeddings"))
-        fitted = {}
-        calibration_path = self.assets / "calibration.json"
-        if calibration_path.is_file():
-            from .calibration import load_artifact
-
-            loaded = load_artifact(calibration_path)
-            if loaded["pipeline_version"] != encoder_version:
-                raise ValueError("Calibration belongs to different encoder revisions")
-            fitted = {"models": loaded["models"], "version": policy.VERSION + ":" + hashlib.sha256(calibration_path.read_bytes()).hexdigest(),
-                      "quality_status": loaded["quality_status"]}
-        version = encoder_version + ":" + fitted.get("version", policy.VERSION)
+        version = inference_version(models) + ":" + policy.VERSION
         while True:
             self.heartbeat()
             try:
@@ -370,11 +359,11 @@ class Supervisor:
                     db.execute(text("BEGIN IMMEDIATE"))
                     with embeddings.reserve_growth(db):
                         adapter.bootstrap(db)
-                        previous = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
-                        if previous != version:
+                        previous = db.execute(text("SELECT pipeline_version,decision_policy FROM ml_state WHERE id=1")).one()
+                        if previous.pipeline_version != version or previous.decision_policy != "{}":
                             queue.request_backfill(db)
-                            db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy=:policy WHERE id=1"),
-                                       {"version": version, "policy": json.dumps(fitted, sort_keys=True)})
+                            db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy='{}' WHERE id=1"),
+                                       {"version": version})
                     db.commit()
                 break
             except OperationalError as error:

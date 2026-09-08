@@ -1,5 +1,6 @@
 """Mechanical integration proof with supplied encoder outputs, not model-quality evidence."""
 
+import json
 import uuid
 
 import pytest
@@ -20,6 +21,27 @@ def automation(app_modules):
     yield
     with SessionLocal() as db:
         db.execute(text("UPDATE ml_state SET automation_enabled=:enabled WHERE id=1"), {"enabled": previous})
+        db.commit()
+
+
+@pytest.fixture
+def obsolete_policy(app_modules):
+    """A previously fitted policy must not alter fixed inference decisions."""
+    from sqlalchemy import text
+
+    from app.db import SessionLocal
+
+    model = {"intercept": -100, "coefficients": [0] * 8, "platt_intercept": 0,
+             "platt_coefficient": 1, "threshold": 0.99}
+    stored = json.dumps({"version": "obsolete-fitted", "models": {
+        kind: model for kind in ("concept", "mention", "relationship", "expertise")}})
+    with SessionLocal() as db:
+        previous = db.execute(text("SELECT decision_policy FROM ml_state WHERE id=1")).scalar_one()
+        db.execute(text("UPDATE ml_state SET decision_policy=:policy WHERE id=1"), {"policy": stored})
+        db.commit()
+    yield
+    with SessionLocal() as db:
+        db.execute(text("UPDATE ml_state SET decision_policy=:policy WHERE id=1"), {"policy": previous})
         db.commit()
 
 
@@ -80,7 +102,11 @@ def _decision(admin, key, mode):
     return response.json()
 
 
-def test_automatic_concepts_and_relation_replay_keep_independent_evidence(make_client):
+def test_automatic_concepts_and_relation_replay_keep_independent_evidence(make_client, admin_client, obsolete_policy):
+    from app.db import SessionLocal
+    from app.ml import policy
+    from app.ml.models import Finding
+
     first, second = make_client(), make_client()
     suffix = uuid.uuid4().hex[:6]
     names = (f"Asteria{suffix}", f"BorealDB{suffix}")
@@ -91,6 +117,16 @@ def test_automatic_concepts_and_relation_replay_keep_independent_evidence(make_c
     assert set(tags) == set(names)
     edge = _edge(first, *tags.values())
     assert edge["style"] == "dashed" and edge["support_count"] == 1
+
+    finding = _finding(admin_client, "concept", name=names[0])
+    with SessionLocal() as db:
+        stored = db.get(Finding, finding["key"])
+        stored.calibrated, stored.score, stored.policy_version = True, 0.01, "obsolete-fitted"
+        db.commit()
+    assert _finding(admin_client, "concept", name=names[0])["raw_model_score"] is None
+    _apply(first_id, cached=True)
+    refreshed = _finding(admin_client, "concept", name=names[0])
+    assert refreshed["raw_model_score"] == 0.995 and refreshed["policy_version"] == policy.VERSION
 
     for cached in (False, True, True):
         _apply(first_id, names, relation=True, cached=cached)
@@ -264,6 +300,12 @@ def test_explicit_alias_requires_independent_definitions_and_ambiguity_withdraws
     _apply(second_id, cached=True)
     assert first.get("/api/search", params={"q": alias}).json()["concepts"] == []
 
+    assert third.put(f"/api/items/{third_id}", json={"body": f"{other} traces local network packet loss."}).status_code == 200
+    _apply(third_id, [other])
+    assert _tags(third, third_id).keys() == {other}
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "active"
+    assert any(c["id"] == concept_id for c in first.get("/api/search", params={"q": alias}).json()["concepts"])
+
 
 def test_spelling_variants_reuse_identity_and_respect_removal(make_client, admin_client):
     first, second, third = make_client(), make_client(), make_client()
@@ -431,7 +473,7 @@ def _profile_work(profile_id):
         db.commit()
 
 
-def test_expertise_outcomes_route_old_questions_once_and_respect_overrides(make_client, admin_client):
+def test_expertise_outcomes_route_old_questions_once_and_respect_overrides(make_client, admin_client, obsolete_policy):
     expert, asker, reader = make_client(), make_client(), make_client()
     suffix = uuid.uuid4().hex[:6]
     username = f"keeper{suffix}"

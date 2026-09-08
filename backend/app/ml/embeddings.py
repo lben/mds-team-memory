@@ -234,9 +234,11 @@ def finish_generation(db):
     budget = _budget(db)
     staging = budget["staging_generation"]
     if staging:
+        state = db.execute(text("SELECT backfill_kind,pipeline_version FROM ml_state WHERE id=1")).one()
         if (db.execute(text("SELECT 1 FROM ml_jobs LIMIT 1")).first()
-                or db.execute(text("SELECT backfill_kind FROM ml_state WHERE id=1")).scalar()):
+                or state.backfill_kind):
             return False
+        model_version = state.pipeline_version.rsplit(":", 1)[0]
         kind, _, cursor = (budget["staging_cursor"] or "item:").partition(":")
         table = "knowledge_items" if kind == "item" else "document_passages"
         eligibility = "AND current.visibility='team'" if kind == "item" else ""
@@ -249,7 +251,7 @@ def finish_generation(db):
         for row in page:
             result = json.loads(row["result"]) if row["result"] else {}
             if (not row["valid"] or result.get("embedding_version") != staging
-                    or row["model_version"].rsplit(":", 1)[-1] != staging
+                    or row["model_version"] != model_version
                     or result.get("embedding_count") != row["stored_count"]):
                 return False
         if page:

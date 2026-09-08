@@ -180,7 +180,7 @@ def test_heldout_group_cannot_overlap_development(tmp_path):
     assert "overlaps development" in result.stderr
 
 
-@pytest.mark.parametrize("inventory", ["a", [1], ["a", "a"]])
+@pytest.mark.parametrize("inventory", ["a", [1], ["a", "a"], {"schema_version": 1, "development_groups": {}}])
 def test_invalid_development_inventory_is_not_ignored(tmp_path, inventory):
     result, report = run_gate(tmp_path, decisions(), development=inventory)
     assert result.returncode == 2

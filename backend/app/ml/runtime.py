@@ -9,10 +9,9 @@ from pathlib import Path
 
 
 ENTITIES = {
-    "technology": "Named software, database, programming language, framework or protocol.",
-    "technical topic": "Specific technical method or topic, such as access control or query optimization.",
-    "named system": "Named internal application, service, component or project.",
-    "business process": "Specific named business procedure or domain process.",
+    "named entity": "A specifically named person, organization, place, object, system, project or event.",
+    "topic or process": "A specific subject, discipline, method, process or phenomenon discussed in the text.",
+    "object or substance": "A specific type of physical object, organism, material or substance discussed in the text.",
 }
 RELATIONS = {
     "uses": "The head uses the tail as a tool or service.",
@@ -31,8 +30,17 @@ CUES = {
     "replaces": (r"\b(?:replaces?|supersedes?)\b", r"\b(?:replaced|superseded) by\b"),
 }
 NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can't|doesn't|don't|isn't|aren't|wasn't|weren't)\b", re.I)
-UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan\w*|consider\w*|hypothetical)\b", re.I)
+UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
+# Bump for extraction behavior changes outside the schema, such as grounding or windowing.
+EXTRACTION_VERSION = "grounded-spans-v4"
+
+
+def inference_version(models):
+    schema = json.dumps({"entities": ENTITIES, "relations": RELATIONS}, sort_keys=True, separators=(",", ":"))
+    fingerprint = hashlib.sha256(schema.encode()).hexdigest()[:16]
+    revisions = ":".join(models[role]["revision"] for role in ("extractor", "embeddings"))
+    return f"{revisions}:{EXTRACTION_VERSION}:{fingerprint}"
 
 
 def normalize(value):
@@ -123,11 +131,60 @@ def relation_support(text, head, tail, predicate):
     sentence = text[start:end]
     if re.search(r"[.!?\n]", text[left:right]):
         return {"polarity": "uncertain", "literal_support": False, "start": start, "end": end}
-    polarity = "negative" if NEGATION.search(sentence) else "uncertain" if "?" in sentence or UNCERTAIN.search(sentence) else "positive"
+    uncertain = ("?" in sentence or UNCERTAIN.search(sentence)
+                 or re.search(r"\b(?:unless|whether|when|whenever|until|provided|assuming|suppos\w*)\b", sentence, re.I))
+    polarity = "uncertain" if uncertain else "negative" if NEGATION.search(sentence) else "positive"
     forward = head["start"] < tail["start"]
     middle = text[head["end"]:tail["start"]] if forward else text[tail["end"]:head["start"]]
     cue = CUES[predicate][0 if forward else 1]
     return {"polarity": polarity, "literal_support": bool(re.search(cue, middle, re.I)), "start": start, "end": end}
+
+
+def repair_relation_spans(text, head, tail, predicate, start, end):
+    """Repair only an unambiguous repeated name in a model-proposed relation."""
+    left, right = min(head["start"], tail["start"]), max(head["end"], tail["end"])
+    if not re.search(r"[.!?\n]", text[left:right]):
+        return head, tail
+    candidates = {}
+    for endpoint, other, move_head in ((head, tail, True), (tail, head, False)):
+        pattern = r"(?<!\w)" + re.escape(endpoint["name"]) + r"(?!\w)"
+        for match in re.finditer(pattern, text[start:end]):
+            moved = {**endpoint, "start": start + match.start(), "end": start + match.end()}
+            first, second = (moved, other) if move_head else (other, moved)
+            left, right = min(first["start"], second["start"]), max(first["end"], second["end"])
+            if not re.search(r"[.!?\n]", text[left:right]):
+                candidates[first["start"], second["start"]] = first, second
+    # Count all same-sentence alternatives before considering their predicates.
+    if len(candidates) != 1:
+        return head, tail
+    first, second = next(iter(candidates.values()))
+    earlier, later = sorted((first, second), key=lambda span: span["start"])
+    middle = text[earlier["end"]:later["start"]]
+    support = relation_support(text, first, second, predicate)
+    if (not support["literal_support"] or re.search(r"[,;:]|\b(?:and|or|but|while|although|because|that|which|who)\b", middle, re.I)
+            or (support["polarity"] == "negative" and not NEGATION.search(middle))):
+        return head, tail
+    return first, second
+
+
+def negative_relations(text, spans):
+    """A direct negative phrase can veto a claim, without a relation score."""
+    prefix = r"(?:(?:does|do|did|is|are|was|were) not|(?:doesn't|don't|isn't|aren't|wasn't|weren't)|(?:is |are |was |were )?(?:never|no longer))"
+    ordered = sorted(spans, key=lambda span: (span["start"], span["end"]))
+    for index, first in enumerate(ordered):
+        for second in ordered[index + 1:]:
+            if second["start"] < first["end"] or normalize(first["name"]) == normalize(second["name"]):
+                continue
+            middle = text[first["end"]:second["start"]]
+            for predicate, cues in CUES.items():
+                for direction, cue in enumerate(cues):
+                    if not re.fullmatch(rf"\s*{prefix}\s+(?:{cue})\s*(?:(?:a|an|the)\s+)?", middle, re.I):
+                        continue
+                    head, tail = (first, second) if direction == 0 else (second, first)
+                    support = relation_support(text, head, tail, predicate)
+                    if support["polarity"] != "negative" or not support["literal_support"]:
+                        continue
+                    yield {"head": head, "tail": tail, "predicate": predicate, "score": 0.0, **support}
 
 
 class LocalModels:
@@ -142,7 +199,7 @@ class LocalModels:
         torch.set_num_interop_threads(1)
         directory = Path(directory).resolve()
         self.manifest = verified_manifest(directory)
-        self.version = ":".join(self.manifest["models"][role]["revision"] for role in ("extractor", "embeddings"))
+        self.version = inference_version(self.manifest["models"])
         self.embedding_version = self.manifest["models"]["embeddings"]["revision"]
         self.extractor = AutoExtractor.from_pretrained(str(directory / "extractor"), local_files_only=True, map_location="cpu")
         self.extractor.eval()
@@ -158,6 +215,7 @@ class LocalModels:
     def analyze(self, text):
         concepts, relations, chunks = {}, {}, []
         for start, end, body in windows(text, self.tokenizer, 192):
+            window_spans = {}
             entities = self.extractor.extract(body, self.entity_schema, include_confidence=True,
                                               include_spans=True, max_len=512)
             for label, values in entities.get("entities", {}).items():
@@ -168,6 +226,7 @@ class LocalModels:
                         key = (span["start"], span["end"])
                         if span["score"] > concepts.get(key, {}).get("score", -1):
                             concepts[key] = span
+                        window_spans[key] = concepts[key]
             extracted = self.extractor.extract(body, self.relation_schema, include_confidence=True,
                                                include_spans=True, max_len=512)
             for predicate, values in extracted.get("relation_extraction", {}).items():
@@ -180,12 +239,16 @@ class LocalModels:
                         continue
                     if not specific_name(head["name"]) or not specific_name(tail["name"]):
                         continue
+                    head, tail = repair_relation_spans(text, head, tail, predicate, start, end)
                     support = relation_support(text, head, tail, predicate)
                     relation = {"head": head, "tail": tail, "predicate": predicate,
                                 "score": min(head["score"], tail["score"]), **support}
                     key = (head["start"], tail["start"], predicate)
                     if relation["score"] > relations.get(key, {}).get("score", -1):
                         relations[key] = relation
+            for relation in negative_relations(text, window_spans.values()):
+                key = (relation["head"]["start"], relation["tail"]["start"], relation["predicate"])
+                relations.setdefault(key, relation)
             vector = self.embedding.encode(body, normalize_embeddings=True, batch_size=1,
                                            show_progress_bar=False, convert_to_numpy=True)
             chunks.append({"start": start, "end": end, "vector": vector.astype("<f4").tobytes()})

@@ -30,9 +30,8 @@ def finding_dict(db, row):
     state = fixed.mode if fixed else row.state
     return {"key": row.key, "kind": row.kind, "payload": json.loads(fixed.payload if fixed else row.payload),
             "state": state, "canonical_id": row.canonical_id, "origin": "manual" if fixed and fixed.mode == "pinned" else "automatic",
-            "policy_version": row.policy_version, "calibrated": row.calibrated,
+            "policy_version": row.policy_version,
             "raw_model_score": None if row.calibrated else row.score,
-            "calibrated_estimate": row.score if row.calibrated else None,
             "updated_at": row.updated_at.isoformat() + "Z"}
 
 

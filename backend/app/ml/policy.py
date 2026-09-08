@@ -1,12 +1,11 @@
-"""Conservative cold-start decisions; raw encoder scores are not probabilities."""
+"""Fixed conservative decisions; raw encoder scores are not probabilities."""
 
-import json
 import re
 
 from .runtime import specific_name
 
 
-VERSION = "grounded-cold-start-v1"
+VERSION = "grounded-cold-start-v2"
 
 
 def acronym_definitions(text):
@@ -54,7 +53,7 @@ def independent_support(evidence):
     return len(groups), len(authors)
 
 
-def _cold_decision(kind, evidence):
+def decide(kind, evidence):
     positive = [row for row in evidence if row["polarity"] == "positive"]
     groups, authors = independent_support(positive)
     score = max((row["raw_score"] for row in positive), default=0.0)
@@ -75,7 +74,8 @@ def _cold_decision(kind, evidence):
         return ("active" if groups >= 2 and score >= 0.85 else "held"), score
     if kind == "relationship":
         supported = [row for row in positive if row.get("literal_support") and row.get("assertion_allowed")]
-        contradicted = any(row["polarity"] == "negative" and row.get("literal_support") for row in evidence)
+        contradicted = any(row["polarity"] == "negative" and row.get("literal_support")
+                           and row.get("assertion_allowed") for row in evidence)
         groups, authors = independent_support(supported)
         score = max((row["raw_score"] for row in supported), default=score)
         active = groups >= 2 and score >= 0.70 and not contradicted
@@ -85,14 +85,6 @@ def _cold_decision(kind, evidence):
     if kind == "association":
         return ("weak" if groups >= 2 else "held"), score
     raise ValueError(f"Unsupported decision kind: {kind}")
-
-
-def artifact(db):
-    from sqlalchemy import text
-
-    if "ml_decision_policy" not in db.info:
-        db.info["ml_decision_policy"] = json.loads(db.execute(text("SELECT decision_policy FROM ml_state WHERE id=1")).scalar_one())
-    return db.info["ml_decision_policy"]
 
 
 def features(evidence):
@@ -106,16 +98,3 @@ def features(evidence):
               "outcome_originals": max((row.get("originals", 0) for row in positive), default=0),
               "accepted_answers": max((row.get("accepted_answers", 0) for row in positive), default=0)}
     return {name: value if name == "raw_score" else min(100, value) for name, value in values.items()}
-
-
-def decide(kind, evidence, fitted=None):
-    state, score = _cold_decision(kind, evidence)
-    if fitted and kind in fitted["models"]:
-        from .calibration import predict
-
-        score = predict(fitted, kind, features(evidence))
-        # Development fitting alone cannot relax the conservative evidence
-        # policy. The frozen held-out gate must still establish release quality.
-        if state == "active" and score < fitted["models"][kind]["threshold"]:
-            state = "held"
-    return state, score

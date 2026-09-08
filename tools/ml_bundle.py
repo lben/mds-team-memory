@@ -81,17 +81,6 @@ def model_files(directory):
                 raise ValueError(f"Model checksum or length mismatch: {name}")
             result.append((f"models/{name}", source, actual))
     result.append(("models/models.json", manifest_path, record(manifest_path)))
-    calibration_path = directory / "calibration.json"
-    if os.path.lexists(calibration_path):
-        regular_file(calibration_path)
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
-        from app.ml.calibration import load_artifact
-
-        fitted = load_artifact(calibration_path)
-        version = ":".join(manifest["models"][role]["revision"] for role in ("extractor", "embeddings"))
-        if fitted["pipeline_version"] != version:
-            raise ValueError("Calibration belongs to different encoder revisions")
-        result.append(("models/calibration.json", calibration_path, record(calibration_path)))
     return manifest, result
 
 
