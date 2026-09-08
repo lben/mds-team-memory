@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 r"""Run the fixed 50,000-item, 50-client paired capacity check on Linux.
 
-The worker starts cold for the second phase. A failed capacity verdict is a
-result, not permission to change the workload. Every run creates a new directory
+Model startup is measured first. The paired phases compare an idle, loaded
+worker with queued inference under traffic. Every run creates a new directory
 containing its private SQLite database, backend snapshot, logs, pins and report.
 The application database configured in the calling shell is never used.
 
@@ -111,9 +111,14 @@ def cgroup_files():
 
 def record_load_gates(report):
     """Freeze acceptance facts before post-load verification can add results."""
-    samples = [sample for sample in report['samples'] if sample['phase'] == 'worker_on']
-    report['real_inference'] = {'sources': max((sample.get('sources', 0) for sample in samples), default=0),
-                                'embedding_chunks': max((sample.get('chunks', 0) for sample in samples), default=0)}
+    phase = report['phases']['worker_on']
+    samples = [sample for sample in report['samples'] if sample['phase'] == 'worker_on'
+               and phase['traffic_start_elapsed'] <= sample.get('inference_observed_elapsed', -1)
+               <= phase['traffic_end_elapsed']]
+    before = report.get('inference_before_load', {'sources': 0, 'embedding_chunks': 0})
+    report['real_inference'] = {
+        'sources': max(0, max((sample.get('sources', 0) for sample in samples), default=0) - before['sources']),
+        'embedding_chunks': max(0, max((sample.get('chunks', 0) for sample in samples), default=0) - before['embedding_chunks'])}
     baseline = report['phases']['worker_off']['write']['p95_seconds']
     active = report['phases']['worker_on']['write']['p95_seconds']
     report['write_p95_gate_seconds'] = max(1.0, 1.25*baseline) if baseline is not None else None
@@ -125,6 +130,43 @@ def record_load_gates(report):
         report['failures'].append('No completed real inference during worker-on window')
     if report['worker_exit_before_stop'] is not None:
         report['failures'].append('Worker stopped before load phase completed')
+    affinity = [sample['worker_cpu_affinity'] for sample in samples if sample.get('worker_cpu_affinity')]
+    if not affinity or any(len(cpus) > 4 for cpus in affinity):
+        report['failures'].append('ML process-tree four-CPU affinity ceiling was not verified')
+
+
+def warm_worker(assets, ready):
+    """Warm the production inference child without consuming or locking jobs."""
+    import select
+    from app import config
+    from app.ml.worker import Supervisor, Stopped, database_path, lower_priority
+
+    stop = threading.Event()
+    for signum in (signal.SIGINT, signal.SIGTERM):
+        signal.signal(signum, lambda *_: stop.set())
+    lower_priority()
+    supervisor = Supervisor(database_path(config.DATABASE_URL), assets, stop)
+    def heartbeat():
+        if stop.is_set():
+            raise Stopped('Load check stopped')
+    try:
+        started = time.monotonic()
+        result, metadata = supervisor.inference.analyze('The analysis service uses PostgreSQL.', heartbeat)
+        staging = ready.with_suffix('.tmp')
+        staging.write_text(json.dumps({'cold_start_through_first_inference_seconds': time.monotonic()-started,
+                                       'model_version': metadata[0], 'warmup_chunks': len(result['chunks'])}))
+        staging.replace(ready)
+        while not stop.is_set():
+            supervisor.inference.check_memory()
+            if select.select([sys.stdin], [], [], .5)[0]:
+                if sys.stdin.readline() != 'start\n':
+                    raise ValueError('Missing start signal from load driver')
+                return supervisor.run('daemon')
+        return 0
+    except Stopped:
+        return 0
+    finally:
+        supervisor.close()
 
 
 def run(args):
@@ -154,12 +196,13 @@ def run(args):
         'web_environment': environment(args.web_python),
         'worker_environment': environment(args.worker_python),
         'phase_seconds': args.seconds,
+        'protocol': 'steady-state-v2',
+        'startup_measurement_limit_seconds': args.startup_seconds,
+        'drain_observation_seconds': args.drain_seconds,
         'limitations': ['Synthetic content does not establish model quality.',
-                        'A single paired cold-start run does not establish full-backlog drain time.'],
+                        'Startup timeout bounds this check, not the product response time.',
+                        'A bounded drain observation does not establish full-backlog drain time.'],
     }
-    calibration = args.models / 'calibration.json'
-    if calibration.is_file():
-        metadata['calibration_sha256'] = hashlib.sha256(calibration.read_bytes()).hexdigest()
     (out / 'snapshot.json').write_text(json.dumps(metadata, indent=2))
     dbpath = out / 'app.sqlite3'
     os.environ.update(MDS_DATA_DIR=str(out), MDS_DATABASE_URL='sqlite:///' + str(dbpath),
@@ -251,7 +294,8 @@ def run(args):
     with SessionLocal() as db:
         bootstrap(db)
         db.commit()
-    report['comparison_configuration'] = 'Automatic maintenance initialized in both phases; only inference worker changes.'
+    report['comparison_configuration'] = ('Automatic maintenance initialized and the same models resident in both phases; '
+                                          'only production queue consumption starts for worker_on. Warmup is never published.')
     print(json.dumps({'seed': report['seed'], 'runtime': report['runtime']}), flush=True)
     web_log = (out/'web.log').open('w')
     worker_log = (out/'worker.log').open('w')
@@ -274,6 +318,7 @@ def run(args):
         sample = {'elapsed': time.monotonic()-started, 'phase': phase_name}
         for name, proc in [('web', web), ('worker', worker)]:
             rss, cpu = 0, 0
+            allowed_cpus = set()
             if proc and proc.poll() is None:
                 try:
                     parent = psutil.Process(proc.pid)
@@ -282,12 +327,16 @@ def run(args):
                             rss += p.memory_info().rss
                             t = p.cpu_times()
                             cpu += t.user+t.system
+                            if name == 'worker':
+                                allowed_cpus.update(p.cpu_affinity())
                         except psutil.NoSuchProcess:
                             pass
                 except psutil.NoSuchProcess:
                     pass
             sample[name+'_tree_rss'] = rss
             sample[name+'_tree_cpu_seconds'] = cpu
+            if name == 'worker':
+                sample['worker_cpu_affinity'] = sorted(allowed_cpus)
         sample['database_bytes'] = dbpath.stat().st_size
         wal = Path(str(dbpath)+'-wal')
         sample['wal_bytes'] = wal.stat().st_size if wal.exists() else 0
@@ -301,6 +350,7 @@ def run(args):
                 sample['sources'] = con.execute("SELECT count(*) FROM ml_sources WHERE model_version != '' AND result != '{}'").fetchone()[0]
                 sample['chunks'] = con.execute('SELECT count(*) FROM ml_embeddings').fetchone()[0]
                 sample['revision'], sample['status'] = con.execute('SELECT revision,status FROM ml_state WHERE id=1').fetchone()
+                sample['inference_observed_elapsed'] = time.monotonic()-started
         except sqlite3.OperationalError as error:
             sample['monitor_error'] = str(error)
         report['samples'].append(sample)
@@ -319,8 +369,16 @@ def run(args):
     def run_phase(name):
         nonlocal phase_name
         phase_name = name
-        barrier = threading.Barrier(51)
+        begin = None
         stop_at = [0]
+        def start_traffic():
+            nonlocal begin
+            begin = time.monotonic()
+            stop_at[0] = begin+args.seconds
+            if name == 'worker_on':
+                worker.stdin.write('start\n')
+                worker.stdin.flush()
+        barrier = threading.Barrier(51, action=start_traffic)
         records = []
         def client_run(client):
             local = []
@@ -350,18 +408,20 @@ def run(args):
                     rec['error'] = f'{type(error).__name__}: {error}'
                     if isinstance(error, urllib.error.HTTPError):
                         rec['http_body'] = error.read().decode(errors='replace')[:2000]
-                rec['seconds'] = time.monotonic()-rec.pop('started')
+                finished = time.monotonic()
+                rec['seconds'] = finished-rec.pop('started')
+                rec['completed_elapsed'] = finished-started
                 local.append(rec)
                 i += 1
             return local
         with concurrent.futures.ThreadPoolExecutor(max_workers=50) as pool:
             futures = [pool.submit(client_run, i) for i in range(50)]
-            begin = time.monotonic()
-            stop_at[0] = begin+args.seconds
             barrier.wait()
             for future in futures:
                 records.extend(future.result())
-        summary = {'seconds': time.monotonic()-begin, 'concurrent_clients': 50,
+        traffic_end = max((record['completed_elapsed'] for record in records), default=begin-started)
+        summary = {'seconds': traffic_end-(begin-started), 'concurrent_clients': 50,
+                   'traffic_start_elapsed': begin-started, 'traffic_end_elapsed': traffic_end,
                    'mix': 'one capture per five operations; other requests rotate feed, item, search',
                    'requests': len(records), 'errors': [r for r in records if not r['ok']]}
         for op in ('read', 'write'):
@@ -389,12 +449,43 @@ def run(args):
                 time.sleep(.1)
         snapshot()
         thread.start()
+        phase_name = 'model_startup'
+        ready = out / 'worker-ready.json'
+        worker = subprocess.Popen([str(args.worker_python), str(Path(__file__).resolve()),
+                                   '--warm-worker', str(args.models), str(ready)],
+                                  cwd=root/'backend', stdin=subprocess.PIPE, text=True,
+                                  stdout=worker_log, stderr=worker_log)
+        deadline = time.monotonic()+args.startup_seconds
+        while not ready.is_file():
+            if worker.poll() is not None:
+                raise RuntimeError('Worker stopped during model startup')
+            if time.monotonic() >= deadline:
+                raise TimeoutError('Model startup exceeded the bounded measurement window')
+            monitoring.wait(.25)
+        report['startup'] = json.loads(ready.read_text())
+        with sqlite3.connect(dbpath) as con:
+            assert con.execute('SELECT count(*) FROM ml_sources').fetchone()[0] == 0, 'Warmup published source data'
         run_phase('worker_off')
-        worker = subprocess.Popen([str(args.worker_python), '-m', 'app.ml.worker', '--assets', str(args.models)],
-                                  cwd=root/'backend', stdout=worker_log, stderr=worker_log)
+        with sqlite3.connect(dbpath) as con:
+            report['inference_before_load'] = {
+                'sources': con.execute("SELECT count(*) FROM ml_sources WHERE model_version != '' AND result != '{}'").fetchone()[0],
+                'embedding_chunks': con.execute('SELECT count(*) FROM ml_embeddings').fetchone()[0]}
         run_phase('worker_on')
         report['worker_exit_before_stop'] = worker.poll()
         record_load_gates(report)
+        phase_name = 'drain_observation'
+        snapshot()
+        drain_before = report['samples'][-1]
+        drain_started = time.monotonic()
+        while time.monotonic()-drain_started < args.drain_seconds and worker.poll() is None:
+            monitoring.wait(.25)
+        snapshot()
+        drain_after = report['samples'][-1]
+        report['drain'] = {'seconds': time.monotonic()-drain_started,
+                           'jobs_before': drain_before.get('jobs'), 'jobs_after': drain_after.get('jobs'),
+                           'completed_sources': drain_after.get('sources', 0)-drain_before.get('sources', 0),
+                           'completed_chunks': drain_after.get('chunks', 0)-drain_before.get('chunks', 0),
+                           'worker_exit': worker.poll()}
         phase_name = 'verification'
         with sqlite3.connect(dbpath) as con:
             successful = [r for r in attempts if r['ok']]
@@ -462,6 +553,9 @@ def run(args):
 
 
 def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if len(argv) == 3 and argv[0] == '--warm-worker':
+        return warm_worker(Path(argv[1]), Path(argv[2]))
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--web-python', type=Path, required=True, help='Python executable with the deployed web dependencies')
     parser.add_argument('--worker-python', type=Path, required=True, help='Python executable with the deployed ML dependencies and psutil')
@@ -469,6 +563,8 @@ def main(argv=None):
     parser.add_argument('--source-root', type=Path, default=Path(__file__).resolve().parents[1], help='Repository root to snapshot (default: this checkout)')
     parser.add_argument('--output-parent', type=Path, default=Path(tempfile.gettempdir()), help='Existing parent for a new, private run directory (default: system temp)')
     parser.add_argument('--seconds', type=int, default=60, help='Seconds per phase (default: 60; preserve this for the fixed capacity check)')
+    parser.add_argument('--startup-seconds', type=int, default=180, help='Maximum startup observation time; not a product latency target (default: 180)')
+    parser.add_argument('--drain-seconds', type=int, default=30, help='Post-traffic queue progress observation (default: 30)')
     args = parser.parse_args(argv)
     if sys.platform != 'linux':
         parser.error('Run the capacity check on Linux; --help is available on other systems')
@@ -485,8 +581,8 @@ def main(argv=None):
         parser.error('--models must contain a prepared models.json manifest')
     if not (args.source_root / 'backend/alembic.ini').is_file():
         parser.error('--source-root must contain backend/alembic.ini')
-    if not args.output_parent.is_dir() or args.seconds <= 0:
-        parser.error('--output-parent must exist and --seconds must be positive')
+    if not args.output_parent.is_dir() or min(args.seconds, args.startup_seconds, args.drain_seconds) <= 0:
+        parser.error('--output-parent must exist and observation durations must be positive')
     if Path(sys.executable).absolute() != args.worker_python:
         os.execv(str(args.worker_python), [str(args.worker_python), str(Path(__file__).absolute()), *(sys.argv[1:] if argv is None else argv)])
     def stop(*_):

@@ -62,7 +62,7 @@ docker run --rm --platform linux/amd64 --network none \
 This checks model loading, source span offsets and finite normalized 1,024-element
 embeddings. It does not measure the quality of concepts or relationships.
 
-Run the complete backend suite in a test layer so process and calibration checks
+Run the complete backend suite in a test layer so worker and offline checks
 use the Linux ML environment. Build this layer while downloads are available,
 then run the suite with network access disabled:
 

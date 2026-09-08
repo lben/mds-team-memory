@@ -39,3 +39,30 @@ def test_ml_database_rejects_shared_filesystems(tmp_path, monkeypatch, filesyste
     else:
         with pytest.raises(ValueError, match=f"unsupported filesystem {filesystem}"):
             local_sqlite_filesystem(tmp_path / "database")
+
+
+@pytest.mark.parametrize("new_sources", [0, 1])
+def test_load_gate_counts_only_work_completed_during_traffic(monkeypatch, new_sources):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[2] / "tools"))
+    from ml_load_check import record_load_gates
+
+    report = {
+        "inference_before_load": {"sources": 2, "embedding_chunks": 2},
+        "samples": [
+            {"phase": "worker_on", "sources": 3, "chunks": 3, "inference_observed_elapsed": 9,
+             "worker_cpu_affinity": [0, 1, 2, 3]},
+            {"phase": "worker_on", "sources": 2 + new_sources, "chunks": 2 + new_sources,
+             "worker_cpu_affinity": [0, 1, 2, 3], "inference_observed_elapsed": 15},
+            {"phase": "worker_on", "sources": 10, "chunks": 10, "inference_observed_elapsed": 21,
+             "worker_cpu_affinity": [0, 1, 2, 3]},
+        ],
+        "phases": {phase: {"write": {"p95_seconds": 0.5}, "errors": [],
+                            "traffic_start_elapsed": 10, "traffic_end_elapsed": 20}
+                   for phase in ("worker_off", "worker_on")},
+        "worker_exit_before_stop": None,
+        "failures": [],
+    }
+    record_load_gates(report)
+    assert report["real_inference"] == {"sources": new_sources, "embedding_chunks": new_sources}
+    assert bool(report["failures"]) == (new_sources == 0)
+    assert report["phases"]["worker_on"]["write"]["p95_seconds"] == 0.5

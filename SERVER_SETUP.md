@@ -243,10 +243,12 @@ Setup and worker start run these checks too. Unknown or network filesystems are
 rejected for ML. The deployment database must remain `MDS_DATA_DIR/mds.sqlite3`,
 the file used by backup and reset. The worker uses at most four CPUs from its
 allowed affinity, low scheduling priority and the existing 8 GiB process-tree
-RSS ceiling. RSS
-monitoring can briefly overshoot; it is not a hard kernel memory cap. Use an
-approved user-level cgroup if a hard quota is required. The container proof uses
-four CPUs and a 4 GiB hard limit without swap. It does not establish production
+RSS ceiling. RSS monitoring can briefly overshoot; it is not a hard kernel
+memory cap. Use an approved user-level cgroup if a hard quota is required.
+Offline inference validation uses four CPUs and a 4 GiB hard limit without swap.
+The combined load check allows eight CPUs for the web app, load driver and ML,
+while verifying that ML stays within four CPUs; its total memory limit is 4 GiB.
+These container measurements do not establish production
 Xeon throughput or host kernel and filesystem behavior.
 
 ```powershell
@@ -264,21 +266,18 @@ web availability only. Backup, migration, activation and reset stop ML first.
 The database backup includes derived ML tables. A database reset deliberately
 removes them with the rest of the test data.
 
-The default policy uses conservative evidence rules. Model scores are not
-validated probabilities. Optional local fitting is available through
-`python -m app.ml.calibration fit --help` in the ML environment. Use independently
-labeled development examples, with separate training and calibration groups.
-Place its output at `models/calibration.json` before packing a new generation.
-The bundle verifies its encoder revisions and carries it through deployment and
-rollback. Fitted policies can withhold additional findings; they cannot bypass
-the source and independent-evidence requirements.
+The worker uses fixed pretrained models and conservative evidence rules. It does
+not train models or fit decision policies. Model scores are not validated
+probabilities. Existing fitted policies are ignored; recomputation replaces
+their finding scores with the fixed rules while preserving admin overrides.
 
-Validate actual publication decisions separately with `python -m
-app.ml.evaluation --help`. Pass the fitted artifact as `--development-groups`
-to check for overlap. The frozen precision, recall and sample-size requirements
-are in `ML_IMPLEMENTATION_PLAN.md`. Fitting and integration checks do not establish
-accuracy on the team's content. Sparse evaluation data reports insufficient
-evidence, and admin silence is never a positive label.
+Grade frozen inference decisions from labeled test cases with `python -m
+app.ml.evaluation --help`. An optional `--development-groups` JSON array lists
+authored development fixture groups so the evaluator can reject overlap.
+The frozen precision, recall and sample-size requirements are in
+`ML_IMPLEMENTATION_PLAN.md`. Generated test cases and integration checks do not
+establish accuracy on the team's content. Sparse evaluation data reports
+insufficient evidence, and admin silence is never a positive label.
 
 ## Resetting a UAT instance
 
