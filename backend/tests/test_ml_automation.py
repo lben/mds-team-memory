@@ -242,25 +242,92 @@ def test_explicit_alias_requires_independent_definitions_and_ambiguity_withdraws
     first, second, third = make_client(), make_client(), make_client()
     name, alias = "Kestrel Protocol Relay", "KPR"
     first_id = _capture(first, f"{name} ({alias}) forwards encrypted settlement acknowledgements.")
-    _apply(first_id, [name])
+    _apply(first_id, [name, alias])
     concept_id = _tags(first, first_id)[name]
+    assert _tags(first, first_id) == {name: concept_id}
     key = _finding(admin_client, "alias", alias=alias, concept_id=concept_id)["key"]
     assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "held"
     _apply(first_id, cached=True)
     assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "held"
 
     second_id = _capture(second, f"Our recovery runbook calls the failover service {name} ({alias}). Operators restart it after receipt reconciliation.")
-    _apply(second_id, [name])
+    _apply(second_id, [name, alias])
+    assert _tags(second, second_id) == {name: concept_id}
     assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "active"
     assert any(c["id"] == concept_id for c in first.get("/api/search", params={"q": alias}).json()["concepts"])
 
     other = "Kernel Packet Relay"
     third_id = _capture(third, f"{other} ({alias}) traces local network packet loss.")
-    _apply(third_id, [other])
+    _apply(third_id, [other, alias])
     assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "held"
     assert first.get("/api/search", params={"q": alias}).json()["concepts"] == []
     _apply(second_id, cached=True)
     assert first.get("/api/search", params={"q": alias}).json()["concepts"] == []
+
+
+def test_spelling_variants_reuse_identity_and_respect_removal(make_client, admin_client):
+    first, second, third = make_client(), make_client(), make_client()
+    name, variant = "Meridian Access-Control", "Meridian Access Control"
+    original = _capture(first, f"{name} limits access to the receipt store.")
+    _apply(original, [name])
+    concept_id = _tags(first, original)[name]
+    one = _capture(second, f"Our operators enabled {variant} for ledger recovery.")
+    two = _capture(third, f"The audit guide requires {variant} for receipt downloads.")
+    for item_id in (one, two):
+        _apply(item_id, [variant])
+        assert _tags(first, item_id) == {name: concept_id}
+    alias_key = _finding(admin_client, "alias", alias=variant, concept_id=concept_id)["key"]
+    assert admin_client.get(f"/api/ml/findings/{alias_key}").json()["state"] == "active"
+    for item_id in (one, two):
+        _apply(item_id, cached=True)
+    assert admin_client.get(f"/api/ml/findings/{alias_key}").json()["state"] == "active"
+    assert [c["id"] for c in first.get("/api/search", params={"q": variant}).json()["concepts"]] == [concept_id]
+    assert admin_client.put(f"/api/admin/concepts/{concept_id}", json={"name": name, "aliases": []}).status_code == 200
+    _apply(one, cached=True)
+    assert _tags(first, one) == {}
+    _decision(admin_client, alias_key, "automatic")
+    _apply(one, cached=True)
+    assert _tags(first, one) == {name: concept_id}
+    concept_key = _finding(admin_client, "concept", name=name)["key"]
+    _decision(admin_client, concept_key, "suppressed")
+    _apply(two, cached=True)
+    assert _tags(first, two) == {}
+
+
+def test_contextual_equivalence_needs_affirmative_independent_evidence(make_client, admin_client):
+    first, second, third = make_client(), make_client(), make_client()
+    name, alias = "Sirius Ledger Gateway", "Receipt Bridge"
+    one = _capture(first, f"{name} is also known as {alias}. It accepts settlement batches.")
+    two = _capture(second, f"Our recovery guide documents {name}, also called {alias}, for incident response.")
+    for item_id in (one, two):
+        _apply(item_id, [name, alias])
+    concept_id = _tags(first, one)[name]
+    assert _tags(first, one) == _tags(first, two) == {name: concept_id}
+    key = _finding(admin_client, "alias", alias=alias, concept_id=concept_id)["key"]
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "active"
+    assert first.delete(f"/api/items/{one}").status_code == 200
+    _apply(one)
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "held"
+    uncertain = _capture(third, f"Perhaps {name} is also known as {alias} in the new deployment?")
+    _apply(uncertain, [name, alias])
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "held"
+    restored = _capture(third, f"The deployment guide confirms {name} is also known as {alias}. Receipts arrive there.")
+    _apply(restored, [name, alias])
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "active"
+
+
+def test_alias_resolution_preserves_distinct_manual_identities_and_word_boundaries(make_client, admin_client):
+    client = make_client()
+    name, alias = "Titan Packet Collector", "TPC"
+    manual = admin_client.post("/api/admin/concepts", json={"name": alias, "aliases": []}).json()
+    item_id = _capture(client, f"{name} ({alias}) collects wire receipts.")
+    _apply(item_id, [name, alias])
+    tags = _tags(client, item_id)
+    assert tags[alias] == manual["id"] and tags[name] != manual["id"]
+    different = ["Receipt re-sign", "Receipt resign", "C++ Ledger", "C# Ledger"]
+    other = _capture(client, "The comparison covers " + ", ".join(different) + ".")
+    _apply(other, different)
+    assert len(set(_tags(client, other).values())) == 4
 
 
 def test_alias_restore_releases_removed_spelling_but_preserves_concept_suppression(make_client, admin_client):

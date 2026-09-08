@@ -1,6 +1,7 @@
 """One leased supervisor and one reusable, separately monitored inference child."""
 
 import argparse
+from collections import Counter
 import hashlib
 import json
 import multiprocessing
@@ -36,7 +37,8 @@ class AssetsChanged(RuntimeError):
 
 
 def database_busy(error):
-    return getattr(error, "sqlite_errorcode", None) in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED)
+    code = getattr(error, "sqlite_errorcode", None)
+    return code is not None and code & 255 in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED)
 
 
 def database_path(database_url):
@@ -243,17 +245,24 @@ class Supervisor:
         self.claim = None
         self.next_renewal = 0
         self.worker_deadline = self.claim_deadline = 0
+        self.lock_retries = Counter()
+
+    def record_lock_retry(self, operation):
+        self.lock_retries[operation] += 1
+        print(f"ML SQLite retries: {json.dumps(dict(self.lock_retries), sort_keys=True)}", file=sys.stderr, flush=True)
 
     def heartbeat(self):
         if self.stop.is_set():
             raise Stopped("Worker stopped")
         if time.monotonic() < self.next_renewal:
             return
+        operation = "renew_worker"
         try:
             if not queue.renew_worker(self.connection, self.token):
                 raise LeaseLost("Worker lease lost")
             self.worker_deadline = time.time() + queue.LEASE_SECONDS
             if self.claim:
+                operation = "renew_claim"
                 if not queue.renew_claim(self.connection, self.claim):
                     raise LeaseLost("Source changed or job lease lost")
                 self.claim_deadline = time.time() + queue.LEASE_SECONDS
@@ -261,6 +270,7 @@ class Supervisor:
         except sqlite3.OperationalError as error:
             if not database_busy(error):
                 raise
+            self.record_lock_retry(operation)
             if time.time() >= min(self.worker_deadline, self.claim_deadline if self.claim else self.worker_deadline):
                 raise LeaseLost("Database contention prevented lease renewal")
             self.next_renewal = time.monotonic() + 1
@@ -271,33 +281,35 @@ class Supervisor:
         except sqlite3.OperationalError as failure:
             if not database_busy(failure):
                 raise
+            self.record_lock_retry("retry")
             # A locked database keeps the existing durable claim until expiry.
 
     def apply(self, previous, result, metadata):
-        from . import adapter
+        from . import adapter, embeddings
         from .sources import snapshot
 
         with Session(self.engine, autoflush=False, expire_on_commit=False) as db:
             db.execute(text("BEGIN IMMEDIATE"))
-            if not queue.owns_claim(db, self.claim):
-                raise LeaseLost("Job changed before application")
-            kind, source_id = self.claim.source_kind, self.claim.source_id
-            if kind == "vocabulary":
-                adapter.apply_vocabulary(db, source_id)
-            elif kind == "profile":
-                adapter.apply_profile(db, source_id)
-            else:
-                current = snapshot(db, kind, source_id)
-                if (current.content_hash if current else None) != (previous.content_hash if previous else None):
-                    raise LeaseLost("Source changed during inference")
-                if result is not None:
-                    models = json.loads((self.assets / "models.json").read_text())["models"]
-                    version = ":".join(models[role]["revision"] for role in ("extractor", "embeddings"))
-                    if version != metadata[0] or models["embeddings"]["revision"] != metadata[1]:
-                        raise AssetsChanged("Model assets changed during inference")
-                adapter.apply_source(db, kind, source_id, current, result, *metadata)
-            if not queue.complete_claim(db, self.claim):
-                raise LeaseLost("Job changed before commit")
+            with embeddings.reserve_growth(db):
+                if not queue.owns_claim(db, self.claim):
+                    raise LeaseLost("Job changed before application")
+                kind, source_id = self.claim.source_kind, self.claim.source_id
+                if kind == "vocabulary":
+                    adapter.apply_vocabulary(db, source_id)
+                elif kind == "profile":
+                    adapter.apply_profile(db, source_id)
+                else:
+                    current = snapshot(db, kind, source_id)
+                    if (current.content_hash if current else None) != (previous.content_hash if previous else None):
+                        raise LeaseLost("Source changed during inference")
+                    if result is not None:
+                        models = json.loads((self.assets / "models.json").read_text())["models"]
+                        version = ":".join(models[role]["revision"] for role in ("extractor", "embeddings"))
+                        if version != metadata[0] or models["embeddings"]["revision"] != metadata[1]:
+                            raise AssetsChanged("Model assets changed during inference")
+                    adapter.apply_source(db, kind, source_id, current, result, *metadata)
+                if not queue.complete_claim(db, self.claim):
+                    raise LeaseLost("Job changed before commit")
             db.commit()
 
     def process_claim(self):
@@ -331,6 +343,7 @@ class Supervisor:
             except sqlite3.OperationalError as error:
                 if not database_busy(error):
                     raise
+                self.record_lock_retry("acquire")
                 self.stop.wait(1)
         if self.stop.is_set():
             return 0
@@ -355,30 +368,37 @@ class Supervisor:
             try:
                 with Session(self.engine) as db:
                     db.execute(text("BEGIN IMMEDIATE"))
-                    adapter.bootstrap(db)
-                    previous = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
-                    if previous != version:
-                        queue.request_backfill(db)
-                        db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy=:policy WHERE id=1"),
-                                   {"version": version, "policy": json.dumps(fitted, sort_keys=True)})
+                    with embeddings.reserve_growth(db):
+                        adapter.bootstrap(db)
+                        previous = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
+                        if previous != version:
+                            queue.request_backfill(db)
+                            db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy=:policy WHERE id=1"),
+                                       {"version": version, "policy": json.dumps(fitted, sort_keys=True)})
                     db.commit()
                 break
             except OperationalError as error:
                 if not database_busy(error.orig):
                     raise
+                self.record_lock_retry("bootstrap")
                 self.stop.wait(1)
         idle = 1
         while not self.stop.is_set():
             self.heartbeat()
             self.inference.check_memory()
+            operation = "checkpoint"
             try:
                 if queue.checkpoint_between_batches(self.connection):
+                    self.record_lock_retry(operation)
                     self.stop.wait(1)
                     continue
+                operation = "claim"
                 self.claim = queue.claim_next(self.connection, self.token)
                 if self.claim is None:
+                    operation = "backfill"
                     if queue.backfill_page(self.connection, self.token):
                         continue
+                    operation = "housekeeping"
                     with Session(self.engine) as db:
                         db.execute(text("BEGIN IMMEDIATE"))
                         advanced = embeddings.finish_generation(db)
@@ -394,6 +414,7 @@ class Supervisor:
             except (sqlite3.OperationalError, OperationalError) as error:
                 if not database_busy(getattr(error, "orig", error)):
                     raise
+                self.record_lock_retry(operation)
                 self.stop.wait(1)
                 continue
             idle = 1
@@ -401,6 +422,8 @@ class Supervisor:
             try:
                 self.process_claim()
             except Exception as error:
+                if database_busy(getattr(error, "orig", error)):
+                    self.record_lock_retry("apply")
                 if isinstance(error, AssetsChanged):
                     self.inference.close()
                 self.retry(error)
@@ -426,8 +449,10 @@ class Supervisor:
                 except sqlite3.OperationalError as error:
                     if not database_busy(error):
                         raise
+                    self.record_lock_retry("release")
                     print("ML worker lease will expire after database contention", file=sys.stderr)
         finally:
+            print(f"ML SQLite retries final: {json.dumps(dict(self.lock_retries), sort_keys=True)}", file=sys.stderr, flush=True)
             self.connection.close()
             self.engine.dispose()
 

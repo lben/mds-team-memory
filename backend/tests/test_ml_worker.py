@@ -14,6 +14,7 @@ import time
 import pytest
 
 from app.ml.worker import InferenceProcess, Stopped, process_tree_rss
+from test_ml_queue import queue_db, queue_template
 
 ROOT = Path(__file__).resolve().parents[2]
 requires_ml = pytest.mark.skipif(importlib.util.find_spec("psutil") is None,
@@ -158,3 +159,222 @@ print(json.dumps([name for name in ('torch', 'gliner2', 'sentence_transformers',
     assert state["pending"] == 1 and not state["worker_active"]
     assert imports == []
     assert path.read_bytes() == before and not (tmp_path / "unused").exists()
+
+
+@pytest.fixture
+def worker_store(app_modules, queue_db, tmp_path, monkeypatch):
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import Session
+    from app.ml import embeddings, queue, worker
+
+    if not queue.sqlite_is_safe(sqlite3.sqlite_version_info):
+        pytest.skip("Worker requires the SQLite WAL-reset fix")
+    pytest.importorskip("psutil")
+    assets = tmp_path / "assets"
+    assets.mkdir()
+    (assets / "models.json").write_text(json.dumps({"models": {
+        "extractor": {"revision": "extractor"}, "embeddings": {"revision": "old"}}}))
+    monkeypatch.setattr(worker, "lower_priority", lambda: None)
+    monkeypatch.setattr(embeddings, "_free_bytes", lambda db: 20 * 1024**3)
+    engine = create_engine(f"sqlite:///{queue_db}")
+    with Session(engine) as db:
+        yield db, queue_db, assets
+    engine.dispose()
+
+
+def run_once(path, assets):
+    import threading
+    from app.ml.worker import Supervisor
+
+    supervisor = Supervisor(path, assets, threading.Event())
+    try:
+        return supervisor.run("once"), dict(supervisor.lock_retries)
+    finally:
+        supervisor.close()
+
+
+def charged_state(db):
+    from sqlalchemy import text
+
+    return {table: db.execute(text(f"SELECT * FROM {table} ORDER BY 1,2")).all()
+            for table in ("ml_budget", "ml_sources", "ml_findings", "ml_evidence", "ml_embeddings")}
+
+
+def test_cached_source_job_rolls_back_derived_growth_and_can_retract(worker_store, monkeypatch):
+    from sqlalchemy import text
+    from app.ml import adapter, embeddings, queue
+    from test_ml_embeddings import add_source, save
+
+    db, path, assets = worker_store
+    source = add_source(db, "source")
+    save(db, source)
+    cached = json.loads(db.execute(text("SELECT result FROM ml_sources WHERE id='source'")).scalar_one())
+    cached.update(concepts=[{"name": "Settlement ledger", "start": 0, "end": 17,
+                             "score": 0.99, "label": "technical concept"}], relations=[])
+    db.execute(text("UPDATE ml_sources SET result=:result WHERE id='source'"), {"result": json.dumps(cached)})
+    adapter.bootstrap(db)
+    db.execute(text("DELETE FROM ml_jobs"))
+    queue.enqueue(db, "item", "source")
+    db.commit()
+    before = charged_state(db)
+    db.rollback()
+    monkeypatch.setattr(embeddings, "_free_bytes", lambda db: embeddings.FREE_RESERVE - 1)
+
+    assert run_once(path, assets)[0] == 1
+    assert charged_state(db) == before
+    job = db.execute(text("SELECT attempts,error FROM ml_jobs WHERE source_kind='item' AND source_id='source'")).one()
+    assert job.attempts == 1 and "filesystem reserve" in job.error
+    assert db.execute(text("SELECT body FROM knowledge_items WHERE id='source'")).scalar_one() == source.text
+    db.execute(text("UPDATE knowledge_items SET visibility='private' WHERE id='source'"))
+    queue.enqueue(db, "item", "source", priority=-1)
+    db.commit()
+
+    assert run_once(path, assets)[0] == 0
+    assert db.execute(text("SELECT valid,result FROM ml_sources WHERE id='source'")).one() == (0, "{}")
+    assert db.execute(text("SELECT count(*) FROM ml_embeddings")).scalar_one() == 0
+    assert db.execute(text("SELECT count(*) FROM ml_jobs WHERE source_kind='item' AND source_id='source'")).scalar_one() == 0
+
+
+def test_profile_job_rolls_back_derived_growth_and_can_retract(worker_store, monkeypatch):
+    from sqlalchemy import text
+    from app.ml import adapter, embeddings, queue
+    from test_ml_embeddings import add_source
+
+    db, path, assets = worker_store
+    db.execute(text("UPDATE profiles SET account_id='account' WHERE id='author'"))
+    db.execute(text("INSERT INTO accounts(id,username,password_hash,is_admin,created_at) VALUES ('actor-account','actor','unused',0,datetime('now'))"))
+    db.execute(text("INSERT INTO profiles(id,account_id,claim_locked,created_at) VALUES ('actor','actor-account',0,datetime('now'))"))
+    add_source(db, "source")
+    db.execute(text("INSERT INTO concepts(id) VALUES ('topic')"))
+    db.execute(text("INSERT INTO concept_terms(id,concept_id,term,display,is_canonical) VALUES ('term','topic','settlement ledger','Settlement ledger',1)"))
+    db.execute(text("INSERT INTO item_concepts(id,item_id,concept_id) VALUES ('tag','source','topic')"))
+    db.execute(text("""INSERT INTO impact_events(id,event_type,actor_profile_id,beneficiary_profile_id,item_id,points,dedup_key,created_at)
+      VALUES ('help','helped','actor','author','source',1,'helped:actor:item:source',datetime('now'))"""))
+    adapter.bootstrap(db)
+    db.execute(text("DELETE FROM ml_jobs"))
+    queue.enqueue(db, "profile", "author")
+    db.commit()
+    before = charged_state(db)
+    db.rollback()
+    monkeypatch.setattr(embeddings, "_free_bytes", lambda db: embeddings.FREE_RESERVE - 1)
+
+    assert run_once(path, assets)[0] == 1
+    assert charged_state(db) == before
+    job = db.execute(text("SELECT attempts,error FROM ml_jobs WHERE source_kind='profile' AND source_id='author'")).one()
+    assert job.attempts == 1 and "filesystem reserve" in job.error
+    db.execute(text("UPDATE ml_jobs SET available_at=0"))
+    db.commit()
+    monkeypatch.setattr(embeddings, "_free_bytes", lambda db: 20 * 1024**3)
+    assert run_once(path, assets)[0] == 0
+    assert db.execute(text("SELECT count(*) FROM ml_evidence WHERE source_kind='profile'")).scalar_one() == 1
+    db.execute(text("UPDATE profiles SET account_id=NULL WHERE id='author'"))
+    db.commit()
+    monkeypatch.setattr(embeddings, "_free_bytes", lambda db: embeddings.FREE_RESERVE - 1)
+
+    assert run_once(path, assets)[0] == 0
+    assert db.execute(text("SELECT valid FROM ml_sources WHERE kind='profile' AND id='author'")).scalar_one() == 0
+    assert db.execute(text("SELECT count(*) FROM ml_evidence WHERE source_kind='profile'")).scalar_one() == 0
+    assert db.execute(text("SELECT state FROM ml_findings WHERE kind='expertise'")).scalar_one() == "withdrawn"
+    assert db.execute(text("SELECT count(*) FROM ml_jobs WHERE source_kind='profile' AND source_id='author'")).scalar_one() == 0
+
+
+@pytest.mark.parametrize(("function", "counter"), [
+    ("acquire_worker", "acquire"), ("renew_worker", "renew_worker"), ("claim_next", "claim"),
+])
+def test_worker_counts_real_sqlite_contention(worker_store, monkeypatch, capsys, function, counter):
+    from app.ml import queue
+
+    _, path, assets = worker_store
+    original = getattr(queue, function)
+    blocked = False
+
+    def contend_once(*args, **kwargs):
+        nonlocal blocked
+        if blocked:
+            return original(*args, **kwargs)
+        blocked = True
+        with sqlite3.connect(path) as holder:
+            holder.execute("BEGIN IMMEDIATE")
+            try:
+                return original(*args, **kwargs)
+            finally:
+                holder.rollback()
+
+    monkeypatch.setattr(queue, function, contend_once)
+    assert run_once(path, assets) == (0, {counter: 1})
+    assert f'"{counter}": 1' in capsys.readouterr().err
+
+
+def test_apply_and_retry_locks_are_counted_and_keep_the_claim(worker_store, monkeypatch, capsys):
+    from sqlalchemy import text
+    from app.ml import queue, worker
+
+    db, path, assets = worker_store
+    queue.enqueue(db, "profile", "author")
+    db.commit()
+    apply, retry = worker.Supervisor.apply, queue.retry_claim
+
+    def locked(original, *args):
+        with sqlite3.connect(path) as holder:
+            holder.execute("BEGIN IMMEDIATE")
+            try:
+                return original(*args)
+            finally:
+                holder.rollback()
+
+    monkeypatch.setattr(worker.Supervisor, "apply", lambda *args: locked(apply, *args))
+    monkeypatch.setattr(queue, "retry_claim", lambda *args: locked(retry, *args))
+    assert run_once(path, assets) == (1, {"apply": 1, "retry": 1})
+    job = db.execute(text("SELECT lease_token,attempts FROM ml_jobs WHERE source_kind='profile' AND source_id='author'")).one()
+    assert job.lease_token and job.attempts == 0
+    assert db.execute(text("SELECT count(*) FROM ml_sources")).scalar_one() == 0
+    assert 'ML SQLite retries final: {"apply": 1, "retry": 1}' in capsys.readouterr().err
+
+
+def test_checkpoint_backoff_is_counted(worker_store, monkeypatch, capsys):
+    from app.ml import queue
+
+    _, path, assets = worker_store
+    original = queue.checkpoint_between_batches
+    blocked = False
+    monkeypatch.setattr(queue, "WAL_HIGH_WATER", 1)
+
+    def pinned_once(connection):
+        nonlocal blocked
+        if blocked:
+            return original(connection)
+        blocked = True
+        with sqlite3.connect(path) as reader:
+            reader.execute("BEGIN")
+            reader.execute("SELECT revision FROM ml_state").fetchone()
+            with sqlite3.connect(path) as writer:
+                writer.execute("UPDATE ml_state SET revision=revision+1")
+            try:
+                return original(connection)
+            finally:
+                reader.rollback()
+
+    monkeypatch.setattr(queue, "checkpoint_between_batches", pinned_once)
+    assert run_once(path, assets) == (0, {"checkpoint": 1})
+    assert '"checkpoint": 1' in capsys.readouterr().err
+
+
+def test_bootstrap_rolls_back_derived_growth_without_losing_jobs(worker_store, monkeypatch):
+    from sqlalchemy import text
+    from app.ml import embeddings, queue
+
+    db, path, assets = worker_store
+    db.execute(text("INSERT INTO concepts(id) VALUES ('topic')"))
+    db.execute(text("INSERT INTO concept_terms(id,concept_id,term,display,is_canonical) VALUES ('term','topic','ledger','Ledger',1)"))
+    queue.enqueue(db, "profile", "author")
+    db.commit()
+    before = charged_state(db)
+    db.rollback()
+    monkeypatch.setattr(embeddings, "_free_bytes", lambda db: embeddings.FREE_RESERVE - 1)
+
+    with pytest.raises(embeddings.StoragePressure, match="filesystem reserve"):
+        run_once(path, assets)
+    assert charged_state(db) == before
+    assert db.execute(text("SELECT count(*) FROM ml_overrides")).scalar_one() == 0
+    assert db.execute(text("SELECT count(*) FROM ml_jobs WHERE source_kind='profile' AND source_id='author'")).scalar_one() == 1
+    assert db.execute(text("SELECT display FROM concept_terms WHERE id='term'")).scalar_one() == "Ledger"

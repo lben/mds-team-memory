@@ -2,11 +2,13 @@
 
 Status: implementation approved on 8 September 2026. Audit baseline: commit `3243b0b5e81a37afda56a024e5d3b62a5c1ea367`. The implementation runs as a persistent Codex goal with gauntlet review. The clarifications below address the subsequent concurrency, evaluation, storage, and deployment requirements.
 
-Verification status: the offline UBI 8.10/Python 3.12.14 suite passes all 189 tests without skips. Real local models publish concepts and a typed relationship without admin login. Browser checks cover live updates, topic correction, suppression/restoration, and persistent relationship direction edits. Offline bundle roundtrip, worker process limits, restart, generation upgrade, deployment recovery and rollback have been exercised.
+Verification status: the offline UBI 8.10/Python 3.12.14 suite passes all 200 tests without skips. Real local models publish concepts and a typed relationship without admin login. Browser checks cover live updates, topic correction, suppression/restoration, and persistent relationship direction edits. Offline bundle roundtrip, worker process limits, restart, generation upgrade, deployment recovery and rollback have been exercised.
 
 The paired 50,000-item/50-client container load check passes: 503 writes preserved, no HTTP errors or unhandled database locks, and write p95 of 5.48 seconds with the worker versus 5.12 seconds without it (6.40-second fixed comparison gate). The worker completed real inference and peaked at 2.77 GiB RSS. These emulated-host results do not establish Xeon capacity. Earlier failed runs remain recorded; a measured feed index correction resolved the observed request timeouts.
 
 Release validation remains open: final fresh integration review, Windows split/assembly execution, and representative labeled accuracy evaluation. The prepared GLiNER2.5 base/BGE-large combination has runtime and development-probe evidence; it has not passed the release quality gate. Conservative publication rules remain uncalibrated by default. Optional fitted decision models carry an explicit unverified quality status.
+
+The first separate integration review identified duplicate acronym identities, incomplete alias matching, and a disk-reserve bypass for cached/profile evidence. Corrections resolve explicit definitions before creating identities, match token-preserving spelling variants, and recognize affirmative contextual naming statements. Existing distinct canonical identities remain intact. Global aliases still require independent support. Worker transactions now enforce the filesystem reserve across all charged derived data, including cached results and expertise; cleanup remains possible below the reserve. Contention counters cover acquisition, renewal, application, and maintenance operations. The corrected real-model alias and complete-retry load checks are pending.
 
 **Outcome and limits**
 

@@ -11,7 +11,7 @@ from sqlalchemy import func, or_, text
 from ..models import (RELATED_TO_ID, Account, Concept, ConceptTerm, ExpertiseMapping,
                       ImpactEvent, ItemConcept, KnowledgeItem, Profile, Relationship,
                       RelationshipType, utcnow)
-from . import effective, embeddings, policy
+from . import effective, embeddings, policy, resolution
 from .models import Embedding, Evidence, Finding, Override, Source
 from .queue import enqueue, request_backfill
 from .runtime import normalize, specific_name
@@ -73,7 +73,8 @@ def _decide(db, row):
 
 def _concept(db, name):
     term = db.query(ConceptTerm).filter_by(term=normalize(name)).first()
-    concept = db.get(Concept, term.concept_id) if term else None
+    identity = term.concept_id if term else resolution.spelling_concept(db, name)
+    concept = db.get(Concept, identity) if identity else None
     if concept:
         existing = db.query(Finding).filter_by(kind="concept", canonical_id=concept.id).first()
         if existing:
@@ -330,21 +331,55 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             authors.add(source.author_id)
         concepts = {}
         spans = list(result["concepts"])
-        definitions = list(policy.acronym_definitions(source.text))
+        definitions = list(resolution.definitions(source.text, spans)) if source.assertion_allowed else []
         for definition in definitions:
-            supporting = [span for span in spans if definition["start"] <= span["start"] < span["end"] <= definition["end"]]
-            if supporting:
-                spans.append({"name": definition["name"], "start": definition["start"],
-                              "end": definition["alias_start"] - 2, "score": max(s["score"] for s in supporting),
-                              "label": "explicit definition"})
+            spans.append({"name": definition["name"], "start": definition["name_start"],
+                          "end": definition["name_end"], "score": definition["score"],
+                          "label": "explicit definition"})
+            concepts[normalize(definition["name"])] = _concept(db, definition["name"])
+        # Resolve definitions before an extracted abbreviation can create its
+        # own identity. Distinct existing canonical records are never merged.
+        aliases = []
         for span in spans:
             if not specific_name(span["name"]):
                 continue
-            row = _concept(db, span["name"])
+            spelling = normalize(span["name"])
+            blocked = db.get(Override, finding_key("term", spelling))
+            if blocked and blocked.mode == "suppressed":
+                continue
+            targets = {normalize(d["name"]) for d in definitions if normalize(d["alias"]) == spelling}
+            existing = db.query(ConceptTerm).filter_by(term=spelling).first()
+            if len(targets) > 1:
+                # Multiple expansions in this source cannot establish a single
+                # source-wide identity for standalone occurrences.
+                continue
+            if targets and not (existing and existing.is_canonical):
+                row = concepts[next(iter(targets))]
+            else:
+                if not existing and not targets and resolution.spelling_concept(db, span["name"]) is None and db.query(Finding).filter(
+                        Finding.kind == "alias", func.json_extract(Finding.payload, "$.alias_key") == spelling,
+                        effective.supported()).first():
+                    # An awaiting-evidence alias must not become a conflicting
+                    # new canonical concept through a standalone occurrence.
+                    continue
+                row = concepts.get(spelling)
+                if row is None and existing is None:
+                    matching = {candidate.key: candidate for candidate in concepts.values()
+                                if resolution.spelling_key(json.loads(candidate.payload)["name"])
+                                == resolution.spelling_key(span["name"])}
+                    if len(matching) == 1:
+                        row = next(iter(matching.values()))
+                row = row or _concept(db, span["name"])
+            canonical_name = json.loads(row.payload)["name"]
+            if (spelling != normalize(canonical_name)
+                    and resolution.spelling_key(span["name"]) == resolution.spelling_key(canonical_name)):
+                aliases.append({"name": canonical_name, "alias": span["name"], "start": span["start"],
+                                "end": span["end"], "score": span["score"], "spelling_variant": True})
             _evidence(db, row, source, span["start"], span["end"], span["score"], model_version,
                       grounded=True, label=span["label"])
             affected.add(row.key)
-            concepts[normalize(span["name"])] = row
+            concepts[spelling] = row
+            concepts.setdefault(normalize(canonical_name), row)
         db.flush()
         vocabulary_changed = False
         for row in {r.key: r for r in concepts.values()}.values():
@@ -360,13 +395,14 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             mention.canonical_id = concept.canonical_id
             _evidence(db, mention, source, span["start"], span["end"], span["score"], model_version, grounded=True)
             affected.add(mention.key)
-        for definition in definitions:
+        for definition in definitions + aliases:
             concept = concepts.get(normalize(definition["name"]))
             if concept and concept.canonical_id:
                 alias = _finding(db, "alias", [normalize(definition["alias"]), concept.canonical_id],
                                  {"alias": definition["alias"], "alias_key": normalize(definition["alias"]), "concept_id": concept.canonical_id})
-                score = max(span["score"] for span in spans if normalize(span["name"]) == normalize(definition["name"]))
-                _evidence(db, alias, source, definition["start"], definition["end"], score, model_version, explicit_definition=True)
+                _evidence(db, alias, source, definition["start"], definition["end"], definition["score"], model_version,
+                          explicit_definition=not definition.get("spelling_variant", False),
+                          spelling_variant=definition.get("spelling_variant", False), assertion_allowed=source.assertion_allowed)
                 affected.add(alias.key)
         for relation in result["relations"]:
             # The relation extractor can identify a known endpoint that the

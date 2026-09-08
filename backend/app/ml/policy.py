@@ -67,7 +67,8 @@ def _cold_decision(kind, evidence):
         active = strong >= 0.985 or (groups >= 2 and strong >= 0.94)
         return ("active" if active else "held"), strong
     if kind == "alias":
-        explicit = [row for row in positive if row.get("explicit_definition")]
+        explicit = [row for row in positive if (row.get("explicit_definition") or row.get("spelling_variant"))
+                    and row.get("assertion_allowed", True)]
         groups, _ = independent_support(explicit)
         # Different expansions of the same spelling are checked against the
         # complete current finding set before any global term is published.

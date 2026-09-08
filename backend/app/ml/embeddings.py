@@ -4,6 +4,7 @@ Call mutations inside the worker's short BEGIN IMMEDIATE transaction. Similarity
 is a retrieval score only; it cannot establish an alias, fact, or expertise.
 """
 
+from contextlib import contextmanager
 from functools import lru_cache
 import hashlib
 import json
@@ -40,8 +41,29 @@ def _free_bytes(db):
 def _check_space(db, total, growth, max_bytes):
     if total > min(MAX_BYTES, max_bytes):
         raise StoragePressure("Embedding quota cannot fit this allocation; current generation retained")
+    _check_reserve(db, growth)
+
+
+def _check_reserve(db, growth):
     if growth > 0 and _free_bytes(db) - growth < FREE_RESERVE:
-        raise StoragePressure("Embedding allocation would breach the 2 GiB filesystem reserve")
+        raise StoragePressure("Derived allocation would breach the 2 GiB filesystem reserve")
+
+
+@contextmanager
+def reserve_growth(db):
+    """Check every charged allocation before the worker commits its transaction.
+
+    The caller must roll back on refusal. Budget triggers include cached source
+    results, finding payloads, and profile evidence as well as vector storage.
+    Net retraction remains available when the filesystem reserve is depleted.
+    """
+    db.flush()
+    before = _budget(db)
+    yield
+    db.flush()
+    after = _budget(db)
+    _check_reserve(db, after["embedding_bytes"] + after["evidence_bytes"]
+                   - before["embedding_bytes"] - before["evidence_bytes"])
 
 
 def _rebuild_estimate(db, dimensions):

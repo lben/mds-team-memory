@@ -36,6 +36,7 @@ def _trigger(name: str, action: str, table: str, body: str, when: str = "") -> N
 
 def upgrade() -> None:
     op.execute("CREATE INDEX ix_knowledge_items_visibility_created_at ON knowledge_items(visibility,created_at)")
+    op.execute("CREATE INDEX ix_concept_terms_spelling ON concept_terms(replace(replace(replace(term,' ',''),'-',''),'_',''))")
     _derived_schema()
     op.execute("""CREATE TABLE ml_jobs (
       source_kind TEXT NOT NULL CHECK(source_kind IN ('item','passage','profile','vocabulary')),
@@ -94,6 +95,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    op.execute("DROP INDEX IF EXISTS ix_concept_terms_spelling")
     op.execute("DROP INDEX IF EXISTS ix_knowledge_items_visibility_created_at")
     for name in ("item_update", "item_delete", "passage_update", "passage_delete",
                  "outcome_insert", "outcome_delete", "profile_update", "account_delete"):
