@@ -14,8 +14,10 @@ engine = create_engine(config.DATABASE_URL, connect_args={"check_same_thread": F
 @event.listens_for(engine, "connect")
 def _set_sqlite_pragma(dbapi_connection, _record):
     cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA busy_timeout=5000")
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.execute("PRAGMA wal_autocheckpoint=1000")
     cursor.close()
 
 

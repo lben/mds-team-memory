@@ -323,3 +323,6 @@ class Revision(Base):
     correction_id: Mapped[str] = mapped_column(ForeignKey("knowledge_items.id"))
     note: Mapped[str] = mapped_column(Text, default="")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+from .ml import models as _ml_models  # noqa: E402,F401 — registers additive derived tables
