@@ -134,7 +134,44 @@ def test_release_gate_includes_extra_predictions_and_cannot_pass_missing_evidenc
     assert gate["categories"]["aliases"]["all_applied_predictions"]["precision"] == 150 / 160
     assert checker.release_quality(corpus, results[:-1])[0]["status"] == "INCOMPLETE"
     results[0]["retractions"] = [{"initially_present": False, "absent_after_actions": True}]
-    assert checker.release_quality(corpus, results)[0]["status"] == "INCOMPLETE"
+    assert checker.release_quality(corpus, results)[0]["status"] == "FAIL"
+
+
+def test_untriggered_withdrawal_does_not_change_numeric_quality(checker):
+    corpus, results = complete_toy_records(checker)
+    expected, _ = checker.release_quality(corpus, results)
+    results[-1]["retractions"] = [{"category": "concepts", "assertion": "Compiler",
+                                  "initially_present": False, "absent_after_actions": True}]
+    actual, _ = checker.release_quality(corpus, results)
+    assert actual == expected
+
+
+def test_lifecycle_requires_demonstrated_transitions_and_fails_surviving_findings(checker):
+    results = [{"id": "mutation", "status": "PASS", "retractions": [
+        {"category": category, "assertion": category,
+         "initially_present": True, "absent_after_actions": True}
+        for category in checker.CATEGORIES]}]
+    assert checker.lifecycle_quality(results)["status"] == "PASS"
+    results[0]["retractions"].append({"category": "concepts", "assertion": "Withheld",
+                                     "initially_present": False, "absent_after_actions": True})
+    lifecycle = checker.lifecycle_quality(results)
+    assert lifecycle["status"] == "PASS"
+    assert lifecycle["categories"]["concepts"] == {"DEMONSTRATED": 1, "FAILED": 0, "UNTRIGGERED": 1}
+    assert lifecycle["checks"][-1]["status"] == "UNTRIGGERED"
+    assert checker.case_status([{"passed": True}], results[0]["retractions"], version=2) == "PASS"
+    assert checker.case_status([{"passed": True}], results[0]["retractions"], version=1) == "INCOMPLETE"
+
+    # Missing aliases/relationships cannot be certified by concept/expertise transitions.
+    results[0]["retractions"] = [row for row in results[0]["retractions"]
+                                 if row["category"] in {"concepts", "expertise"}]
+    assert checker.lifecycle_quality(results)["status"] == "NOT_DEMONSTRATED"
+    assert checker.evaluation_status("PASS", "NOT_DEMONSTRATED") == "INCOMPLETE"
+    assert checker.evaluation_status("FAIL", "NOT_DEMONSTRATED") == "FAIL"
+    for initially_present in (True, False):
+        results[0]["retractions"][-1].update(initially_present=initially_present, absent_after_actions=False)
+        assert checker.lifecycle_quality(results)["status"] == "FAIL"
+        assert checker.evaluation_status("PASS", "FAIL") == "FAIL"
+        assert checker.case_status([{"passed": True}], results[0]["retractions"], version=2) == "FAIL"
 
 
 def test_empty_publication_and_small_corpus_do_not_pass_release_gate(checker):

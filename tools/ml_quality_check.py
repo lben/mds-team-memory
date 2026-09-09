@@ -3,8 +3,8 @@
 Each case gets a fresh migrated database. One production inference child is reused
 across cases; the normal worker drains each phase. Exit 0 means the corpus gate
 passed, 1 means quality failed, and 2 means execution or required evidence was
-incomplete. Version 1 requires every assertion; version 2 uses the frozen numeric
-quality gates and reports individual assertion failures separately.
+incomplete. Version 1 requires every assertion; version 2 reports the frozen
+numeric quality gates separately from demonstrated withdrawal behavior.
 The original small corpus cannot establish the statistical release-quality gate.
 An expanded corpus also grades every published prediction against frozen labels.
 """
@@ -426,10 +426,18 @@ def audit_predictions(case, observed):
     return audit
 
 
-def case_status(checks, retractions):
+def withdrawal_status(row):
+    if not row["absent_after_actions"]:
+        return "FAILED"
+    return "DEMONSTRATED" if row["initially_present"] else "UNTRIGGERED"
+
+
+def case_status(checks, retractions, version=1):
     if any(not check["passed"] for check in checks):
         return "FAIL"
-    if any(not row["initially_present"] or not row["absent_after_actions"] for row in retractions):
+    if version == 2:
+        return "FAIL" if any(withdrawal_status(row) == "FAILED" for row in retractions) else "PASS"
+    if any(withdrawal_status(row) != "DEMONSTRATED" for row in retractions):
         return "INCOMPLETE"
     return "PASS"
 
@@ -491,9 +499,16 @@ def run_case(case, source_root, models, directory, inference, version=1):
             if version == 2:
                 result["prediction_audit"] = audit_predictions(case, final)
             if result.get("retractions"):
-                demonstrated = all(row["initially_present"] and row["absent_after_actions"] for row in result["retractions"])
-                result["retraction_status"] = "DEMONSTRATED" if demonstrated else "NOT_DEMONSTRATED"
-            result["status"] = case_status(result["checks"], result.get("retractions", []))
+                if version == 2:
+                    for row in result["retractions"]:
+                        row["status"] = withdrawal_status(row)
+                    statuses = {row["status"] for row in result["retractions"]}
+                    result["retraction_status"] = next(state for state in ("FAILED", "UNTRIGGERED", "DEMONSTRATED")
+                                                       if state in statuses)
+                else:
+                    demonstrated = all(withdrawal_status(row) == "DEMONSTRATED" for row in result["retractions"])
+                    result["retraction_status"] = "DEMONSTRATED" if demonstrated else "NOT_DEMONSTRATED"
+            result["status"] = case_status(result["checks"], result.get("retractions", []), version)
             if any(not row["correct"] for rows in result.get("prediction_audit", {}).values() for row in rows):
                 result["status"] = "FAIL"
             inference.check_memory()
@@ -548,14 +563,12 @@ def release_quality(corpus, results):
 
     by_id = {result["id"]: result for result in results}
     decisions, audit = [], {category: [] for category in CATEGORIES}
-    missing, unproved_retractions = [], []
+    missing = []
     for case in corpus["cases"]:
         result = by_id.get(case["id"])
         if not result or result["status"] == "ERROR":
             missing.append(case["id"])
             continue
-        unproved_retractions.extend({"case": case["id"], **row} for row in result.get("retractions", [])
-                                    if not row["initially_present"] or not row["absent_after_actions"])
         for check in result["checks"]:
             category = check["category"]
             decisions.append({"id": case["id"] + ":" + category, "group_id": case["id"],
@@ -579,17 +592,39 @@ def release_quality(corpus, results):
                 summary["status"] = "fail"
         categories[category] = summary
     statuses = {row["status"] for row in categories.values()}
-    status = ("INCOMPLETE" if missing or unproved_retractions else
+    status = ("INCOMPLETE" if missing else
               "INSUFFICIENT_EVIDENCE" if "insufficient" in statuses or corpus.get("split") == "development" else
               "FAIL" if "fail" in statuses else "PASS")
     return {"status": status, "categories": categories, "missing_cases": missing,
-            "unproved_retractions": unproved_retractions,
             "split": corpus.get("split", "heldout"),
             "development_can_establish_release_quality": False,
             "population": "Frozen authored scenarios; no workplace accuracy claim.",
             "intervals": "Wilson intervals use one preselected decision per independent case/category. "
                          "The separate complete-output precision audit includes correlated predictions; "
                          "it does not add independent samples."}, decisions
+
+
+def lifecycle_quality(results):
+    checks = [{"case": result["id"], **row, "status": withdrawal_status(row)}
+              for result in results if result["status"] != "ERROR"
+              for row in result.get("retractions", [])]
+    categories = {category: {status: sum(row["category"] == category and row["status"] == status
+                                        for row in checks)
+                             for status in ("DEMONSTRATED", "FAILED", "UNTRIGGERED")}
+                  for category in CATEGORIES}
+    status = ("FAIL" if any(row["FAILED"] for row in categories.values()) else
+              "NOT_DEMONSTRATED" if any(not row["DEMONSTRATED"] for row in categories.values()) else "PASS")
+    return {"status": status, "categories": categories, "checks": checks,
+            "scope": "Withdrawal after source changes only. Each finding category needs an active-to-absent "
+                     "application scenario. Untriggered checks establish final absence, not withdrawal."}
+
+
+def evaluation_status(quality, lifecycle):
+    if "FAIL" in (quality, lifecycle):
+        return "FAIL"
+    if quality != "PASS":
+        return quality
+    return "PASS" if lifecycle == "PASS" else "INCOMPLETE"
 
 
 def main(argv=None):
@@ -691,11 +726,12 @@ def main(argv=None):
         if corpus["version"] == 2:
             gate, decisions = release_quality(corpus, report["cases"])
             report["statistical_release_gate"] = gate
+            report["lifecycle_gate"] = lifecycle_quality(report["cases"])
             with (output / "decisions.jsonl").open("w", encoding="utf-8") as stream:
                 for row in decisions:
                     stream.write(json.dumps(row) + "\n")
             if report["status"] != "ERROR":
-                report["status"] = gate["status"]
+                report["status"] = evaluation_status(gate["status"], report["lifecycle_gate"]["status"])
         write_json(output / "report.json", report)
     print(json.dumps({"status": report["status"], "report": str(output / "report.json")}), flush=True)
     return {"PASS": 0, "FAIL": 1, "INCOMPLETE": 2, "INSUFFICIENT_EVIDENCE": 2, "ERROR": 2}[report["status"]]
