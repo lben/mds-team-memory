@@ -358,6 +358,62 @@ def test_contextual_equivalence_needs_affirmative_independent_evidence(make_clie
     assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "active"
 
 
+@pytest.mark.parametrize("unsupported", [
+    'The caption "{definition}" was rejected.',
+    "There is no evidence that {definition}.",
+])
+def test_unsupported_definition_withdraws_alias_and_cannot_republish_it(make_client, admin_client, unsupported):
+    first, second, third = make_client(), make_client(), make_client()
+    suffix = uuid.uuid4().hex[:6]
+    name, alias = f"Vega Ledger{suffix}", f"Archive Bridge{suffix}"
+    definition = f"{name} is also called {alias}"
+    one = _capture(first, f"{definition}. It receives daily settlement receipts.")
+    two = _capture(second, f"Our recovery guide confirms {definition}. Operators use it for receipt replay.")
+    for item_id in (one, two):
+        _apply(item_id, [name, alias])
+    concept_id = _tags(first, one)[name]
+    key = _finding(admin_client, "alias", alias=alias, concept_id=concept_id)["key"]
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "active"
+    assert any(c["id"] == concept_id for c in first.get("/api/search", params={"q": alias}).json()["concepts"])
+
+    body = unsupported.format(definition=definition)
+    assert second.put(f"/api/items/{two}", json={"body": body}).status_code == 200
+    assert first.get("/api/search", params={"q": alias}).json()["concepts"] == []
+    _apply(two, [name, alias])
+    finding = admin_client.get(f"/api/ml/findings/{key}").json()
+    assert finding["state"] == "held"
+    assert finding["raw_model_score"] == 0.995
+    assert first.get("/api/search", params={"q": alias}).json()["concepts"] == []
+    another = _capture(third, body + " The archive review records this correction.")
+    _apply(another, [name, alias])
+    _apply(two, cached=True)
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "held"
+    assert first.get("/api/search", params={"q": alias}).json()["concepts"] == []
+
+
+@pytest.mark.parametrize("name, alias, template", [
+    ("Orion Plan", "Rejected Gateway", "{name} is also called {alias}"),
+    ("Rejected Relay", "Lyra Plan Bridge", "{alias} is an alias for {name}"),
+    ("Rejected Plan Service", "RPS", "{name} ({alias})"),
+])
+def test_alias_assertion_cues_inside_grounded_names_do_not_block_definitions(
+        make_client, admin_client, name, alias, template):
+    first, second = make_client(), make_client()
+    definition = template.format(name=name, alias=alias)
+    one = _capture(first, f"{definition}. It archives settlement receipts.")
+    two = _capture(second, f"The recovery guide identifies {definition}. Operators use it during receipt replay.")
+    _apply(one, [name, alias])
+    concept_id = _tags(first, one)[name]
+    key = _finding(admin_client, "alias", alias=alias, concept_id=concept_id)["key"]
+    assert admin_client.get(f"/api/ml/findings/{key}").json()["state"] == "held"
+    _apply(two, [name, alias])
+    _apply(two, cached=True)
+    assert _tags(first, one) == _tags(first, two) == {name: concept_id}
+    finding = admin_client.get(f"/api/ml/findings/{key}").json()
+    assert finding["state"] == "active" and finding["raw_model_score"] == 0.995
+    assert [c["id"] for c in first.get("/api/search", params={"q": alias}).json()["concepts"]] == [concept_id]
+
+
 def test_alias_resolution_preserves_distinct_manual_identities_and_word_boundaries(make_client, admin_client):
     client = make_client()
     name, alias = "Titan Packet Collector", "TPC"

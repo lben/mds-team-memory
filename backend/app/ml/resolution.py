@@ -67,6 +67,13 @@ def definitions(text, spans):
         start, end = definition["start"], definition["end"]
         before = list(re.finditer(r"[.!?\n]", text[:start]))
         after = re.search(r"[.!?\n]", text[end:])
-        sentence = text[before[-1].end() if before else 0:end + after.end() if after else len(text)]
-        if not ("?" in sentence or NEGATION.search(sentence) or UNCERTAIN.search(sentence)):
+        sentence_start = before[-1].end() if before else 0
+        context = list(text[sentence_start:end + after.end() if after else len(text)])
+        # Grounded names such as "Orion Plan" are not assertion cues.
+        for endpoint in ("name", "alias"):
+            left, right = definition[f"{endpoint}_start"], definition[f"{endpoint}_end"]
+            context[left - sentence_start:right - sentence_start] = " " * (right - left)
+        context = "".join(context)
+        if not ("?" in context or NEGATION.search(context) or UNCERTAIN.search(context)
+                or re.search(r"\b(?:rejected|no\s+evidence)\b", context, re.I)):
             yield definition

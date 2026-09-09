@@ -33,7 +33,7 @@ NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can['’]t|doesn
 UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
 # Bump for extraction behavior changes outside the schema, such as grounding or windowing.
-EXTRACTION_VERSION = "grounded-spans-v7"
+EXTRACTION_VERSION = "grounded-spans-v8"
 
 
 def inference_version(models):
