@@ -102,6 +102,19 @@ def _decision(admin, key, mode):
     return response.json()
 
 
+def test_sentence_punctuation_is_not_published_as_part_of_a_concept(make_client):
+    client = make_client()
+    item = _capture(client, "Neither. ECM names edge curvature measure, and the present Elm carving model has no steel armature.")
+    _apply(item, [". ECM", "ECM"])
+    _apply(item, cached=True)
+    assert set(_tags(client, item)) == {"ECM"}
+    assert {c["name"] for c in client.get("/api/search", params={"q": ". ECM"}).json()["concepts"]} == {"ECM"}
+
+    dotted = _capture(client, ".NET Core handles the archive import.")
+    _apply(dotted, [".NET Core"])
+    assert set(_tags(client, dotted)) == {".NET Core"}
+
+
 def test_automatic_concepts_and_relation_replay_keep_independent_evidence(make_client, admin_client, obsolete_policy):
     from app.db import SessionLocal
     from app.ml import policy
