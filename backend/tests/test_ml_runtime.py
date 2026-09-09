@@ -157,6 +157,38 @@ def test_repeated_endpoint_repair_preserves_reverse_text_order():
     assert rows[0]["literal_support"] and rows[0]["polarity"] == "positive"
 
 
+@pytest.mark.parametrize("participle", ["included", "contained"])
+@pytest.mark.parametrize("passive", [False, True])
+def test_explicit_component_of_preserves_subject(make_client, participle, passive):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import snapshot
+    from test_ml_automation import _capture, _edge, _tags
+
+    names = (f"Cedar {participle.title()} {passive} Sensor", f"Amber {participle.title()} {passive} Camera")
+    for index, client in enumerate((make_client(), make_client())):
+        phrase = f"is {participle} as" if passive else {"included": "includes", "contained": "contains"}[participle]
+        body = f"{names[0]} {phrase} a component of {names[1]}."
+        if index:
+            body = "The latest inspection confirms that " + body
+        spans = [_span(body, name, score=0.995) for name in names]
+        result = _analyze(body, spans, {"part_of": [{"head": spans[0], "tail": spans[1]}]}, full=True)
+        result["chunks"] = []
+        item_id = _capture(client, body)
+        with SessionLocal() as db:
+            adapter.apply_source(db, "item", item_id, snapshot(db, "item", item_id), result,
+                                 "recorded-component-phrase", "recorded-embedding", 1024)
+            db.commit()
+        tags = _tags(client, item_id)
+        edge = _edge(client, *tags.values())
+        if not passive:
+            assert edge is None or edge["style"] != "solid"
+            continue
+        assert edge is not None and edge["label"] == "part of"
+        assert (edge["source"], edge["target"]) == (tags[names[0]], tags[names[1]])
+        assert edge["style"] == ("dashed", "solid")[index]
+
+
 @pytest.mark.parametrize("predicate,phrase", [
     ("uses", "used"), ("uses", "utilized"), ("uses", "ran on"),
     ("uses", "is using"), ("uses", "was using"),

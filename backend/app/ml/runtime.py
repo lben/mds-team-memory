@@ -33,7 +33,7 @@ NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can['’]t|doesn
 UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
 # Bump for extraction behavior changes outside the schema, such as grounding or windowing.
-EXTRACTION_VERSION = "grounded-spans-v6"
+EXTRACTION_VERSION = "grounded-spans-v7"
 
 
 def inference_version(models):
@@ -148,8 +148,12 @@ def relation_support(text, head, tail, predicate):
     cue = CUES[predicate][0 if forward else 1]
     match = re.search(cue, middle, re.I)
     literal_support = bool(match)
-    if forward and re.search(CUES[predicate][1], middle, re.I):
-        literal_support = False
+    inverse = re.search(CUES[predicate][1], middle, re.I)
+    if forward and inverse:
+        literal_support = bool(predicate == "part_of" and match
+                               and inverse.group().casefold() in {"included", "contained"}
+                               and re.fullmatch(r"\s+as\s+(?:(?:a|an|the)\s+)?",
+                                                middle[inverse.end():match.start()], re.I))
     if match and match.group().casefold().endswith("ed") and re.search(
             r"\b(?:(?:is|are|was|were)(?:n['’]t)?|be|been|being|gets?|got)\s+(?:(?:not|never|no longer|\w+ly)\s+)*$",
             middle[:match.start()], re.I):
