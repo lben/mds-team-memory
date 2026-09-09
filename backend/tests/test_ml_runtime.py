@@ -157,6 +157,154 @@ def test_repeated_endpoint_repair_preserves_reverse_text_order():
     assert rows[0]["literal_support"] and rows[0]["polarity"] == "positive"
 
 
+@pytest.mark.parametrize("predicate,phrase", [
+    ("uses", "used"), ("uses", "utilized"), ("uses", "ran on"),
+    ("uses", "is using"), ("uses", "was using"),
+    ("depends_on", "required"), ("depends_on", "depended on"), ("depends_on", "relied on"),
+    ("produces", "produced"), ("produces", "generated"), ("produces", "emitted"),
+    ("produces", "created"), ("replaces", "replaced"), ("replaces", "superseded"),
+    ("part_of", "contained"), ("part_of", "included"),
+])
+def test_past_tense_relation_publishes_with_independent_support(make_client, predicate, phrase):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import snapshot
+    from test_ml_automation import _capture, _edge, _tags
+
+    names = (f"Cedar {phrase.title()} Plan", f"Amber {phrase.title()} Register")
+    clients = make_client(), make_client()
+    for index, client in enumerate(clients):
+        body = f"{names[0]} {phrase} {names[1]}; the inspection cannot proceed without its records."
+        if index:
+            body = "The audit confirmed that " + body
+        spans = [_span(body, name, score=0.995) for name in names]
+        head, tail = reversed(spans) if predicate == "part_of" else spans
+        result = _analyze(body, spans, {predicate: [{"head": head, "tail": tail}]}, full=True)
+        result["chunks"] = []
+        item_id = _capture(client, body)
+        with SessionLocal() as db:
+            adapter.apply_source(db, "item", item_id, snapshot(db, "item", item_id), result,
+                                 "recorded-inflections", "recorded-embedding", 1024)
+            db.commit()
+        tags = _tags(client, item_id)
+        edge = _edge(client, *tags.values())
+        assert edge is not None and edge["label"] == predicate.replace("_", " ")
+        assert edge["style"] == ("dashed", "solid")[index]
+        assert edge["support_count"] == index + 1
+
+
+@pytest.mark.parametrize("predicate,verb", [
+    ("uses", "used"), ("uses", "utilized"), ("depends_on", "required"),
+    ("produces", "produced"), ("produces", "generated"), ("produces", "emitted"),
+    ("produces", "created"), ("replaces", "replaced"), ("replaces", "superseded"),
+])
+def test_passive_past_tense_keeps_direction(predicate, verb):
+    body = f"Amber Register was {verb} by Cedar Plan."
+    first, second = _span(body, "Amber Register"), _span(body, "Cedar Plan")
+    rows = _analyze(body, relations={predicate: [{"head": first, "tail": second},
+                                               {"head": second, "tail": first}]})
+    assert not rows[0]["literal_support"]
+    assert rows[1]["literal_support"] and rows[1]["polarity"] == "positive"
+
+
+@pytest.mark.parametrize("predicate,body", [
+    ("uses", "Amber Register was used in Cedar Plan."),
+    ("produces", "Amber Register is produced from Cedar Plan."),
+    ("depends_on", "Amber Register was required for Cedar Plan."),
+    ("replaces", "Amber Register has been replaced with Cedar Plan."),
+])
+def test_passive_with_other_prepositions_cannot_reverse_roles(predicate, body):
+    rows = _analyze(body, relations={predicate: [{"head": _span(body, "Amber Register"),
+                                               "tail": _span(body, "Cedar Plan")}]})
+    assert not rows[0]["literal_support"]
+
+
+@pytest.mark.parametrize("verb", ["included", "contained"])
+def test_passive_containment_cannot_reverse_part_of(verb):
+    body = f"Amber Register was {verb} in Cedar Plan."
+    rows = _analyze(body, relations={"part_of": [{"head": _span(body, "Cedar Plan"),
+                                                "tail": _span(body, "Amber Register")}]})
+    assert not rows[0]["literal_support"]
+
+
+@pytest.mark.parametrize("auxiliary", ["isn't", "aren't", "wasn't", "weren't"])
+@pytest.mark.parametrize("apostrophe", ["'", "’"])
+def test_negated_passive_cannot_withdraw_opposite_relationship(make_client, auxiliary, apostrophe):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import snapshot
+    from test_ml_automation import _capture, _edge, _tags
+
+    auxiliary = auxiliary.replace("'", apostrophe)
+    names = (f"Cedar {auxiliary} Gateway", f"Amber {auxiliary} Register")
+    for index in range(3):
+        client = make_client()
+        phrase = f"{auxiliary} contained in" if index == 2 else "contains"
+        body = f"{names[0]} {phrase} {names[1]}."
+        if index == 1:
+            body = "The audit confirms that " + body
+        spans = [_span(body, name, score=0.995) for name in names]
+        result = _analyze(body, spans, {"part_of": [{"head": spans[1], "tail": spans[0]}]}, full=True)
+        result["chunks"] = []
+        item_id = _capture(client, body)
+        with SessionLocal() as db:
+            adapter.apply_source(db, "item", item_id, snapshot(db, "item", item_id), result,
+                                 "recorded-passive-negative", "recorded-embedding", 1024)
+            db.commit()
+        tags = _tags(client, item_id)
+        edge = _edge(client, *tags.values())
+        assert edge is not None and edge["label"] == "part of"
+        assert edge["style"] == ("dashed" if index == 0 else "solid")
+
+
+@pytest.mark.parametrize("predicate,phrase", [
+    ("uses", "didn't use"), ("uses", "hasn't used"),
+    ("uses", "haven't used"), ("depends_on", "hadn't required"),
+])
+@pytest.mark.parametrize("model_returns_relation", [False, True])
+@pytest.mark.parametrize("apostrophe", ["'", "’"])
+def test_negative_contractions_cannot_publish_positive_relationship(
+        make_client, predicate, phrase, model_returns_relation, apostrophe):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import snapshot
+    from test_ml_automation import _capture, _edge, _tags
+
+    phrase = phrase.replace("'", apostrophe)
+    suffix = f"{phrase.split()[0]} {model_returns_relation}"
+    names = (f"Cedar {suffix} Gateway", f"Amber {suffix} Register")
+    for index, client in enumerate((make_client(), make_client())):
+        body = f"{names[0]} {phrase} {names[1]}."
+        if index:
+            body = "The audit confirmed that " + body
+        spans = [_span(body, name, score=0.995) for name in names]
+        extracted = {predicate: [{"head": spans[0], "tail": spans[1]}]} if model_returns_relation else None
+        result = _analyze(body, spans, extracted, full=True)
+        assert result["relations"] and all(row["polarity"] == "negative" for row in result["relations"])
+        result["chunks"] = []
+        item_id = _capture(client, body)
+        with SessionLocal() as db:
+            adapter.apply_source(db, "item", item_id, snapshot(db, "item", item_id), result,
+                                 "recorded-contractions", "recorded-embedding", 1024)
+            db.commit()
+        tags = _tags(client, item_id)
+        edge = _edge(client, *tags.values())
+        assert edge is None or edge["style"] != "solid"
+
+
+@pytest.mark.parametrize("body,expected", [
+    ("Cedar Plan required Amber Register; the task cannot run without its records.", "positive"),
+    ("Cedar Plan never required Amber Register; the audit confirmed the result.", "negative"),
+    ("If Cedar Plan required Amber Register; the task would need its records.", "uncertain"),
+    ("Cedar Plan required Amber Register; whether this is correct remains open.", "uncertain"),
+    ("Did Cedar Plan require Amber Register?", "uncertain"),
+])
+def test_relation_scope_preserves_negation_and_uncertainty(body, expected):
+    rows = _analyze(body, relations={"depends_on": [{"head": _span(body, "Cedar Plan"),
+                                                   "tail": _span(body, "Amber Register")}]})
+    assert rows[0]["literal_support"] and rows[0]["polarity"] == expected
+
+
 @pytest.mark.parametrize("text,expected", [
     ("Our astronomy chart identifies Earth as part of the Solar System. The Sun is part of the Solar System, along with its planets and smaller bodies.", "positive"),
     ("I plan to confirm that Sun is part of Solar System.", "uncertain"),

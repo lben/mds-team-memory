@@ -23,17 +23,17 @@ RELATIONS = {
 # These checks verify literal support for a model-extracted predicate. They do
 # not turn a high model score or co-occurrence into a factual assertion.
 CUES = {
-    "uses": (r"\b(?:uses?|using|utilizes?|runs? on)\b", r"\b(?:used|utilized) by\b"),
-    "depends_on": (r"\b(?:depends? on|requires?|relies? on)\b", r"\brequired by\b"),
-    "part_of": (r"\b(?:part|component|module|subset) of\b", r"\b(?:includes?|contains?)\b"),
-    "produces": (r"\b(?:produces?|generates?|emits?|creates?|outputs?)\b", r"\b(?:produced|generated|emitted|created) by\b"),
-    "replaces": (r"\b(?:replaces?|supersedes?)\b", r"\b(?:replaced|superseded) by\b"),
+    "uses": (r"\b(?:use[sd]?|using|utilize[sd]?|(?:runs?|ran) on)\b", r"\b(?:used|utilized) by\b"),
+    "depends_on": (r"\b(?:depend(?:s|ed)? on|require[sd]?|(?:relies|relied|rely) on)\b", r"\brequired by\b"),
+    "part_of": (r"\b(?:part|component|module|subset) of\b", r"\b(?:include[sd]?|contain(?:s|ed)?)\b"),
+    "produces": (r"\b(?:produce[sd]?|generate[sd]?|emit(?:s|ted)?|create[sd]?|output(?:s|ted)?)\b", r"\b(?:produced|generated|emitted|created) by\b"),
+    "replaces": (r"\b(?:replace[sd]?|supersede[sd]?)\b", r"\b(?:replaced|superseded) by\b"),
 }
-NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can't|doesn't|don't|isn't|aren't|wasn't|weren't)\b", re.I)
+NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can['’]t|doesn['’]t|don['’]t|didn['’]t|hasn['’]t|haven['’]t|hadn['’]t|isn['’]t|aren['’]t|wasn['’]t|weren['’]t)\b", re.I)
 UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
 # Bump for extraction behavior changes outside the schema, such as grounding or windowing.
-EXTRACTION_VERSION = "grounded-spans-v5"
+EXTRACTION_VERSION = "grounded-spans-v6"
 
 
 def inference_version(models):
@@ -129,15 +129,32 @@ def relation_support(text, head, tail, predicate):
     start = before[-1].end() if before else 0
     end = right + after.end() if after else len(text)
     sentence = text[start:end]
-    if re.search(r"[.!?\n]", text[left:right]):
+    if re.search(r"[.!?;\n]", text[left:right]):
         return {"polarity": "uncertain", "literal_support": False, "start": start, "end": end}
-    uncertain = ("?" in sentence or UNCERTAIN.search(sentence)
-                 or re.search(r"\b(?:unless|whether|when|whenever|until|provided|assuming|suppos\w*)\b", sentence, re.I))
-    polarity = "uncertain" if uncertain else "negative" if NEGATION.search(sentence) else "positive"
+    # Entity names such as "Chute Plan" do not express speaker uncertainty.
+    context = list(sentence)
+    for span in (head, tail):
+        context[span["start"] - start:span["end"] - start] = " " * (span["end"] - span["start"])
+    context = "".join(context)
+    uncertain = ("?" in context or UNCERTAIN.search(context)
+                 or re.search(r"\b(?:unless|whether|when|whenever|until|provided|assuming|suppos\w*)\b", context, re.I))
+    # Negation in a separate semicolon clause does not contradict this claim.
+    clause_start = context.rfind(";", 0, left - start) + 1
+    clause_end = context.find(";", right - start)
+    clause = context[clause_start:clause_end if clause_end >= 0 else len(context)]
+    polarity = "uncertain" if uncertain else "negative" if NEGATION.search(clause) else "positive"
     forward = head["start"] < tail["start"]
     middle = text[head["end"]:tail["start"]] if forward else text[tail["end"]:head["start"]]
     cue = CUES[predicate][0 if forward else 1]
-    return {"polarity": polarity, "literal_support": bool(re.search(cue, middle, re.I)), "start": start, "end": end}
+    match = re.search(cue, middle, re.I)
+    literal_support = bool(match)
+    if forward and re.search(CUES[predicate][1], middle, re.I):
+        literal_support = False
+    if match and match.group().casefold().endswith("ed") and re.search(
+            r"\b(?:(?:is|are|was|were)(?:n['’]t)?|be|been|being|gets?|got)\s+(?:(?:not|never|no longer|\w+ly)\s+)*$",
+            middle[:match.start()], re.I):
+        literal_support = False
+    return {"polarity": polarity, "literal_support": literal_support, "start": start, "end": end}
 
 
 def repair_relation_spans(text, head, tail, predicate, start, end):
@@ -169,7 +186,7 @@ def repair_relation_spans(text, head, tail, predicate, start, end):
 
 def negative_relations(text, spans):
     """A direct negative phrase can veto a claim, without a relation score."""
-    prefix = r"(?:(?:does|do|did|is|are|was|were) not|(?:doesn't|don't|isn't|aren't|wasn't|weren't)|(?:is |are |was |were )?(?:never|no longer))"
+    prefix = r"(?:(?:does|do|did|has|have|had|is|are|was|were) not|(?:doesn['’]t|don['’]t|didn['’]t|hasn['’]t|haven['’]t|hadn['’]t|isn['’]t|aren['’]t|wasn['’]t|weren['’]t)|(?:is |are |was |were )?(?:never|no longer))"
     ordered = sorted(spans, key=lambda span: (span["start"], span["end"]))
     for index, first in enumerate(ordered):
         for second in ordered[index + 1:]:
