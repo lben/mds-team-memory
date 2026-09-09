@@ -5,7 +5,7 @@ import re
 from .runtime import specific_name
 
 
-VERSION = "grounded-cold-start-v2"
+VERSION = "grounded-cold-start-v4"
 
 
 def acronym_definitions(text):
@@ -62,7 +62,10 @@ def decide(kind, evidence):
     if kind in {"concept", "mention"}:
         supported = [row for row in positive if row.get("grounded", False)]
         groups, _ = independent_support(supported)
-        strong = max((row["raw_score"] for row in supported), default=0.0)
+        # Relation endpoints can corroborate presence, but cannot supply the
+        # entity-score requirement: their confidence belongs to the relation.
+        entity = [row for row in supported if row.get("label") != "relation endpoint"]
+        strong = max((row["raw_score"] for row in entity), default=0.0)
         active = strong >= 0.985 or (groups >= 2 and strong >= 0.94)
         return ("active" if active else "held"), strong
     if kind == "alias":

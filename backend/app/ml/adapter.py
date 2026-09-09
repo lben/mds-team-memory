@@ -48,8 +48,13 @@ def _override(db, row, mode, username, payload=None):
 def _evidence(db, row, source, start, end, score, version, polarity="positive", **features):
     key = finding_key("evidence", row.key, source.kind, source.id, polarity)
     prior = db.get(Evidence, key)
-    if prior and prior.raw_score >= score:
-        return
+    if prior:
+        # Different spellings can resolve to one concept. Relation confidence
+        # must not displace its entity evidence from the same source.
+        prior_entity = row.kind == "concept" and json.loads(prior.features).get("label") != "relation endpoint"
+        current_entity = row.kind == "concept" and features.get("label") != "relation endpoint"
+        if (prior_entity, prior.raw_score) >= (current_entity, score):
+            return
     values = dict(finding_key=row.key, source_kind=source.kind, source_id=source.id,
                   source_hash=source.content_hash, group_key=source.group_key, author_id=source.author_id,
                   start=start, end=end, raw_score=float(score), polarity=polarity,

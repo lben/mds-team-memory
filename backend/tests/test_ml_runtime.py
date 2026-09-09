@@ -11,7 +11,7 @@ def _span(text, name, start=None, score=0.99):
     return {"text": name, "start": start, "end": start + len(name), "confidence": score}
 
 
-def _analyze(text, entities=(), relations=None):
+def _analyze(text, entities=(), relations=None, *, full=False):
     from app.ml.runtime import LocalModels
 
     model = object.__new__(LocalModels)
@@ -22,7 +22,118 @@ def _analyze(text, entities=(), relations=None):
     model.extractor = SimpleNamespace(extract=lambda body, schema, **kwargs: outputs[schema])
     vector = SimpleNamespace(astype=lambda dtype: SimpleNamespace(tobytes=lambda: b"\0" * 4))
     model.embedding = SimpleNamespace(encode=lambda body, **kwargs: vector)
-    return model.analyze(text)["relations"]
+    result = model.analyze(text)
+    return result if full else result["relations"]
+
+
+@pytest.mark.parametrize("uncertain", [False, True])
+def test_grounded_relation_endpoint_corroborates_concept_without_asserting_uncertainty(
+        make_client, admin_client, uncertain):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import snapshot
+    from test_ml_automation import _capture, _edge, _finding, _tags
+
+    names = ("Vega Exporter", "Raster Archive") if not uncertain else ("Orion Exporter", "Pixel Archive")
+    clients = make_client(), make_client()
+    bodies = [f"{names[0]} produces {names[1]} for the composition stage.",
+              f"The export task confirms that {names[0]} produces {names[1]} with the selected settings."]
+    if uncertain:
+        bodies = [f"Could {body.rstrip('.')}?" for body in bodies]
+    item_ids = []
+    metadata = "recorded-extraction", "recorded-embedding", 1024
+
+    def apply(item_id, result=None):
+        with SessionLocal() as db:
+            source = snapshot(db, "item", item_id)
+            if result is None:
+                result, _ = adapter.cached_result(db, source, metadata[0])
+            adapter.apply_source(db, "item", item_id, source, result, *metadata)
+            db.commit()
+
+    for index, (client, body) in enumerate(zip(clients, bodies)):
+        item_id = _capture(client, body)
+        item_ids.append(item_id)
+        entities = [_span(body, names[0], score=0.996327)]
+        if index == 0:
+            entities.append(_span(body, names[1], score=0.981840))
+        score = (0.960865, 0.969040)[index]
+        result = _analyze(body, entities, {"produces": [{
+            "head": _span(body, names[0], score=score),
+            "tail": _span(body, names[1], score=score),
+        }]}, full=True)
+        endpoint = [span for span in result["concepts"] if span["name"] == names[1]]
+        assert len(endpoint) == 1
+        assert endpoint[0]["score"] == (0.981840, 0.969040)[index]
+        result["chunks"] = []
+        apply(item_id, result)
+        finding = _finding(admin_client, "concept", name=names[1])
+        assert finding["state"] == ("held", "active")[index]
+        assert finding["raw_model_score"] == 0.981840
+
+    # Vocabulary backfill revisits the first source after the concept publishes.
+    apply(item_ids[0])
+    tags = _tags(clients[0], item_ids[0])
+    assert set(tags) == set(names)
+    edge = _edge(clients[0], *tags.values())
+    if uncertain:
+        assert edge is None or edge["style"] == "dashed"
+    else:
+        assert (edge["style"], edge["label"], edge["support_count"]) == ("solid", "produces", 2)
+
+
+def test_relation_confidence_cannot_establish_an_entity_or_definition():
+    from app.ml import policy, resolution
+
+    body = "Aster Processor uses Broad Signal Modulation (BSM)."
+    result = _analyze(body, relations={"uses": [{
+        "head": _span(body, "Aster Processor", score=0.999),
+        "tail": _span(body, "Broad Signal Modulation", score=0.999),
+    }]}, full=True)
+    assert len(result["concepts"]) == 2
+    for span in result["concepts"]:
+        assert span["score"] == 0.999
+        evidence = [{**span, "raw_score": span["score"], "polarity": "positive", "grounded": True,
+                     "group_key": str(index), "text_hash": str(index)} for index in range(2)]
+        assert policy.decide("concept", evidence)[0] == "held"
+    assert list(resolution.definitions(body, result["concepts"])) == []
+
+
+@pytest.mark.parametrize("reverse", [False, True])
+def test_spelling_equivalent_endpoint_cannot_replace_entity_evidence(make_client, admin_client, reverse):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import snapshot
+    from test_ml_automation import _capture, _finding, _tags
+
+    name = "Secure Channel" if reverse else "Zero Trust"
+    variant = name.replace(" ", "-")
+    body = f"{name} is reviewed. Vega Gateway uses {variant}."
+    client = make_client()
+    item_id = _capture(client, body)
+    entities = [_span(body, name, score=0.99), _span(body, "Vega Gateway", score=0.995)]
+
+    def apply(result):
+        result["chunks"] = []
+        with SessionLocal() as db:
+            adapter.apply_source(db, "item", item_id, snapshot(db, "item", item_id), result,
+                                 "recorded-extraction", "recorded-embedding", 1024)
+            db.commit()
+
+    apply(_analyze(body, entities, full=True))
+    concept_id = _tags(client, item_id)[name]
+    result = _analyze(body, entities, {"uses": [{
+        "head": _span(body, "Vega Gateway", score=0.999),
+        "tail": _span(body, variant, score=0.999),
+    }]}, full=True)
+    if reverse:
+        result["concepts"].reverse()
+    apply(result)
+    finding = _finding(admin_client, "concept", name=name)
+    assert (finding["state"], finding["raw_model_score"]) == ("active", 0.99)
+    assert _tags(client, item_id)[name] == concept_id
+    graph = client.get("/api/graph/local", params={"concept_id": concept_id}).json()
+    assert any(node["id"] == f"c:{concept_id}" for node in graph["nodes"])
 
 
 def test_repeated_endpoint_repairs_only_the_unique_anchored_sentence():

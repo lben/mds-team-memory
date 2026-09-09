@@ -35,6 +35,7 @@ def spelling_match(db, name):
 
 def definitions(text, spans):
     """Find affirmative definitions supported by extracted endpoint spans."""
+    spans = [span for span in spans if span.get("label") != "relation endpoint"]
     found = []
     for definition in policy.acronym_definitions(text):
         supporting = [span for span in spans

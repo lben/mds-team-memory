@@ -1,10 +1,12 @@
 """Run the frozen authored corpus through offline inference and public app APIs.
 
 Each case gets a fresh migrated database. One production inference child is reused
-across cases; the normal worker drains each phase. Exit 0 means all authored
-assertions passed, 1 means an assertion failed, and 2 means execution or required
-evidence was incomplete.
-These cases cannot establish the statistical release-quality gate.
+across cases; the normal worker drains each phase. Exit 0 means the corpus gate
+passed, 1 means quality failed, and 2 means execution or required evidence was
+incomplete. Version 1 requires every assertion; version 2 uses the frozen numeric
+quality gates and reports individual assertion failures separately.
+The original small corpus cannot establish the statistical release-quality gate.
+An expanded corpus also grades every published prediction against frozen labels.
 """
 
 import argparse
@@ -14,6 +16,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import secrets
 import shutil
 import sqlite3
@@ -39,13 +42,51 @@ def write_json(path, value):
     os.replace(temporary, path)
 
 
-def load_cases(path):
+def load_cases(path, expected_sha256=None):
     raw = path.read_bytes()
-    if hashlib.sha256(raw).hexdigest() != FIXTURE_SHA256:
+    if hashlib.sha256(raw).hexdigest() != (expected_sha256 or FIXTURE_SHA256):
         raise ValueError("The case file differs from the frozen, pre-inference corpus")
     corpus = json.loads(raw)
-    if corpus.get("version") != 1 or len(corpus.get("cases", [])) != 24:
-        raise ValueError("Expected the frozen version-1 corpus with 24 cases")
+    if corpus.get("version") == 1:
+        if hashlib.sha256(raw).hexdigest() != FIXTURE_SHA256 or len(corpus.get("cases", [])) != 24:
+            raise ValueError("Expected the frozen version-1 corpus with 24 cases")
+    elif corpus.get("version") == 2:
+        if not expected_sha256 or corpus.get("split") not in {"heldout", "development"} or not corpus.get("cases"):
+            raise ValueError("Expanded evaluation needs a frozen hash, declared split and cases")
+        ids, texts = set(), set()
+        for case in corpus["cases"]:
+            identity = case["id"]
+            if not isinstance(identity, str) or not re.fullmatch(r"[a-z0-9_]+", identity) or identity in ids:
+                raise ValueError("Case identities must be unique, safe directory names")
+            ids.add(identity)
+            bodies = tuple(normalize(post["body"]) for post in case["posts"])
+            if not bodies or bodies in texts:
+                raise ValueError("Duplicated source scenarios cannot count as independent cases")
+            texts.add(bodies)
+            for category in CATEGORIES:
+                positive = case["expect"][category]
+                negative = case["expect"]["absent_" + category]
+                if len(positive) + len(negative) != 1:
+                    raise ValueError("Select exactly one independent decision per case/category before inference")
+                if category in case.get("hard_negative", []) and not negative:
+                    raise ValueError("A positive decision cannot be a hard negative")
+                if not isinstance(case["allowed"][category], list):
+                    raise ValueError("Every category needs exhaustive allowed-prediction labels")
+                for assertion in case.get("retract", {}).get(category, []):
+                    if not case.get("actions") or assertion not in negative:
+                        raise ValueError("Retraction checks must identify a selected final negative with actions")
+            for index, post in enumerate(case["posts"]):
+                if post["kind"] == "answer":
+                    parent = post.get("parent")
+                    if type(parent) is not int or not 0 <= parent < index or case["posts"][parent]["kind"] != "question":
+                        raise ValueError("Answers must reference a preceding question")
+                if post.get("accepted") and post["kind"] != "answer":
+                    raise ValueError("Only an answer can be accepted")
+            for action in case.get("actions", []):
+                if type(action["post"]) is not int or not 0 <= action["post"] < len(case["posts"]):
+                    raise ValueError("An action must reference an existing post")
+    else:
+        raise ValueError("Unsupported evaluation corpus version")
     return raw, corpus
 
 
@@ -318,16 +359,71 @@ def present(category, assertion, observed, *, forbidden=False):
             and expected_ids.intersection(ids(row["concept"]))]
 
 
-def grade(case, observed):
+def labelled_matches(category, assertion, observed, aliases):
+    """Match names against frozen gold equivalence, never predicted identity."""
+    def names(name):
+        equivalents = {normalize(name)}
+        while True:
+            expanded = set(equivalents)
+            for pair in aliases:
+                terms = {normalize(pair["canonical"]), normalize(pair["alias"])}
+                if equivalents & terms:
+                    expanded.update(terms)
+            if expanded == equivalents:
+                return equivalents
+            equivalents = expanded
+
+    if category == "concepts":
+        permitted = names(assertion)
+        return [row for row in observed[category] if normalize(row["name"]) in permitted]
+    if category == "aliases":
+        permitted = names(assertion["canonical"])
+        if normalize(assertion["alias"]) not in permitted:
+            return []
+        return [row for row in observed[category]
+                if normalize(row["canonical"]) in permitted and normalize(row["alias"]) in permitted
+                and normalize(row["canonical"]) != normalize(row["alias"])
+                and row["public_search_confirmed"]]
+    if category == "relationships":
+        by_id = {row["id"]: normalize(row["name"]) for row in observed["concepts"]}
+        heads, tails = names(assertion["head"]), names(assertion["tail"])
+        return [row for row in observed[category]
+                if by_id.get(row["src_id"]) in heads and by_id.get(row["dst_id"]) in tails
+                and normalize(row["predicate"]).replace(" ", "_") == assertion["predicate"]]
+    permitted = names(assertion["concept"])
+    return [row for row in observed[category] if row["actor"] == assertion["actor"]
+            and normalize(row["concept"]) in permitted]
+
+
+def grade(case, observed, version=1):
     checks = []
     for category in CATEGORIES:
         for expected in (True, False):
             for assertion in case["expect"][category if expected else "absent_" + category]:
-                found = present(category, assertion, observed, forbidden=not expected)
+                if version == 2 and expected:
+                    found = labelled_matches(category, assertion, observed, case["allowed"]["aliases"])
+                    if category == "aliases":
+                        identities = {row["shared_concept_id"] for row in
+                                      present(category, assertion, observed, forbidden=True)}
+                        found = [row for row in found if row["canonical_id"] in identities]
+                else:
+                    found = present(category, assertion, observed, forbidden=not expected)
                 checks.append({"category": category, "assertion": assertion,
                                "expected_present": expected, "observed": found,
                                "passed": bool(found) == expected})
     return checks
+
+
+def audit_predictions(case, observed):
+    """Grade the complete active output, including unselected extra predictions."""
+    audit = {}
+    for category in CATEGORIES:
+        permitted = []
+        for assertion in case["allowed"][category]:
+            permitted.extend(labelled_matches(category, assertion, observed, case["allowed"]["aliases"]))
+        audit[category] = [{"prediction": row, "correct": row in permitted}
+                           for row in observed[category]]
+    return audit
 
 
 def case_status(checks, retractions):
@@ -338,7 +434,7 @@ def case_status(checks, retractions):
     return "PASS"
 
 
-def run_case(case, source_root, models, directory, inference):
+def run_case(case, source_root, models, directory, inference, version=1):
     from fastapi.testclient import TestClient
 
     directory.mkdir(mode=0o700)
@@ -384,16 +480,22 @@ def run_case(case, source_root, models, directory, inference):
                 result["phases"]["after_actions"] = drain(path, models, inference, "after_actions")
                 final = observe(case, posts, clients, reader, labels, result["api_trace"])
                 result["phases"]["after_actions"]["observed"] = final
+                targets = (case.get("retract", {}) if version == 2 else
+                           {category: case["expect"]["absent_" + category] for category in CATEGORIES})
                 result["retractions"] = [
                     {"category": category, "assertion": assertion,
                      "initially_present": bool(present(category, assertion, initial, forbidden=True)),
                      "absent_after_actions": not bool(present(category, assertion, final, forbidden=True))}
-                    for category in CATEGORIES for assertion in case["expect"]["absent_" + category]]
-            result["checks"] = grade(case, final)
+                    for category in CATEGORIES for assertion in targets.get(category, [])]
+            result["checks"] = grade(case, final, version)
+            if version == 2:
+                result["prediction_audit"] = audit_predictions(case, final)
             if result.get("retractions"):
                 demonstrated = all(row["initially_present"] and row["absent_after_actions"] for row in result["retractions"])
                 result["retraction_status"] = "DEMONSTRATED" if demonstrated else "NOT_DEMONSTRATED"
             result["status"] = case_status(result["checks"], result.get("retractions", []))
+            if any(not row["correct"] for rows in result.get("prediction_audit", {}).values() for row in rows):
+                result["status"] = "FAIL"
             inference.check_memory()
         stored = diagnostics(path, directory / "final-diagnostics.json")
         if stored["integrity_check"] != "ok" or stored["ml_jobs"]:
@@ -441,11 +543,61 @@ def summarize(corpus, results):
     return summary
 
 
+def release_quality(corpus, results):
+    from app.ml.evaluation import PRECISION_TARGETS, summarize as summarize_decisions
+
+    by_id = {result["id"]: result for result in results}
+    decisions, audit = [], {category: [] for category in CATEGORIES}
+    missing, unproved_retractions = [], []
+    for case in corpus["cases"]:
+        result = by_id.get(case["id"])
+        if not result or result["status"] == "ERROR":
+            missing.append(case["id"])
+            continue
+        unproved_retractions.extend({"case": case["id"], **row} for row in result.get("retractions", [])
+                                    if not row["initially_present"] or not row["absent_after_actions"])
+        for check in result["checks"]:
+            category = check["category"]
+            decisions.append({"id": case["id"] + ":" + category, "group_id": case["id"],
+                              "category": category, "gold": check["expected_present"],
+                              "applied": bool(check["observed"]), "split": corpus.get("split", "heldout"),
+                              "hard_negative": category in case.get("hard_negative", [])})
+        for category in CATEGORIES:
+            audit[category].extend(result["prediction_audit"][category])
+    categories = {}
+    for category in CATEGORIES:
+        selected = [row for row in decisions if row["category"] == category]
+        summary = summarize_decisions(selected, PRECISION_TARGETS[category])
+        correct = sum(row["correct"] for row in audit[category])
+        total = len(audit[category])
+        precision = correct / total if total else None
+        summary["all_applied_predictions"] = {"count": total, "correct": correct, "incorrect": total - correct,
+                                              "precision": precision}
+        if precision is None or precision < PRECISION_TARGETS[category]:
+            summary["threshold_failures"].append("full-output precision is below target or undefined")
+            if summary["status"] == "pass":
+                summary["status"] = "fail"
+        categories[category] = summary
+    statuses = {row["status"] for row in categories.values()}
+    status = ("INCOMPLETE" if missing or unproved_retractions else
+              "INSUFFICIENT_EVIDENCE" if "insufficient" in statuses or corpus.get("split") == "development" else
+              "FAIL" if "fail" in statuses else "PASS")
+    return {"status": status, "categories": categories, "missing_cases": missing,
+            "unproved_retractions": unproved_retractions,
+            "split": corpus.get("split", "heldout"),
+            "development_can_establish_release_quality": False,
+            "population": "Frozen authored scenarios; no workplace accuracy claim.",
+            "intervals": "Wilson intervals use one preselected decision per independent case/category. "
+                         "The separate complete-output precision audit includes correlated predictions; "
+                         "it does not add independent samples."}, decisions
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models", type=Path, required=True, help="Prepared local model directory containing models.json")
     parser.add_argument("--source-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--cases", type=Path, help="Frozen fixture; defaults to backend/tests/fixtures/ml_cross_domain.json")
+    parser.add_argument("--expected-sha256", help="Hash frozen before inference; required for an expanded corpus")
     parser.add_argument("--output-parent", type=Path, required=True, help="Parent for a new private evaluation directory")
     args = parser.parse_args(argv)
     if sys.platform != "linux":
@@ -457,7 +609,8 @@ def main(argv=None):
 
     filesystem = local_sqlite_filesystem(args.output_parent)
     cases = (args.cases or source_root / "backend/tests/fixtures/ml_cross_domain.json").resolve()
-    fixture_raw, corpus = load_cases(cases)
+    fixture_raw, corpus = load_cases(cases, args.expected_sha256)
+    fixture_sha256 = hashlib.sha256(fixture_raw).hexdigest()
     manifest_raw = (models / "models.json").read_bytes()
     manifest = json.loads(manifest_raw)
     sys.path.insert(0, str(source_root / "backend"))
@@ -477,7 +630,7 @@ def main(argv=None):
     (output / "cases.json").write_bytes(fixture_raw)
     (output / "models.json").write_bytes(manifest_raw)
     source_files = sorted((source_root / "backend/app").rglob("*.py")) + sorted((source_root / "backend/alembic").rglob("*.py"))
-    report = {"status": "RUNNING", "output": str(output), "fixture_sha256": FIXTURE_SHA256,
+    report = {"status": "RUNNING", "output": str(output), "fixture_sha256": fixture_sha256,
               "fixture_purpose": corpus["purpose"], "training": False,
               "models_manifest_sha256": hashlib.sha256(manifest_raw).hexdigest(),
               "model_pins": {role: {key: entry.get(key) for key in ("repository", "revision", "license")}
@@ -498,17 +651,17 @@ def main(argv=None):
                          "API calls use the real ASGI app through TestClient, not a separate web server or browser.",
                          "Private notes use the app's private scratchpad flow.",
                          "Runtime offline flags do not replace operating-system network isolation."],
-              "statistical_release_gate": {"status": "INSUFFICIENT_EVIDENCE", "authored_scenarios": 24,
+              "statistical_release_gate": {"status": "INSUFFICIENT_EVIDENCE", "authored_scenarios": len(corpus["cases"]),
                   "required_independent_decisions_per_category": 300,
-                  "reason": "This small authored corpus cannot pass the statistical release-quality gate."},
+                  "reason": "Full independent quality evidence has not been established."},
               "cases": []}
     started = time.monotonic()
     inference = RecordedInference(models)
     write_json(output / "report.json", report)
-    print(json.dumps({"output": str(output), "fixture_sha256": FIXTURE_SHA256}), flush=True)
+    print(json.dumps({"output": str(output), "fixture_sha256": fixture_sha256}), flush=True)
     try:
         for case in corpus["cases"]:
-            result = run_case(case, source_root, models, output / case["id"], inference)
+            result = run_case(case, source_root, models, output / case["id"], inference, corpus["version"])
             report["cases"].append(result)
             report["assertions"] = summarize(corpus, report["cases"])
             write_json(output / "report.json", report)
@@ -535,9 +688,17 @@ def main(argv=None):
                                "attempted_inference_calls": inference.attempts,
                                "completed_inference_calls": inference.calls}
         report["assertions"] = summarize(corpus, report["cases"])
+        if corpus["version"] == 2:
+            gate, decisions = release_quality(corpus, report["cases"])
+            report["statistical_release_gate"] = gate
+            with (output / "decisions.jsonl").open("w", encoding="utf-8") as stream:
+                for row in decisions:
+                    stream.write(json.dumps(row) + "\n")
+            if report["status"] != "ERROR":
+                report["status"] = gate["status"]
         write_json(output / "report.json", report)
     print(json.dumps({"status": report["status"], "report": str(output / "report.json")}), flush=True)
-    return {"PASS": 0, "FAIL": 1, "INCOMPLETE": 2, "ERROR": 2}[report["status"]]
+    return {"PASS": 0, "FAIL": 1, "INCOMPLETE": 2, "INSUFFICIENT_EVIDENCE": 2, "ERROR": 2}[report["status"]]
 
 
 if __name__ == "__main__":

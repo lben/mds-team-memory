@@ -33,7 +33,7 @@ NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can't|doesn't|do
 UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
 # Bump for extraction behavior changes outside the schema, such as grounding or windowing.
-EXTRACTION_VERSION = "grounded-spans-v4"
+EXTRACTION_VERSION = "grounded-spans-v5"
 
 
 def inference_version(models):
@@ -213,7 +213,7 @@ class LocalModels:
             raise ValueError("Unsupported embedding dimensions")
 
     def analyze(self, text):
-        concepts, relations, chunks = {}, {}, []
+        concepts, endpoints, relations, chunks = {}, {}, {}, []
         for start, end, body in windows(text, self.tokenizer, 192):
             window_spans = {}
             entities = self.extractor.extract(body, self.entity_schema, include_confidence=True,
@@ -241,6 +241,10 @@ class LocalModels:
                         continue
                     head, tail = repair_relation_spans(text, head, tail, predicate, start, end)
                     support = relation_support(text, head, tail, predicate)
+                    for span in (head, tail):
+                        key = (span["start"], span["end"])
+                        if span["score"] > endpoints.get(key, {}).get("score", -1):
+                            endpoints[key] = {**span, "label": "relation endpoint"}
                     relation = {"head": head, "tail": tail, "predicate": predicate,
                                 "score": min(head["score"], tail["score"]), **support}
                     key = (head["start"], tail["start"], predicate)
@@ -252,4 +256,9 @@ class LocalModels:
             vector = self.embedding.encode(body, normalize_embeddings=True, batch_size=1,
                                            show_progress_bar=False, convert_to_numpy=True)
             chunks.append({"start": start, "end": end, "vector": vector.astype("<f4").tobytes()})
-        return {"concepts": list(concepts.values()), "relations": list(relations.values()), "chunks": chunks}
+        # Relation confidence is not entity confidence. Retain omitted names as
+        # corroboration, preserving entity evidence wherever that pass found it.
+        names = {normalize(span["name"]) for span in concepts.values()}
+        corroboration = [span for span in endpoints.values() if normalize(span["name"]) not in names]
+        return {"concepts": [*concepts.values(), *corroboration],
+                "relations": list(relations.values()), "chunks": chunks}
