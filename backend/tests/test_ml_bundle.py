@@ -30,6 +30,16 @@ def assets(tmp_path):
         "repository": "fixture/model", "revision": "a" * 40, "license": "Apache-2.0",
         "files": [{"path": "weights.bin", "size": len(content), "sha256": hashlib.sha256(content).hexdigest()}],
     }}}
+    (models / "syntax").mkdir()
+    syntax_content = {"config.cfg": b"syntax config", "LICENSE": b"MIT", "LICENSES_SOURCES": b"model sources"}
+    for name, data in syntax_content.items():
+        (models / "syntax" / name).write_bytes(data)
+    manifest["models"]["syntax"] = {
+        "repository": "fixture/syntax", "revision": "b" * 64, "license": "mit",
+        "source": {"url": "https://example.invalid/syntax.whl", "size": 123, "sha256": "b" * 64},
+        "files": [{"path": name, "size": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+                  for name, data in syntax_content.items()],
+    }
     (models / "models.json").write_text(json.dumps(manifest))
     (wheels / "fixture-1-py3-none-any.whl").write_bytes(b"wheel bytes for archive integrity")
     lock = tmp_path / "requirements-linux.lock"

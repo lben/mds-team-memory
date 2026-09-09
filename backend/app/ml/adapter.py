@@ -14,7 +14,7 @@ from ..models import (RELATED_TO_ID, Account, Concept, ConceptTerm, ExpertiseMap
 from . import effective, embeddings, policy, resolution
 from .models import Embedding, Evidence, Finding, Override, Source
 from .queue import enqueue, request_backfill
-from .runtime import normalize, specific_name
+from .runtime import grounded_span, normalize, specific_name
 from .sources import digest, finding_key, snapshot
 
 
@@ -49,6 +49,14 @@ def _evidence(db, row, source, start, end, score, version, polarity="positive", 
     key = finding_key("evidence", row.key, source.kind, source.id, polarity)
     prior = db.get(Evidence, key)
     if prior:
+        if row.kind == "alias":
+            previous_features = json.loads(prior.features)
+            methods = previous_features.get("definition_methods", []) + features.get("definition_methods", [])
+            methods = list({_json(method): method for method in methods}.values())
+            if prior.raw_score >= score:
+                prior.features = _json({**previous_features, "definition_methods": methods})
+                return
+            features["definition_methods"] = methods
         # Different spellings can resolve to one concept. Relation confidence
         # must not displace its entity evidence from the same source.
         prior_entity = row.kind == "concept" and json.loads(prior.features).get("label") != "relation endpoint"
@@ -327,6 +335,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
         embedding_count = (len(result["chunks"]) if result["chunks"] is not None
                            else json.loads(stored.result)["embedding_count"])
         cached = {"text_hash": digest(source.text), "concepts": result["concepts"], "relations": result["relations"],
+                  "corroborated_definitions": result.get("corroborated_definitions", []),
                   "embedding_version": embedding_version, "dimensions": dimensions, "embedding_count": embedding_count}
         values = dict(content_hash=source.content_hash, valid=True, model_version=model_version,
                       result=_json(cached), updated_at=utcnow())
@@ -345,6 +354,24 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                           "end": definition["name_end"], "score": definition["score"],
                           "label": "explicit definition"})
             concepts[normalize(definition["name"])] = _concept(db, definition["name"])
+        # Role records route identity, but never add their scores to entity spans.
+        for record in result.get("corroborated_definitions", []) if source.assertion_allowed else []:
+            full = grounded_span(record.get("full_name"), source.text, 0)
+            short = grounded_span(record.get("short_name"), source.text, 0)
+            if (record.get("source_text_hash") != digest(source.text) or not full or not short
+                    or not record.get("syntax_rules") or not specific_name(full["name"])
+                    or not specific_name(short["name"]) or normalize(full["name"]) == normalize(short["name"])
+                    or not (full["end"] <= short["start"] or short["end"] <= full["start"])):
+                raise ValueError("Corroborated definition does not match its source")
+            definitions.append({"name": full["name"], "alias": short["name"],
+                                "name_start": full["start"], "name_end": full["end"],
+                                "alias_start": short["start"], "alias_end": short["end"],
+                                "start": min(full["start"], short["start"]),
+                                "end": max(full["end"], short["end"]),
+                                "score": min(full["score"], short["score"]),
+                                "method": {"origin": "syntax_and_alias_role_record", **record}})
+            if normalize(full["name"]) not in concepts:
+                concepts[normalize(full["name"])] = _concept(db, full["name"])
         # Resolve definitions before an extracted abbreviation can create its
         # own identity. Distinct existing canonical records are never merged.
         aliases = []
@@ -403,7 +430,10 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                                  {"alias": definition["alias"], "alias_key": normalize(definition["alias"]), "concept_id": concept.canonical_id})
                 _evidence(db, alias, source, definition["start"], definition["end"], definition["score"], model_version,
                           explicit_definition=not definition.get("spelling_variant", False),
-                          spelling_variant=definition.get("spelling_variant", False), assertion_allowed=source.assertion_allowed)
+                          spelling_variant=definition.get("spelling_variant", False), assertion_allowed=source.assertion_allowed,
+                          definition_methods=[definition.get("method", {
+                              "origin": "genuine_spelling_variant" if definition.get("spelling_variant") else "legacy_entity_definition",
+                              "score": definition["score"]})])
                 affected.add(alias.key)
         for relation in result["relations"]:
             # The relation extractor can identify a known endpoint that the
@@ -536,7 +566,8 @@ def cached_result(db, source, model_version):
                                          generation=data.get("embedding_version")).count()
     if data.get("embedding_count") != count:
         return None
-    return ({"concepts": data["concepts"], "relations": data["relations"], "chunks": None},
+    return ({"concepts": data["concepts"], "relations": data["relations"], "chunks": None,
+             "corroborated_definitions": data.get("corroborated_definitions", [])},
             (model_version, data["embedding_version"], data["dimensions"]))
 
 

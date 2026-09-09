@@ -15,6 +15,7 @@ def _analyze(text, entities=(), relations=None, *, full=False):
     from app.ml.runtime import LocalModels
 
     model = object.__new__(LocalModels)
+    model.syntax = None
     model.entity_schema, model.relation_schema = "entities", "relations"
     model.tokenizer = lambda body, **kwargs: {"offset_mapping": [match.span() for match in re.finditer(r"\S+", body)]}
     outputs = {"entities": {"entities": {"named entity": list(entities)}},
@@ -24,6 +25,99 @@ def _analyze(text, entities=(), relations=None, *, full=False):
     model.embedding = SimpleNamespace(encode=lambda body, **kwargs: vector)
     result = model.analyze(text)
     return result if full else result["relations"]
+
+
+def test_alias_record_requires_exact_disjoint_syntax_fields():
+    from app.ml.runtime import corroborated_definitions
+
+    body = "MP denotes Meridian photometer."
+    full, short = _span(body, "Meridian photometer", score=0.91), _span(body, "MP", score=0.99)
+    proposals = [{"rule": "denotes", "full_name": full, "short_name": short}]
+    records = [
+        {"full_name": full, "short_name": short},
+        {"full_name": _span(body, "photometer"), "short_name": short},
+        {"full_name": short, "short_name": full},
+        {"full_name": {**full, "start": full["start"] + 1}, "short_name": short},
+        {"full_name": full, "short_name": full},
+        {"full_name": {**full, "confidence": float("nan")}, "short_name": short},
+    ]
+    accepted = list(corroborated_definitions(body, {"alias_definition": records}, proposals, 23))
+    assert len(accepted) == 1
+    assert accepted[0]["full_name"] == {**full, "start": full["start"] + 23, "end": full["end"] + 23}
+    assert accepted[0]["short_name"] == {**short, "start": short["start"] + 23, "end": short["end"] + 23}
+    assert accepted[0]["syntax_rules"] == ["denotes"]
+    assert list(corroborated_definitions(body, {"alias_definition": records}, [], 0)) == []
+
+
+def test_alias_pass_uses_existing_windows_without_promoting_role_scores(monkeypatch):
+    from app.ml import runtime
+    from app.ml.sources import digest
+
+    text = "preface " * 180 + "MP denotes Meridian photometer." + " notes" * 210
+    model = object.__new__(runtime.LocalModels)
+    model.entity_schema, model.relation_schema, model.alias_schema = "entities", "relations", "aliases"
+    model.manifest = {"models": {"extractor": {"revision": "extractor"}, "syntax": {"revision": "syntax"}}}
+    model.tokenizer = lambda body, **kwargs: {"offset_mapping": [m.span() for m in re.finditer(r"\S+", body)]}
+    model.syntax = lambda body: body
+    calls = []
+
+    def pair(body):
+        if "MP denotes Meridian photometer" not in body:
+            return None
+        return {"full_name": _span(body, "Meridian photometer", score=0.997),
+                "short_name": _span(body, "MP", score=0.999)}
+
+    def extract(body, schema, **kwargs):
+        calls.append((body, schema, kwargs))
+        record = pair(body)
+        if schema == "aliases":
+            return {"alias_definition": [record] if record else []}
+        if schema == "entities" and record:
+            return {"entities": {"named entity": [{**record["full_name"], "confidence": 0.2}]}}
+        return {}
+
+    monkeypatch.setattr(runtime.syntax, "candidates", lambda body: [{"rule": "denotes", **pair(body)}] if pair(body) else [])
+    model.extractor = SimpleNamespace(extract=extract)
+    vector = SimpleNamespace(astype=lambda dtype: SimpleNamespace(tobytes=lambda: b"\0" * 4))
+    model.embedding = SimpleNamespace(encode=lambda body, **kwargs: vector)
+    result = model.analyze(text)
+    bounded = list(runtime.windows(text, model.tokenizer, 192))
+    assert [(body, kwargs) for body, schema, kwargs in calls if schema == "aliases"] == [
+        (body, {"threshold": 0.5, "max_len": 512, "include_confidence": True, "include_spans": True})
+        for _, _, body in bounded]
+    assert result["concepts"] == [{"name": "Meridian photometer", "start": text.index("Meridian photometer"),
+                                   "end": text.index("Meridian photometer") + len("Meridian photometer"),
+                                   "score": 0.2, "label": "named entity"}]
+    assert result["corroborated_definitions"]
+    for record in result["corroborated_definitions"]:
+        assert record["source_text_hash"] == digest(text)
+        assert record["full_name"] == _span(text, "Meridian photometer", score=0.997)
+        assert record["short_name"] == _span(text, "MP", score=0.999)
+    # A two-role runtime retains the original two extractor passes per window.
+    model.syntax = None
+    calls.clear()
+    baseline = model.analyze(text)
+    assert baseline["concepts"] == result["concepts"]
+    assert baseline["corroborated_definitions"] == []
+    assert len(calls) == 2 * len(bounded)
+
+
+def test_alias_fingerprint_invalidates_changed_models_schema_settings_and_rules(monkeypatch):
+    from app.ml import runtime
+
+    models = {role: {"revision": role} for role in ("extractor", "embeddings", "syntax")}
+    version = runtime.inference_version(models)
+    for role in models:
+        changed = {**models, role: {"revision": "changed"}}
+        assert runtime.inference_version(changed) != version
+    assert runtime.inference_version({k: v for k, v in models.items() if k != "syntax"}) != version
+    for target, key, value in ((runtime.ALIAS_SCHEMA, "anchor", "short_name"),
+                               (runtime.ALIAS_SETTINGS, "threshold", 0.6)):
+        with monkeypatch.context() as scoped:
+            scoped.setitem(target, key, value)
+            assert runtime.inference_version(models) != version
+    monkeypatch.setattr(runtime.syntax, "REVISION", "changed")
+    assert runtime.inference_version(models) != version
 
 
 @pytest.mark.parametrize("uncertain", [False, True])

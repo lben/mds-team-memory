@@ -7,6 +7,9 @@ import os
 import re
 from pathlib import Path
 
+from . import syntax
+from .sources import digest
+
 
 ENTITIES = {
     "named entity": "A specifically named person, organization, place, object, system, project or event.",
@@ -20,6 +23,16 @@ RELATIONS = {
     "produces": "The head creates or emits the tail.",
     "replaces": "The head takes the place of the tail.",
 }
+ALIAS_SCHEMA = {
+    "name": "alias_definition", "mode": "natural", "anchor": "full_name",
+    "fields": [
+        {"name": "full_name", "dtype": "str", "cardinality": "required_one",
+         "description": "The complete full name of an entity or process that the text explicitly equates with a shorter name, abbreviation, or alias as an actual fact. Copy the entire name from the text. Exclude rejected, denied, hypothetical, or merely related names."},
+        {"name": "short_name", "dtype": "str", "cardinality": "required_one",
+         "description": "The short name, abbreviation, or alias that refers to exactly the same entity or process as this record's full name. Copy the entire short name from the text. Exclude rejected, denied, hypothetical, or merely related names."},
+    ],
+}
+ALIAS_SETTINGS = {"threshold": 0.5, "max_len": 512, "include_confidence": True, "include_spans": True}
 # These checks verify literal support for a model-extracted predicate. They do
 # not turn a high model score or co-occurrence into a factual assertion.
 CUES = {
@@ -33,13 +46,18 @@ NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can['’]t|doesn
 UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
 # Bump for extraction behavior changes outside the schema, such as grounding or windowing.
-EXTRACTION_VERSION = "grounded-spans-v9"
+EXTRACTION_VERSION = "grounded-spans-v10"
 
 
 def inference_version(models):
-    schema = json.dumps({"entities": ENTITIES, "relations": RELATIONS}, sort_keys=True, separators=(",", ":"))
+    schemas = {"entities": ENTITIES, "relations": RELATIONS}
+    roles = ["extractor", "embeddings"]
+    if "syntax" in models:
+        schemas.update(alias=ALIAS_SCHEMA, alias_settings=ALIAS_SETTINGS, syntax_rules=syntax.REVISION)
+        roles.append("syntax")
+    schema = json.dumps(schemas, sort_keys=True, separators=(",", ":"))
     fingerprint = hashlib.sha256(schema.encode()).hexdigest()[:16]
-    revisions = ":".join(models[role]["revision"] for role in ("extractor", "embeddings"))
+    revisions = ":".join(models[role]["revision"] for role in roles)
     return f"{revisions}:{EXTRACTION_VERSION}:{fingerprint}"
 
 
@@ -69,7 +87,8 @@ def configure_cpu():
 
 def verified_manifest(directory):
     manifest = json.loads((directory / "models.json").read_text(encoding="utf-8"))
-    if manifest.get("version") != 1 or set(manifest.get("models", {})) != {"extractor", "embeddings"}:
+    if (manifest.get("version") != 1 or set(manifest.get("models", {})) not in
+            ({"extractor", "embeddings"}, {"extractor", "embeddings", "syntax"})):
         raise ValueError("Unsupported model asset manifest")
     for role, model in manifest["models"].items():
         for entry in model["files"]:
@@ -121,6 +140,24 @@ def grounded_span(value, text, offset):
             or not math.isfinite(score) or not 0 <= score <= 1):
         return None
     return {"name": text[start:end], "start": start + offset, "end": end + offset, "score": score}
+
+
+def corroborated_definitions(body, raw, proposals, offset):
+    """Intersect exact alias-record fields with unscored syntax arguments."""
+    for record in raw.get("alias_definition", []):
+        full = grounded_span(record.get("full_name"), body, 0)
+        short = grounded_span(record.get("short_name"), body, 0)
+        if (not full or not short or not specific_name(full["name"]) or not specific_name(short["name"])
+                or normalize(full["name"]) == normalize(short["name"])
+                or not (full["end"] <= short["start"] or short["end"] <= full["start"])):
+            continue
+        rules = sorted({p["rule"] for p in proposals if all(
+            (p[field]["text"], p[field]["start"], p[field]["end"]) == (span["name"], span["start"], span["end"])
+            for field, span in (("full_name", full), ("short_name", short)))})
+        if rules:
+            yield {"full_name": {**record["full_name"], "start": full["start"] + offset, "end": full["end"] + offset},
+                   "short_name": {**record["short_name"], "start": short["start"] + offset, "end": short["end"] + offset},
+                   "syntax_rules": rules, "syntax_rule_revision": syntax.REVISION}
 
 
 def relation_support(text, head, tail, predicate):
@@ -229,6 +266,16 @@ class LocalModels:
         self.embedding.max_seq_length = 512
         self.entity_schema = self.extractor.create_schema().entities(ENTITIES)
         self.relation_schema = self.extractor.create_schema().relations(RELATIONS)
+        self.syntax = None
+        if "syntax" in self.manifest["models"]:
+            import spacy
+
+            spacy.require_cpu()
+            self.syntax = spacy.load(str(directory / "syntax"))
+            self.alias_schema = self.extractor.create_schema().structure(
+                ALIAS_SCHEMA["name"], mode=ALIAS_SCHEMA["mode"], anchor=ALIAS_SCHEMA["anchor"])
+            for field in ALIAS_SCHEMA["fields"]:
+                self.alias_schema.field(**field)
         self.tokenizer = self.extractor.processor.tokenizer
         self.dimensions = self.embedding.get_sentence_embedding_dimension()
         if self.dimensions not in (768, 1024):
@@ -236,6 +283,7 @@ class LocalModels:
 
     def analyze(self, text):
         concepts, endpoints, relations, chunks = {}, {}, {}, []
+        definitions = []
         for start, end, body in windows(text, self.tokenizer, 192):
             window_spans = {}
             entities = self.extractor.extract(body, self.entity_schema, include_confidence=True,
@@ -275,6 +323,13 @@ class LocalModels:
             for relation in negative_relations(text, window_spans.values()):
                 key = (relation["head"]["start"], relation["tail"]["start"], relation["predicate"])
                 relations.setdefault(key, relation)
+            if self.syntax is not None:
+                raw_aliases = self.extractor.extract(body, self.alias_schema, **ALIAS_SETTINGS)
+                proposals = syntax.candidates(self.syntax(body))
+                for definition in corroborated_definitions(body, raw_aliases, proposals, start):
+                    definitions.append({**definition, "source_text_hash": digest(text),
+                                        "alias_model_revision": self.manifest["models"]["extractor"]["revision"],
+                                        "syntax_model_revision": self.manifest["models"]["syntax"]["revision"]})
             vector = self.embedding.encode(body, normalize_embeddings=True, batch_size=1,
                                            show_progress_bar=False, convert_to_numpy=True)
             chunks.append({"start": start, "end": end, "vector": vector.astype("<f4").tobytes()})
@@ -283,4 +338,5 @@ class LocalModels:
         names = {normalize(span["name"]) for span in concepts.values()}
         corroboration = [span for span in endpoints.values() if normalize(span["name"]) not in names]
         return {"concepts": [*concepts.values(), *corroboration],
-                "relations": list(relations.values()), "chunks": chunks}
+                "relations": list(relations.values()), "chunks": chunks,
+                "corroborated_definitions": definitions}

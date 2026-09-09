@@ -320,6 +320,102 @@ def test_explicit_alias_requires_independent_definitions_and_ambiguity_withdraws
     assert any(c["id"] == concept_id for c in first.get("/api/search", params={"q": alias}).json()["concepts"])
 
 
+def _apply_role_definition(item_id, name, alias, *, cached=False, entity_score=0.995):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import digest, snapshot
+
+    metadata = ("fixture-alias-runtime", "fixture-embedding", 1024)
+    with SessionLocal() as db:
+        source = snapshot(db, "item", item_id)
+        if cached:
+            result, cached_metadata = adapter.cached_result(db, source, metadata[0])
+            assert cached_metadata == metadata
+            assert result["corroborated_definitions"]
+        else:
+            def field(value, score):
+                start = source.text.index(value)
+                return {"text": value, "start": start, "end": start + len(value), "confidence": score}
+
+            full, short = field(name, 0.997), field(alias, 0.999)
+            result = {"concepts": [{"name": name, "start": full["start"], "end": full["end"],
+                                     "score": entity_score, "label": "named entity"}],
+                      "relations": [], "chunks": [], "corroborated_definitions": [{
+                          "full_name": full, "short_name": short, "source_text_hash": digest(source.text),
+                          "syntax_rules": ["parenthetical_compact_name" if "(" in source.text else "denotes"],
+                          "syntax_rule_revision": "fixture-r4",
+                          "alias_model_revision": "fixture-extractor", "syntax_model_revision": "fixture-syntax"}]}
+        adapter.apply_source(db, "item", item_id, source, result, *metadata)
+        db.commit()
+
+
+def test_alias_role_union_holds_one_author_survives_cache_and_respects_removal_and_opt_out(make_client, admin_client):
+    first, second = make_client(), make_client()
+    for index, client in enumerate((first, second)):
+        response = client.post("/api/auth/signup", json={"username": f"alias-role-owner-{index}", "password": "a-good-password"})
+        assert response.status_code == 200, response.text
+    name, alias = "Valley Trace Register", "VTR"
+    original = _capture(first, f"{name} ({alias}) stores the signed calibration record.")
+    _apply_role_definition(original, name, alias)
+    concept_id = _tags(first, original)[name]
+    key = _finding(admin_client, "alias", alias=alias, concept_id=concept_id)["key"]
+
+    def detail():
+        return admin_client.get(f"/api/ml/findings/{key}").json()
+
+    def search_ids():
+        return [c["id"] for c in first.get("/api/search", params={"q": alias}).json()["concepts"]]
+
+    held = detail()
+    assert held["state"] == "held" and held["features"]["independent_groups"] == 1
+    methods = held["evidence"][0]["definition_methods"]
+    assert {m["origin"] for m in methods} == {"legacy_entity_definition", "syntax_and_alias_role_record"}
+    assert search_ids() == []
+    repeated = _capture(first, f"{alias} denotes {name} in the overnight calibration entry.")
+    _apply_role_definition(repeated, name, alias)
+    assert detail()["state"] == "held" and detail()["features"]["independent_groups"] == 1
+    independent = _capture(second, f"{alias} denotes {name} in my separate instrument check.")
+    _apply_role_definition(independent, name, alias)
+    assert detail()["state"] == "active" and detail()["features"]["independent_groups"] == 2
+    assert search_ids() == [concept_id]
+    for item in (original, repeated, independent):
+        _apply_role_definition(item, name, alias, cached=True)
+        assert _tags(first, item) == {name: concept_id}
+    assert search_ids() == [concept_id]
+    assert len(detail()["evidence"]) == 3
+    role = next(m for m in detail()["evidence"][0]["definition_methods"] if m["origin"] == "syntax_and_alias_role_record")
+    assert role["full_name"]["confidence"] == 0.997 and role["short_name"]["confidence"] == 0.999
+    assert _finding(admin_client, "concept", name=name)["raw_model_score"] == 0.995
+    mention = _finding(admin_client, "mention", source_id=independent, concept_id=concept_id)
+    assert mention["raw_model_score"] == 0.995
+    _decision(admin_client, key, "suppressed")
+    _apply_role_definition(independent, name, alias, cached=True)
+    assert detail()["state"] == "suppressed" and search_ids() == []
+    _decision(admin_client, key, "automatic")
+    _apply_role_definition(independent, name, alias, cached=True)
+    assert search_ids() == [concept_id]
+    assert second.delete(f"/api/items/{independent}").status_code == 200
+    _apply(independent)
+    assert detail()["state"] == "held" and search_ids() == []
+    copied = _capture(second, f"{name} ({alias}) stores the signed calibration record.")
+    # Capture updates duplicate grouping, so refresh the original source version.
+    _apply_role_definition(original, name, alias, cached=True)
+    _apply_role_definition(copied, name, alias)
+    assert detail()["state"] == "held" and detail()["features"]["independent_groups"] == 1
+
+
+def test_alias_role_confidence_cannot_publish_weak_concept_evidence(make_client, admin_client):
+    name, alias = "Umber Trace Register", "UTR"
+    for client, context in ((make_client(), "first check"), (make_client(), "second check")):
+        item = _capture(client, f"{alias} denotes {name} in the {context}.")
+        _apply_role_definition(item, name, alias, entity_score=0.2)
+        _apply_role_definition(item, name, alias, cached=True)
+        assert _tags(client, item) == {}
+    finding = _finding(admin_client, "concept", name=name)
+    assert (finding["state"], finding["raw_model_score"]) == ("held", 0.2)
+    assert client.get("/api/search", params={"q": alias}).json()["concepts"] == []
+
+
 def test_spelling_variants_reuse_identity_and_respect_removal(make_client, admin_client):
     first, second, third = make_client(), make_client(), make_client()
     name, variant = "Meridian Access-Control", "Meridian Access Control"
