@@ -468,6 +468,10 @@ def main(argv=None):
             return 0
         if not (args.assets / "models.json").is_file():
             raise ValueError("--assets must contain a prepared models.json manifest")
+        manifest = json.loads((args.assets / "models.json").read_text())
+        if "syntax" not in manifest.get("models", {}):
+            raise ValueError("models.json must include the syntax model; "
+                             "alias and definition extraction is disabled without it")
         for signum in (signal.SIGINT, signal.SIGTERM):
             previous[signum] = signal.signal(signum, lambda *_: stop.set())
         supervisor = Supervisor(path, args.assets, stop)
