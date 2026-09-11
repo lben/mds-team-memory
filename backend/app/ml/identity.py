@@ -104,6 +104,33 @@ def valid_routes():
             AND json_extract(claimed.payload,'$.concept_id')!=target.canonical_id
             AND EXISTS (SELECT 1 FROM ml_evidence e JOIN ml_sources s ON s.kind=e.source_kind AND s.id=e.source_id
               AND s.valid=1 AND s.content_hash=e.source_hash WHERE e.finding_key=claimed.key))
+      ) AND NOT EXISTS (
+        SELECT 1 FROM ml_findings alias
+        JOIN ml_overrides fixed ON fixed.key=alias.key AND fixed.mode='pinned'
+        JOIN concept_terms term ON term.id=alias.canonical_id
+        JOIN ml_findings target ON target.key=json_extract(route.value,'$.concept_key') AND target.kind='concept'
+        JOIN ml_sources owner ON owner.kind=ml_evidence.source_kind AND owner.id=ml_evidence.source_id
+        JOIN ml_state state ON state.id=1
+        WHERE alias.key=json_extract(route.value,'$.pinned_alias_key') AND alias.kind='alias'
+          AND json_extract(alias.payload,'$.direction')='inverse'
+          AND json_extract(route.value,'$.direction')='inverse'
+          AND json_extract(route.value,'$.routing_policy')='{VERSION}'
+          AND json_extract(alias.payload,'$.alias_key')=json_extract(route.value,'$.published_alias')
+          AND json_extract(alias.payload,'$.definition_alias_key')=json_extract(route.value,'$.alias_key')
+          AND json_extract(alias.payload,'$.declaration_key')=json_extract(route.value,'$.declaration_key')
+          AND term.term=json_extract(route.value,'$.published_alias') AND term.is_canonical=0
+          AND term.concept_id=target.canonical_id AND target.canonical_id=json_extract(route.value,'$.canonical_id')
+          AND json_extract(alias.payload,'$.concept_id')=target.canonical_id
+          AND owner.valid=1 AND owner.content_hash=ml_evidence.source_hash
+          AND owner.model_version=ml_evidence.model_version
+          AND ml_evidence.model_version=json_extract(route.value,'$.model_version')
+          AND state.pipeline_version=ml_evidence.model_version || ':{policy.VERSION}'
+          AND NOT EXISTS (SELECT 1 FROM ml_overrides excluded WHERE excluded.mode='suppressed' AND (
+            excluded.key=target.key OR excluded.key=json_extract(route.value,'$.declaration_key')
+            OR excluded.key=json_extract(route.value,'$.term_key') OR excluded.key=json_extract(route.value,'$.full_term_key')
+            OR (excluded.kind='mention' AND json_extract(excluded.payload,'$.source_kind')=ml_evidence.source_kind
+                AND json_extract(excluded.payload,'$.source_id')=ml_evidence.source_id
+                AND json_extract(excluded.payload,'$.concept_id')=target.canonical_id)))
       ))""")
 
 
@@ -116,6 +143,25 @@ def route(db, spelling):
     """Select one exact retained witness; candidates can veto, never prove it."""
     from . import effective
 
+    pinned = (db.query(Finding).join(Override, Override.key == Finding.key).join(
+        ConceptTerm, ConceptTerm.id == Finding.canonical_id).filter(Finding.kind == "alias", Override.mode == "pinned",
+        ConceptTerm.term == spelling, ConceptTerm.is_canonical.is_(False),
+        func.json_extract(Finding.payload, "$.direction") == "inverse").first())
+    if pinned:
+        payload = json.loads(pinned.payload)
+        target = db.query(Finding).filter_by(kind="concept", canonical_id=payload["concept_id"]).first()
+        if target and effective.concepts(db).filter_by(id=target.canonical_id).first():
+            keys = [target.key, payload["declaration_key"], finding_key("term", payload["definition_alias_key"]),
+                    finding_key("term", spelling)]
+            if not db.query(Override).filter(Override.key.in_(keys), Override.mode == "suppressed").first():
+                generation = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
+                suffix = ":" + policy.VERSION
+                if generation.endswith(suffix):
+                    return {"direction": "inverse", "pinned_alias_key": pinned.key, "routing_policy": VERSION,
+                        "alias_key": payload["definition_alias_key"], "published_alias": spelling,
+                        "concept_key": target.key, "canonical_id": target.canonical_id,
+                        "declaration_key": payload["declaration_key"], "term_key": keys[2], "full_term_key": keys[3],
+                        "model_version": generation[:-len(suffix)]}
     if definitions_pending(db):
         return None
     lookup = spelling
