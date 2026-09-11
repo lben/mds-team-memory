@@ -3,12 +3,13 @@
 import re
 
 
-REVISION = "r4:536d6a7e86fad2dad4c3ce7945fd03a0a5041ce1e6e2e614dfdd521cdae4fbc1"
+REVISION = "r6-postverbal-stands-for"
+CONFLICT_REVISION = "conflict-v1"
 UNCERTAIN = frozenset("if unless whether perhaps maybe possibly hypothetical potential unverified unconfirmed propose proposal plan consider assume assumption suppose suggest recommend wish hope intend pretend reject deny dispute rumor incorrect false wrong mistaken misleading".split())
 MODALS = {"may", "might", "could", "would", "should", "will"}
 
 
-def candidates(doc):
+def candidates(doc, *, conflict=False):
     return propose({
         "body": doc.text,
         "tokens": [{"i": t.i, "text": t.text, "whitespace": t.whitespace_,
@@ -19,10 +20,10 @@ def candidates(doc):
         "noun_chunks": [{"start_token": s.start, "end_token": s.end,
                          "end": s.end_char, "root_token": s.root.i} for s in doc.noun_chunks],
         "sentences": [{"start_token": s.start, "end_token": s.end} for s in doc.sents],
-    })
+    }, conflict=conflict)
 
 
-def propose(row):
+def propose(row, *, conflict=False):
     tokens, body = row["tokens"], row["body"]
     if "".join(t["text"] + t["whitespace"] for t in tokens) != body:
         raise ValueError("Syntax tokens do not match their source")
@@ -97,6 +98,19 @@ def propose(row):
                 break
             embedded = t["dep"] in {"ccomp", "xcomp", "advcl", "relcl", "csubj", "csubjpass"}
             embedded |= t["dep"] == "acl" and not (index == trigger and rule == "passive_or_nominal_naming")
+            if conflict and index == trigger:
+                if rule == "object_control_naming" and t["dep"] == "xcomp":
+                    embedded = False
+                heading = tokens[t["head"]]
+                subject = one(dependents(trigger, {"nsubj"}))
+                if (t["dep"] == "acl" and t["tag"] in {"VBD", "VBP", "VBZ"}
+                        and subject is not None and heading["dep"] == "ROOT"
+                        and heading["pos"] in {"NOUN", "PROPN"}
+                        and heading["i"] < subject < trigger
+                        and any(p["text"] == ":" for p in tokens[heading["i"] + 1:subject])):
+                    # A noun heading can own the parse of a finite assertion.
+                    # Keep the entire sentence's negation/uncertainty checks.
+                    embedded = False
             if embedded and left <= t["head"] < right:
                 return
         key = (rule, trigger, full["start"], full["end"], short["start"], short["end"])
@@ -110,17 +124,27 @@ def propose(row):
         passive = one(dependents(i, {"nsubjpass"}))
         obj = one(dependents(i, {"dobj"}))
         complement = one(dependents(i, {"oprd"}))
-        if lemma in {"call", "name", "abbreviate"} and (passive is not None or t["dep"] == "acl"):
+        if (lemma in {"call", "name", "abbreviate"} or (conflict and lemma == "shorten")) and (passive is not None or t["dep"] == "acl"):
             full = passive if passive is not None else t["head"]
             short = complement if complement is not None else prep_object(i, {"as", "to"})
             emit("passive_or_nominal_naming", i, full, short)
         elif (lemma in {"mean", "name", "abbreviate"} and t["pos"] == "VERB" and subject is not None
               and obj is not None and complement is None and prep_object(i, {"as", "to"}) is None):
             emit("active_subject_definition", i, obj, subject)
+        elif conflict and lemma == "mean" and t["dep"] == "xcomp" and subject is None and obj is not None:
+            parent = tokens[t["head"]]
+            if (parent["lemma"].lower() == "use" and parent["pos"] == "VERB"
+                    and one(dependents(parent["i"], {"nsubj"})) is not None
+                    and any(c["dep"] == "aux" and c["lemma"].lower() == "to" for c in children[i])):
+                emit("object_control_naming", i, obj, one(dependents(parent["i"], {"dobj"})))
         elif lemma == "abbreviate" and obj is not None:
             emit("active_abbreviation", i, obj, prep_object(i, {"as", "to"}))
-        elif lemma == "stand" and prep_object(i, {"for"}) is not None:
-            emit("stands_for", i, prep_object(i, {"for"}), subject)
+        elif lemma == "stand":
+            # A fronted context ("For maintenance, ...") is not the expansion.
+            full = one([o for p in children[i] if p["dep"] == "prep"
+                        and p["lemma"].lower() == "for" and p["i"] > i
+                        for o in children[p["i"]] if o["dep"] == "pobj"])
+            emit("stands_for", i, full, subject)
         elif lemma == "expand" and prep_object(i, {"to"}) is not None:
             emit("expands_to", i, prep_object(i, {"to"}), obj if obj is not None else subject)
         elif lemma == "denote":
@@ -139,12 +163,23 @@ def propose(row):
                     emit("is_short_for", i, prep_object(adjective["i"], {"for"}), subject)
             attribute = one(dependents(i, {"attr"}))
             for naming, alias in ((subject, attribute), (attribute, subject)):
-                if naming is None or tokens[naming]["lemma"].lower() not in {"name", "alias"}:
+                if naming is None or tokens[naming]["lemma"].lower() not in {
+                        "name", "title", "label", "form", "abbreviation", "alias"}:
                     continue
-                explicit = tokens[naming]["lemma"].lower() == "alias" or any(
-                    c["lemma"].lower() in {"short", "another"} for c in children[naming])
+                explicit = tokens[naming]["lemma"].lower() in {"abbreviation", "alias"} or any(
+                    c["lemma"].lower() in {"short", "shorten", "abbreviate", "abbreviated", "alternate", "another"}
+                    for c in children[naming])
                 if explicit:
-                    emit("copular_name_for", i, prep_object(naming, {"for"}), alias)
+                    full = prep_object(naming, {"for", "of"})
+                    if not any(c["dep"] == "prep" and c["lemma"].lower() in {"for", "of"}
+                               for c in children[naming]):
+                        relative = one([c for c in children[naming] if c["dep"] == "relcl"
+                                        and c["lemma"].lower() == "use"
+                                        and one(dependents(c["i"], {"nsubj"})) is not None
+                                        and not dependents(c["i"], {"dobj", "dative", "oprd", "ccomp", "xcomp"})])
+                        if relative is not None:
+                            full = prep_object(relative, {"for", "of"})
+                    emit("copular_name_for", i, full, alias)
         if t["dep"] == "appos":
             alias = argument(i)
             if (alias and re.fullmatch(r"[A-Za-z][A-Za-z0-9-]{1,11}", alias["text"])

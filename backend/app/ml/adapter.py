@@ -5,13 +5,14 @@ source snapshot, and model generation before calling this module.
 """
 
 import json
+import re
 
 from sqlalchemy import func, or_, text
 
 from ..models import (RELATED_TO_ID, Account, Concept, ConceptTerm, ExpertiseMapping,
                       ImpactEvent, ItemConcept, KnowledgeItem, Profile, Relationship,
                       RelationshipType, utcnow)
-from . import effective, embeddings, policy, resolution
+from . import effective, embeddings, identity, policy, resolution, syntax
 from .models import Embedding, Evidence, Finding, Override, Source
 from .queue import enqueue, request_backfill
 from .runtime import grounded_span, normalize, specific_name
@@ -49,7 +50,7 @@ def _evidence(db, row, source, start, end, score, version, polarity="positive", 
     key = finding_key("evidence", row.key, source.kind, source.id, polarity)
     prior = db.get(Evidence, key)
     if prior:
-        if row.kind == "alias":
+        if row.kind in {"alias", "alias_definition"}:
             previous_features = json.loads(prior.features)
             methods = previous_features.get("definition_methods", []) + features.get("definition_methods", [])
             methods = list({_json(method): method for method in methods}.values())
@@ -220,19 +221,70 @@ def _publish_concept(db, row):
     return False
 
 
+def _definitions_pending(db):
+    return identity.definitions_pending(db)
+
+
+def _definition_conflict(db, spelling, concept_id):
+    definitions = db.query(Finding).filter(Finding.kind == "alias_definition",
+        func.json_extract(Finding.payload, text("'$.alias_key'")) == spelling, effective.supported()).limit(33).all()
+    if len(definitions) > 32:
+        return True
+    for definition in definitions:
+        target = db.get(Finding, json.loads(definition.payload)["concept_key"])
+        if target is None or target.canonical_id != concept_id:
+            return True
+    return False
+
+
 def _publish_alias(db, row):
     changed = False
     payload = json.loads(row.payload)
     spelling = normalize(payload["alias"])
+    routed = db.execute(text("""SELECT 1 FROM ml_evidence e, json_each(e.features,'$.identity_routes') route
+      WHERE e.finding_key IN (SELECT key FROM ml_findings WHERE kind='concept' AND canonical_id=:cid)
+        AND json_extract(route.value,'$.alias_key')=:spelling LIMIT 1"""),
+        {"cid": payload["concept_id"], "spelling": spelling}).first()
+    if payload.get("identity_routing") or routed:
+        payload["identity_routing"] = True
+        row.payload = _json(payload)
+        if not db.get(Override, row.key):
+            certificate = identity.route(db, spelling)
+            if certificate is None:
+                row.state = "held"
+            else:
+                for evidence in db.query(Evidence).filter_by(finding_key=row.key):
+                    features = json.loads(evidence.features)
+                    # An unchanged alias keeps its selected witness. Replaying
+                    # its owning source is what may select a replacement.
+                    if "identity_routes" not in features:
+                        evidence.features = _json({**features, "identity_routes": [certificate]})
+                db.flush()
+    if row.state == "held" and not db.get(Override, row.key) and not _definitions_pending(db):
+        version = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
+        evidence = [e for e in effective.evidence_rows(db, row.key) if version == e["model_version"] + ":" + policy.VERSION]
+        for method in policy.single_alias_definitions(evidence):
+            if normalize(method["short_name"]["text"]) != spelling:
+                continue
+            name = method["full_name"]["text"]
+            target = db.query(ConceptTerm).filter_by(term=normalize(name)).first() or resolution.spelling_match(db, name)
+            target_id = target.canonical_id if isinstance(target, Finding) else target.concept_id if target else None
+            if target_id != payload["concept_id"]:
+                continue
+            targets = db.query(Finding).filter_by(kind="concept", canonical_id=target_id)
+            if any(policy.decide("concept", effective.evidence_rows(db, target.key))[0] == "active" for target in targets):
+                row.state = "active"
+                break
     blocked = db.get(Override, finding_key("term", spelling))
     if blocked and blocked.mode == "suppressed":
         row.state = "suppressed"
     conflicting = [other for other in db.query(Finding).filter(Finding.kind == "alias",
-                   func.json_extract(Finding.payload, "$.alias_key") == spelling, Finding.key != row.key)
+                   func.json_extract(Finding.payload, text("'$.alias_key'")) == spelling, Finding.key != row.key)
                    if normalize(json.loads(other.payload)["alias"]) == spelling
                    and json.loads(other.payload)["concept_id"] != payload["concept_id"]
                    and effective.evidence_rows(db, other.key)]
-    if conflicting and row.state in {"active", "held"} and not db.get(Override, row.key):
+    definition_conflict = _definition_conflict(db, spelling, payload["concept_id"])
+    if (conflicting or definition_conflict) and row.state in {"active", "held"} and not db.get(Override, row.key):
         row.state = "held"
         for other in conflicting:
             if not db.get(Override, other.key):
@@ -325,6 +377,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
     authors = {row.author_id for row in prior if row.author_id}
     db.query(Evidence).filter_by(source_kind=source_kind, source_id=source_id).delete(synchronize_session="fetch")
     stored = db.get(Source, (source_kind, source_id))
+    indexing_old_source = stored is not None and json.loads(stored.result).get("definitions_indexed", 0) < 2
     if source is None:
         embeddings.invalidate_source(db, source_kind, source_id)
         if stored:
@@ -334,9 +387,14 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
         embeddings.replace_source(db, source, result["chunks"], embedding_version, dimensions)
         embedding_count = (len(result["chunks"]) if result["chunks"] is not None
                            else json.loads(stored.result)["embedding_count"])
-        cached = {"text_hash": digest(source.text), "concepts": result["concepts"], "relations": result["relations"],
+        covered = (result.get("conflict_coverage_revision") == syntax.CONFLICT_REVISION
+                   and isinstance(result.get("conflict_definitions"), list))
+        cached = {"definitions_indexed": 2 if covered else 1, "text_hash": digest(source.text), "concepts": result["concepts"], "relations": result["relations"],
                   "corroborated_definitions": result.get("corroborated_definitions", []),
                   "embedding_version": embedding_version, "dimensions": dimensions, "embedding_count": embedding_count}
+        if covered:
+            cached.update(conflict_definitions=result["conflict_definitions"],
+                          conflict_coverage_revision=syntax.CONFLICT_REVISION)
         values = dict(content_hash=source.content_hash, valid=True, model_version=model_version,
                       result=_json(cached), updated_at=utcnow())
         if stored is None:
@@ -372,9 +430,34 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                                 "method": {"origin": "syntax_and_alias_role_record", **record}})
             if normalize(full["name"]) not in concepts:
                 concepts[normalize(full["name"])] = _concept(db, full["name"])
+        for candidate in result.get("conflict_definitions", []) if covered and source.assertion_allowed else []:
+            full = grounded_span({**candidate["full_name"], "confidence": 0.0}, source.text, 0)
+            short = grounded_span({**candidate["short_name"], "confidence": 0.0}, source.text, 0)
+            if (candidate.get("source_text_hash") != digest(source.text) or not candidate.get("rule")
+                    or not full or not short or not specific_name(full["name"]) or not specific_name(short["name"])
+                    or normalize(full["name"]) == normalize(short["name"])
+                    or not (full["end"] <= short["start"] or short["end"] <= full["start"])):
+                raise ValueError("Conflict definition does not match its source")
+            target = _concept(db, full["name"])
+            payload = {"alias_key": normalize(short["name"]), "name": full["name"], "concept_key": target.key}
+            record = _finding(db, "alias_definition", [normalize(short["name"]), normalize(full["name"])], payload)
+            record.payload = _json({**json.loads(record.payload), **payload})
+            _evidence(db, record, source, min(full["start"], short["start"]), max(full["end"], short["end"]),
+                      0.0, model_version, conflict_only=True, rule=candidate["rule"])
+            affected.add(record.key)
+        for definition in definitions:
+            target = concepts[normalize(definition["name"])]
+            payload = {"alias_key": normalize(definition["alias"]), "name": definition["name"], "concept_key": target.key}
+            record = _finding(db, "alias_definition", [normalize(definition["alias"]), normalize(definition["name"])], payload)
+            record.payload = _json({**json.loads(record.payload), **payload})
+            _evidence(db, record, source, definition["start"], definition["end"], definition["score"], model_version,
+                      assertion_allowed=source.assertion_allowed,
+                      definition_methods=[definition["method"]] if definition.get("method") else [])
+            affected.add(record.key)
         # Resolve definitions before an extracted abbreviation can create its
         # own identity. Distinct existing canonical records are never merged.
         aliases = []
+        routes_by_spelling = {}
         for span in spans:
             if not specific_name(span["name"]):
                 continue
@@ -382,6 +465,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             blocked = db.get(Override, finding_key("term", spelling))
             if blocked and blocked.mode == "suppressed":
                 continue
+            certificate = None
             targets = {normalize(d["name"]) for d in definitions if normalize(d["alias"]) == spelling}
             existing = db.query(ConceptTerm).filter_by(term=spelling).first()
             if len(targets) > 1:
@@ -391,20 +475,42 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             if targets and not (existing and existing.is_canonical):
                 row = concepts[next(iter(targets))]
             else:
-                if not existing and not targets and resolution.spelling_match(db, span["name"]) is None and db.query(Finding).filter(
-                        Finding.kind == "alias", func.json_extract(Finding.payload, "$.alias_key") == spelling,
-                        effective.supported()).first():
-                    # An awaiting-evidence alias must not become a conflicting
-                    # new canonical concept through a standalone occurrence.
-                    continue
-                row = concepts.get(spelling) or _concept(db, span["name"])
+                matched = resolution.spelling_match(db, span["name"]) if not existing and not targets else None
+                reserved = (not existing and not targets
+                    and (matched is None or isinstance(matched, Finding) and not matched.canonical_id)
+                    and db.query(Finding).filter(Finding.kind.in_(("alias", "alias_definition")),
+                        func.json_extract(Finding.payload, text("'$.alias_key'")) == spelling,
+                        effective.supported()).first())
+                conditional = None
+                if existing and not existing.is_canonical:
+                    conditional = db.query(Finding).filter_by(kind="alias", canonical_id=existing.id).first()
+                elif not existing:
+                    # The alias Finding survives term withdrawal. Its publication
+                    # must never erase the identity dependency on later replay.
+                    conditional = db.query(Finding).filter(Finding.kind == "alias",
+                        func.json_extract(Finding.payload, text("'$.alias_key'")) == spelling,
+                        func.json_extract(Finding.payload, "$.identity_routing") == True).first()
+                fixed = db.get(Override, conditional.key) if conditional else None
+                conditional = (conditional and json.loads(conditional.payload).get("identity_routing")
+                               and not (fixed and fixed.mode == "pinned"))
+                if reserved or conditional:
+                    if span not in result["concepts"] or span["label"] == "relation endpoint":
+                        continue
+                    certificate = identity.route(db, spelling)
+                    if certificate is None:
+                        continue
+                    row = db.get(Finding, certificate["concept_key"])
+                    routes_by_spelling[spelling] = certificate
+                else:
+                    row = concepts.get(spelling) or _concept(db, span["name"])
             canonical_name = json.loads(row.payload)["name"]
             if (spelling != normalize(canonical_name)
                     and resolution.spelling_key(span["name"]) == resolution.spelling_key(canonical_name)):
                 aliases.append({"name": canonical_name, "alias": span["name"], "start": span["start"],
                                 "end": span["end"], "score": span["score"], "spelling_variant": True})
             _evidence(db, row, source, span["start"], span["end"], span["score"], model_version,
-                      grounded=True, label=span["label"])
+                      grounded=True, label=span["label"],
+                      **({"identity_routes": [certificate]} if certificate else {}))
             affected.add(row.key)
             concepts[spelling] = row
             concepts.setdefault(normalize(canonical_name), row)
@@ -421,8 +527,28 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             mention = _finding(db, "mention", [source_kind, source_id, concept.canonical_id],
                                {"source_kind": source_kind, "source_id": source_id, "concept_id": concept.canonical_id})
             mention.canonical_id = concept.canonical_id
-            _evidence(db, mention, source, span["start"], span["end"], span["score"], model_version, grounded=True)
+            _evidence(db, mention, source, span["start"], span["end"], span["score"], model_version,
+                      grounded=True,
+                      **({"identity_routes": [routes_by_spelling[normalize(span["name"])]], "label": span["label"]}
+                         if normalize(span["name"]) in routes_by_spelling else {}))
             affected.add(mention.key)
+        # Exact vocabulary tagging also depends on a conditional alias, even
+        # when the entity pass returns no span. It supplies no entity score.
+        conditional_terms = effective.terms(db).filter(ConceptTerm.id.in_(db.query(Finding.canonical_id).filter(
+            Finding.kind == "alias", func.json_extract(Finding.payload, "$.identity_routing") == True)))
+        for term in conditional_terms:
+            alias = db.query(Finding).filter_by(kind="alias", canonical_id=term.id).first()
+            if db.get(Override, alias.key):
+                continue
+            match = re.search(r"(?<!\w)" + re.escape(term.term) + r"(?!\w)", source.text.lower())
+            certificate = identity.route(db, term.term) if match else None
+            if certificate:
+                mention = _finding(db, "mention", [source_kind, source_id, term.concept_id],
+                    {"source_kind": source_kind, "source_id": source_id, "concept_id": term.concept_id})
+                mention.canonical_id = term.concept_id
+                _evidence(db, mention, source, match.start(), match.end(), 0.0, model_version,
+                          grounded=True, label="term match", identity_routes=[certificate])
+                affected.add(mention.key)
         for definition in definitions + aliases:
             concept = concepts.get(normalize(definition["name"]))
             if concept and concept.canonical_id:
@@ -445,6 +571,11 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                     term = effective.terms(db).filter(ConceptTerm.term == normalize(name)).first()
                     if term:
                         concepts[normalize(name)] = _concept(db, name)
+                        alias = db.query(Finding).filter_by(kind="alias", canonical_id=term.id).first()
+                        if alias and json.loads(alias.payload).get("identity_routing") and not db.get(Override, alias.key):
+                            certificate = identity.route(db, normalize(name))
+                            if certificate:
+                                routes_by_spelling[normalize(name)] = certificate
             head, tail = (concepts.get(normalize(relation[part]["name"])) for part in ("head", "tail"))
             if not head or not tail or not head.canonical_id or not tail.canonical_id or head.canonical_id == tail.canonical_id:
                 continue
@@ -452,7 +583,10 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                            {"src_id": head.canonical_id, "dst_id": tail.canonical_id, "predicate": relation["predicate"]})
             _evidence(db, row, source, relation["start"], relation["end"], relation["score"], model_version,
                       polarity=relation["polarity"], literal_support=relation["literal_support"],
-                      assertion_allowed=source.assertion_allowed, head=relation["head"], tail=relation["tail"])
+                      assertion_allowed=source.assertion_allowed, head=relation["head"], tail=relation["tail"],
+                      **({"identity_routes": [routes_by_spelling[normalize(relation[part]["name"])]
+                            for part in ("head", "tail") if normalize(relation[part]["name"]) in routes_by_spelling]}
+                         if any(normalize(relation[part]["name"]) in routes_by_spelling for part in ("head", "tail")) else {}))
             affected.add(row.key)
         nearby = {}
         ordered_spans = sorted(spans, key=lambda span: span["start"])
@@ -472,22 +606,27 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                 nearby[pair] = max(nearby.get(pair, 0), min(first_span["score"], second_span["score"]))
         for first, second in sorted(nearby, key=lambda pair: (-nearby[pair], pair))[:16]:
             row = _finding(db, "association", [first, second], {"src_id": first, "dst_id": second, "predicate": "related_to"})
-            _evidence(db, row, source, 0, len(source.text), 0.0, model_version)
+            routes = [route for route in routes_by_spelling.values()
+                      if db.get(Finding, route["concept_key"]).canonical_id in (first, second)]
+            _evidence(db, row, source, 0, len(source.text), 0.0, model_version,
+                      **({"identity_routes": routes} if routes else {}))
             affected.add(row.key)
         db.flush()
-        _context_associations(db, source, concepts.values(), embedding_version, model_version, affected)
+        _context_associations(db, source, concepts.values(), embedding_version, model_version, affected,
+                              routes_by_spelling.values())
         if vocabulary_changed:
             enqueue(db, "vocabulary", "all")
     db.flush()
     concept_ids = set()
     spellings = [json.loads(row.payload)["alias_key"] for row in db.query(Finding).filter(
-        Finding.key.in_(affected), Finding.kind == "alias")]
+        Finding.key.in_(affected), Finding.kind.in_(("alias", "alias_definition")))]
     if spellings:
+        affected.update(identity.reconsider(db, spellings))
         affected.update(key for key, in db.query(Finding.key).filter(Finding.kind == "alias",
-                        func.json_extract(Finding.payload, "$.alias_key").in_(spellings)))
+                        func.json_extract(Finding.payload, text("'$.alias_key'")).in_(spellings)))
     for key in affected:
         row = db.get(Finding, key)
-        if not row:
+        if not row or row.kind == "alias_definition":
             continue
         changed = _decide(db, row)
         if row.kind == "concept":
@@ -502,6 +641,9 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             payload = json.loads(row.payload)
             concept_ids.update((payload["src_id"], payload["dst_id"]))
     db.flush()
+    if indexing_old_source and not _definitions_pending(db):
+        enqueue(db, "vocabulary", "aliases:")
+        enqueue(db, "vocabulary", "identities:")
     if source:
         from ..concepts import retag_item, retag_passage
         from ..models import DocumentPassage
@@ -518,7 +660,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
     db.execute(text("UPDATE ml_state SET revision=revision+1 WHERE id=1"))
 
 
-def _context_associations(db, source, concepts, embedding_version, model_version, affected):
+def _context_associations(db, source, concepts, embedding_version, model_version, affected, identity_routes=()):
     """Embeddings nominate optional weak links; they never assert a predicate."""
     from ..models import PassageConcept
 
@@ -547,9 +689,16 @@ def _context_associations(db, source, concepts, embedding_version, model_version
                         continue
                     pairs.add(pair)
                     row = _finding(db, "association", pair, {"src_id": pair[0], "dst_id": pair[1], "predicate": "related_to"})
+                    routes = list(identity_routes)
+                    for evidence in db.query(Evidence).join(Finding, Finding.key == Evidence.finding_key).filter(
+                            Evidence.source_kind == kind, Evidence.source_id == identity,
+                            Finding.kind == "mention", Finding.canonical_id == second):
+                        routes.extend(json.loads(evidence.features).get("identity_routes", []))
+                    routes = [route for route in routes if db.get(Finding, route["concept_key"]).canonical_id in pair]
                     _evidence(db, row, source, vector.start, vector.end, 0.0, model_version,
                               context={"source_kind": kind, "source_id": identity, "source_hash": peer.content_hash,
-                                       "start": candidate["start"], "end": candidate["end"]})
+                                       "start": candidate["start"], "end": candidate["end"]},
+                              **({"identity_routes": list({_json(route): route for route in routes}.values())} if routes else {}))
                     affected.add(row.key)
                     if len(pairs) >= 16:
                         return
@@ -560,14 +709,21 @@ def cached_result(db, source, model_version):
     if stored is None or stored.model_version != model_version:
         return None
     data = json.loads(stored.result)
+    if len(model_version.split(":")) == 5 and (data.get("definitions_indexed", 0) < 2
+            or data.get("conflict_coverage_revision") != syntax.CONFLICT_REVISION):
+        return None
     if data.get("text_hash") != digest(source.text):
         return None
     count = db.query(Embedding).filter_by(source_kind=source.kind, source_id=source.id,
                                          generation=data.get("embedding_version")).count()
     if data.get("embedding_count") != count:
         return None
-    return ({"concepts": data["concepts"], "relations": data["relations"], "chunks": None,
-             "corroborated_definitions": data.get("corroborated_definitions", [])},
+    result = {"concepts": data["concepts"], "relations": data["relations"], "chunks": None,
+              "corroborated_definitions": data.get("corroborated_definitions", [])}
+    if data.get("conflict_coverage_revision") == syntax.CONFLICT_REVISION:
+        result.update(conflict_definitions=data["conflict_definitions"],
+                      conflict_coverage_revision=syntax.CONFLICT_REVISION)
+    return (result,
             (model_version, data["embedding_version"], data["dimensions"]))
 
 
@@ -603,9 +759,9 @@ def apply_profile(db, profile_id):
             question = db.get(KnowledgeItem, item.parent_id) if item.parent_id else None
             if not question or question.accepted_answer_id != item.id:
                 continue
-        for tag in db.query(ItemConcept).filter_by(item_id=item.id):
-            if effective.concepts(db).filter(Concept.id == tag.concept_id).first():
-                by_concept.setdefault(tag.concept_id, []).append((event, item))
+        from ..concepts import source_concepts
+        for concept in source_concepts(db, "item", item.id, item.body):
+            by_concept.setdefault(concept.id, []).append((event, item))
     for cid, records in by_concept.items():
         row = _finding(db, "expertise", [profile_id, cid], {"profile_id": profile_id, "concept_id": cid})
         affected.add(row.key)
@@ -650,6 +806,26 @@ def apply_profile(db, profile_id):
 
 
 def apply_vocabulary(db, source_id):
+    if source_id.startswith("identities:"):
+        cursor = source_id.split(":", 1)[1]
+        rows = db.query(Finding).filter(Finding.kind == "alias_definition", Finding.key > cursor).order_by(Finding.key).limit(25).all()
+        identity.reconsider(db, [json.loads(row.payload)["alias_key"] for row in rows])
+        if len(rows) == 25:
+            enqueue(db, "vocabulary", "identities:" + rows[-1].key)
+        return
+    if source_id.startswith("aliases:"):
+        cursor = source_id.split(":", 1)[1]
+        rows = db.query(Finding).filter(Finding.kind == "alias", Finding.key > cursor).order_by(Finding.key).limit(25).all()
+        changed = False
+        for row in rows:
+            _decide(db, row)
+            changed |= _publish_alias(db, row)
+        if len(rows) == 25:
+            enqueue(db, "vocabulary", "aliases:" + rows[-1].key)
+        if changed:
+            request_backfill(db)
+        db.execute(text("UPDATE ml_state SET revision=revision+1 WHERE id=1"))
+        return
     if not source_id.startswith("route:"):
         request_backfill(db)
         return

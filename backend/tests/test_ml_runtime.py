@@ -76,7 +76,7 @@ def test_alias_pass_uses_existing_windows_without_promoting_role_scores(monkeypa
             return {"entities": {"named entity": [{**record["full_name"], "confidence": 0.2}]}}
         return {}
 
-    monkeypatch.setattr(runtime.syntax, "candidates", lambda body: [{"rule": "denotes", **pair(body)}] if pair(body) else [])
+    monkeypatch.setattr(runtime.syntax, "candidates", lambda body, **kwargs: [{"rule": "denotes", **pair(body)}] if pair(body) else [])
     model.extractor = SimpleNamespace(extract=extract)
     vector = SimpleNamespace(astype=lambda dtype: SimpleNamespace(tobytes=lambda: b"\0" * 4))
     model.embedding = SimpleNamespace(encode=lambda body, **kwargs: vector)
@@ -117,6 +117,15 @@ def test_alias_fingerprint_invalidates_changed_models_schema_settings_and_rules(
             scoped.setitem(target, key, value)
             assert runtime.inference_version(models) != version
     monkeypatch.setattr(runtime.syntax, "REVISION", "changed")
+    assert runtime.inference_version(models) != version
+
+
+def test_conflict_coverage_revision_invalidates_cached_inference(monkeypatch):
+    from app.ml import runtime
+
+    models = {role: {"revision": role} for role in ("extractor", "embeddings", "syntax")}
+    version = runtime.inference_version(models)
+    monkeypatch.setattr(runtime.syntax, "CONFLICT_REVISION", "next-conflict-contract")
     assert runtime.inference_version(models) != version
 
 

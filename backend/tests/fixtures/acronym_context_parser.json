@@ -1,0 +1,3667 @@
+{
+  "scope": "Recorded actual pretrained parser output for the reproduced context-adjunct bug; engineering regression, not independent quality samples.",
+  "original_parser_output_sha256": "60b2b226845645255d66708e138683e27f4e19d5869be541c653116544003c1c",
+  "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5",
+  "cases": [
+    {
+      "id": "original_first",
+      "parsed": {
+        "body": "RSR stands for Release State Register in deployment operations. Release State Register lists the versions cleared for rollout.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "stands",
+            "whitespace": " ",
+            "start": 4,
+            "end": 10,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              6,
+              9
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "for",
+            "whitespace": " ",
+            "start": 11,
+            "end": 14,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 1,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Release",
+            "whitespace": " ",
+            "start": 15,
+            "end": 22,
+            "lemma": "Release",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "State",
+            "whitespace": " ",
+            "start": 23,
+            "end": 28,
+            "lemma": "State",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 29,
+            "end": 37,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 2,
+            "children": [
+              3,
+              4
+            ],
+            "ancestors": [
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "in",
+            "whitespace": " ",
+            "start": 38,
+            "end": 40,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 1,
+            "children": [
+              8
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "deployment",
+            "whitespace": " ",
+            "start": 41,
+            "end": 51,
+            "lemma": "deployment",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "operations",
+            "whitespace": "",
+            "start": 52,
+            "end": 62,
+            "lemma": "operation",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "pobj",
+            "head": 6,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": ".",
+            "whitespace": " ",
+            "start": 62,
+            "end": 63,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Release",
+            "whitespace": " ",
+            "start": 64,
+            "end": 71,
+            "lemma": "Release",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 12,
+            "children": [],
+            "ancestors": [
+              12,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "State",
+            "whitespace": " ",
+            "start": 72,
+            "end": 77,
+            "lemma": "State",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 12,
+            "children": [],
+            "ancestors": [
+              12,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 78,
+            "end": 86,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 13,
+            "children": [
+              10,
+              11
+            ],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "lists",
+            "whitespace": " ",
+            "start": 87,
+            "end": 92,
+            "lemma": "list",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 13,
+            "children": [
+              12,
+              15,
+              19
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "the",
+            "whitespace": " ",
+            "start": 93,
+            "end": 96,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 15,
+            "children": [],
+            "ancestors": [
+              15,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "versions",
+            "whitespace": " ",
+            "start": 97,
+            "end": 105,
+            "lemma": "version",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 13,
+            "children": [
+              14,
+              16
+            ],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "cleared",
+            "whitespace": " ",
+            "start": 106,
+            "end": 113,
+            "lemma": "clear",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "acl",
+            "head": 15,
+            "children": [
+              17
+            ],
+            "ancestors": [
+              15,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": "for",
+            "whitespace": " ",
+            "start": 114,
+            "end": 117,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 16,
+            "children": [
+              18
+            ],
+            "ancestors": [
+              16,
+              15,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 18,
+            "text": "rollout",
+            "whitespace": "",
+            "start": 118,
+            "end": 125,
+            "lemma": "rollout",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 17,
+            "children": [],
+            "ancestors": [
+              17,
+              16,
+              15,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 19,
+            "text": ".",
+            "whitespace": "",
+            "start": 125,
+            "end": 126,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 6,
+            "end": 37,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 9,
+            "end": 62,
+            "root_token": 8
+          },
+          {
+            "start_token": 10,
+            "end_token": 13,
+            "end": 86,
+            "root_token": 12
+          },
+          {
+            "start_token": 14,
+            "end_token": 16,
+            "end": 105,
+            "root_token": 15
+          },
+          {
+            "start_token": 18,
+            "end_token": 19,
+            "end": 125,
+            "root_token": 18
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 10
+          },
+          {
+            "start_token": 10,
+            "end_token": 20
+          }
+        ]
+      },
+      "expected_full_name": "Release State Register"
+    },
+    {
+      "id": "original_second",
+      "parsed": {
+        "body": "For pump maintenance, RSR stands for Rotor Service Report. Rotor Service Report records bearing replacements.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "For",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 4,
+            "end": 8,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 9,
+            "end": 20,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 0,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 20,
+            "end": 21,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 22,
+            "end": 25,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "stands",
+            "whitespace": " ",
+            "start": 26,
+            "end": 32,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 5,
+            "children": [
+              0,
+              3,
+              4,
+              6,
+              10
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "for",
+            "whitespace": " ",
+            "start": 33,
+            "end": 36,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 37,
+            "end": 42,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 43,
+            "end": 50,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Report",
+            "whitespace": "",
+            "start": 51,
+            "end": 57,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 6,
+            "children": [
+              7,
+              8
+            ],
+            "ancestors": [
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": " ",
+            "start": 57,
+            "end": 58,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 59,
+            "end": 64,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 65,
+            "end": 72,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "Report",
+            "whitespace": " ",
+            "start": 73,
+            "end": 79,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 14,
+            "children": [
+              11,
+              12
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "records",
+            "whitespace": " ",
+            "start": 80,
+            "end": 87,
+            "lemma": "record",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 14,
+            "children": [
+              13,
+              16,
+              17
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "bearing",
+            "whitespace": " ",
+            "start": 88,
+            "end": 95,
+            "lemma": "bearing",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 16,
+            "children": [],
+            "ancestors": [
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "replacements",
+            "whitespace": "",
+            "start": 96,
+            "end": 108,
+            "lemma": "replacement",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 14,
+            "children": [
+              15
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": ".",
+            "whitespace": "",
+            "start": 108,
+            "end": 109,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 3,
+            "end": 20,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 25,
+            "root_token": 4
+          },
+          {
+            "start_token": 7,
+            "end_token": 10,
+            "end": 57,
+            "root_token": 9
+          },
+          {
+            "start_token": 11,
+            "end_token": 14,
+            "end": 79,
+            "root_token": 13
+          },
+          {
+            "start_token": 15,
+            "end_token": 17,
+            "end": 108,
+            "root_token": 16
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          },
+          {
+            "start_token": 11,
+            "end_token": 18
+          }
+        ]
+      },
+      "expected_full_name": "Rotor Service Report"
+    },
+    {
+      "id": "no_prefix",
+      "parsed": {
+        "body": "RSR stands for Rotor Service Report. Rotor Service Report records bearing replacements.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "stands",
+            "whitespace": " ",
+            "start": 4,
+            "end": 10,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "for",
+            "whitespace": " ",
+            "start": 11,
+            "end": 14,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 1,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 15,
+            "end": 20,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              5,
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 21,
+            "end": 28,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [
+              3
+            ],
+            "ancestors": [
+              5,
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Report",
+            "whitespace": "",
+            "start": 29,
+            "end": 35,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 2,
+            "children": [
+              4
+            ],
+            "ancestors": [
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": ".",
+            "whitespace": " ",
+            "start": 35,
+            "end": 36,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 37,
+            "end": 42,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              9,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 43,
+            "end": 50,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              9,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Report",
+            "whitespace": " ",
+            "start": 51,
+            "end": 57,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [
+              8
+            ],
+            "ancestors": [
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "records",
+            "whitespace": " ",
+            "start": 58,
+            "end": 65,
+            "lemma": "record",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "ROOT",
+            "head": 10,
+            "children": [
+              9,
+              11,
+              13
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "bearing",
+            "whitespace": " ",
+            "start": 66,
+            "end": 73,
+            "lemma": "bear",
+            "pos": "VERB",
+            "tag": "VBG",
+            "dep": "acl",
+            "head": 10,
+            "children": [
+              12
+            ],
+            "ancestors": [
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "replacements",
+            "whitespace": "",
+            "start": 74,
+            "end": 86,
+            "lemma": "replacement",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": ".",
+            "whitespace": "",
+            "start": 86,
+            "end": 87,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 6,
+            "end": 35,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 11,
+            "end": 65,
+            "root_token": 10
+          },
+          {
+            "start_token": 12,
+            "end_token": 13,
+            "end": 86,
+            "root_token": 12
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 7
+          },
+          {
+            "start_token": 7,
+            "end_token": 14
+          }
+        ]
+      },
+      "expected_full_name": "Rotor Service Report"
+    },
+    {
+      "id": "in_prefix",
+      "parsed": {
+        "body": "In pump maintenance, RSR stands for Rotor Service Report. Rotor Service Report records bearing replacements.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "In",
+            "whitespace": " ",
+            "start": 0,
+            "end": 2,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 3,
+            "end": 7,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 8,
+            "end": 19,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 0,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 19,
+            "end": 20,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 21,
+            "end": 24,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "stands",
+            "whitespace": " ",
+            "start": 25,
+            "end": 31,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 5,
+            "children": [
+              0,
+              3,
+              4,
+              6,
+              10
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "for",
+            "whitespace": " ",
+            "start": 32,
+            "end": 35,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 36,
+            "end": 41,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 42,
+            "end": 49,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Report",
+            "whitespace": "",
+            "start": 50,
+            "end": 56,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 6,
+            "children": [
+              7,
+              8
+            ],
+            "ancestors": [
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": " ",
+            "start": 56,
+            "end": 57,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 58,
+            "end": 63,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 64,
+            "end": 71,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "Report",
+            "whitespace": " ",
+            "start": 72,
+            "end": 78,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 14,
+            "children": [
+              11,
+              12
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "records",
+            "whitespace": " ",
+            "start": 79,
+            "end": 86,
+            "lemma": "record",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 14,
+            "children": [
+              13,
+              16,
+              17
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "bearing",
+            "whitespace": " ",
+            "start": 87,
+            "end": 94,
+            "lemma": "bearing",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 16,
+            "children": [],
+            "ancestors": [
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "replacements",
+            "whitespace": "",
+            "start": 95,
+            "end": 107,
+            "lemma": "replacement",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 14,
+            "children": [
+              15
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": ".",
+            "whitespace": "",
+            "start": 107,
+            "end": 108,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 3,
+            "end": 19,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 24,
+            "root_token": 4
+          },
+          {
+            "start_token": 7,
+            "end_token": 10,
+            "end": 56,
+            "root_token": 9
+          },
+          {
+            "start_token": 11,
+            "end_token": 14,
+            "end": 78,
+            "root_token": 13
+          },
+          {
+            "start_token": 15,
+            "end_token": 17,
+            "end": 107,
+            "root_token": 16
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          },
+          {
+            "start_token": 11,
+            "end_token": 18
+          }
+        ]
+      },
+      "expected_full_name": "Rotor Service Report"
+    },
+    {
+      "id": "same_expansion_for_prefix",
+      "parsed": {
+        "body": "For pump maintenance, RSR stands for Release State Register. Release State Register lists the versions cleared for rollout.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "For",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 4,
+            "end": 8,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 9,
+            "end": 20,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 0,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 20,
+            "end": 21,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 22,
+            "end": 25,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "stands",
+            "whitespace": " ",
+            "start": 26,
+            "end": 32,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 5,
+            "children": [
+              0,
+              3,
+              4,
+              6,
+              10
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "for",
+            "whitespace": " ",
+            "start": 33,
+            "end": 36,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Release",
+            "whitespace": " ",
+            "start": 37,
+            "end": 44,
+            "lemma": "Release",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "State",
+            "whitespace": " ",
+            "start": 45,
+            "end": 50,
+            "lemma": "State",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Register",
+            "whitespace": "",
+            "start": 51,
+            "end": 59,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 6,
+            "children": [
+              7,
+              8
+            ],
+            "ancestors": [
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": " ",
+            "start": 59,
+            "end": 60,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "Release",
+            "whitespace": " ",
+            "start": 61,
+            "end": 68,
+            "lemma": "Release",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "State",
+            "whitespace": " ",
+            "start": 69,
+            "end": 74,
+            "lemma": "State",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 75,
+            "end": 83,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 14,
+            "children": [
+              11,
+              12
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "lists",
+            "whitespace": " ",
+            "start": 84,
+            "end": 89,
+            "lemma": "list",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 14,
+            "children": [
+              13,
+              16,
+              20
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "the",
+            "whitespace": " ",
+            "start": 90,
+            "end": 93,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 16,
+            "children": [],
+            "ancestors": [
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "versions",
+            "whitespace": " ",
+            "start": 94,
+            "end": 102,
+            "lemma": "version",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 14,
+            "children": [
+              15,
+              17
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": "cleared",
+            "whitespace": " ",
+            "start": 103,
+            "end": 110,
+            "lemma": "clear",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "acl",
+            "head": 16,
+            "children": [
+              18
+            ],
+            "ancestors": [
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 18,
+            "text": "for",
+            "whitespace": " ",
+            "start": 111,
+            "end": 114,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 17,
+            "children": [
+              19
+            ],
+            "ancestors": [
+              17,
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 19,
+            "text": "rollout",
+            "whitespace": "",
+            "start": 115,
+            "end": 122,
+            "lemma": "rollout",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              17,
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 20,
+            "text": ".",
+            "whitespace": "",
+            "start": 122,
+            "end": 123,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 3,
+            "end": 20,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 25,
+            "root_token": 4
+          },
+          {
+            "start_token": 7,
+            "end_token": 10,
+            "end": 59,
+            "root_token": 9
+          },
+          {
+            "start_token": 11,
+            "end_token": 14,
+            "end": 83,
+            "root_token": 13
+          },
+          {
+            "start_token": 15,
+            "end_token": 17,
+            "end": 102,
+            "root_token": 16
+          },
+          {
+            "start_token": 19,
+            "end_token": 20,
+            "end": 122,
+            "root_token": 19
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          },
+          {
+            "start_token": 11,
+            "end_token": 21
+          }
+        ]
+      },
+      "expected_full_name": "Release State Register"
+    },
+    {
+      "id": "same_expansion_in_prefix",
+      "parsed": {
+        "body": "In pump maintenance, RSR stands for Release State Register. Release State Register lists the versions cleared for rollout.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "In",
+            "whitespace": " ",
+            "start": 0,
+            "end": 2,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 3,
+            "end": 7,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 8,
+            "end": 19,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 0,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              0,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 19,
+            "end": 20,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 21,
+            "end": 24,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "stands",
+            "whitespace": " ",
+            "start": 25,
+            "end": 31,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 5,
+            "children": [
+              0,
+              3,
+              4,
+              6,
+              10
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "for",
+            "whitespace": " ",
+            "start": 32,
+            "end": 35,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Release",
+            "whitespace": " ",
+            "start": 36,
+            "end": 43,
+            "lemma": "Release",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "State",
+            "whitespace": " ",
+            "start": 44,
+            "end": 49,
+            "lemma": "State",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Register",
+            "whitespace": "",
+            "start": 50,
+            "end": 58,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 6,
+            "children": [
+              7,
+              8
+            ],
+            "ancestors": [
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": " ",
+            "start": 58,
+            "end": 59,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "Release",
+            "whitespace": " ",
+            "start": 60,
+            "end": 67,
+            "lemma": "Release",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "State",
+            "whitespace": " ",
+            "start": 68,
+            "end": 73,
+            "lemma": "State",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 74,
+            "end": 82,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 14,
+            "children": [
+              11,
+              12
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "lists",
+            "whitespace": " ",
+            "start": 83,
+            "end": 88,
+            "lemma": "list",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 14,
+            "children": [
+              13,
+              16,
+              20
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "the",
+            "whitespace": " ",
+            "start": 89,
+            "end": 92,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 16,
+            "children": [],
+            "ancestors": [
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "versions",
+            "whitespace": " ",
+            "start": 93,
+            "end": 101,
+            "lemma": "version",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 14,
+            "children": [
+              15,
+              17
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": "cleared",
+            "whitespace": " ",
+            "start": 102,
+            "end": 109,
+            "lemma": "clear",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "acl",
+            "head": 16,
+            "children": [
+              18
+            ],
+            "ancestors": [
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 18,
+            "text": "for",
+            "whitespace": " ",
+            "start": 110,
+            "end": 113,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 17,
+            "children": [
+              19
+            ],
+            "ancestors": [
+              17,
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 19,
+            "text": "rollout",
+            "whitespace": "",
+            "start": 114,
+            "end": 121,
+            "lemma": "rollout",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              17,
+              16,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 20,
+            "text": ".",
+            "whitespace": "",
+            "start": 121,
+            "end": 122,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 3,
+            "end": 19,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 24,
+            "root_token": 4
+          },
+          {
+            "start_token": 7,
+            "end_token": 10,
+            "end": 58,
+            "root_token": 9
+          },
+          {
+            "start_token": 11,
+            "end_token": 14,
+            "end": 82,
+            "root_token": 13
+          },
+          {
+            "start_token": 15,
+            "end_token": 17,
+            "end": 101,
+            "root_token": 16
+          },
+          {
+            "start_token": 19,
+            "end_token": 20,
+            "end": 121,
+            "root_token": 19
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          },
+          {
+            "start_token": 11,
+            "end_token": 21
+          }
+        ]
+      },
+      "expected_full_name": "Release State Register"
+    },
+    {
+      "id": "negated_for_prefix",
+      "parsed": {
+        "body": "For pump maintenance, RSR does not stand for Rotor Service Report. Rotor Service Report records bearing replacements.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "For",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 7,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 4,
+            "end": 8,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 9,
+            "end": 20,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 0,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 20,
+            "end": 21,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 22,
+            "end": 25,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "does",
+            "whitespace": " ",
+            "start": 26,
+            "end": 30,
+            "lemma": "do",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "aux",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "not",
+            "whitespace": " ",
+            "start": 31,
+            "end": 34,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "stand",
+            "whitespace": " ",
+            "start": 35,
+            "end": 40,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 7,
+            "children": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              8,
+              12
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "for",
+            "whitespace": " ",
+            "start": 41,
+            "end": 44,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 7,
+            "children": [
+              11
+            ],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 45,
+            "end": 50,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 51,
+            "end": 58,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "Report",
+            "whitespace": "",
+            "start": 59,
+            "end": 65,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 8,
+            "children": [
+              9,
+              10
+            ],
+            "ancestors": [
+              8,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": ".",
+            "whitespace": " ",
+            "start": 65,
+            "end": 66,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 67,
+            "end": 72,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 15,
+            "children": [],
+            "ancestors": [
+              15,
+              16
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 73,
+            "end": 80,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 15,
+            "children": [],
+            "ancestors": [
+              15,
+              16
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "Report",
+            "whitespace": " ",
+            "start": 81,
+            "end": 87,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 16,
+            "children": [
+              13,
+              14
+            ],
+            "ancestors": [
+              16
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "records",
+            "whitespace": " ",
+            "start": 88,
+            "end": 95,
+            "lemma": "record",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 16,
+            "children": [
+              15,
+              18,
+              19
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": "bearing",
+            "whitespace": " ",
+            "start": 96,
+            "end": 103,
+            "lemma": "bearing",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              16
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 18,
+            "text": "replacements",
+            "whitespace": "",
+            "start": 104,
+            "end": 116,
+            "lemma": "replacement",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 16,
+            "children": [
+              17
+            ],
+            "ancestors": [
+              16
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 19,
+            "text": ".",
+            "whitespace": "",
+            "start": 116,
+            "end": 117,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 16,
+            "children": [],
+            "ancestors": [
+              16
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 3,
+            "end": 20,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 25,
+            "root_token": 4
+          },
+          {
+            "start_token": 9,
+            "end_token": 12,
+            "end": 65,
+            "root_token": 11
+          },
+          {
+            "start_token": 13,
+            "end_token": 16,
+            "end": 87,
+            "root_token": 15
+          },
+          {
+            "start_token": 17,
+            "end_token": 19,
+            "end": 116,
+            "root_token": 18
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          },
+          {
+            "start_token": 13,
+            "end_token": 20
+          }
+        ]
+      },
+      "expected_full_name": null
+    },
+    {
+      "id": "question_for_prefix",
+      "parsed": {
+        "body": "For pump maintenance, does RSR stand for Rotor Service Report?",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "For",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 4,
+            "end": 8,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 9,
+            "end": 20,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 0,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 20,
+            "end": 21,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "does",
+            "whitespace": " ",
+            "start": 22,
+            "end": 26,
+            "lemma": "do",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "aux",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 27,
+            "end": 30,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "stand",
+            "whitespace": " ",
+            "start": 31,
+            "end": 36,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 6,
+            "children": [
+              0,
+              3,
+              4,
+              5,
+              7,
+              11
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "for",
+            "whitespace": " ",
+            "start": 37,
+            "end": 40,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 41,
+            "end": 46,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 47,
+            "end": 54,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Report",
+            "whitespace": "",
+            "start": 55,
+            "end": 61,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 7,
+            "children": [
+              8,
+              9
+            ],
+            "ancestors": [
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "?",
+            "whitespace": "",
+            "start": 61,
+            "end": 62,
+            "lemma": "?",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 3,
+            "end": 20,
+            "root_token": 2
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 30,
+            "root_token": 5
+          },
+          {
+            "start_token": 8,
+            "end_token": 11,
+            "end": 61,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          }
+        ]
+      },
+      "expected_full_name": null
+    },
+    {
+      "id": "hypothetical_for_prefix",
+      "parsed": {
+        "body": "For pump maintenance, RSR might stand for Rotor Service Report.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "For",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 4,
+            "end": 8,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 9,
+            "end": 20,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 0,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 20,
+            "end": 21,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 22,
+            "end": 25,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "might",
+            "whitespace": " ",
+            "start": 26,
+            "end": 31,
+            "lemma": "might",
+            "pos": "AUX",
+            "tag": "MD",
+            "dep": "aux",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "stand",
+            "whitespace": " ",
+            "start": 32,
+            "end": 37,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 6,
+            "children": [
+              0,
+              3,
+              4,
+              5,
+              7,
+              11
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "for",
+            "whitespace": " ",
+            "start": 38,
+            "end": 41,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 42,
+            "end": 47,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 48,
+            "end": 55,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Report",
+            "whitespace": "",
+            "start": 56,
+            "end": 62,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 7,
+            "children": [
+              8,
+              9
+            ],
+            "ancestors": [
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": "",
+            "start": 62,
+            "end": 63,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 3,
+            "end": 20,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 25,
+            "root_token": 4
+          },
+          {
+            "start_token": 8,
+            "end_token": 11,
+            "end": 62,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          }
+        ]
+      },
+      "expected_full_name": null
+    },
+    {
+      "id": "quoted_for_prefix",
+      "parsed": {
+        "body": "\"For pump maintenance, RSR stands for Rotor Service Report.\"",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "\"",
+            "whitespace": "",
+            "start": 0,
+            "end": 1,
+            "lemma": "\"",
+            "pos": "PUNCT",
+            "tag": "``",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": true
+          },
+          {
+            "i": 1,
+            "text": "For",
+            "whitespace": " ",
+            "start": 1,
+            "end": 4,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              3
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "pump",
+            "whitespace": " ",
+            "start": 5,
+            "end": 9,
+            "lemma": "pump",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              1,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "maintenance",
+            "whitespace": "",
+            "start": 10,
+            "end": 21,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 1,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              1,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": ",",
+            "whitespace": " ",
+            "start": 21,
+            "end": 22,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "RSR",
+            "whitespace": " ",
+            "start": 23,
+            "end": 26,
+            "lemma": "RSR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "stands",
+            "whitespace": " ",
+            "start": 27,
+            "end": 33,
+            "lemma": "stand",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 6,
+            "children": [
+              0,
+              1,
+              4,
+              5,
+              7,
+              11,
+              12
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "for",
+            "whitespace": " ",
+            "start": 34,
+            "end": 37,
+            "lemma": "for",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Rotor",
+            "whitespace": " ",
+            "start": 38,
+            "end": 43,
+            "lemma": "Rotor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Service",
+            "whitespace": " ",
+            "start": 44,
+            "end": 51,
+            "lemma": "Service",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Report",
+            "whitespace": "",
+            "start": 52,
+            "end": 58,
+            "lemma": "Report",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 7,
+            "children": [
+              8,
+              9
+            ],
+            "ancestors": [
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": "",
+            "start": 58,
+            "end": 59,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "\"",
+            "whitespace": "",
+            "start": 59,
+            "end": 60,
+            "lemma": "\"",
+            "pos": "PUNCT",
+            "tag": "''",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": true
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 2,
+            "end_token": 4,
+            "end": 21,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 26,
+            "root_token": 5
+          },
+          {
+            "start_token": 8,
+            "end_token": 11,
+            "end": 58,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          }
+        ]
+      },
+      "expected_full_name": null
+    }
+  ]
+}

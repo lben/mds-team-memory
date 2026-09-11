@@ -53,7 +53,8 @@ def inference_version(models):
     schemas = {"entities": ENTITIES, "relations": RELATIONS}
     roles = ["extractor", "embeddings"]
     if "syntax" in models:
-        schemas.update(alias=ALIAS_SCHEMA, alias_settings=ALIAS_SETTINGS, syntax_rules=syntax.REVISION)
+        schemas.update(alias=ALIAS_SCHEMA, alias_settings=ALIAS_SETTINGS, syntax_rules=syntax.REVISION,
+                       conflict_rules=syntax.CONFLICT_REVISION)
         roles.append("syntax")
     schema = json.dumps(schemas, sort_keys=True, separators=(",", ":"))
     fingerprint = hashlib.sha256(schema.encode()).hexdigest()[:16]
@@ -283,7 +284,7 @@ class LocalModels:
 
     def analyze(self, text):
         concepts, endpoints, relations, chunks = {}, {}, {}, []
-        definitions = []
+        definitions, conflicts = [], []
         for start, end, body in windows(text, self.tokenizer, 192):
             window_spans = {}
             entities = self.extractor.extract(body, self.entity_schema, include_confidence=True,
@@ -325,11 +326,22 @@ class LocalModels:
                 relations.setdefault(key, relation)
             if self.syntax is not None:
                 raw_aliases = self.extractor.extract(body, self.alias_schema, **ALIAS_SETTINGS)
-                proposals = syntax.candidates(self.syntax(body))
+                parsed = self.syntax(body)
+                proposals = syntax.candidates(parsed)
                 for definition in corroborated_definitions(body, raw_aliases, proposals, start):
                     definitions.append({**definition, "source_text_hash": digest(text),
                                         "alias_model_revision": self.manifest["models"]["extractor"]["revision"],
                                         "syntax_model_revision": self.manifest["models"]["syntax"]["revision"]})
+                for candidate in syntax.candidates(parsed, conflict=True):
+                    if not all(specific_name(candidate[field]["text"]) for field in ("full_name", "short_name")):
+                        continue
+                    conflicts.append({"full_name": {**candidate["full_name"],
+                        "start": candidate["full_name"]["start"] + start,
+                        "end": candidate["full_name"]["end"] + start},
+                        "short_name": {**candidate["short_name"],
+                        "start": candidate["short_name"]["start"] + start,
+                        "end": candidate["short_name"]["end"] + start},
+                        "rule": candidate["rule"], "source_text_hash": digest(text)})
             vector = self.embedding.encode(body, normalize_embeddings=True, batch_size=1,
                                            show_progress_bar=False, convert_to_numpy=True)
             chunks.append({"start": start, "end": end, "vector": vector.astype("<f4").tobytes()})
@@ -337,6 +349,9 @@ class LocalModels:
         # corroboration, preserving entity evidence wherever that pass found it.
         names = {normalize(span["name"]) for span in concepts.values()}
         corroboration = [span for span in endpoints.values() if normalize(span["name"]) not in names]
-        return {"concepts": [*concepts.values(), *corroboration],
+        result = {"concepts": [*concepts.values(), *corroboration],
                 "relations": list(relations.values()), "chunks": chunks,
                 "corroborated_definitions": definitions}
+        if self.syntax is not None:
+            result.update(conflict_definitions=conflicts, conflict_coverage_revision=syntax.CONFLICT_REVISION)
+        return result

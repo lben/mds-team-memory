@@ -1,0 +1,3040 @@
+{
+  "scope": "Observed-development implementation regressions, not quality data",
+  "cases": [
+    {
+      "id": "alias_next_a_113",
+      "alias": "MPL",
+      "competing_name": "Music Part Library",
+      "competing_phase": "post_2",
+      "published_name": "Monitor Position Log",
+      "posts": [
+        {
+          "body": "MPL means Monitor Position Log for the hall acoustics crew. That log records speaker angles and distances from the stage edge.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "MPL",
+                "start": 0,
+                "end": 3,
+                "score": 0.989378035068512,
+                "label": "named entity"
+              },
+              {
+                "name": "Monitor Position Log",
+                "start": 10,
+                "end": 30,
+                "score": 0.5015615224838257,
+                "label": "topic or process"
+              },
+              {
+                "name": "stage edge",
+                "start": 115,
+                "end": 125,
+                "score": 0.6497402787208557,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Monitor Position Log",
+                  "confidence": 0.997296154499054,
+                  "start": 10,
+                  "end": 30
+                },
+                "short_name": {
+                  "text": "MPL",
+                  "confidence": 0.997156023979187,
+                  "start": 0,
+                  "end": 3
+                },
+                "syntax_rules": [
+                  "active_subject_definition"
+                ],
+                "syntax_rule_revision": "r4:536d6a7e86fad2dad4c3ce7945fd03a0a5041ce1e6e2e614dfdd521cdae4fbc1",
+                "source_text_hash": "bff28d11df7fea8d385c4b0b51d080af3c3bbcefcfd26bfe452e18d875f658e9",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ]
+          },
+          "syntax": null
+        },
+        {
+          "body": "The librarian uses MPL to mean Music Part Library, the collection of individual orchestral parts. That collection keeps MPL on its checkout forms.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "MPL",
+                "start": 120,
+                "end": 123,
+                "score": 0.9852783679962158,
+                "label": "named entity"
+              },
+              {
+                "name": "Music Part Library",
+                "start": 31,
+                "end": 49,
+                "score": 0.9808272123336792,
+                "label": "named entity"
+              },
+              {
+                "name": "MPL",
+                "start": 19,
+                "end": 22,
+                "score": 0.9788656234741211,
+                "label": "named entity"
+              },
+              {
+                "name": "orchestral parts",
+                "start": 80,
+                "end": 96,
+                "score": 0.813274085521698,
+                "label": "object or substance"
+              },
+              {
+                "name": "librarian",
+                "start": 4,
+                "end": 13,
+                "score": 0.7985795140266418,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "librarian",
+                  "start": 4,
+                  "end": 13,
+                  "score": 0.7985795140266418
+                },
+                "tail": {
+                  "name": "MPL",
+                  "start": 19,
+                  "end": 22,
+                  "score": 0.7985795140266418
+                },
+                "predicate": "uses",
+                "score": 0.7985795140266418,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 97
+              },
+              {
+                "head": {
+                  "name": "librarian",
+                  "start": 4,
+                  "end": 13,
+                  "score": 0.6749736666679382
+                },
+                "tail": {
+                  "name": "Music Part Library",
+                  "start": 31,
+                  "end": 49,
+                  "score": 0.6749736666679382
+                },
+                "predicate": "uses",
+                "score": 0.6749736666679382,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 97
+              },
+              {
+                "head": {
+                  "name": "librarian",
+                  "start": 4,
+                  "end": 13,
+                  "score": 0.7442216873168945
+                },
+                "tail": {
+                  "name": "MPL",
+                  "start": 19,
+                  "end": 22,
+                  "score": 0.7442216873168945
+                },
+                "predicate": "depends_on",
+                "score": 0.7442216873168945,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 97
+              },
+              {
+                "head": {
+                  "name": "MPL",
+                  "start": 19,
+                  "end": 22,
+                  "score": 0.5137982964515686
+                },
+                "tail": {
+                  "name": "Music Part Library",
+                  "start": 31,
+                  "end": 49,
+                  "score": 0.5137982964515686
+                },
+                "predicate": "part_of",
+                "score": 0.5137982964515686,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 97
+              }
+            ],
+            "corroborated_definitions": []
+          },
+          "syntax": {
+            "stage": "syntax",
+            "body": "The librarian uses MPL to mean Music Part Library, the collection of individual orchestral parts. That collection keeps MPL on its checkout forms.",
+            "tokens": [
+              {
+                "i": 0,
+                "text": "The",
+                "whitespace": " ",
+                "start": 0,
+                "end": 3,
+                "lemma": "the",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 1,
+                "children": [],
+                "ancestors": [
+                  1,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 1,
+                "text": "librarian",
+                "whitespace": " ",
+                "start": 4,
+                "end": 13,
+                "lemma": "librarian",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "nsubj",
+                "head": 2,
+                "children": [
+                  0
+                ],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 2,
+                "text": "uses",
+                "whitespace": " ",
+                "start": 14,
+                "end": 18,
+                "lemma": "use",
+                "pos": "VERB",
+                "tag": "VBZ",
+                "dep": "ROOT",
+                "head": 2,
+                "children": [
+                  1,
+                  3,
+                  5,
+                  16
+                ],
+                "ancestors": [],
+                "is_quote": false
+              },
+              {
+                "i": 3,
+                "text": "MPL",
+                "whitespace": " ",
+                "start": 19,
+                "end": 22,
+                "lemma": "MPL",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "dobj",
+                "head": 2,
+                "children": [],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 4,
+                "text": "to",
+                "whitespace": " ",
+                "start": 23,
+                "end": 25,
+                "lemma": "to",
+                "pos": "PART",
+                "tag": "TO",
+                "dep": "aux",
+                "head": 5,
+                "children": [],
+                "ancestors": [
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 5,
+                "text": "mean",
+                "whitespace": " ",
+                "start": 26,
+                "end": 30,
+                "lemma": "mean",
+                "pos": "VERB",
+                "tag": "VB",
+                "dep": "xcomp",
+                "head": 2,
+                "children": [
+                  4,
+                  8
+                ],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 6,
+                "text": "Music",
+                "whitespace": " ",
+                "start": 31,
+                "end": 36,
+                "lemma": "Music",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 7,
+                "children": [],
+                "ancestors": [
+                  7,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 7,
+                "text": "Part",
+                "whitespace": " ",
+                "start": 37,
+                "end": 41,
+                "lemma": "Part",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 8,
+                "children": [
+                  6
+                ],
+                "ancestors": [
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 8,
+                "text": "Library",
+                "whitespace": "",
+                "start": 42,
+                "end": 49,
+                "lemma": "Library",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "dobj",
+                "head": 5,
+                "children": [
+                  7,
+                  9,
+                  11
+                ],
+                "ancestors": [
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 9,
+                "text": ",",
+                "whitespace": " ",
+                "start": 49,
+                "end": 50,
+                "lemma": ",",
+                "pos": "PUNCT",
+                "tag": ",",
+                "dep": "punct",
+                "head": 8,
+                "children": [],
+                "ancestors": [
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 10,
+                "text": "the",
+                "whitespace": " ",
+                "start": 51,
+                "end": 54,
+                "lemma": "the",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 11,
+                "children": [],
+                "ancestors": [
+                  11,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 11,
+                "text": "collection",
+                "whitespace": " ",
+                "start": 55,
+                "end": 65,
+                "lemma": "collection",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "appos",
+                "head": 8,
+                "children": [
+                  10,
+                  12
+                ],
+                "ancestors": [
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 12,
+                "text": "of",
+                "whitespace": " ",
+                "start": 66,
+                "end": 68,
+                "lemma": "of",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "prep",
+                "head": 11,
+                "children": [
+                  15
+                ],
+                "ancestors": [
+                  11,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 13,
+                "text": "individual",
+                "whitespace": " ",
+                "start": 69,
+                "end": 79,
+                "lemma": "individual",
+                "pos": "ADJ",
+                "tag": "JJ",
+                "dep": "amod",
+                "head": 15,
+                "children": [],
+                "ancestors": [
+                  15,
+                  12,
+                  11,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 14,
+                "text": "orchestral",
+                "whitespace": " ",
+                "start": 80,
+                "end": 90,
+                "lemma": "orchestral",
+                "pos": "ADJ",
+                "tag": "JJ",
+                "dep": "amod",
+                "head": 15,
+                "children": [],
+                "ancestors": [
+                  15,
+                  12,
+                  11,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 15,
+                "text": "parts",
+                "whitespace": "",
+                "start": 91,
+                "end": 96,
+                "lemma": "part",
+                "pos": "NOUN",
+                "tag": "NNS",
+                "dep": "pobj",
+                "head": 12,
+                "children": [
+                  13,
+                  14
+                ],
+                "ancestors": [
+                  12,
+                  11,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 16,
+                "text": ".",
+                "whitespace": " ",
+                "start": 96,
+                "end": 97,
+                "lemma": ".",
+                "pos": "PUNCT",
+                "tag": ".",
+                "dep": "punct",
+                "head": 2,
+                "children": [],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 17,
+                "text": "That",
+                "whitespace": " ",
+                "start": 98,
+                "end": 102,
+                "lemma": "that",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 18,
+                "children": [],
+                "ancestors": [
+                  18,
+                  19
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 18,
+                "text": "collection",
+                "whitespace": " ",
+                "start": 103,
+                "end": 113,
+                "lemma": "collection",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "nsubj",
+                "head": 19,
+                "children": [
+                  17
+                ],
+                "ancestors": [
+                  19
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 19,
+                "text": "keeps",
+                "whitespace": " ",
+                "start": 114,
+                "end": 119,
+                "lemma": "keep",
+                "pos": "VERB",
+                "tag": "VBZ",
+                "dep": "ROOT",
+                "head": 19,
+                "children": [
+                  18,
+                  20,
+                  21,
+                  25
+                ],
+                "ancestors": [],
+                "is_quote": false
+              },
+              {
+                "i": 20,
+                "text": "MPL",
+                "whitespace": " ",
+                "start": 120,
+                "end": 123,
+                "lemma": "MPL",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "dobj",
+                "head": 19,
+                "children": [],
+                "ancestors": [
+                  19
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 21,
+                "text": "on",
+                "whitespace": " ",
+                "start": 124,
+                "end": 126,
+                "lemma": "on",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "prep",
+                "head": 19,
+                "children": [
+                  24
+                ],
+                "ancestors": [
+                  19
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 22,
+                "text": "its",
+                "whitespace": " ",
+                "start": 127,
+                "end": 130,
+                "lemma": "its",
+                "pos": "PRON",
+                "tag": "PRP$",
+                "dep": "poss",
+                "head": 24,
+                "children": [],
+                "ancestors": [
+                  24,
+                  21,
+                  19
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 23,
+                "text": "checkout",
+                "whitespace": " ",
+                "start": 131,
+                "end": 139,
+                "lemma": "checkout",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 24,
+                "children": [],
+                "ancestors": [
+                  24,
+                  21,
+                  19
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 24,
+                "text": "forms",
+                "whitespace": "",
+                "start": 140,
+                "end": 145,
+                "lemma": "form",
+                "pos": "NOUN",
+                "tag": "NNS",
+                "dep": "pobj",
+                "head": 21,
+                "children": [
+                  22,
+                  23
+                ],
+                "ancestors": [
+                  21,
+                  19
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 25,
+                "text": ".",
+                "whitespace": "",
+                "start": 145,
+                "end": 146,
+                "lemma": ".",
+                "pos": "PUNCT",
+                "tag": ".",
+                "dep": "punct",
+                "head": 19,
+                "children": [],
+                "ancestors": [
+                  19
+                ],
+                "is_quote": false
+              }
+            ],
+            "noun_chunks": [
+              {
+                "start_token": 0,
+                "end_token": 2,
+                "end": 13,
+                "root_token": 1
+              },
+              {
+                "start_token": 3,
+                "end_token": 4,
+                "end": 22,
+                "root_token": 3
+              },
+              {
+                "start_token": 6,
+                "end_token": 9,
+                "end": 49,
+                "root_token": 8
+              },
+              {
+                "start_token": 10,
+                "end_token": 12,
+                "end": 65,
+                "root_token": 11
+              },
+              {
+                "start_token": 13,
+                "end_token": 16,
+                "end": 96,
+                "root_token": 15
+              },
+              {
+                "start_token": 17,
+                "end_token": 19,
+                "end": 113,
+                "root_token": 18
+              },
+              {
+                "start_token": 20,
+                "end_token": 21,
+                "end": 123,
+                "root_token": 20
+              },
+              {
+                "start_token": 22,
+                "end_token": 25,
+                "end": 145,
+                "root_token": 24
+              }
+            ],
+            "sentences": [
+              {
+                "start_token": 0,
+                "end_token": 17
+              },
+              {
+                "start_token": 17,
+                "end_token": 26
+              }
+            ],
+            "proposals": []
+          },
+          "raw": {
+            "generic_entities": {
+              "entities": {
+                "named entity": [
+                  {
+                    "text": "MPL",
+                    "confidence": 0.9852783679962158,
+                    "start": 120,
+                    "end": 123
+                  },
+                  {
+                    "text": "Music Part Library",
+                    "confidence": 0.9808272123336792,
+                    "start": 31,
+                    "end": 49
+                  },
+                  {
+                    "text": "MPL",
+                    "confidence": 0.9788656234741211,
+                    "start": 19,
+                    "end": 22
+                  }
+                ],
+                "topic or process": [
+                  {
+                    "text": "orchestral parts",
+                    "confidence": 0.5069425106048584,
+                    "start": 80,
+                    "end": 96
+                  }
+                ],
+                "object or substance": [
+                  {
+                    "text": "orchestral parts",
+                    "confidence": 0.813274085521698,
+                    "start": 80,
+                    "end": 96
+                  }
+                ]
+              }
+            },
+            "relations": {
+              "relation_extraction": {
+                "uses": [
+                  {
+                    "head": {
+                      "text": "librarian",
+                      "start": 4,
+                      "end": 13,
+                      "confidence": 0.7985795140266418
+                    },
+                    "tail": {
+                      "text": "MPL",
+                      "start": 19,
+                      "end": 22,
+                      "confidence": 0.7985795140266418
+                    }
+                  },
+                  {
+                    "head": {
+                      "text": "librarian",
+                      "start": 4,
+                      "end": 13,
+                      "confidence": 0.6749736666679382
+                    },
+                    "tail": {
+                      "text": "Music Part Library",
+                      "start": 31,
+                      "end": 49,
+                      "confidence": 0.6749736666679382
+                    }
+                  }
+                ],
+                "depends_on": [
+                  {
+                    "head": {
+                      "text": "librarian",
+                      "start": 4,
+                      "end": 13,
+                      "confidence": 0.7442216873168945
+                    },
+                    "tail": {
+                      "text": "MPL",
+                      "start": 19,
+                      "end": 22,
+                      "confidence": 0.7442216873168945
+                    }
+                  }
+                ],
+                "part_of": [
+                  {
+                    "head": {
+                      "text": "MPL",
+                      "start": 19,
+                      "end": 22,
+                      "confidence": 0.5137982964515686
+                    },
+                    "tail": {
+                      "text": "Music Part Library",
+                      "start": 31,
+                      "end": 49,
+                      "confidence": 0.5137982964515686
+                    }
+                  }
+                ],
+                "produces": [],
+                "replaces": []
+              }
+            },
+            "alias_roles": {
+              "alias_definition": [
+                {
+                  "full_name": {
+                    "text": "Music Part Library",
+                    "confidence": 0.9978786706924438,
+                    "start": 31,
+                    "end": 49
+                  },
+                  "short_name": {
+                    "text": "MPL",
+                    "confidence": 0.9650156497955322,
+                    "start": 19,
+                    "end": 22
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "alias_next_a_114",
+      "alias": "FRS",
+      "competing_name": "Frequency Response Sheet",
+      "competing_phase": "post_1",
+      "published_name": "Final Rehearsal Schedule",
+      "posts": [
+        {
+          "body": "The Frequency Response Sheet, shortened to FRS by the repair bench, records measured output across the test tones.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "FRS",
+                "start": 43,
+                "end": 46,
+                "score": 0.9062414765357971,
+                "label": "named entity"
+              },
+              {
+                "name": "repair bench",
+                "start": 54,
+                "end": 66,
+                "score": 0.8845576643943787,
+                "label": "named entity"
+              },
+              {
+                "name": "Frequency Response Sheet",
+                "start": 4,
+                "end": 28,
+                "score": 0.8493384122848511,
+                "label": "named entity"
+              },
+              {
+                "name": "test tones",
+                "start": 103,
+                "end": 113,
+                "score": 0.8395785689353943,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "corroborated_definitions": []
+          },
+          "syntax": {
+            "stage": "syntax",
+            "body": "The Frequency Response Sheet, shortened to FRS by the repair bench, records measured output across the test tones.",
+            "tokens": [
+              {
+                "i": 0,
+                "text": "The",
+                "whitespace": " ",
+                "start": 0,
+                "end": 3,
+                "lemma": "the",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 3,
+                "children": [],
+                "ancestors": [
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 1,
+                "text": "Frequency",
+                "whitespace": " ",
+                "start": 4,
+                "end": 13,
+                "lemma": "Frequency",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 2,
+                "children": [],
+                "ancestors": [
+                  2,
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 2,
+                "text": "Response",
+                "whitespace": " ",
+                "start": 14,
+                "end": 22,
+                "lemma": "Response",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 3,
+                "children": [
+                  1
+                ],
+                "ancestors": [
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 3,
+                "text": "Sheet",
+                "whitespace": "",
+                "start": 23,
+                "end": 28,
+                "lemma": "Sheet",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "nsubj",
+                "head": 13,
+                "children": [
+                  0,
+                  2,
+                  4,
+                  5,
+                  12
+                ],
+                "ancestors": [
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 4,
+                "text": ",",
+                "whitespace": " ",
+                "start": 28,
+                "end": 29,
+                "lemma": ",",
+                "pos": "PUNCT",
+                "tag": ",",
+                "dep": "punct",
+                "head": 3,
+                "children": [],
+                "ancestors": [
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 5,
+                "text": "shortened",
+                "whitespace": " ",
+                "start": 30,
+                "end": 39,
+                "lemma": "shorten",
+                "pos": "VERB",
+                "tag": "VBN",
+                "dep": "acl",
+                "head": 3,
+                "children": [
+                  6,
+                  8
+                ],
+                "ancestors": [
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 6,
+                "text": "to",
+                "whitespace": " ",
+                "start": 40,
+                "end": 42,
+                "lemma": "to",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "prep",
+                "head": 5,
+                "children": [
+                  7
+                ],
+                "ancestors": [
+                  5,
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 7,
+                "text": "FRS",
+                "whitespace": " ",
+                "start": 43,
+                "end": 46,
+                "lemma": "FRS",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "pobj",
+                "head": 6,
+                "children": [],
+                "ancestors": [
+                  6,
+                  5,
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 8,
+                "text": "by",
+                "whitespace": " ",
+                "start": 47,
+                "end": 49,
+                "lemma": "by",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "agent",
+                "head": 5,
+                "children": [
+                  11
+                ],
+                "ancestors": [
+                  5,
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 9,
+                "text": "the",
+                "whitespace": " ",
+                "start": 50,
+                "end": 53,
+                "lemma": "the",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 11,
+                "children": [],
+                "ancestors": [
+                  11,
+                  8,
+                  5,
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 10,
+                "text": "repair",
+                "whitespace": " ",
+                "start": 54,
+                "end": 60,
+                "lemma": "repair",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 11,
+                "children": [],
+                "ancestors": [
+                  11,
+                  8,
+                  5,
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 11,
+                "text": "bench",
+                "whitespace": "",
+                "start": 61,
+                "end": 66,
+                "lemma": "bench",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "pobj",
+                "head": 8,
+                "children": [
+                  9,
+                  10
+                ],
+                "ancestors": [
+                  8,
+                  5,
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 12,
+                "text": ",",
+                "whitespace": " ",
+                "start": 66,
+                "end": 67,
+                "lemma": ",",
+                "pos": "PUNCT",
+                "tag": ",",
+                "dep": "punct",
+                "head": 3,
+                "children": [],
+                "ancestors": [
+                  3,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 13,
+                "text": "records",
+                "whitespace": " ",
+                "start": 68,
+                "end": 75,
+                "lemma": "record",
+                "pos": "VERB",
+                "tag": "VBZ",
+                "dep": "ROOT",
+                "head": 13,
+                "children": [
+                  3,
+                  15,
+                  20
+                ],
+                "ancestors": [],
+                "is_quote": false
+              },
+              {
+                "i": 14,
+                "text": "measured",
+                "whitespace": " ",
+                "start": 76,
+                "end": 84,
+                "lemma": "measure",
+                "pos": "VERB",
+                "tag": "VBN",
+                "dep": "amod",
+                "head": 15,
+                "children": [],
+                "ancestors": [
+                  15,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 15,
+                "text": "output",
+                "whitespace": " ",
+                "start": 85,
+                "end": 91,
+                "lemma": "output",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "dobj",
+                "head": 13,
+                "children": [
+                  14,
+                  16
+                ],
+                "ancestors": [
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 16,
+                "text": "across",
+                "whitespace": " ",
+                "start": 92,
+                "end": 98,
+                "lemma": "across",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "prep",
+                "head": 15,
+                "children": [
+                  19
+                ],
+                "ancestors": [
+                  15,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 17,
+                "text": "the",
+                "whitespace": " ",
+                "start": 99,
+                "end": 102,
+                "lemma": "the",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 19,
+                "children": [],
+                "ancestors": [
+                  19,
+                  16,
+                  15,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 18,
+                "text": "test",
+                "whitespace": " ",
+                "start": 103,
+                "end": 107,
+                "lemma": "test",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 19,
+                "children": [],
+                "ancestors": [
+                  19,
+                  16,
+                  15,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 19,
+                "text": "tones",
+                "whitespace": "",
+                "start": 108,
+                "end": 113,
+                "lemma": "tone",
+                "pos": "NOUN",
+                "tag": "NNS",
+                "dep": "pobj",
+                "head": 16,
+                "children": [
+                  17,
+                  18
+                ],
+                "ancestors": [
+                  16,
+                  15,
+                  13
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 20,
+                "text": ".",
+                "whitespace": "",
+                "start": 113,
+                "end": 114,
+                "lemma": ".",
+                "pos": "PUNCT",
+                "tag": ".",
+                "dep": "punct",
+                "head": 13,
+                "children": [],
+                "ancestors": [
+                  13
+                ],
+                "is_quote": false
+              }
+            ],
+            "noun_chunks": [
+              {
+                "start_token": 0,
+                "end_token": 4,
+                "end": 28,
+                "root_token": 3
+              },
+              {
+                "start_token": 7,
+                "end_token": 8,
+                "end": 46,
+                "root_token": 7
+              },
+              {
+                "start_token": 9,
+                "end_token": 12,
+                "end": 66,
+                "root_token": 11
+              },
+              {
+                "start_token": 14,
+                "end_token": 16,
+                "end": 91,
+                "root_token": 15
+              },
+              {
+                "start_token": 17,
+                "end_token": 20,
+                "end": 113,
+                "root_token": 19
+              }
+            ],
+            "sentences": [
+              {
+                "start_token": 0,
+                "end_token": 21
+              }
+            ],
+            "proposals": []
+          },
+          "raw": {
+            "generic_entities": {
+              "entities": {
+                "named entity": [
+                  {
+                    "text": "FRS",
+                    "confidence": 0.9062414765357971,
+                    "start": 43,
+                    "end": 46
+                  },
+                  {
+                    "text": "repair bench",
+                    "confidence": 0.8845576643943787,
+                    "start": 54,
+                    "end": 66
+                  },
+                  {
+                    "text": "Frequency Response Sheet",
+                    "confidence": 0.8493384122848511,
+                    "start": 4,
+                    "end": 28
+                  }
+                ],
+                "topic or process": [],
+                "object or substance": [
+                  {
+                    "text": "test tones",
+                    "confidence": 0.8395785689353943,
+                    "start": 103,
+                    "end": 113
+                  }
+                ]
+              }
+            },
+            "relations": {
+              "relation_extraction": {
+                "uses": [],
+                "depends_on": [],
+                "part_of": [],
+                "produces": [],
+                "replaces": []
+              }
+            },
+            "alias_roles": {}
+          }
+        },
+        {
+          "body": "For the choir office FRS is short for Final Rehearsal Schedule, which sets call times and room bookings; the office still uses FRS on notices.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "FRS",
+                "start": 127,
+                "end": 130,
+                "score": 0.9906337261199951,
+                "label": "named entity"
+              },
+              {
+                "name": "FRS",
+                "start": 21,
+                "end": 24,
+                "score": 0.9841833710670471,
+                "label": "named entity"
+              },
+              {
+                "name": "office",
+                "start": 109,
+                "end": 115,
+                "score": 0.6142129898071289,
+                "label": "relation endpoint"
+              },
+              {
+                "name": "notices",
+                "start": 134,
+                "end": 141,
+                "score": 0.5470281839370728,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "office",
+                  "start": 109,
+                  "end": 115,
+                  "score": 0.6142129898071289
+                },
+                "tail": {
+                  "name": "FRS",
+                  "start": 127,
+                  "end": 130,
+                  "score": 0.6142129898071289
+                },
+                "predicate": "uses",
+                "score": 0.6142129898071289,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 142
+              },
+              {
+                "head": {
+                  "name": "office",
+                  "start": 109,
+                  "end": 115,
+                  "score": 0.5345786213874817
+                },
+                "tail": {
+                  "name": "notices",
+                  "start": 134,
+                  "end": 141,
+                  "score": 0.5345786213874817
+                },
+                "predicate": "uses",
+                "score": 0.5345786213874817,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 142
+              },
+              {
+                "head": {
+                  "name": "FRS",
+                  "start": 127,
+                  "end": 130,
+                  "score": 0.5470281839370728
+                },
+                "tail": {
+                  "name": "notices",
+                  "start": 134,
+                  "end": 141,
+                  "score": 0.5470281839370728
+                },
+                "predicate": "produces",
+                "score": 0.5470281839370728,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 142
+              }
+            ],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Final Rehearsal Schedule",
+                  "confidence": 0.9992926120758057,
+                  "start": 38,
+                  "end": 62
+                },
+                "short_name": {
+                  "text": "FRS",
+                  "confidence": 0.987087607383728,
+                  "start": 21,
+                  "end": 24
+                },
+                "syntax_rules": [
+                  "is_short_for"
+                ],
+                "syntax_rule_revision": "r4:536d6a7e86fad2dad4c3ce7945fd03a0a5041ce1e6e2e614dfdd521cdae4fbc1",
+                "source_text_hash": "b87a5143ae302c6931fc952680821895515916e15c64edde773551fbe1d9742a",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ]
+          },
+          "syntax": null
+        },
+        {
+          "body": "The shared drive has two uses of FRS. Can the abbreviation alone identify one document?",
+          "kind": "question",
+          "result": {
+            "concepts": [
+              {
+                "name": "FRS",
+                "start": 33,
+                "end": 36,
+                "score": 0.9732046723365784,
+                "label": "named entity"
+              },
+              {
+                "name": "shared drive",
+                "start": 4,
+                "end": 16,
+                "score": 0.601649284362793,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "shared drive",
+                  "start": 4,
+                  "end": 16,
+                  "score": 0.5073292255401611
+                },
+                "tail": {
+                  "name": "FRS",
+                  "start": 33,
+                  "end": 36,
+                  "score": 0.5073292255401611
+                },
+                "predicate": "depends_on",
+                "score": 0.5073292255401611,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 37
+              },
+              {
+                "head": {
+                  "name": "FRS",
+                  "start": 33,
+                  "end": 36,
+                  "score": 0.601649284362793
+                },
+                "tail": {
+                  "name": "shared drive",
+                  "start": 4,
+                  "end": 16,
+                  "score": 0.601649284362793
+                },
+                "predicate": "part_of",
+                "score": 0.601649284362793,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 37
+              }
+            ],
+            "corroborated_definitions": []
+          },
+          "syntax": null
+        }
+      ]
+    },
+    {
+      "id": "alias_next_b_080",
+      "alias": "CSB",
+      "competing_name": "Connection State Buffer",
+      "competing_phase": "post_1",
+      "published_name": "Cold Storage Broker",
+      "posts": [
+        {
+          "body": "Network component glossary: CSB means Connection State Buffer, the memory area that retains partially received frames.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "CSB",
+                "start": 28,
+                "end": 31,
+                "score": 0.91561359167099,
+                "label": "named entity"
+              }
+            ],
+            "relations": [],
+            "corroborated_definitions": []
+          },
+          "syntax": {
+            "stage": "syntax",
+            "body": "Network component glossary: CSB means Connection State Buffer, the memory area that retains partially received frames.",
+            "tokens": [
+              {
+                "i": 0,
+                "text": "Network",
+                "whitespace": " ",
+                "start": 0,
+                "end": 7,
+                "lemma": "network",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 1,
+                "children": [],
+                "ancestors": [
+                  1,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 1,
+                "text": "component",
+                "whitespace": " ",
+                "start": 8,
+                "end": 17,
+                "lemma": "component",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 2,
+                "children": [
+                  0
+                ],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 2,
+                "text": "glossary",
+                "whitespace": "",
+                "start": 18,
+                "end": 26,
+                "lemma": "glossary",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "ROOT",
+                "head": 2,
+                "children": [
+                  1,
+                  3,
+                  5,
+                  18
+                ],
+                "ancestors": [],
+                "is_quote": false
+              },
+              {
+                "i": 3,
+                "text": ":",
+                "whitespace": " ",
+                "start": 26,
+                "end": 27,
+                "lemma": ":",
+                "pos": "PUNCT",
+                "tag": ":",
+                "dep": "punct",
+                "head": 2,
+                "children": [],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 4,
+                "text": "CSB",
+                "whitespace": " ",
+                "start": 28,
+                "end": 31,
+                "lemma": "CSB",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "nsubj",
+                "head": 5,
+                "children": [],
+                "ancestors": [
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 5,
+                "text": "means",
+                "whitespace": " ",
+                "start": 32,
+                "end": 37,
+                "lemma": "mean",
+                "pos": "VERB",
+                "tag": "VBZ",
+                "dep": "acl",
+                "head": 2,
+                "children": [
+                  4,
+                  8
+                ],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 6,
+                "text": "Connection",
+                "whitespace": " ",
+                "start": 38,
+                "end": 48,
+                "lemma": "Connection",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 7,
+                "children": [],
+                "ancestors": [
+                  7,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 7,
+                "text": "State",
+                "whitespace": " ",
+                "start": 49,
+                "end": 54,
+                "lemma": "State",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 8,
+                "children": [
+                  6
+                ],
+                "ancestors": [
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 8,
+                "text": "Buffer",
+                "whitespace": "",
+                "start": 55,
+                "end": 61,
+                "lemma": "Buffer",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "dobj",
+                "head": 5,
+                "children": [
+                  7,
+                  9,
+                  12
+                ],
+                "ancestors": [
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 9,
+                "text": ",",
+                "whitespace": " ",
+                "start": 61,
+                "end": 62,
+                "lemma": ",",
+                "pos": "PUNCT",
+                "tag": ",",
+                "dep": "punct",
+                "head": 8,
+                "children": [],
+                "ancestors": [
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 10,
+                "text": "the",
+                "whitespace": " ",
+                "start": 63,
+                "end": 66,
+                "lemma": "the",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 12,
+                "children": [],
+                "ancestors": [
+                  12,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 11,
+                "text": "memory",
+                "whitespace": " ",
+                "start": 67,
+                "end": 73,
+                "lemma": "memory",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 12,
+                "children": [],
+                "ancestors": [
+                  12,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 12,
+                "text": "area",
+                "whitespace": " ",
+                "start": 74,
+                "end": 78,
+                "lemma": "area",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "appos",
+                "head": 8,
+                "children": [
+                  10,
+                  11,
+                  14
+                ],
+                "ancestors": [
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 13,
+                "text": "that",
+                "whitespace": " ",
+                "start": 79,
+                "end": 83,
+                "lemma": "that",
+                "pos": "PRON",
+                "tag": "WDT",
+                "dep": "nsubj",
+                "head": 14,
+                "children": [],
+                "ancestors": [
+                  14,
+                  12,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 14,
+                "text": "retains",
+                "whitespace": " ",
+                "start": 84,
+                "end": 91,
+                "lemma": "retain",
+                "pos": "VERB",
+                "tag": "VBZ",
+                "dep": "relcl",
+                "head": 12,
+                "children": [
+                  13,
+                  17
+                ],
+                "ancestors": [
+                  12,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 15,
+                "text": "partially",
+                "whitespace": " ",
+                "start": 92,
+                "end": 101,
+                "lemma": "partially",
+                "pos": "ADV",
+                "tag": "RB",
+                "dep": "advmod",
+                "head": 16,
+                "children": [],
+                "ancestors": [
+                  16,
+                  17,
+                  14,
+                  12,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 16,
+                "text": "received",
+                "whitespace": " ",
+                "start": 102,
+                "end": 110,
+                "lemma": "receive",
+                "pos": "VERB",
+                "tag": "VBN",
+                "dep": "amod",
+                "head": 17,
+                "children": [
+                  15
+                ],
+                "ancestors": [
+                  17,
+                  14,
+                  12,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 17,
+                "text": "frames",
+                "whitespace": "",
+                "start": 111,
+                "end": 117,
+                "lemma": "frame",
+                "pos": "NOUN",
+                "tag": "NNS",
+                "dep": "dobj",
+                "head": 14,
+                "children": [
+                  16
+                ],
+                "ancestors": [
+                  14,
+                  12,
+                  8,
+                  5,
+                  2
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 18,
+                "text": ".",
+                "whitespace": "",
+                "start": 117,
+                "end": 118,
+                "lemma": ".",
+                "pos": "PUNCT",
+                "tag": ".",
+                "dep": "punct",
+                "head": 2,
+                "children": [],
+                "ancestors": [
+                  2
+                ],
+                "is_quote": false
+              }
+            ],
+            "noun_chunks": [
+              {
+                "start_token": 0,
+                "end_token": 3,
+                "end": 26,
+                "root_token": 2
+              },
+              {
+                "start_token": 4,
+                "end_token": 5,
+                "end": 31,
+                "root_token": 4
+              },
+              {
+                "start_token": 6,
+                "end_token": 9,
+                "end": 61,
+                "root_token": 8
+              },
+              {
+                "start_token": 10,
+                "end_token": 13,
+                "end": 78,
+                "root_token": 12
+              },
+              {
+                "start_token": 13,
+                "end_token": 14,
+                "end": 83,
+                "root_token": 13
+              },
+              {
+                "start_token": 15,
+                "end_token": 18,
+                "end": 117,
+                "root_token": 17
+              }
+            ],
+            "sentences": [
+              {
+                "start_token": 0,
+                "end_token": 19
+              }
+            ],
+            "proposals": []
+          },
+          "raw": {
+            "generic_entities": {
+              "entities": {
+                "named entity": [
+                  {
+                    "text": "CSB",
+                    "confidence": 0.91561359167099,
+                    "start": 28,
+                    "end": 31
+                  }
+                ],
+                "topic or process": [],
+                "object or substance": []
+              }
+            },
+            "relations": {
+              "relation_extraction": {
+                "uses": [],
+                "depends_on": [],
+                "part_of": [],
+                "produces": [],
+                "replaces": []
+              }
+            },
+            "alias_roles": {
+              "alias_definition": [
+                {
+                  "full_name": {
+                    "text": "Connection State Buffer",
+                    "confidence": 0.973016619682312,
+                    "start": 38,
+                    "end": 61
+                  },
+                  "short_name": {
+                    "text": "CSB",
+                    "confidence": 0.9942836165428162,
+                    "start": 28,
+                    "end": 31
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "body": "Storage component glossary: CSB means Cold Storage Broker, the service that queues retrievals from offline media. Both glossary entries remain current.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "CSB",
+                "start": 28,
+                "end": 31,
+                "score": 0.9912007451057434,
+                "label": "named entity"
+              },
+              {
+                "name": "retrievals",
+                "start": 83,
+                "end": 93,
+                "score": 0.5834255218505859,
+                "label": "topic or process"
+              },
+              {
+                "name": "offline media",
+                "start": 99,
+                "end": 112,
+                "score": 0.9291101098060608,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Cold Storage Broker",
+                  "confidence": 0.9964351654052734,
+                  "start": 38,
+                  "end": 57
+                },
+                "short_name": {
+                  "text": "CSB",
+                  "confidence": 0.9971036314964294,
+                  "start": 28,
+                  "end": 31
+                },
+                "syntax_rules": [
+                  "active_subject_definition"
+                ],
+                "syntax_rule_revision": "r4:536d6a7e86fad2dad4c3ce7945fd03a0a5041ce1e6e2e614dfdd521cdae4fbc1",
+                "source_text_hash": "c9151e452fa8db4413a8ba8314f7e9c4727b9c2505e3ed33ed3b0a665484f633",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ]
+          },
+          "syntax": null
+        },
+        {
+          "body": "The bare label CSB appears in both components, so an unqualified cross-component label does not identify just one component.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "CSB",
+                "start": 15,
+                "end": 18,
+                "score": 0.9670583009719849,
+                "label": "named entity"
+              }
+            ],
+            "relations": [],
+            "corroborated_definitions": []
+          },
+          "syntax": null
+        }
+      ]
+    },
+    {
+      "id": "alias_next_b_134",
+      "alias": "MLR",
+      "competing_name": "Mast Line Replacement",
+      "competing_phase": "post_2",
+      "published_name": "Match Load Register",
+      "posts": [
+        {
+          "body": "Team performance sheet: MLR stands for Match Load Register, the record of playing time and reported exertion for each athlete.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "MLR",
+                "start": 24,
+                "end": 27,
+                "score": 0.9947921633720398,
+                "label": "named entity"
+              },
+              {
+                "name": "reported exertion",
+                "start": 91,
+                "end": 108,
+                "score": 0.8854857087135315,
+                "label": "topic or process"
+              },
+              {
+                "name": "playing time",
+                "start": 74,
+                "end": 86,
+                "score": 0.6898033618927002,
+                "label": "topic or process"
+              },
+              {
+                "name": "Match Load Register",
+                "start": 39,
+                "end": 58,
+                "score": 0.6366015672683716,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Match Load Register",
+                  "confidence": 0.9847428798675537,
+                  "start": 39,
+                  "end": 58
+                },
+                "short_name": {
+                  "text": "MLR",
+                  "confidence": 0.9967412352561951,
+                  "start": 24,
+                  "end": 27
+                },
+                "syntax_rules": [
+                  "stands_for"
+                ],
+                "syntax_rule_revision": "r4:536d6a7e86fad2dad4c3ce7945fd03a0a5041ce1e6e2e614dfdd521cdae4fbc1",
+                "source_text_hash": "8267a537e084677a6028c525bd42b4d53272dc7d32fbea68317610661633c0af",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ]
+          },
+          "syntax": null
+        },
+        {
+          "body": "Equipment sheet: MLR stands for Mast Line Replacement, the maintenance operation for a training sailboat. Both uses are approved in their own sheets.",
+          "kind": "note",
+          "result": {
+            "concepts": [
+              {
+                "name": "MLR",
+                "start": 17,
+                "end": 20,
+                "score": 0.9980835914611816,
+                "label": "named entity"
+              },
+              {
+                "name": "maintenance operation",
+                "start": 59,
+                "end": 80,
+                "score": 0.9883546829223633,
+                "label": "topic or process"
+              },
+              {
+                "name": "Mast Line Replacement",
+                "start": 32,
+                "end": 53,
+                "score": 0.9656558632850647,
+                "label": "topic or process"
+              },
+              {
+                "name": "training sailboat",
+                "start": 87,
+                "end": 104,
+                "score": 0.9321619868278503,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "corroborated_definitions": []
+          },
+          "syntax": {
+            "stage": "syntax",
+            "body": "Equipment sheet: MLR stands for Mast Line Replacement, the maintenance operation for a training sailboat. Both uses are approved in their own sheets.",
+            "tokens": [
+              {
+                "i": 0,
+                "text": "Equipment",
+                "whitespace": " ",
+                "start": 0,
+                "end": 9,
+                "lemma": "equipment",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 1,
+                "children": [],
+                "ancestors": [
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 1,
+                "text": "sheet",
+                "whitespace": "",
+                "start": 10,
+                "end": 15,
+                "lemma": "sheet",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "ROOT",
+                "head": 1,
+                "children": [
+                  0,
+                  2,
+                  4,
+                  17
+                ],
+                "ancestors": [],
+                "is_quote": false
+              },
+              {
+                "i": 2,
+                "text": ":",
+                "whitespace": " ",
+                "start": 15,
+                "end": 16,
+                "lemma": ":",
+                "pos": "PUNCT",
+                "tag": ":",
+                "dep": "punct",
+                "head": 1,
+                "children": [],
+                "ancestors": [
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 3,
+                "text": "MLR",
+                "whitespace": " ",
+                "start": 17,
+                "end": 20,
+                "lemma": "MLR",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "nsubj",
+                "head": 4,
+                "children": [],
+                "ancestors": [
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 4,
+                "text": "stands",
+                "whitespace": " ",
+                "start": 21,
+                "end": 27,
+                "lemma": "stand",
+                "pos": "VERB",
+                "tag": "VBZ",
+                "dep": "acl",
+                "head": 1,
+                "children": [
+                  3,
+                  5
+                ],
+                "ancestors": [
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 5,
+                "text": "for",
+                "whitespace": " ",
+                "start": 28,
+                "end": 31,
+                "lemma": "for",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "prep",
+                "head": 4,
+                "children": [
+                  8
+                ],
+                "ancestors": [
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 6,
+                "text": "Mast",
+                "whitespace": " ",
+                "start": 32,
+                "end": 36,
+                "lemma": "Mast",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 7,
+                "children": [],
+                "ancestors": [
+                  7,
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 7,
+                "text": "Line",
+                "whitespace": " ",
+                "start": 37,
+                "end": 41,
+                "lemma": "Line",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "compound",
+                "head": 8,
+                "children": [
+                  6
+                ],
+                "ancestors": [
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 8,
+                "text": "Replacement",
+                "whitespace": "",
+                "start": 42,
+                "end": 53,
+                "lemma": "Replacement",
+                "pos": "PROPN",
+                "tag": "NNP",
+                "dep": "pobj",
+                "head": 5,
+                "children": [
+                  7,
+                  9,
+                  12
+                ],
+                "ancestors": [
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 9,
+                "text": ",",
+                "whitespace": " ",
+                "start": 53,
+                "end": 54,
+                "lemma": ",",
+                "pos": "PUNCT",
+                "tag": ",",
+                "dep": "punct",
+                "head": 8,
+                "children": [],
+                "ancestors": [
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 10,
+                "text": "the",
+                "whitespace": " ",
+                "start": 55,
+                "end": 58,
+                "lemma": "the",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 12,
+                "children": [],
+                "ancestors": [
+                  12,
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 11,
+                "text": "maintenance",
+                "whitespace": " ",
+                "start": 59,
+                "end": 70,
+                "lemma": "maintenance",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 12,
+                "children": [],
+                "ancestors": [
+                  12,
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 12,
+                "text": "operation",
+                "whitespace": " ",
+                "start": 71,
+                "end": 80,
+                "lemma": "operation",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "appos",
+                "head": 8,
+                "children": [
+                  10,
+                  11,
+                  13
+                ],
+                "ancestors": [
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 13,
+                "text": "for",
+                "whitespace": " ",
+                "start": 81,
+                "end": 84,
+                "lemma": "for",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "prep",
+                "head": 12,
+                "children": [
+                  16
+                ],
+                "ancestors": [
+                  12,
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 14,
+                "text": "a",
+                "whitespace": " ",
+                "start": 85,
+                "end": 86,
+                "lemma": "a",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 16,
+                "children": [],
+                "ancestors": [
+                  16,
+                  13,
+                  12,
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 15,
+                "text": "training",
+                "whitespace": " ",
+                "start": 87,
+                "end": 95,
+                "lemma": "training",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "compound",
+                "head": 16,
+                "children": [],
+                "ancestors": [
+                  16,
+                  13,
+                  12,
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 16,
+                "text": "sailboat",
+                "whitespace": "",
+                "start": 96,
+                "end": 104,
+                "lemma": "sailboat",
+                "pos": "NOUN",
+                "tag": "NN",
+                "dep": "pobj",
+                "head": 13,
+                "children": [
+                  14,
+                  15
+                ],
+                "ancestors": [
+                  13,
+                  12,
+                  8,
+                  5,
+                  4,
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 17,
+                "text": ".",
+                "whitespace": " ",
+                "start": 104,
+                "end": 105,
+                "lemma": ".",
+                "pos": "PUNCT",
+                "tag": ".",
+                "dep": "punct",
+                "head": 1,
+                "children": [],
+                "ancestors": [
+                  1
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 18,
+                "text": "Both",
+                "whitespace": " ",
+                "start": 106,
+                "end": 110,
+                "lemma": "both",
+                "pos": "DET",
+                "tag": "DT",
+                "dep": "det",
+                "head": 19,
+                "children": [],
+                "ancestors": [
+                  19,
+                  21
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 19,
+                "text": "uses",
+                "whitespace": " ",
+                "start": 111,
+                "end": 115,
+                "lemma": "us",
+                "pos": "NOUN",
+                "tag": "NNS",
+                "dep": "nsubjpass",
+                "head": 21,
+                "children": [
+                  18
+                ],
+                "ancestors": [
+                  21
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 20,
+                "text": "are",
+                "whitespace": " ",
+                "start": 116,
+                "end": 119,
+                "lemma": "be",
+                "pos": "AUX",
+                "tag": "VBP",
+                "dep": "auxpass",
+                "head": 21,
+                "children": [],
+                "ancestors": [
+                  21
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 21,
+                "text": "approved",
+                "whitespace": " ",
+                "start": 120,
+                "end": 128,
+                "lemma": "approve",
+                "pos": "VERB",
+                "tag": "VBN",
+                "dep": "ROOT",
+                "head": 21,
+                "children": [
+                  19,
+                  20,
+                  22,
+                  26
+                ],
+                "ancestors": [],
+                "is_quote": false
+              },
+              {
+                "i": 22,
+                "text": "in",
+                "whitespace": " ",
+                "start": 129,
+                "end": 131,
+                "lemma": "in",
+                "pos": "ADP",
+                "tag": "IN",
+                "dep": "prep",
+                "head": 21,
+                "children": [
+                  25
+                ],
+                "ancestors": [
+                  21
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 23,
+                "text": "their",
+                "whitespace": " ",
+                "start": 132,
+                "end": 137,
+                "lemma": "their",
+                "pos": "PRON",
+                "tag": "PRP$",
+                "dep": "poss",
+                "head": 25,
+                "children": [],
+                "ancestors": [
+                  25,
+                  22,
+                  21
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 24,
+                "text": "own",
+                "whitespace": " ",
+                "start": 138,
+                "end": 141,
+                "lemma": "own",
+                "pos": "ADJ",
+                "tag": "JJ",
+                "dep": "amod",
+                "head": 25,
+                "children": [],
+                "ancestors": [
+                  25,
+                  22,
+                  21
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 25,
+                "text": "sheets",
+                "whitespace": "",
+                "start": 142,
+                "end": 148,
+                "lemma": "sheet",
+                "pos": "NOUN",
+                "tag": "NNS",
+                "dep": "pobj",
+                "head": 22,
+                "children": [
+                  23,
+                  24
+                ],
+                "ancestors": [
+                  22,
+                  21
+                ],
+                "is_quote": false
+              },
+              {
+                "i": 26,
+                "text": ".",
+                "whitespace": "",
+                "start": 148,
+                "end": 149,
+                "lemma": ".",
+                "pos": "PUNCT",
+                "tag": ".",
+                "dep": "punct",
+                "head": 21,
+                "children": [],
+                "ancestors": [
+                  21
+                ],
+                "is_quote": false
+              }
+            ],
+            "noun_chunks": [
+              {
+                "start_token": 0,
+                "end_token": 2,
+                "end": 15,
+                "root_token": 1
+              },
+              {
+                "start_token": 3,
+                "end_token": 4,
+                "end": 20,
+                "root_token": 3
+              },
+              {
+                "start_token": 6,
+                "end_token": 9,
+                "end": 53,
+                "root_token": 8
+              },
+              {
+                "start_token": 10,
+                "end_token": 13,
+                "end": 80,
+                "root_token": 12
+              },
+              {
+                "start_token": 14,
+                "end_token": 17,
+                "end": 104,
+                "root_token": 16
+              },
+              {
+                "start_token": 18,
+                "end_token": 20,
+                "end": 115,
+                "root_token": 19
+              },
+              {
+                "start_token": 23,
+                "end_token": 26,
+                "end": 148,
+                "root_token": 25
+              }
+            ],
+            "sentences": [
+              {
+                "start_token": 0,
+                "end_token": 18
+              },
+              {
+                "start_token": 18,
+                "end_token": 27
+              }
+            ],
+            "proposals": []
+          },
+          "raw": {
+            "generic_entities": {
+              "entities": {
+                "named entity": [
+                  {
+                    "text": "MLR",
+                    "confidence": 0.9980835914611816,
+                    "start": 17,
+                    "end": 20
+                  }
+                ],
+                "topic or process": [
+                  {
+                    "text": "maintenance operation",
+                    "confidence": 0.9883546829223633,
+                    "start": 59,
+                    "end": 80
+                  },
+                  {
+                    "text": "Mast Line Replacement",
+                    "confidence": 0.9656558632850647,
+                    "start": 32,
+                    "end": 53
+                  }
+                ],
+                "object or substance": [
+                  {
+                    "text": "training sailboat",
+                    "confidence": 0.9321619868278503,
+                    "start": 87,
+                    "end": 104
+                  }
+                ]
+              }
+            },
+            "relations": {
+              "relation_extraction": {
+                "uses": [],
+                "depends_on": [],
+                "part_of": [],
+                "produces": [],
+                "replaces": []
+              }
+            },
+            "alias_roles": {
+              "alias_definition": [
+                {
+                  "full_name": {
+                    "text": "Mast Line Replacement",
+                    "confidence": 0.996107280254364,
+                    "start": 32,
+                    "end": 53
+                  },
+                  "short_name": {
+                    "text": "MLR",
+                    "confidence": 0.9976861476898193,
+                    "start": 17,
+                    "end": 20
+                  }
+                },
+                {
+                  "full_name": {
+                    "text": "maintenance operation",
+                    "confidence": 0.9623484015464783,
+                    "start": 59,
+                    "end": 80
+                  },
+                  "short_name": {
+                    "text": "MLR",
+                    "confidence": 0.9976861476898193,
+                    "start": 17,
+                    "end": 20
+                  }
+                },
+                {
+                  "full_name": {
+                    "text": "training sailboat",
+                    "confidence": 0.7416422963142395,
+                    "start": 87,
+                    "end": 104
+                  },
+                  "short_name": {
+                    "text": "MLR",
+                    "confidence": 0.9929515719413757,
+                    "start": 17,
+                    "end": 20
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "body": "A label lacking the sheet context cannot choose between these two current meanings.",
+          "kind": "note",
+          "result": {
+            "concepts": [],
+            "relations": [],
+            "corroborated_definitions": []
+          },
+          "syntax": null
+        }
+      ]
+    }
+  ]
+}

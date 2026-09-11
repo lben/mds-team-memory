@@ -1,0 +1,1364 @@
+{
+  "scope": "Exact retained observed-development identity-routing regressions; embedding chunks omitted because these assertions concern entity identity, not embedding similarity. No inference or quality claim.",
+  "engineering_inputs_sha256": "09e68cc7db2987cde104508486ea46fe1058a4195a305c4cdf98d2c2b8f0ce4f",
+  "cases": [
+    {
+      "case": {
+        "id": "qa_a_037",
+        "domain": "libraries/archives",
+        "rationale": "Threaded Index is a specific locally named subject with multiple public observations. The tempting equivalence between Threaded Index and Loose Card Index is rejected, conditional, or merely questioned; only TIndex is a supported local name for Threaded Index. Ben has three original topic-bearing contributions, an answer accepted by Alice, and outcomes from Alice and Cam. Ben and Cam independently support the factual replaces relation from Threaded Index to Loose Card Index.",
+        "posts": [
+          {
+            "actor": "alice",
+            "body": "Which index format should I use to find the subject heading today?",
+            "kind": "question",
+            "visibility": "team"
+          },
+          {
+            "actor": "ben",
+            "body": "Threaded Index (TIndex) replaces Loose Card Index. The requested subject heading is present in the new card order.",
+            "kind": "answer",
+            "visibility": "team",
+            "parent": 0,
+            "accepted": true
+          },
+          {
+            "actor": "ben",
+            "body": "TIndex refers to Threaded Index. I followed a second subject heading and checked its neighbors in the card order.",
+            "kind": "note",
+            "visibility": "team",
+            "helped_by": [
+              "cam"
+            ]
+          },
+          {
+            "actor": "ben",
+            "body": "Loose Card Index was replaced by Threaded Index for desk use; the second heading was found through the replacement.",
+            "kind": "note",
+            "visibility": "team",
+            "helped_by": [
+              "alice"
+            ]
+          },
+          {
+            "actor": "cam",
+            "body": "TIndex supplied my subject heading after superseding Loose Card Index. TIndex is short for Threaded Index. Quotation marks around “Threaded Index means Loose Card Index” reproduce a rejected interpretation, not an agreed definition.",
+            "kind": "note",
+            "visibility": "team"
+          }
+        ],
+        "expect": {
+          "concepts": [
+            "Threaded Index"
+          ],
+          "aliases": [],
+          "relationships": [
+            {
+              "head": "Threaded Index",
+              "predicate": "replaces",
+              "tail": "Loose Card Index"
+            }
+          ],
+          "expertise": [
+            {
+              "actor": "ben",
+              "concept": "Threaded Index"
+            }
+          ],
+          "absent_concepts": [],
+          "absent_aliases": [
+            {
+              "canonical": "Threaded Index",
+              "alias": "Loose Card Index"
+            }
+          ],
+          "absent_relationships": [],
+          "absent_expertise": []
+        },
+        "hard_negative": [
+          "aliases"
+        ],
+        "allowed": {
+          "concepts": [
+            "Threaded Index",
+            "TIndex",
+            "Loose Card Index",
+            "subject heading",
+            "card order"
+          ],
+          "aliases": [
+            {
+              "canonical": "Threaded Index",
+              "alias": "TIndex"
+            },
+            {
+              "canonical": "TIndex",
+              "alias": "Threaded Index"
+            }
+          ],
+          "relationships": [
+            {
+              "head": "Threaded Index",
+              "predicate": "replaces",
+              "tail": "Loose Card Index"
+            },
+            {
+              "head": "TIndex",
+              "predicate": "replaces",
+              "tail": "Loose Card Index"
+            }
+          ],
+          "expertise": [
+            {
+              "actor": "ben",
+              "concept": "Threaded Index"
+            },
+            {
+              "actor": "ben",
+              "concept": "TIndex"
+            },
+            {
+              "actor": "ben",
+              "concept": "subject heading"
+            }
+          ]
+        },
+        "retract": {
+          "concepts": [],
+          "aliases": [],
+          "relationships": [],
+          "expertise": []
+        }
+      },
+      "records": [
+        {
+          "phase": "post_1",
+          "body": "Which index format should I use to find the subject heading today?",
+          "body_sha256": "4678dd759263d40318be531a1a88c6c19d0abf56ec5de576c158056a0c9a51c9",
+          "result": {
+            "concepts": [],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_2",
+          "body": "Threaded Index (TIndex) replaces Loose Card Index. The requested subject heading is present in the new card order.",
+          "body_sha256": "9972c35e0354b6ea13a9fe126b218f0e2835812fa573c137f98d7d8c0eb95885",
+          "result": {
+            "concepts": [
+              {
+                "name": "Threaded Index",
+                "start": 0,
+                "end": 14,
+                "score": 0.8249229788780212,
+                "label": "named entity"
+              },
+              {
+                "name": "Loose Card Index",
+                "start": 33,
+                "end": 49,
+                "score": 0.683610200881958,
+                "label": "named entity"
+              },
+              {
+                "name": "TIndex",
+                "start": 16,
+                "end": 22,
+                "score": 0.6571516394615173,
+                "label": "named entity"
+              },
+              {
+                "name": "subject heading",
+                "start": 65,
+                "end": 80,
+                "score": 0.5423533916473389,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "Threaded Index",
+                  "start": 0,
+                  "end": 14,
+                  "score": 0.5549061894416809
+                },
+                "tail": {
+                  "name": "Loose Card Index",
+                  "start": 33,
+                  "end": 49,
+                  "score": 0.5549061894416809
+                },
+                "predicate": "replaces",
+                "score": 0.5549061894416809,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 50
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Threaded Index",
+                  "confidence": 0.9925639033317566,
+                  "start": 0,
+                  "end": 14
+                },
+                "short_name": {
+                  "text": "TIndex",
+                  "confidence": 0.9946343898773193,
+                  "start": 16,
+                  "end": 22
+                },
+                "syntax_rules": [
+                  "parenthetical_compact_name"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "ad58198ba5e054e2b7285f60529c285f4e14c61bf1d574545e5baafad1f32192",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Threaded Index",
+                  "start": 0,
+                  "end": 14
+                },
+                "short_name": {
+                  "text": "TIndex",
+                  "start": 16,
+                  "end": 22
+                },
+                "rule": "parenthetical_compact_name",
+                "source_text_hash": "ad58198ba5e054e2b7285f60529c285f4e14c61bf1d574545e5baafad1f32192"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_3",
+          "body": "TIndex refers to Threaded Index. I followed a second subject heading and checked its neighbors in the card order.",
+          "body_sha256": "3408170a72ed9880a774f4f6183a673b2f5db331ec42c65a90e7c59598e5c679",
+          "result": {
+            "concepts": [
+              {
+                "name": "TIndex",
+                "start": 0,
+                "end": 6,
+                "score": 0.9470778703689575,
+                "label": "named entity"
+              },
+              {
+                "name": "Threaded Index",
+                "start": 17,
+                "end": 31,
+                "score": 0.8546918034553528,
+                "label": "topic or process"
+              },
+              {
+                "name": "card order",
+                "start": 102,
+                "end": 112,
+                "score": 0.637302815914154,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_4",
+          "body": "Loose Card Index was replaced by Threaded Index for desk use; the second heading was found through the replacement.",
+          "body_sha256": "167847d121d003b637d287cf2b4eed1dd31b5c45af33d270ff6b2fb53955a50f",
+          "result": {
+            "concepts": [
+              {
+                "name": "Threaded Index",
+                "start": 33,
+                "end": 47,
+                "score": 0.8478942513465881,
+                "label": "object or substance"
+              },
+              {
+                "name": "Loose Card Index",
+                "start": 0,
+                "end": 16,
+                "score": 0.6198752522468567,
+                "label": "object or substance"
+              },
+              {
+                "name": "Card Index",
+                "start": 6,
+                "end": 16,
+                "score": 0.6693629026412964,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "Threaded Index",
+                  "start": 33,
+                  "end": 47,
+                  "score": 0.6693629026412964
+                },
+                "tail": {
+                  "name": "Card Index",
+                  "start": 6,
+                  "end": 16,
+                  "score": 0.6693629026412964
+                },
+                "predicate": "replaces",
+                "score": 0.6693629026412964,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 115
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_5",
+          "body": "TIndex supplied my subject heading after superseding Loose Card Index. TIndex is short for Threaded Index. Quotation marks around “Threaded Index means Loose Card Index” reproduce a rejected interpretation, not an agreed definition.",
+          "body_sha256": "4203e8232730bb4381bb6750b5faaf7c9f4521e56543a9d1030ae8231466d4d5",
+          "result": {
+            "concepts": [
+              {
+                "name": "TIndex",
+                "start": 71,
+                "end": 77,
+                "score": 0.9985187649726868,
+                "label": "named entity"
+              },
+              {
+                "name": "TIndex",
+                "start": 0,
+                "end": 6,
+                "score": 0.9980144500732422,
+                "label": "named entity"
+              },
+              {
+                "name": "Threaded Index",
+                "start": 131,
+                "end": 145,
+                "score": 0.7280096411705017,
+                "label": "topic or process"
+              },
+              {
+                "name": "Threaded Index",
+                "start": 91,
+                "end": 105,
+                "score": 0.6786320805549622,
+                "label": "topic or process"
+              },
+              {
+                "name": "Loose Card Index",
+                "start": 152,
+                "end": 168,
+                "score": 0.566380500793457,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "TIndex",
+                  "start": 71,
+                  "end": 77,
+                  "score": 0.5058286190032959
+                },
+                "tail": {
+                  "name": "Loose Card Index",
+                  "start": 53,
+                  "end": 69,
+                  "score": 0.5058286190032959
+                },
+                "predicate": "depends_on",
+                "score": 0.5058286190032959,
+                "polarity": "uncertain",
+                "literal_support": false,
+                "start": 0,
+                "end": 106
+              },
+              {
+                "head": {
+                  "name": "TIndex",
+                  "start": 71,
+                  "end": 77,
+                  "score": 0.6150243878364563
+                },
+                "tail": {
+                  "name": "Threaded Index",
+                  "start": 91,
+                  "end": 105,
+                  "score": 0.6150243878364563
+                },
+                "predicate": "produces",
+                "score": 0.6150243878364563,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 70,
+                "end": 106
+              },
+              {
+                "head": {
+                  "name": "TIndex",
+                  "start": 71,
+                  "end": 77,
+                  "score": 0.8552576303482056
+                },
+                "tail": {
+                  "name": "Loose Card Index",
+                  "start": 53,
+                  "end": 69,
+                  "score": 0.8552576303482056
+                },
+                "predicate": "replaces",
+                "score": 0.8552576303482056,
+                "polarity": "uncertain",
+                "literal_support": false,
+                "start": 0,
+                "end": 106
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Threaded Index",
+                  "start": 91,
+                  "end": 105
+                },
+                "short_name": {
+                  "text": "TIndex",
+                  "start": 71,
+                  "end": 77
+                },
+                "rule": "is_short_for",
+                "source_text_hash": "a44b7bfbef50bce5ecddf77f6d2f262cc6c08c50852117999124a021d9589523"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        }
+      ]
+    },
+    {
+      "case": {
+        "id": "qa_b_005",
+        "domain": "astronomy_earth",
+        "retract": {
+          "concepts": [],
+          "aliases": [],
+          "relationships": [],
+          "expertise": []
+        },
+        "rationale": "Repeated independent statements establish the named topic, its source-defined alias, and the directed relation. Ben contributes three distinct topic-bearing posts; Alice accepts the answer, and Alice and Cam mark different original notes helpful.",
+        "posts": [
+          {
+            "actor": "alice",
+            "kind": "question",
+            "visibility": "team",
+            "body": "Has manual tracing remained the normal step in the comet analysis?"
+          },
+          {
+            "actor": "ben",
+            "kind": "answer",
+            "visibility": "team",
+            "parent": 0,
+            "accepted": true,
+            "body": "No. The comet profile extractor, shortened to CPE, replaces manual tracing in this study."
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "CPE is the comet profile extractor on our checklist. We now use it where manual tracing used to occur.",
+            "helped_by": [
+              "cam"
+            ]
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "The comet profile extractor gave a wider profile when I included the dim outer pixels.",
+            "helped_by": [
+              "alice"
+            ]
+          },
+          {
+            "actor": "cam",
+            "kind": "note",
+            "visibility": "team",
+            "body": "In the comet study, manual tracing has been replaced by CPE, the comet profile extractor."
+          }
+        ],
+        "expect": {
+          "concepts": [
+            "comet profile extractor"
+          ],
+          "absent_concepts": [],
+          "aliases": [
+            {
+              "canonical": "comet profile extractor",
+              "alias": "CPE"
+            }
+          ],
+          "absent_aliases": [],
+          "relationships": [
+            {
+              "head": "comet profile extractor",
+              "predicate": "replaces",
+              "tail": "manual tracing"
+            }
+          ],
+          "absent_relationships": [],
+          "expertise": [
+            {
+              "actor": "ben",
+              "concept": "comet profile extractor"
+            }
+          ],
+          "absent_expertise": []
+        },
+        "hard_negative": [],
+        "allowed": {
+          "concepts": [
+            "comet profile extractor",
+            "CPE",
+            "manual tracing",
+            "comet analysis",
+            "comet profile",
+            "outer pixels",
+            "checklist",
+            "wider profile",
+            "dim outer pixels",
+            "comet study"
+          ],
+          "aliases": [
+            {
+              "canonical": "comet profile extractor",
+              "alias": "CPE"
+            }
+          ],
+          "relationships": [
+            {
+              "head": "comet profile extractor",
+              "predicate": "replaces",
+              "tail": "manual tracing"
+            }
+          ],
+          "expertise": [
+            {
+              "actor": "ben",
+              "concept": "comet profile extractor"
+            },
+            {
+              "actor": "ben",
+              "concept": "CPE"
+            }
+          ]
+        }
+      },
+      "records": [
+        {
+          "phase": "post_1",
+          "body": "Has manual tracing remained the normal step in the comet analysis?",
+          "body_sha256": "6dbb19714dd5f0dca9112cdbcf1bc94a37b056a0e2b363d60d4b5858bc9415f5",
+          "result": {
+            "concepts": [
+              {
+                "name": "comet analysis",
+                "start": 51,
+                "end": 65,
+                "score": 0.9266682863235474,
+                "label": "topic or process"
+              },
+              {
+                "name": "comet",
+                "start": 51,
+                "end": 56,
+                "score": 0.6749384999275208,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_2",
+          "body": "No. The comet profile extractor, shortened to CPE, replaces manual tracing in this study.",
+          "body_sha256": "87cdc11bdd6c9c99539c2620f122bb23c2174d16888798f2663fae8e476593ae",
+          "result": {
+            "concepts": [
+              {
+                "name": "CPE",
+                "start": 46,
+                "end": 49,
+                "score": 0.9814578890800476,
+                "label": "named entity"
+              },
+              {
+                "name": "comet profile extractor",
+                "start": 8,
+                "end": 31,
+                "score": 0.9450819492340088,
+                "label": "named entity"
+              },
+              {
+                "name": "study",
+                "start": 83,
+                "end": 88,
+                "score": 0.9806457161903381,
+                "label": "topic or process"
+              },
+              {
+                "name": "manual tracing",
+                "start": 60,
+                "end": 74,
+                "score": 0.7976207733154297,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "comet profile extractor",
+                  "start": 8,
+                  "end": 31,
+                  "score": 0.5344306230545044
+                },
+                "tail": {
+                  "name": "CPE",
+                  "start": 46,
+                  "end": 49,
+                  "score": 0.5344306230545044
+                },
+                "predicate": "produces",
+                "score": 0.5344306230545044,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 3,
+                "end": 89
+              },
+              {
+                "head": {
+                  "name": "comet profile extractor",
+                  "start": 8,
+                  "end": 31,
+                  "score": 0.7976207733154297
+                },
+                "tail": {
+                  "name": "manual tracing",
+                  "start": 60,
+                  "end": 74,
+                  "score": 0.7976207733154297
+                },
+                "predicate": "replaces",
+                "score": 0.7976207733154297,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 3,
+                "end": 89
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "comet profile extractor",
+                  "start": 8,
+                  "end": 31
+                },
+                "short_name": {
+                  "text": "CPE",
+                  "start": 46,
+                  "end": 49
+                },
+                "rule": "passive_or_nominal_naming",
+                "source_text_hash": "9fc182e3c299063ff6a96da25ea9544f8342e9c608e1b71c89140f3038bb3534"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_3",
+          "body": "CPE is the comet profile extractor on our checklist. We now use it where manual tracing used to occur.",
+          "body_sha256": "0760a19bd0c186902ffd615f7edeca035fec55d5e5b33a34e1177f43e5732510",
+          "result": {
+            "concepts": [
+              {
+                "name": "CPE",
+                "start": 0,
+                "end": 3,
+                "score": 0.9986750483512878,
+                "label": "named entity"
+              },
+              {
+                "name": "manual tracing",
+                "start": 73,
+                "end": 87,
+                "score": 0.985573947429657,
+                "label": "topic or process"
+              },
+              {
+                "name": "comet",
+                "start": 11,
+                "end": 16,
+                "score": 0.7782617807388306,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "CPE",
+                  "start": 0,
+                  "end": 3,
+                  "score": 0.6419841051101685
+                },
+                "tail": {
+                  "name": "manual tracing",
+                  "start": 73,
+                  "end": 87,
+                  "score": 0.6419841051101685
+                },
+                "predicate": "uses",
+                "score": 0.6419841051101685,
+                "polarity": "uncertain",
+                "literal_support": false,
+                "start": 0,
+                "end": 102
+              },
+              {
+                "head": {
+                  "name": "CPE",
+                  "start": 0,
+                  "end": 3,
+                  "score": 0.6809561848640442
+                },
+                "tail": {
+                  "name": "manual tracing",
+                  "start": 73,
+                  "end": 87,
+                  "score": 0.6809561848640442
+                },
+                "predicate": "depends_on",
+                "score": 0.6809561848640442,
+                "polarity": "uncertain",
+                "literal_support": false,
+                "start": 0,
+                "end": 102
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_4",
+          "body": "The comet profile extractor gave a wider profile when I included the dim outer pixels.",
+          "body_sha256": "636fe239bfc8a1eddd0f0dcf3856c70c35c1cade2e7ff5fe2bd803c278bff63d",
+          "result": {
+            "concepts": [
+              {
+                "name": "comet profile extractor",
+                "start": 4,
+                "end": 27,
+                "score": 0.8970317840576172,
+                "label": "named entity"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_5",
+          "body": "In the comet study, manual tracing has been replaced by CPE, the comet profile extractor.",
+          "body_sha256": "c69aadec6e61f257c6443938b7a88524b6f87d103813cb3c804c30cb2d0e6202",
+          "result": {
+            "concepts": [
+              {
+                "name": "CPE",
+                "start": 56,
+                "end": 59,
+                "score": 0.9767091274261475,
+                "label": "named entity"
+              },
+              {
+                "name": "comet study",
+                "start": 7,
+                "end": 18,
+                "score": 0.9888575077056885,
+                "label": "topic or process"
+              },
+              {
+                "name": "manual tracing",
+                "start": 20,
+                "end": 34,
+                "score": 0.6355919241905212,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "CPE",
+                  "start": 56,
+                  "end": 59,
+                  "score": 0.6355919241905212
+                },
+                "tail": {
+                  "name": "manual tracing",
+                  "start": 20,
+                  "end": 34,
+                  "score": 0.6355919241905212
+                },
+                "predicate": "replaces",
+                "score": 0.6355919241905212,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 89
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        }
+      ]
+    },
+    {
+      "case": {
+        "id": "qa_a_100",
+        "domain": "materials/manufacturing",
+        "rationale": "Rolled Rim is a specific locally named subject with multiple public observations. Ben has three original topic-bearing contributions, an answer accepted by Alice, and outcomes from Alice and Cam. Rolled Rim and RRim are explicitly equated by Ben and Cam in differently worded original statements. Ben and Cam independently support the factual replaces relation from Rolled Rim to Folded Rim.",
+        "posts": [
+          {
+            "actor": "alice",
+            "body": "Which detail explains the different edge section in the new sample?",
+            "kind": "question",
+            "visibility": "team"
+          },
+          {
+            "actor": "ben",
+            "body": "Rolled Rim replaces Folded Rim. RRim is the short label for Rolled Rim on the profile sheet.",
+            "kind": "answer",
+            "visibility": "team",
+            "parent": 0,
+            "accepted": true
+          },
+          {
+            "actor": "ben",
+            "body": "I checked the RRim label against the full Rolled Rim entry. A second edge section showed the same profile.",
+            "kind": "note",
+            "visibility": "team",
+            "helped_by": [
+              "cam"
+            ]
+          },
+          {
+            "actor": "ben",
+            "body": "Folded Rim was replaced by Rolled Rim in the display sample as well. Its edge section matches the revised profile.",
+            "kind": "note",
+            "visibility": "team",
+            "helped_by": [
+              "alice"
+            ]
+          },
+          {
+            "actor": "cam",
+            "body": "RRim occupies the former Folded Rim position in my sample. RRim denotes the replacement detail called Rolled Rim.",
+            "kind": "note",
+            "visibility": "team"
+          }
+        ],
+        "expect": {
+          "concepts": [
+            "Rolled Rim"
+          ],
+          "aliases": [
+            {
+              "canonical": "Rolled Rim",
+              "alias": "RRim"
+            }
+          ],
+          "relationships": [
+            {
+              "head": "Rolled Rim",
+              "predicate": "replaces",
+              "tail": "Folded Rim"
+            }
+          ],
+          "expertise": [
+            {
+              "actor": "ben",
+              "concept": "Rolled Rim"
+            }
+          ],
+          "absent_concepts": [],
+          "absent_aliases": [],
+          "absent_relationships": [],
+          "absent_expertise": []
+        },
+        "hard_negative": [],
+        "allowed": {
+          "concepts": [
+            "Rolled Rim",
+            "RRim",
+            "Folded Rim",
+            "rim profile",
+            "edge section",
+            "profile",
+            "profile sheet"
+          ],
+          "aliases": [
+            {
+              "canonical": "Rolled Rim",
+              "alias": "RRim"
+            },
+            {
+              "canonical": "RRim",
+              "alias": "Rolled Rim"
+            }
+          ],
+          "relationships": [
+            {
+              "head": "Rolled Rim",
+              "predicate": "replaces",
+              "tail": "Folded Rim"
+            },
+            {
+              "head": "RRim",
+              "predicate": "replaces",
+              "tail": "Folded Rim"
+            }
+          ],
+          "expertise": [
+            {
+              "actor": "ben",
+              "concept": "Rolled Rim"
+            },
+            {
+              "actor": "ben",
+              "concept": "RRim"
+            }
+          ]
+        },
+        "retract": {
+          "concepts": [],
+          "aliases": [],
+          "relationships": [],
+          "expertise": []
+        }
+      },
+      "records": [
+        {
+          "phase": "post_1",
+          "body": "Which detail explains the different edge section in the new sample?",
+          "body_sha256": "f498062fed6989fe19ddc1165549872647506da7ffa5caec835358d619b3a9c6",
+          "result": {
+            "concepts": [],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_2",
+          "body": "Rolled Rim replaces Folded Rim. RRim is the short label for Rolled Rim on the profile sheet.",
+          "body_sha256": "6011dd9b72fa535597ac837a7b45a8fa7da37d2e37af3f00ecdfebe968b46614",
+          "result": {
+            "concepts": [
+              {
+                "name": "RRim",
+                "start": 32,
+                "end": 36,
+                "score": 0.9160687327384949,
+                "label": "named entity"
+              },
+              {
+                "name": "Rolled Rim",
+                "start": 0,
+                "end": 10,
+                "score": 0.9702398180961609,
+                "label": "topic or process"
+              },
+              {
+                "name": "Rolled Rim",
+                "start": 60,
+                "end": 70,
+                "score": 0.9491731524467468,
+                "label": "topic or process"
+              },
+              {
+                "name": "Folded Rim",
+                "start": 20,
+                "end": 30,
+                "score": 0.8700151443481445,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "Rolled Rim",
+                  "start": 0,
+                  "end": 10,
+                  "score": 0.8700151443481445
+                },
+                "tail": {
+                  "name": "Folded Rim",
+                  "start": 20,
+                  "end": 30,
+                  "score": 0.8700151443481445
+                },
+                "predicate": "replaces",
+                "score": 0.8700151443481445,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 31
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Rolled Rim",
+                  "confidence": 0.9915026426315308,
+                  "start": 60,
+                  "end": 70
+                },
+                "short_name": {
+                  "text": "RRim",
+                  "confidence": 0.9982832670211792,
+                  "start": 32,
+                  "end": 36
+                },
+                "syntax_rules": [
+                  "copular_name_for"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "fa06b799f5b5b6b5527510d4f90e3d4693f3fe0098e981bfad9fdde34ae1c676",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Rolled Rim",
+                  "start": 60,
+                  "end": 70
+                },
+                "short_name": {
+                  "text": "RRim",
+                  "start": 32,
+                  "end": 36
+                },
+                "rule": "copular_name_for",
+                "source_text_hash": "fa06b799f5b5b6b5527510d4f90e3d4693f3fe0098e981bfad9fdde34ae1c676"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_3",
+          "body": "I checked the RRim label against the full Rolled Rim entry. A second edge section showed the same profile.",
+          "body_sha256": "669c5c046113d78528ef5a7d61f27d62760729911455b9a6e7105a3af0e4481a",
+          "result": {
+            "concepts": [],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_4",
+          "body": "Folded Rim was replaced by Rolled Rim in the display sample as well. Its edge section matches the revised profile.",
+          "body_sha256": "9f808f3db524c181be374ad81cc95b6c73e642aacf4ee540022f92c42f947a1a",
+          "result": {
+            "concepts": [
+              {
+                "name": "display sample",
+                "start": 45,
+                "end": 59,
+                "score": 0.6110916137695312,
+                "label": "named entity"
+              },
+              {
+                "name": "edge section",
+                "start": 73,
+                "end": 85,
+                "score": 0.6903655529022217,
+                "label": "object or substance"
+              },
+              {
+                "name": "Rolled Rim",
+                "start": 27,
+                "end": 37,
+                "score": 0.5304133296012878,
+                "label": "relation endpoint"
+              },
+              {
+                "name": "Folded Rim",
+                "start": 0,
+                "end": 10,
+                "score": 0.5304133296012878,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "Rolled Rim",
+                  "start": 27,
+                  "end": 37,
+                  "score": 0.5304133296012878
+                },
+                "tail": {
+                  "name": "Folded Rim",
+                  "start": 0,
+                  "end": 10,
+                  "score": 0.5304133296012878
+                },
+                "predicate": "replaces",
+                "score": 0.5304133296012878,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 68
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        },
+        {
+          "phase": "post_5",
+          "body": "RRim occupies the former Folded Rim position in my sample. RRim denotes the replacement detail called Rolled Rim.",
+          "body_sha256": "554a10dc414aa8b9856d46f10d061305880b82bd909a203e0a700735bb3cd6fe",
+          "result": {
+            "concepts": [
+              {
+                "name": "RRim",
+                "start": 59,
+                "end": 63,
+                "score": 0.9741805195808411,
+                "label": "named entity"
+              },
+              {
+                "name": "RRim",
+                "start": 0,
+                "end": 4,
+                "score": 0.9725134372711182,
+                "label": "named entity"
+              },
+              {
+                "name": "sample",
+                "start": 51,
+                "end": 57,
+                "score": 0.7497245669364929,
+                "label": "object or substance"
+              },
+              {
+                "name": "Folded Rim",
+                "start": 25,
+                "end": 35,
+                "score": 0.7939825057983398,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "RRim",
+                  "start": 0,
+                  "end": 4,
+                  "score": 0.7939825057983398
+                },
+                "tail": {
+                  "name": "Folded Rim",
+                  "start": 25,
+                  "end": 35,
+                  "score": 0.7939825057983398
+                },
+                "predicate": "replaces",
+                "score": 0.7939825057983398,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 58
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "replacement detail",
+                  "start": 76,
+                  "end": 94
+                },
+                "short_name": {
+                  "text": "RRim",
+                  "start": 59,
+                  "end": 63
+                },
+                "rule": "denotes",
+                "source_text_hash": "4b5c22f06806e97f9e269c927d142c6429b78b1a3257589e79080e6e68251efe"
+              },
+              {
+                "full_name": {
+                  "text": "replacement detail",
+                  "start": 76,
+                  "end": 94
+                },
+                "short_name": {
+                  "text": "Rolled Rim",
+                  "start": 102,
+                  "end": 112
+                },
+                "rule": "passive_or_nominal_naming",
+                "source_text_hash": "4b5c22f06806e97f9e269c927d142c6429b78b1a3257589e79080e6e68251efe"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          },
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:grounded-spans-v5:663b9b477e35dcf9",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "application_model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18"
+        }
+      ]
+    }
+  ]
+}

@@ -38,7 +38,7 @@ def finding_dict(db, row):
 @router.get("/findings", dependencies=[Depends(require_admin)])
 def findings(state: str | None = None, kind: str | None = None,
              offset: int = Query(0, ge=0), limit: int = Query(50, ge=1, le=100), db=Depends(get_db)):
-    query = db.query(Finding).filter(~Finding.kind.in_(("term", "bootstrap")))
+    query = db.query(Finding).filter(~Finding.kind.in_(("term", "bootstrap", "alias_definition")))
     if kind:
         query = query.filter(Finding.kind == kind)
     if state in {"pinned", "suppressed"}:
@@ -71,7 +71,7 @@ class Decision(BaseModel):
 @router.put("/findings/{key}/decision")
 def decide(key: str, decision: Decision, admin: Account = Depends(require_admin), db=Depends(get_db)):
     row = db.get(Finding, key)
-    if row is None or row.kind in {"bootstrap", "term"}:
+    if row is None or row.kind in {"bootstrap", "term", "alias_definition"}:
         raise HTTPException(404, "Finding not found")
     payload = json.loads(row.payload)
     fixed = db.get(Override, key)

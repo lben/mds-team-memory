@@ -5,6 +5,7 @@ import json
 from sqlalchemy import and_, exists, func, or_, select
 
 from ..models import Account, Concept, ConceptTerm, ExpertiseMapping, Profile, RelationshipType
+from . import identity
 from .models import Evidence, Finding, Override, Source
 from .sources import finding_key
 from .runtime import normalize
@@ -33,7 +34,7 @@ def supported():
 def enabled():
     pinned = exists(select(Override.key).where(Override.key == Finding.key, Override.mode == "pinned").correlate(Finding))
     suppressed = exists(select(Override.key).where(Override.key == Finding.key, Override.mode == "suppressed").correlate(Finding))
-    return and_(~suppressed, or_(pinned, and_(Finding.state == "active", supported())))
+    return and_(~suppressed, or_(pinned, and_(Finding.state == "active", supported(), identity.current_decision())))
 
 
 def concepts(db):
@@ -77,7 +78,7 @@ def source_tags(db, kind, source_id, exact):
 
 def evidence_rows(db, key):
     result = []
-    for row in db.query(Evidence).join(Source, valid_evidence()).filter(Evidence.finding_key == key):
+    for row in db.query(Evidence).join(Source, valid_evidence()).filter(Evidence.finding_key == key, identity.valid_routes()):
         features = json.loads(row.features)
         context = features.get("context")
         if context:

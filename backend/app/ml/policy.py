@@ -2,10 +2,11 @@
 
 import re
 
-from .runtime import specific_name
+from . import syntax
+from .runtime import inference_version, specific_name
 
 
-VERSION = "grounded-cold-start-v4"
+VERSION = "grounded-cold-start-v5"
 
 
 def acronym_definitions(text):
@@ -88,6 +89,27 @@ def decide(kind, evidence):
     if kind == "association":
         return ("weak" if groups >= 2 else "held"), score
     raise ValueError(f"Unsupported decision kind: {kind}")
+
+
+def single_alias_definitions(evidence):
+    """A score belongs to both exact fields of one current role record."""
+    for row in evidence:
+        if row["polarity"] != "positive" or not row.get("assertion_allowed"):
+            continue
+        parts = row["model_version"].split(":")
+        for method in row.get("definition_methods", []):
+            if (method.get("origin") != "syntax_and_alias_role_record"
+                    or method.get("syntax_rule_revision") != syntax.REVISION or not method.get("syntax_rules")
+                    or len(parts) != 5 or not method.get("alias_model_revision") or not method.get("syntax_model_revision")):
+                continue
+            models = {"extractor": {"revision": method["alias_model_revision"]},
+                      "embeddings": {"revision": parts[1]}, "syntax": {"revision": method["syntax_model_revision"]}}
+            if row["model_version"] != inference_version(models):
+                continue
+            if all(isinstance(method.get(field), dict)
+                   and type(method[field].get("confidence")) in (int, float)
+                   and 0.85 <= method[field]["confidence"] <= 1 for field in ("full_name", "short_name")):
+                yield method
 
 
 def features(evidence):

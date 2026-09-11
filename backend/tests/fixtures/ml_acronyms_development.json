@@ -1,0 +1,1979 @@
+{
+  "version": 2,
+  "split": "development",
+  "scope": "aliases",
+  "purpose": "Authored acronym development cases. These are inference-only tests and cannot establish release accuracy. Identity labels are fixed before the first model run.",
+  "cases": [
+    {
+      "id": "acronym_dev_001",
+      "domain": "software_infrastructure",
+      "phenomena": [
+        "parenthetical",
+        "unfamiliar_name"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Container Recovery Ledger (CRL) records each replacement container and the snapshot it used. The ledger survives a host restart."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "I checked CRL after the recovery drill. CRL means Container Recovery Ledger; its last entry points to the snapshot we restored."
+        }
+      ],
+      "rationale": "Two authors explicitly identify the same ledger.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Container Recovery Ledger",
+            "alias": "CRL"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Container Recovery Ledger",
+            "alias": "CRL"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_002",
+      "domain": "network_operations",
+      "phenomena": [
+        "short_first",
+        "later_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PGM recorded a gap after the link bounced. I saved its capture before restarting the router."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PGM is short for Packet Gap Monitor. Packet Gap Monitor measures missing sequence numbers on the mirror port."
+        },
+        {
+          "actor": "cam",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The Packet Gap Monitor result agrees with my independent packet capture."
+        }
+      ],
+      "rationale": "The later definition supplies identity for the earlier acronym observation.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Packet Gap Monitor",
+            "alias": "PGM"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Packet Gap Monitor",
+            "alias": "PGM"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_003",
+      "domain": "data_engineering",
+      "phenomena": [
+        "full_first",
+        "acronym_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Lease State Table holds the owner and expiry for each import partition. I found the stuck partition in this table."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "In the importer documentation, LST stands for Lease State Table. I cleared its expired lease after checking the owner."
+        }
+      ],
+      "rationale": "The second source explicitly defines the table abbreviation.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Lease State Table",
+            "alias": "LST"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Lease State Table",
+            "alias": "LST"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_004",
+      "domain": "manufacturing",
+      "phenomena": [
+        "apposition",
+        "unfamiliar_name"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Batch Quality Record, abbreviated BQR, contains the hardness readings for a single furnace batch."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "My BQR has the readings from the second shift. BQR is the abbreviation for Batch Quality Record on our furnace forms."
+        }
+      ],
+      "rationale": "Both sources give the same explicit form identity.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Batch Quality Record",
+            "alias": "BQR"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Batch Quality Record",
+            "alias": "BQR"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_005",
+      "domain": "optical_testing",
+      "phenomena": [
+        "parenthetical",
+        "technical_jargon"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Optical Path Register (OPR) lists the reference arm position and detector offset for each interferometer."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "We use OPR as the short name for Optical Path Register. I updated the detector offset after realigning the reference arm."
+        }
+      ],
+      "rationale": "Independent technical descriptions agree on one register.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Optical Path Register",
+            "alias": "OPR"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Optical Path Register",
+            "alias": "OPR"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_006",
+      "domain": "process_control",
+      "phenomena": [
+        "reverse_parenthetical",
+        "technical_jargon"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "CVM (Cryogenic Valve Map) shows the isolation valves between the separator and the cold return."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Cryogenic Valve Map is called CVM in the shutdown checklist. Its return-line labels match the physical tags."
+        }
+      ],
+      "rationale": "Both directions of the definition refer to the same valve map.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Cryogenic Valve Map",
+            "alias": "CVM"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Cryogenic Valve Map",
+            "alias": "CVM"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_007",
+      "domain": "industrial_safety",
+      "phenomena": [
+        "digit_acronym",
+        "non_initialism"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Shift Safety Envelope is the approved operating limit sheet. Its short name is S2E; the numeral replaces the two initial S letters."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "S2E refers to Shift Safety Envelope. I compared its pressure limit with the permit before starting the shift."
+        }
+      ],
+      "rationale": "An explicit definition establishes the unconventional digit abbreviation.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Shift Safety Envelope",
+            "alias": "S2E"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Shift Safety Envelope",
+            "alias": "S2E"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_008",
+      "domain": "batch_operations",
+      "phenomena": [
+        "digit_acronym",
+        "hyphenated_full_name"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Stage-2 Transfer Gate (S2TG) blocks batch transfer until the second-stage sample is released."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "S2TG stands for Stage-2 Transfer Gate. The gate stayed closed because the sample was still awaiting measurement."
+        }
+      ],
+      "rationale": "The digit is part of both the named gate and its defined abbreviation.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Stage-2 Transfer Gate",
+            "alias": "S2TG"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Stage-2 Transfer Gate",
+            "alias": "S2TG"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_009",
+      "domain": "instrumentation",
+      "phenomena": [
+        "digit_acronym",
+        "hyphenated_full_name"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Run-to-Run Ledger is abbreviated R2RL in the instrument package. It stores the calibration offset between consecutive runs."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "I compared the latest R2RL entry with the reference run. R2RL means Run-to-Run Ledger, not the live sensor display."
+        }
+      ],
+      "rationale": "Both sources explicitly identify the ledger despite nonliteral initials.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Run-to-Run Ledger",
+            "alias": "R2RL"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Run-to-Run Ledger",
+            "alias": "R2RL"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_010",
+      "domain": "process_monitoring",
+      "phenomena": [
+        "mixed_case_acronym"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Process Identity Map (PiM) maps a process handle to its service owner and restart count."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PiM is short for Process Identity Map. My export includes the owner of the replacement process."
+        }
+      ],
+      "rationale": "Mixed casing does not remove the explicit identity.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Process Identity Map",
+            "alias": "PiM"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Process Identity Map",
+            "alias": "PiM"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_011",
+      "domain": "message_operations",
+      "phenomena": [
+        "case_variation"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Message Exchange Ledger (MEL) records the sender and receipt time for each exchange."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Our operator notes write the same abbreviation in lowercase: mel means Message Exchange Ledger. I used it to find the late receipt."
+        }
+      ],
+      "rationale": "The source explicitly equates the lowercase spelling with the defined abbreviation.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Message Exchange Ledger",
+            "alias": "MEL"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Message Exchange Ledger",
+            "alias": "MEL"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_012",
+      "domain": "session_operations",
+      "phenomena": [
+        "short_first",
+        "independent_evidence"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "SBT reported that my session had used its retry allowance. I exported the result before closing the connection."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "I reproduced the limit independently. The Session Budget Tracker measures the remaining retries."
+        },
+        {
+          "actor": "cam",
+          "kind": "note",
+          "visibility": "team",
+          "body": "SBT stands for Session Budget Tracker. The tracker now includes the retry caused by the connection reset."
+        }
+      ],
+      "rationale": "A later independent definition connects earlier short and full-name observations.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Session Budget Tracker",
+            "alias": "SBT"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Session Budget Tracker",
+            "alias": "SBT"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_013",
+      "domain": "storage_operations",
+      "phenomena": [
+        "definition_paraphrase"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The Vault Relay Monitor watches transfers from the staging vault. Operators refer to it as VRM."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "VRM is the abbreviation for Vault Relay Monitor in this runbook. Its transfer count agrees with my audit."
+        }
+      ],
+      "rationale": "The naming statements identify one monitor.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Vault Relay Monitor",
+            "alias": "VRM"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Vault Relay Monitor",
+            "alias": "VRM"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_014",
+      "domain": "reactor_operations",
+      "phenomena": [
+        "possessive_usage"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Reactor Batch Note (RBN) contains the operator observations for one charge."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "RBN stands for Reactor Batch Note. The RBN's pressure trace matches the shift record."
+        }
+      ],
+      "rationale": "Possessive usage follows an explicit singular abbreviation.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Reactor Batch Note",
+            "alias": "RBN"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Reactor Batch Note",
+            "alias": "RBN"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_015",
+      "domain": "archive_operations",
+      "phenomena": [
+        "common_acronym_local_meaning"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "For this archive, ACL means Archive Change Ledger. Archive Change Ledger records every change to the collection description."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "I used ACL to trace the altered shelf reference. ACL is short for Archive Change Ledger in our catalog team."
+        }
+      ],
+      "rationale": "The supplied local definition controls the alias without importing another familiar meaning.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Archive Change Ledger",
+            "alias": "ACL"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Archive Change Ledger",
+            "alias": "ACL"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_016",
+      "domain": "warehouse_operations",
+      "phenomena": [
+        "common_acronym_local_meaning"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Receipt Allocation Matrix (RAM) assigns arriving receipts to the available inspection desks."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "RAM stands for Receipt Allocation Matrix in the receiving team. Its assignment sent my receipt to desk four."
+        }
+      ],
+      "rationale": "Both sources define a local meaning for a familiar acronym.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Receipt Allocation Matrix",
+            "alias": "RAM"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Receipt Allocation Matrix",
+            "alias": "RAM"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_017",
+      "domain": "platform_operations",
+      "phenomena": [
+        "multiple_acronyms"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Platform Change Log (PCL) stores deployment records. Event Receipt Book (ERB) stores the matching receipt identifiers. The PCL links each change to its ERB entry."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PCL is short for Platform Change Log, while ERB is short for Event Receipt Book. I checked both records after the rollback."
+        }
+      ],
+      "rationale": "Separate explicit definitions must remain separate identities.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Platform Change Log",
+            "alias": "PCL"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Platform Change Log",
+            "alias": "PCL"
+          },
+          {
+            "canonical": "Event Receipt Book",
+            "alias": "ERB"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_018",
+      "domain": "material_tracking",
+      "phenomena": [
+        "paragraph_boundary"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Material Trace Envelope contains the lot number and the chain of custody.\n\nThe abbreviation MTE refers to Material Trace Envelope. Keep this envelope with the sample."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "I used MTE to check the custody handoff. MTE means Material Trace Envelope in the sample tracking notes."
+        }
+      ],
+      "rationale": "The explicit identity remains clear across a paragraph boundary.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Material Trace Envelope",
+            "alias": "MTE"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Material Trace Envelope",
+            "alias": "MTE"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_019",
+      "domain": "mechanical_maintenance",
+      "phenomena": [
+        "punctuation",
+        "definition_paraphrase"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Rotor Bearing Survey — RBS for short — lists the vibration readings from each bearing station."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "RBS stands for Rotor Bearing Survey. I added the readings taken after balancing the rotor."
+        }
+      ],
+      "rationale": "Punctuation separates a supported abbreviation without changing its identity.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Rotor Bearing Survey",
+            "alias": "RBS"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Rotor Bearing Survey",
+            "alias": "RBS"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_020",
+      "domain": "audio_testing",
+      "phenomena": [
+        "full_first",
+        "technical_jargon"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Acoustic Gain Sheet holds the preamplifier setting and reference tone level for the chamber test."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "AGS is the abbreviation for Acoustic Gain Sheet. The sheet for my chamber run uses the lower preamplifier setting."
+        }
+      ],
+      "rationale": "The later abbreviation refers to the already described sheet.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Acoustic Gain Sheet",
+            "alias": "AGS"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Acoustic Gain Sheet",
+            "alias": "AGS"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_021",
+      "domain": "replication_operations",
+      "phenomena": [
+        "short_first",
+        "late_identity"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "SSR contains the sequence at which my replica caught up. I attached the receipt to the incident."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The Source Sync Receipt from my replica records the same handoff sequence."
+        },
+        {
+          "actor": "cam",
+          "kind": "note",
+          "visibility": "team",
+          "body": "SSR means Source Sync Receipt. Source Sync Receipt is the receipt generated at the end of each completed synchronization."
+        }
+      ],
+      "rationale": "A late explicit identity can connect earlier observations without assuming a familiar expansion.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Source Sync Receipt",
+            "alias": "SSR"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Source Sync Receipt",
+            "alias": "SSR"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_022",
+      "domain": "panel_inspection",
+      "phenomena": [
+        "two_independent_definitions"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Panel Inspection Log (PIL) records the terminal torque measurements after a panel is rewired."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PIL stands for Panel Inspection Log. I entered the second panel independently after checking its terminal labels."
+        }
+      ],
+      "rationale": "Independent current definitions support one log identity.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Panel Inspection Log",
+            "alias": "PIL"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Panel Inspection Log",
+            "alias": "PIL"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_023",
+      "domain": "batch_reporting",
+      "phenomena": [
+        "known_as_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Uniform Batch Register is known as UBR on the packing line. The register contains the final unit count."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "UBR means Uniform Batch Register. My count in the register includes the replacement cartons."
+        }
+      ],
+      "rationale": "Ordinary naming prose provides the alias.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Uniform Batch Register",
+            "alias": "UBR"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Uniform Batch Register",
+            "alias": "UBR"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_024",
+      "domain": "device_diagnostics",
+      "phenomena": [
+        "copular_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "DEL is the Device Exception Ledger. Device Exception Ledger contains the unhandled device faults from the last shift."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The Device Exception Ledger, or DEL, has the fault I reproduced on the spare controller."
+        }
+      ],
+      "rationale": "The two copular/appositional definitions identify the same ledger.",
+      "expect": {
+        "aliases": [
+          {
+            "canonical": "Device Exception Ledger",
+            "alias": "DEL"
+          }
+        ],
+        "absent_aliases": []
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Device Exception Ledger",
+            "alias": "DEL"
+          }
+        ]
+      },
+      "hard_negative": []
+    },
+    {
+      "id": "acronym_dev_025",
+      "domain": "shared_operations",
+      "phenomena": [
+        "global_collision",
+        "different_contexts"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "RSR stands for Release State Register in deployment operations. Release State Register lists the versions cleared for rollout."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "For pump maintenance, RSR stands for Rotor Service Report. Rotor Service Report records bearing replacements."
+        }
+      ],
+      "rationale": "Two current expansions in different contexts prevent one global mapping.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Release State Register",
+            "alias": "RSR"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_026",
+      "domain": "cross_team_operations",
+      "phenomena": [
+        "global_collision",
+        "three_meanings"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "LEM means Load Event Map in the electrical workshop."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "LEM means Lane Entry Marker in the vehicle test area."
+        },
+        {
+          "actor": "cam",
+          "kind": "note",
+          "visibility": "team",
+          "body": "LEM means Laboratory Equipment Manifest in the sample room."
+        }
+      ],
+      "rationale": "Three distinct explicit expansions must not become one global identity.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Load Event Map",
+            "alias": "LEM"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_027",
+      "domain": "network_operations",
+      "phenomena": [
+        "one_letter_difference"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Packet Gap Monitor is abbreviated PGM. It counts missing packets."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PGN stands for Packet Gap Notebook. The notebook stores the operator comments and is separate from the monitor."
+        }
+      ],
+      "rationale": "A one-letter difference identifies separate entities.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Packet Gap Monitor",
+            "alias": "PGN"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Packet Gap Monitor",
+            "alias": "PGM"
+          },
+          {
+            "canonical": "Packet Gap Notebook",
+            "alias": "PGN"
+          }
+        ]
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_028",
+      "domain": "device_versions",
+      "phenomena": [
+        "digit_version_difference"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Signal Relay Gate 2 (SRG2) drives the older controller."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Signal Relay Gate 3 (SRG3) drives the replacement controller. SRG3 is a different model and cannot use the SRG2 wiring harness."
+        }
+      ],
+      "rationale": "Distinct model numbers must not be collapsed.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Signal Relay Gate 2",
+            "alias": "SRG3"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Signal Relay Gate 2",
+            "alias": "SRG2"
+          },
+          {
+            "canonical": "Signal Relay Gate 3",
+            "alias": "SRG3"
+          }
+        ]
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_029",
+      "domain": "workshop_forms",
+      "phenomena": [
+        "transposed_letters"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Pressure Check Sheet (PCS) stores the pressure readings from the bench."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PSC is the abbreviation for Panel Service Card. The card records work on the enclosure, not the pressure test."
+        }
+      ],
+      "rationale": "Transposed initial letters are not sufficient for identity.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Pressure Check Sheet",
+            "alias": "PSC"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Pressure Check Sheet",
+            "alias": "PCS"
+          },
+          {
+            "canonical": "Panel Service Card",
+            "alias": "PSC"
+          }
+        ]
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_030",
+      "domain": "thermal_testing",
+      "phenomena": [
+        "negated_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The draft suggests the expansion Thermal Transfer Gauge for TTG."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "That expansion is incorrect. TTG does not stand for Thermal Transfer Gauge. We have not recorded its correct expansion."
+        }
+      ],
+      "rationale": "A suggested definition is explicitly rejected.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Thermal Transfer Gauge",
+            "alias": "TTG"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_031",
+      "domain": "pressure_testing",
+      "phenomena": [
+        "question_only"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Could PVR stand for Pressure Validation Register? I found PVR on a handwritten test label."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "I do not know what PVR means. Please leave the abbreviation unresolved until we find its author."
+        }
+      ],
+      "rationale": "A question and an unresolved reply do not establish identity.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Pressure Validation Register",
+            "alias": "PVR"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_032",
+      "domain": "sample_preparation",
+      "phenomena": [
+        "hypothetical_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "If we create a Sample Transfer Index, we could shorten the name to STI."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "There is no Sample Transfer Index yet. The proposed STI label is only an example for the workshop."
+        }
+      ],
+      "rationale": "A hypothetical name is not an asserted current alias.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Sample Transfer Index",
+            "alias": "STI"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_033",
+      "domain": "change_management",
+      "phenomena": [
+        "unapproved_proposal"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "I propose calling the Inspection Decision Ledger IDL. This is a naming proposal for next month."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "No abbreviation has been selected for Inspection Decision Ledger. The team has not adopted the proposed IDL name."
+        }
+      ],
+      "rationale": "The sources explicitly say that the proposed identity is unadopted.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Inspection Decision Ledger",
+            "alias": "IDL"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_034",
+      "domain": "migration_operations",
+      "phenomena": [
+        "competing_expansion",
+        "historical_context"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Older maintenance notes define CRB as Cold Receipt Book. The old book still exists in the archive."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The current dispatch system defines CRB as Cart Routing Board. These are separate tools maintained by different teams."
+        }
+      ],
+      "rationale": "The explicit different identities prevent one global CRB alias even though both tools exist.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Cold Receipt Book",
+            "alias": "CRB"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_035",
+      "domain": "quality_review",
+      "phenomena": [
+        "quoted_rejected_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The rejected line was \"ORT stands for Offset Review Table.\" Do not use that expansion; the author confirmed it was wrong."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Offset Review Table is a real table, but its name does not explain the ORT mark on this instrument."
+        }
+      ],
+      "rationale": "Quoted erroneous text must not override explicit rejection.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Offset Review Table",
+            "alias": "ORT"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_036",
+      "domain": "parser_testing",
+      "phenomena": [
+        "code_literal",
+        "test_input"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "This is an intentionally false parser input, not a glossary entry:\n```text\nQAM means Queue Archive Map\n```"
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Queue Archive Map is the name of our map. The parser test deliberately assigns the unrelated QAM token to it."
+        }
+      ],
+      "rationale": "The definition is only a deliberately false test literal.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Queue Archive Map",
+            "alias": "QAM"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_037",
+      "domain": "operator_notices",
+      "phenomena": [
+        "uppercase_common_word",
+        "cooccurrence"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The terminal prints LOG when it opens the logging menu. LOG is a menu command, not an abbreviation."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Load Observation Grid stores the crane readings. Its name is written in full; no short name is assigned."
+        }
+      ],
+      "rationale": "Uppercase command text does not define an acronym for a nearby full name.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Load Observation Grid",
+            "alias": "LOG"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_038",
+      "domain": "measurement_pipeline",
+      "phenomena": [
+        "relationship_not_identity"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Counter Collection Register receives measurements from CCR. CCR is a separate collector service."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The Counter Collection Register restarted while CCR kept collecting. The receiver and collector have different processes."
+        }
+      ],
+      "rationale": "A producer/receiver relationship is not an alias.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Counter Collection Register",
+            "alias": "CCR"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_039",
+      "domain": "power_control",
+      "phenomena": [
+        "component_not_identity"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Power Panel Manager contains a plug-in called PPM. The plug-in is only its protection module."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PPM can be removed while Power Panel Manager continues to serve the panel display."
+        }
+      ],
+      "rationale": "A removable component is not the full parent system.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Power Panel Manager",
+            "alias": "PPM"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_040",
+      "domain": "schema_versions",
+      "phenomena": [
+        "compatible_not_equivalent"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Archive Schema 1 is abbreviated AS1. Archive Schema 2 is abbreviated AS2."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "AS2 readers can import AS1 records, but the two schemas have different required fields and remain separate versions."
+        }
+      ],
+      "rationale": "Compatibility does not establish identical concepts.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Archive Schema 1",
+            "alias": "AS2"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Archive Schema 1",
+            "alias": "AS1"
+          },
+          {
+            "canonical": "Archive Schema 2",
+            "alias": "AS2"
+          }
+        ]
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_041",
+      "domain": "private_operations",
+      "phenomena": [
+        "private_definition_only"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "private",
+          "body": "My private shorthand DAR means Desk Allocation Register. This is not a published team definition."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Desk Allocation Register holds the public desk reservations."
+        },
+        {
+          "actor": "cam",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The team note contains DAR as an unresolved token copied from a label."
+        }
+      ],
+      "rationale": "A private definition must not establish a team-visible alias.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Desk Allocation Register",
+            "alias": "DAR"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_042",
+      "domain": "private_instrumentation",
+      "phenomena": [
+        "private_full_name_only"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "private",
+          "body": "Probe Alignment Book (PAB) contains my private alignment notes."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "PAB appeared on the probe case. I do not have a published expansion for that token."
+        }
+      ],
+      "rationale": "The only full-name definition is private.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Probe Alignment Book",
+            "alias": "PAB"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_043",
+      "domain": "dispatch_operations",
+      "phenomena": [
+        "initials_only",
+        "no_definition"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Dock Assignment Table contains tomorrow's berth allocations."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "DAT was printed on a damaged package. I cannot tell what DAT refers to, and there is no link to the berth allocation work."
+        }
+      ],
+      "rationale": "Matching initials and proximity alone do not prove identity.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Dock Assignment Table",
+            "alias": "DAT"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_044",
+      "domain": "reporting_operations",
+      "phenomena": [
+        "question_then_rejection"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Does TRL mean Trace Review Ledger in the controller report?"
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "No. TRL does not refer to Trace Review Ledger. That proposed expansion is wrong."
+        }
+      ],
+      "rationale": "The answer explicitly denies the questioned identity.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Trace Review Ledger",
+            "alias": "TRL"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_045",
+      "domain": "inventory_import",
+      "phenomena": [
+        "list_cooccurrence"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The recovered inventory fragments are: Asset Sampling Ledger; ASL; calibration room; pallet seven."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Those fragments came from different labels. We have no evidence that ASL names Asset Sampling Ledger."
+        }
+      ],
+      "rationale": "An unlinked list of fragments is not a definition.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Asset Sampling Ledger",
+            "alias": "ASL"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_046",
+      "domain": "service_versions",
+      "phenomena": [
+        "suffix_distinction"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Service Valve Controller (SVC) controls the whole valve bank."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "SVC1 is an individual replaceable channel inside SVC. Service Valve Controller contains several such channels."
+        }
+      ],
+      "rationale": "A numbered channel must remain distinct from the enclosing controller.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Service Valve Controller",
+            "alias": "SVC1"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": [
+          {
+            "canonical": "Service Valve Controller",
+            "alias": "SVC"
+          }
+        ]
+      },
+      "hard_negative": [
+        "aliases"
+      ]
+    },
+    {
+      "id": "acronym_dev_047",
+      "domain": "retired_mapping",
+      "phenomena": [
+        "definition_deletion"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Feed Receipt Ledger (FRL) records the receipt for each hopper load."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "The hopper label contains FRL. I have no other source for what FRL means."
+        }
+      ],
+      "rationale": "After deleting the only full-name definition, the remaining token cannot sustain the alias.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Feed Receipt Ledger",
+            "alias": "FRL"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ],
+      "actions": [
+        {
+          "type": "delete",
+          "post": 0
+        }
+      ],
+      "retract": {
+        "aliases": [
+          {
+            "canonical": "Feed Receipt Ledger",
+            "alias": "FRL"
+          }
+        ]
+      }
+    },
+    {
+      "id": "acronym_dev_048",
+      "domain": "retired_mapping",
+      "phenomena": [
+        "definition_edit"
+      ],
+      "posts": [
+        {
+          "actor": "alice",
+          "kind": "note",
+          "visibility": "team",
+          "body": "Seal Audit Map (SAM) shows the last inspected seal on each vessel."
+        },
+        {
+          "actor": "ben",
+          "kind": "note",
+          "visibility": "team",
+          "body": "SAM appears on the inspection printout. I cannot expand that token independently."
+        }
+      ],
+      "rationale": "Replacing the only definition with unrelated text removes the alias support.",
+      "expect": {
+        "aliases": [],
+        "absent_aliases": [
+          {
+            "canonical": "Seal Audit Map",
+            "alias": "SAM"
+          }
+        ]
+      },
+      "allowed": {
+        "aliases": []
+      },
+      "hard_negative": [
+        "aliases"
+      ],
+      "actions": [
+        {
+          "type": "edit",
+          "post": 0,
+          "body": "The inspection printout was filed after the shift."
+        }
+      ],
+      "retract": {
+        "aliases": [
+          {
+            "canonical": "Seal Audit Map",
+            "alias": "SAM"
+          }
+        ]
+      }
+    }
+  ]
+}

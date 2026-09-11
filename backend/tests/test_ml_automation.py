@@ -56,7 +56,7 @@ def _apply(source_id, names=(), *, relation=False, cached=False, omitted_entity=
     from sqlalchemy import text
 
     from app.db import SessionLocal
-    from app.ml import adapter
+    from app.ml import adapter, syntax
     from app.ml.sources import snapshot
 
     metadata = ("fixture-extractor:fixture-embedding", "fixture-embedding", 1024)
@@ -73,7 +73,8 @@ def _apply(source_id, names=(), *, relation=False, cached=False, omitted_entity=
                       "end": source.text.index(name) + len(name), "score": 0.995,
                       "label": "technology"} for name in names]
             result = {"concepts": [span for span in spans if span["name"] != omitted_entity],
-                      "relations": [], "chunks": []}
+                      "relations": [], "chunks": [], "conflict_definitions": [],
+                      "conflict_coverage_revision": syntax.CONFLICT_REVISION}
             if relation:
                 result["relations"] = [{"head": spans[0], "tail": spans[1], "predicate": "uses",
                                         "score": 0.9, "start": 0, "end": len(source.text),
@@ -322,7 +323,7 @@ def test_explicit_alias_requires_independent_definitions_and_ambiguity_withdraws
 
 def _apply_role_definition(item_id, name, alias, *, cached=False, entity_score=0.995):
     from app.db import SessionLocal
-    from app.ml import adapter
+    from app.ml import adapter, syntax
     from app.ml.sources import digest, snapshot
 
     metadata = ("fixture-alias-runtime", "fixture-embedding", 1024)
@@ -340,7 +341,8 @@ def _apply_role_definition(item_id, name, alias, *, cached=False, entity_score=0
             full, short = field(name, 0.997), field(alias, 0.999)
             result = {"concepts": [{"name": name, "start": full["start"], "end": full["end"],
                                      "score": entity_score, "label": "named entity"}],
-                      "relations": [], "chunks": [], "corroborated_definitions": [{
+                      "relations": [], "chunks": [], "conflict_definitions": [],
+                      "conflict_coverage_revision": syntax.CONFLICT_REVISION, "corroborated_definitions": [{
                           "full_name": full, "short_name": short, "source_text_hash": digest(source.text),
                           "syntax_rules": ["parenthetical_compact_name" if "(" in source.text else "denotes"],
                           "syntax_rule_revision": "fixture-r4",
@@ -690,3 +692,190 @@ def test_expertise_outcomes_route_old_questions_once_and_respect_overrides(make_
     _decision(admin_client, finding["key"], "pinned")
     _profile_work(profile_id)
     assert any(row["label"] == username for row in reader.get("/api/expertise").json())
+
+
+def _apply_current_definition(item_id, name, alias, *, field_score=0.995, entity_score=0.995,
+                              spans=None, cached=False, revision=None, rule="denotes"):
+    """Supply pinned records at the existing expensive-inference boundary."""
+    from app.db import SessionLocal
+    from sqlalchemy import text
+    from app.ml import adapter, policy, syntax
+    from app.ml.runtime import inference_version
+    from app.ml.sources import digest, snapshot
+
+    models = {"extractor": {"revision": "72ac19b486cd4557424c8d61114e7530c243e9b0"},
+              "embeddings": {"revision": "fixture-embedding"},
+              "syntax": {"revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"}}
+    metadata = (inference_version(models), models["embeddings"]["revision"], 1024)
+    with SessionLocal() as db:
+        db.execute(text("UPDATE ml_state SET pipeline_version=:version WHERE id=1"), {"version": metadata[0] + ":" + policy.VERSION})
+        source = snapshot(db, "item", item_id)
+        if cached:
+            result, metadata = adapter.cached_result(db, source, metadata[0])
+        else:
+            def field(value, score):
+                start = source.text.index(value)
+                return {"text": value, "start": start, "end": start + len(value), "confidence": score}
+
+            entities = [field(value, score) for value, score in (spans or [(name, entity_score)])]
+            result = {"concepts": [{"name": e["text"], "start": e["start"], "end": e["end"],
+                                     "score": e["confidence"], "label": "named entity"} for e in entities],
+                      "relations": [], "chunks": [], "conflict_definitions": [],
+                      "conflict_coverage_revision": syntax.CONFLICT_REVISION, "corroborated_definitions": [{
+                          "full_name": field(name, field_score), "short_name": field(alias, field_score),
+                          "source_text_hash": digest(source.text), "syntax_rules": [rule],
+                          "syntax_rule_revision": revision or syntax.REVISION,
+                          "alias_model_revision": models["extractor"]["revision"],
+                          "syntax_model_revision": models["syntax"]["revision"]}]}
+        adapter.apply_source(db, "item", item_id, source, result, *metadata)
+        db.commit()
+
+
+@pytest.mark.parametrize("removal", ["delete", "edit", "private"])
+def test_single_exact_definition_publishes_and_retracts_without_role_score_leak(make_client, admin_client, removal):
+    from sqlalchemy import text
+    from app.db import SessionLocal
+
+    owner = make_client()
+    name, alias = "Prospective Trace " + removal, "PT" + removal
+    item = _capture(owner, f"{alias} denotes {name} in this instrument log.")
+    _apply_current_definition(item, name, alias, field_score=0.85)
+    cid = _tags(owner, item)[name]
+    key = _finding(admin_client, "alias", alias=alias, concept_id=cid)["key"]
+    def published():
+        return [c["id"] for c in owner.get("/api/search", params={"q": alias}).json()["concepts"]]
+    assert published() == [cid]
+    detail = admin_client.get(f"/api/ml/findings/{key}").json()
+    assert detail["features"]["independent_groups"] == 1
+    assert _finding(admin_client, "concept", name=name)["raw_model_score"] == 0.995
+    assert _finding(admin_client, "mention", source_id=item, concept_id=cid)["raw_model_score"] == 0.995
+    _apply_current_definition(item, name, alias, cached=True)
+    _decision(admin_client, key, "suppressed")
+    assert published() == []
+    _apply_current_definition(item, name, alias, cached=True)
+    assert published() == []
+    _decision(admin_client, key, "automatic")
+    assert published() == [cid]
+    if removal == "delete":
+        assert owner.delete(f"/api/items/{item}").status_code == 200
+    elif removal == "edit":
+        assert owner.put(f"/api/items/{item}", json={"body": "The instrument log no longer contains a name."}).status_code == 200
+    else:
+        with SessionLocal() as db:
+            db.execute(text("UPDATE knowledge_items SET visibility='private' WHERE id=:id"), {"id": item})
+            db.commit()
+    assert published() == []
+    _apply(item)
+    assert published() == []
+
+
+@pytest.mark.parametrize("name,alias,legacy_score,role_score", [
+    ("Harbor Deeds", "Harbor Titles", 0.9973875880241394, 0.528182327747345),
+    ("opal seismometer", "OS", 0.9704638719558716, 0.7214248180389404),
+    ("vine bud map", "VBM", 0.9534861445426941, 0.659421443939209),
+])
+def test_single_definition_cannot_borrow_legacy_score(make_client, admin_client, name, alias, legacy_score, role_score):
+    owner = make_client()
+    anchor = _capture(owner, f"{name} stores the observation record.")
+    _apply(anchor, [name])
+    item = _capture(owner, f"{name} is also called {alias} in the observation log.")
+    _apply_current_definition(item, name, alias, field_score=role_score, spans=[(name, legacy_score), (alias, legacy_score)], rule="passive_or_nominal_naming")
+    finding = _finding(admin_client, "alias", alias=alias)
+    assert finding["raw_model_score"] == legacy_score and finding["state"] == "held"
+    assert owner.get("/api/search", params={"q": alias}).json()["concepts"] == []
+
+
+def test_hidden_partial_expansion_blocks_single_definition_until_source_correction(make_client, admin_client):
+    owner = make_client()
+    name, alias = "Saffron Sampler", "SSamp"
+    body = "SSamp is another name for Saffron Sampler on our rack list. I compared two playback starts for the same sample."
+    item = _capture(owner, body)
+    _apply_current_definition(item, name, alias, spans=[(name, 0.995), (alias, 0.6), ("Saffron", 0.6)], rule="copular_name_for")
+    assert _finding(admin_client, "concept", name="Saffron")["canonical_id"] is None
+    assert _finding(admin_client, "alias", alias=alias)["state"] == "held"
+    assert owner.get("/api/search", params={"q": alias}).json()["concepts"] == []
+    assert owner.put(f"/api/items/{item}", json={"body": "SSamp denotes Saffron Sampler on our rack list."}).status_code == 200
+    _apply_current_definition(item, name, alias)
+    assert [c["name"] for c in owner.get("/api/search", params={"q": alias}).json()["concepts"]] == [name]
+
+
+def test_single_definition_preserves_existing_short_name_canonical(make_client, admin_client):
+    owner = make_client()
+    name, alias = "Prospective Canonical Collector", "PCC"
+    manual = admin_client.post("/api/admin/concepts", json={"name": alias, "aliases": []}).json()
+    item = _capture(owner, f"{alias} denotes {name} in the observation log.")
+    _apply_current_definition(item, name, alias)
+    target = _finding(admin_client, "concept", name=name)
+    assert target["canonical_id"] != manual["id"]
+    assert _finding(admin_client, "alias", alias=alias, concept_id=target["canonical_id"])["state"] == "held"
+    assert [c["id"] for c in owner.get("/api/search", params={"q": alias}).json()["concepts"]] == [manual["id"]]
+
+
+def test_single_definition_waits_for_old_source_index_then_redecides_in_pages(make_client, admin_client):
+    from sqlalchemy import text
+    from app.db import SessionLocal
+    from app.ml import adapter
+
+    owner = make_client()
+    old = _capture(owner, "Historical Observation Register stores calibrated readings.")
+    _apply(old, ["Historical Observation Register"])
+    with SessionLocal() as db:
+        db.execute(text("UPDATE ml_sources SET result=json_remove(result,'$.definitions_indexed') WHERE kind='item' AND id=:id"), {"id": old})
+        db.commit()
+    name, alias = "Prospective Indexed Register", "PIR"
+    item = _capture(owner, f"{alias} denotes {name} in the observation log.")
+    _apply_current_definition(item, name, alias)
+    assert _finding(admin_client, "alias", alias=alias)["state"] == "held"
+    assert owner.get("/api/search", params={"q": alias}).json()["concepts"] == []
+    _apply(old, ["Historical Observation Register"])
+    with SessionLocal() as db:
+        cursor = ""
+        while True:
+            adapter.apply_vocabulary(db, "aliases:" + cursor)
+            later = db.execute(text("SELECT source_id FROM ml_jobs WHERE source_kind='vocabulary' AND source_id LIKE 'aliases:%' AND source_id>:current ORDER BY source_id LIMIT 1"), {"current": "aliases:" + cursor}).scalar()
+            if later is None:
+                break
+            cursor = later.split(":", 1)[1]
+        db.commit()
+    assert [c["name"] for c in owner.get("/api/search", params={"q": alias}).json()["concepts"]] == [name]
+
+
+def test_single_definition_requires_current_rule_and_selected_model_contract(make_client, admin_client):
+    from sqlalchemy import text
+    from app.db import SessionLocal
+    from app.ml import adapter
+
+    owner = make_client()
+    name, alias = "Prospective Version Register", "PVR"
+    item = _capture(owner, f"{alias} denotes {name} in the observation log.")
+    _apply_current_definition(item, name, alias, revision="obsolete-rules")
+    assert _finding(admin_client, "alias", alias=alias)["state"] == "held"
+    _apply_current_definition(item, name, alias)
+    finding = _finding(admin_client, "alias", alias=alias)
+    assert finding["state"] == "active"
+    with SessionLocal() as db:
+        db.execute(text("UPDATE ml_state SET pipeline_version='a-different-selected-model' WHERE id=1"))
+        adapter.apply_vocabulary(db, "aliases:" + finding["key"][:-1])
+        db.commit()
+    assert owner.get("/api/search", params={"q": alias}).json()["concepts"] == []
+
+
+def test_single_current_role_record_cannot_qualify_a_weak_entity(make_client, admin_client):
+    owner = make_client()
+    name, alias = "Prospective Weak Register", "PWR"
+    item = _capture(owner, f"{alias} denotes {name} in the observation log.")
+    _apply_current_definition(item, name, alias, field_score=0.999, entity_score=0.2)
+    finding = _finding(admin_client, "concept", name=name)
+    assert (finding["state"], finding["canonical_id"], finding["raw_model_score"]) == ("held", None, 0.2)
+    assert owner.get("/api/search", params={"q": alias}).json()["concepts"] == []
+
+
+def test_exact_definition_survives_higher_scoring_spelling_method(make_client, admin_client):
+    owner = make_client()
+    name, alias = "Prospective Spelling Register", "Prospective-Spelling-Register"
+    item = _capture(owner, f"{name} is also called {alias} in the observation log.")
+    _apply_current_definition(item, name, alias, field_score=0.99,
+                              spans=[(name, 0.995), (alias, 0.999)], rule="passive_or_nominal_naming")
+    finding = _finding(admin_client, "alias", alias=alias)
+    assert finding["state"] == "active"
+    assert [c["name"] for c in owner.get("/api/search", params={"q": alias}).json()["concepts"]] == [name]
