@@ -85,6 +85,14 @@ def _decide(db, row):
 
 
 def _concept(db, name):
+    # An inverse alias projects a name, but never adopts its declaration.
+    inverse = db.query(Finding).filter(Finding.kind == "alias",
+        func.json_extract(Finding.payload, "$.alias_key") == normalize(name),
+        func.json_extract(Finding.payload, "$.direction") == "inverse").first()
+    if inverse:
+        declaration = db.get(Finding, json.loads(inverse.payload)["declaration_key"])
+        if declaration:
+            return declaration
     term = db.query(ConceptTerm).filter_by(term=normalize(name)).first()
     match = term or resolution.spelling_match(db, name)
     if isinstance(match, Finding):
@@ -200,6 +208,15 @@ def _publish_concept(db, row):
     if row.state != "active":
         return False
     payload = json.loads(row.payload)
+    if not row.canonical_id:
+        certificate = identity.route(db, normalize(payload["name"]))
+        if certificate and certificate["direction"] == "inverse":
+            return False
+        term = db.query(ConceptTerm).filter_by(term=normalize(payload["name"])).first()
+        inverse = (db.query(Finding).filter(Finding.kind == "alias", Finding.canonical_id == term.id,
+                   func.json_extract(Finding.payload, "$.direction") == "inverse").first() if term else None)
+        if inverse:
+            return False
     blocked = db.get(Override, finding_key("term", normalize(payload["name"])))
     if blocked and blocked.mode == "suppressed":
         row.state = "suppressed"
@@ -249,7 +266,9 @@ def _publish_alias(db, row):
         payload["identity_routing"] = True
         row.payload = _json(payload)
         if not db.get(Override, row.key):
-            certificate = identity.route(db, spelling)
+            certificate = identity.route(db, payload.get("definition_alias_key", spelling))
+            if certificate and certificate["published_alias"] != spelling:
+                certificate = None
             if certificate is None:
                 row.state = "held"
             else:
@@ -264,15 +283,21 @@ def _publish_alias(db, row):
         version = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
         evidence = [e for e in effective.evidence_rows(db, row.key) if version == e["model_version"] + ":" + policy.VERSION]
         for method in policy.single_alias_definitions(evidence):
-            if normalize(method["short_name"]["text"]) != spelling:
+            inverse = payload.get("direction") == "inverse"
+            if normalize(method["full_name" if inverse else "short_name"]["text"]) != spelling:
                 continue
-            name = method["full_name"]["text"]
+            name = method["short_name" if inverse else "full_name"]["text"]
             target = db.query(ConceptTerm).filter_by(term=normalize(name)).first() or resolution.spelling_match(db, name)
             target_id = target.canonical_id if isinstance(target, Finding) else target.concept_id if target else None
             if target_id != payload["concept_id"]:
                 continue
             targets = db.query(Finding).filter_by(kind="concept", canonical_id=target_id)
-            if any(policy.decide("concept", effective.evidence_rows(db, target.key))[0] == "active" for target in targets):
+            if inverse:
+                certificate = identity.route(db, payload["definition_alias_key"])
+                qualified = certificate and certificate["direction"] == "inverse" and certificate["canonical_id"] == target_id
+            else:
+                qualified = any(policy.decide("concept", effective.evidence_rows(db, target.key))[0] == "active" for target in targets)
+            if qualified:
                 row.state = "active"
                 break
     blocked = db.get(Override, finding_key("term", spelling))
@@ -439,7 +464,8 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                     or not (full["end"] <= short["start"] or short["end"] <= full["start"])):
                 raise ValueError("Conflict definition does not match its source")
             target = _concept(db, full["name"])
-            payload = {"alias_key": normalize(short["name"]), "name": full["name"], "concept_key": target.key}
+            payload = {"alias_key": normalize(short["name"]), "name": full["name"],
+                       "full_key": normalize(full["name"]), "concept_key": target.key}
             record = _finding(db, "alias_definition", [normalize(short["name"]), normalize(full["name"])], payload)
             record.payload = _json({**json.loads(record.payload), **payload})
             _evidence(db, record, source, min(full["start"], short["start"]), max(full["end"], short["end"]),
@@ -447,7 +473,8 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             affected.add(record.key)
         for definition in definitions:
             target = concepts[normalize(definition["name"])]
-            payload = {"alias_key": normalize(definition["alias"]), "name": definition["name"], "concept_key": target.key}
+            payload = {"alias_key": normalize(definition["alias"]), "name": definition["name"],
+                       "full_key": normalize(definition["name"]), "concept_key": target.key}
             record = _finding(db, "alias_definition", [normalize(definition["alias"]), normalize(definition["name"])], payload)
             record.payload = _json({**json.loads(record.payload), **payload})
             _evidence(db, record, source, definition["start"], definition["end"], definition["score"], model_version,
@@ -491,6 +518,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                         func.json_extract(Finding.payload, text("'$.alias_key'")) == spelling,
                         func.json_extract(Finding.payload, "$.identity_routing") == True).first()
                 fixed = db.get(Override, conditional.key) if conditional else None
+                conditional_row = conditional
                 conditional = (conditional and json.loads(conditional.payload).get("identity_routing")
                                and not (fixed and fixed.mode == "pinned"))
                 if reserved or conditional:
@@ -498,9 +526,14 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                         continue
                     certificate = identity.route(db, spelling)
                     if certificate is None:
-                        continue
-                    row = db.get(Finding, certificate["concept_key"])
-                    routes_by_spelling[spelling] = certificate
+                        if conditional and json.loads(conditional_row.payload).get("direction") == "inverse":
+                            row = db.get(Finding, json.loads(conditional_row.payload)["declaration_key"])
+                        else:
+                            continue
+                    else:
+                        row = db.get(Finding, certificate["declaration_key"] if certificate["direction"] == "inverse"
+                                     else certificate["concept_key"])
+                        routes_by_spelling[spelling] = certificate
                 else:
                     row = concepts.get(spelling) or _concept(db, span["name"])
             canonical_name = json.loads(row.payload)["name"]
@@ -510,7 +543,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                                 "end": span["end"], "score": span["score"], "spelling_variant": True})
             _evidence(db, row, source, span["start"], span["end"], span["score"], model_version,
                       grounded=True, label=span["label"],
-                      **({"identity_routes": [certificate]} if certificate else {}))
+                      **({"identity_routes": [certificate]} if certificate and certificate["direction"] == "forward" else {}))
             affected.add(row.key)
             concepts[spelling] = row
             concepts.setdefault(normalize(canonical_name), row)
@@ -520,6 +553,13 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             vocabulary_changed |= _decide(db, row)
             vocabulary_changed |= _publish_concept(db, row)
         db.flush()
+        # Reverse publication changes only downstream identity. Direct entity
+        # scores above remain on the unbound full-name declaration.
+        for spelling in list(concepts):
+            certificate = identity.route(db, spelling)
+            if certificate and certificate["direction"] == "inverse" and certificate["published_alias"] == spelling:
+                concepts[spelling] = db.get(Finding, certificate["concept_key"])
+                routes_by_spelling[spelling] = certificate
         for span in spans:
             concept = concepts.get(normalize(span["name"]))
             if not concept or not concept.canonical_id:
@@ -551,15 +591,24 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                 affected.add(mention.key)
         for definition in definitions + aliases:
             concept = concepts.get(normalize(definition["name"]))
+            certificate = identity.route(db, normalize(definition["alias"])) if definition.get("method") else None
+            inverse = certificate and certificate["direction"] == "inverse"
+            if inverse:
+                concept = db.get(Finding, certificate["concept_key"])
             if concept and concept.canonical_id:
-                alias = _finding(db, "alias", [normalize(definition["alias"]), concept.canonical_id],
-                                 {"alias": definition["alias"], "alias_key": normalize(definition["alias"]), "concept_id": concept.canonical_id})
+                name = definition["name"] if inverse else definition["alias"]
+                alias = _finding(db, "alias", [normalize(name), concept.canonical_id],
+                                 {"alias": name, "alias_key": normalize(name), "concept_id": concept.canonical_id,
+                                  **({"identity_routing": True, "direction": "inverse",
+                                      "definition_alias_key": certificate["alias_key"],
+                                      "declaration_key": certificate["declaration_key"]} if inverse else {})})
                 _evidence(db, alias, source, definition["start"], definition["end"], definition["score"], model_version,
                           explicit_definition=not definition.get("spelling_variant", False),
                           spelling_variant=definition.get("spelling_variant", False), assertion_allowed=source.assertion_allowed,
                           definition_methods=[definition.get("method", {
                               "origin": "genuine_spelling_variant" if definition.get("spelling_variant") else "legacy_entity_definition",
-                              "score": definition["score"]})])
+                              "score": definition["score"]})],
+                          **({"identity_routes": [certificate]} if inverse else {}))
                 affected.add(alias.key)
         for relation in result["relations"]:
             # The relation extractor can identify a known endpoint that the
@@ -576,6 +625,8 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                             certificate = identity.route(db, normalize(name))
                             if certificate:
                                 routes_by_spelling[normalize(name)] = certificate
+                                if certificate["direction"] == "inverse":
+                                    concepts[normalize(name)] = db.get(Finding, certificate["concept_key"])
             head, tail = (concepts.get(normalize(relation[part]["name"])) for part in ("head", "tail"))
             if not head or not tail or not head.canonical_id or not tail.canonical_id or head.canonical_id == tail.canonical_id:
                 continue

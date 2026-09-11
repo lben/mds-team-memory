@@ -2,7 +2,7 @@
 
 import json
 
-from sqlalchemy import func, literal_column, text
+from sqlalchemy import func, literal_column, or_, text
 
 from ..models import Account, ConceptTerm, Profile
 from . import policy, syntax
@@ -10,7 +10,7 @@ from .models import Finding, Override, Source
 from .runtime import normalize
 from .sources import digest, finding_key
 
-VERSION = "exact-scored-identity-v1"
+VERSION = "exact-scored-identity-v2"
 
 
 def definitions_pending(db):
@@ -28,6 +28,7 @@ def valid_routes():
         JOIN ml_sources source ON source.kind=witness.source_kind AND source.id=witness.source_id
         JOIN ml_findings definition ON definition.key=witness.finding_key AND definition.kind='alias_definition'
         JOIN ml_findings target ON target.key=json_extract(route.value,'$.concept_key') AND target.kind='concept'
+        JOIN ml_findings declaration ON declaration.key=json_extract(route.value,'$.declaration_key') AND declaration.kind='concept'
         JOIN ml_state state ON state.id=1
         WHERE witness.key=json_extract(route.value,'$.definition_evidence_key')
           AND source.valid=1 AND source.content_hash=witness.source_hash
@@ -41,7 +42,25 @@ def valid_routes():
           AND json_extract(route.value,'$.routing_policy')='{VERSION}'
           AND witness.polarity='positive' AND json_extract(witness.features,'$.assertion_allowed')=1
           AND json_extract(definition.payload,'$.alias_key')=json_extract(route.value,'$.alias_key')
-          AND json_extract(definition.payload,'$.concept_key')=target.key
+          AND json_extract(definition.payload,'$.concept_key')=declaration.key
+          AND (json_extract(route.value,'$.direction')='forward' AND declaration.key=target.key
+            OR json_extract(route.value,'$.direction')='inverse' AND declaration.canonical_id IS NULL
+              AND target.canonical_id=json_extract(route.value,'$.canonical_id') AND target.state='active'
+              AND EXISTS (SELECT 1 FROM concept_terms native WHERE native.is_canonical=1
+                AND native.term=json_extract(route.value,'$.alias_key') AND native.concept_id=target.canonical_id)
+              AND json_array_length(route.value,'$.anchors')>0
+              AND NOT EXISTS (SELECT 1 FROM json_each(route.value,'$.anchors') anchor WHERE NOT EXISTS (
+                SELECT 1 FROM ml_evidence native JOIN ml_sources native_source
+                  ON native_source.kind=native.source_kind AND native_source.id=native.source_id
+                WHERE native.key=json_extract(anchor.value,'$.key') AND native.finding_key=target.key
+                  AND native.raw_score=json_extract(anchor.value,'$.raw_score')
+                  AND native.source_kind=json_extract(anchor.value,'$.source_kind')
+                  AND native.source_id=json_extract(anchor.value,'$.source_id')
+                  AND native.source_hash=json_extract(anchor.value,'$.source_hash')
+                  AND native_source.valid=1 AND native_source.content_hash=native.source_hash
+                  AND native_source.model_version=native.model_version
+                  AND native.model_version=witness.model_version
+                  AND json_type(native.features,'$.identity_routes') IS NULL)))
           AND EXISTS (SELECT 1 FROM json_each(witness.features,'$.definition_methods') method
             WHERE method.value=json_extract(route.value,'$.method_json')
               AND json_extract(method.value,'$.syntax_rule_revision')='{syntax.REVISION}'
@@ -53,10 +72,11 @@ def valid_routes():
           AND NOT EXISTS (SELECT 1 FROM concept_terms short WHERE short.term=json_extract(route.value,'$.alias_key')
             AND short.is_canonical=1 AND (target.canonical_id IS NULL OR short.concept_id!=target.canonical_id))
           AND NOT EXISTS (SELECT 1 FROM ml_overrides fixed WHERE fixed.mode='suppressed' AND
-            (fixed.key=target.key OR fixed.key=json_extract(route.value,'$.term_key')
+            (fixed.key=target.key OR fixed.key=declaration.key OR fixed.key=json_extract(route.value,'$.term_key')
              OR fixed.key=json_extract(route.value,'$.full_term_key')
-             OR (fixed.kind='concept' AND json_extract(fixed.payload,'$.name')=json_extract(target.payload,'$.name'))
-             OR (fixed.kind='alias' AND json_extract(fixed.payload,'$.alias_key')=json_extract(route.value,'$.alias_key')
+             OR (fixed.kind='concept' AND json_extract(fixed.payload,'$.name') IN
+                 (json_extract(target.payload,'$.name'),json_extract(declaration.payload,'$.name')))
+             OR (fixed.kind='alias' AND json_extract(fixed.payload,'$.alias_key')=json_extract(route.value,'$.published_alias')
                  AND json_extract(fixed.payload,'$.concept_id')=target.canonical_id)
              OR (fixed.kind='mention' AND json_extract(fixed.payload,'$.source_kind')=ml_evidence.source_kind
                  AND json_extract(fixed.payload,'$.source_id')=ml_evidence.source_id
@@ -74,8 +94,16 @@ def valid_routes():
               AND json_extract(possible.payload,'$.alias_key')=json_extract(route.value,'$.alias_key')
               AND EXISTS (SELECT 1 FROM ml_evidence e JOIN ml_sources s ON s.kind=e.source_kind AND s.id=e.source_id
                 AND s.valid=1 AND s.content_hash=e.source_hash WHERE e.finding_key=possible.key)
-              AND (alternative.key IS NULL OR (alternative.key!=target.key AND
-                (target.canonical_id IS NULL OR alternative.canonical_id IS NULL OR alternative.canonical_id!=target.canonical_id))))
+              AND (alternative.key IS NULL OR (alternative.key!=declaration.key AND
+                (declaration.canonical_id IS NULL OR alternative.canonical_id IS NULL OR alternative.canonical_id!=declaration.canonical_id))))
+          AND NOT EXISTS (SELECT 1 FROM concept_terms claimed
+            WHERE claimed.term=json_extract(route.value,'$.published_alias')
+              AND target.canonical_id IS NOT NULL AND claimed.concept_id!=target.canonical_id)
+          AND NOT EXISTS (SELECT 1 FROM ml_findings claimed WHERE claimed.kind='alias'
+            AND json_extract(claimed.payload,'$.alias_key')=json_extract(route.value,'$.published_alias')
+            AND json_extract(claimed.payload,'$.concept_id')!=target.canonical_id
+            AND EXISTS (SELECT 1 FROM ml_evidence e JOIN ml_sources s ON s.kind=e.source_kind AND s.id=e.source_id
+              AND s.valid=1 AND s.content_hash=e.source_hash WHERE e.finding_key=claimed.key))
       ))""")
 
 
@@ -90,6 +118,14 @@ def route(db, spelling):
 
     if definitions_pending(db):
         return None
+    lookup = spelling
+    keys = {json.loads(row.payload)["alias_key"] for row in db.query(Finding).filter(
+        Finding.kind == "alias_definition", or_(
+            func.json_extract(Finding.payload, "$.alias_key") == spelling,
+            func.json_extract(Finding.payload, "$.full_key") == spelling), effective.supported()).limit(33)}
+    if len(keys) != 1:
+        return None
+    spelling = next(iter(keys))
     definitions = db.query(Finding).filter(Finding.kind == "alias_definition",
         func.json_extract(Finding.payload, text("'$.alias_key'")) == spelling,
         effective.supported()).order_by(Finding.key).limit(33).all()
@@ -99,17 +135,44 @@ def route(db, spelling):
     if any(target is None for target in targets):
         return None
     generation = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
-    for definition, target in zip(definitions, targets):
-        if any(other.key != target.key and (not target.canonical_id or other.canonical_id != target.canonical_id)
+    for definition, declaration in zip(definitions, targets):
+        if any(other.key != declaration.key and (not declaration.canonical_id or other.canonical_id != declaration.canonical_id)
                for other in targets):
             continue
+        target, direction, anchors = declaration, "forward", []
         short = db.query(ConceptTerm).filter_by(term=spelling, is_canonical=True).first()
-        if short and short.concept_id != target.canonical_id:
+        if short and short.concept_id != declaration.canonical_id:
+            if declaration.canonical_id:
+                continue
+            target = db.query(Finding).filter_by(kind="concept", canonical_id=short.concept_id).first()
+            if target is None or target.state != "active":
+                continue
+            native = []
+            for evidence in effective.evidence_rows(db, target.key):
+                source = db.get(Source, (evidence["source_kind"], evidence["source_id"]))
+                if (evidence.get("identity_routes") or generation != evidence["model_version"] + ":" + policy.VERSION
+                        or source.model_version != evidence["model_version"]):
+                    continue
+                if any(normalize(span["name"]) == spelling and span["label"] != "relation endpoint"
+                       and (span["start"], span["end"], span["score"]) ==
+                           (evidence["start"], evidence["end"], evidence["raw_score"])
+                       for span in json.loads(source.result).get("concepts", [])):
+                    native.append(evidence)
+            if policy.decide("concept", native)[0] != "active":
+                continue
+            anchors = [{key: evidence[key] for key in ("key", "source_kind", "source_id", "source_hash", "raw_score")}
+                       for evidence in sorted(native, key=lambda e: e["key"])]
+            direction = "inverse"
+        name = json.loads(declaration.payload)["name"]
+        published = normalize(name) if direction == "inverse" else spelling
+        if lookup != spelling and (direction != "inverse" or lookup != published):
             continue
-        name = json.loads(target.payload)["name"]
-        keys = [target.key, finding_key("term", spelling), finding_key("term", normalize(name))]
+        claimed = db.query(ConceptTerm).filter_by(term=published).first()
+        if claimed and target.canonical_id and claimed.concept_id != target.canonical_id:
+            continue
+        keys = [target.key, finding_key("term", spelling), finding_key("term", normalize(name)), declaration.key]
         if target.canonical_id:
-            keys.append(finding_key("alias", spelling, target.canonical_id))
+            keys.append(finding_key("alias", published, target.canonical_id))
         if db.query(Override).filter(Override.key.in_(keys), Override.mode == "suppressed").first():
             continue
         for evidence in sorted(effective.evidence_rows(db, definition.key), key=lambda e: e["key"]):
@@ -124,6 +187,8 @@ def route(db, spelling):
                         or method.get("source_text_hash") != json.loads(source.result).get("text_hash")):
                     continue
                 return {"alias_key": spelling, "concept_key": target.key,
+                    "declaration_key": declaration.key, "direction": direction, "published_alias": published,
+                    **({"canonical_id": target.canonical_id, "anchors": anchors} if direction == "inverse" else {}),
                     "definition_evidence_key": evidence["key"],
                     "witness_source_kind": source.kind, "witness_source_id": source.id,
                     "witness_source_hash": source.content_hash, "method_fingerprint": digest(method),
@@ -140,6 +205,14 @@ def reconsider(db, spellings):
     affected = set()
     changed = False
     for spelling in sorted(set(spellings)):
+        mapped = {json.loads(row.payload)["alias_key"] for row in db.query(Finding).filter(
+            Finding.kind == "alias_definition", or_(
+                func.json_extract(Finding.payload, "$.alias_key") == spelling,
+                func.json_extract(Finding.payload, "$.full_key") == spelling))}
+        if mapped and spelling not in mapped:
+            if len(mapped) != 1:
+                continue
+            spelling = next(iter(mapped))
         holder = db.query(Finding).filter(Finding.kind == "alias_definition",
             func.json_extract(Finding.payload, text("'$.alias_key'")) == spelling).order_by(Finding.key).first()
         if holder is None:

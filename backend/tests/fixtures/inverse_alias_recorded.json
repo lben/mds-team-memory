@@ -1,0 +1,1282 @@
+{
+  "purpose": "Observed development identity engineering replay; original scores/spans/roles retained; embedding chunks omitted. Not release quality evidence.",
+  "cases": [
+    {
+      "case": {
+        "id": "acronym_dev_002",
+        "domain": "network_operations",
+        "phenomena": [
+          "short_first",
+          "later_definition"
+        ],
+        "posts": [
+          {
+            "actor": "alice",
+            "kind": "note",
+            "visibility": "team",
+            "body": "PGM recorded a gap after the link bounced. I saved its capture before restarting the router."
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "PGM is short for Packet Gap Monitor. Packet Gap Monitor measures missing sequence numbers on the mirror port."
+          },
+          {
+            "actor": "cam",
+            "kind": "note",
+            "visibility": "team",
+            "body": "The Packet Gap Monitor result agrees with my independent packet capture."
+          }
+        ],
+        "rationale": "The later definition supplies identity for the earlier acronym observation.",
+        "expect": {
+          "aliases": [
+            {
+              "canonical": "Packet Gap Monitor",
+              "alias": "PGM"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "allowed": {
+          "aliases": [
+            {
+              "canonical": "Packet Gap Monitor",
+              "alias": "PGM"
+            }
+          ]
+        },
+        "hard_negative": []
+      },
+      "predictions_sha256": "23e40b7319a75d10e2b126ef4b223d7e848833bf994562509424dde24a1048ef",
+      "records": [
+        {
+          "body": "PGM recorded a gap after the link bounced. I saved its capture before restarting the router.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "PGM",
+                "start": 0,
+                "end": 3,
+                "score": 0.9983199238777161,
+                "label": "named entity"
+              },
+              {
+                "name": "router",
+                "start": 85,
+                "end": 91,
+                "score": 0.7259430885314941,
+                "label": "object or substance"
+              },
+              {
+                "name": "link",
+                "start": 29,
+                "end": 33,
+                "score": 0.6783096790313721,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "PGM",
+                  "start": 0,
+                  "end": 3,
+                  "score": 0.7751622200012207
+                },
+                "tail": {
+                  "name": "link",
+                  "start": 29,
+                  "end": 33,
+                  "score": 0.7751622200012207
+                },
+                "predicate": "produces",
+                "score": 0.7751622200012207,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 42
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "PGM is short for Packet Gap Monitor. Packet Gap Monitor measures missing sequence numbers on the mirror port.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "PGM",
+                "start": 0,
+                "end": 3,
+                "score": 0.9861185550689697,
+                "label": "named entity"
+              },
+              {
+                "name": "Packet Gap Monitor",
+                "start": 37,
+                "end": 55,
+                "score": 0.5579542517662048,
+                "label": "named entity"
+              },
+              {
+                "name": "missing sequence numbers",
+                "start": 65,
+                "end": 89,
+                "score": 0.9166727662086487,
+                "label": "topic or process"
+              },
+              {
+                "name": "Packet Gap Monitor",
+                "start": 17,
+                "end": 35,
+                "score": 0.5783750414848328,
+                "label": "topic or process"
+              },
+              {
+                "name": "mirror port",
+                "start": 97,
+                "end": 108,
+                "score": 0.8555731177330017,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Packet Gap Monitor",
+                  "confidence": 0.9991625547409058,
+                  "start": 17,
+                  "end": 35
+                },
+                "short_name": {
+                  "text": "PGM",
+                  "confidence": 0.9977182149887085,
+                  "start": 0,
+                  "end": 3
+                },
+                "syntax_rules": [
+                  "is_short_for"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "80b09d14d3a1a9928d8c85e47d2843a617b27f84920eb808ce5e45645a409ee7",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Packet Gap Monitor",
+                  "start": 17,
+                  "end": 35
+                },
+                "short_name": {
+                  "text": "PGM",
+                  "start": 0,
+                  "end": 3
+                },
+                "rule": "is_short_for",
+                "source_text_hash": "80b09d14d3a1a9928d8c85e47d2843a617b27f84920eb808ce5e45645a409ee7"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "The Packet Gap Monitor result agrees with my independent packet capture.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "Packet Gap Monitor",
+                "start": 4,
+                "end": 22,
+                "score": 0.8458619117736816,
+                "label": "named entity"
+              },
+              {
+                "name": "packet capture",
+                "start": 57,
+                "end": 71,
+                "score": 0.9302823543548584,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        }
+      ]
+    },
+    {
+      "case": {
+        "id": "acronym_dev_012",
+        "domain": "session_operations",
+        "phenomena": [
+          "short_first",
+          "independent_evidence"
+        ],
+        "posts": [
+          {
+            "actor": "alice",
+            "kind": "note",
+            "visibility": "team",
+            "body": "SBT reported that my session had used its retry allowance. I exported the result before closing the connection."
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "I reproduced the limit independently. The Session Budget Tracker measures the remaining retries."
+          },
+          {
+            "actor": "cam",
+            "kind": "note",
+            "visibility": "team",
+            "body": "SBT stands for Session Budget Tracker. The tracker now includes the retry caused by the connection reset."
+          }
+        ],
+        "rationale": "A later independent definition connects earlier short and full-name observations.",
+        "expect": {
+          "aliases": [
+            {
+              "canonical": "Session Budget Tracker",
+              "alias": "SBT"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "allowed": {
+          "aliases": [
+            {
+              "canonical": "Session Budget Tracker",
+              "alias": "SBT"
+            }
+          ]
+        },
+        "hard_negative": []
+      },
+      "predictions_sha256": "9e876959048094364a4cd162eeb1d9c306f3ae055cab2b855b943cea5980034b",
+      "records": [
+        {
+          "body": "SBT reported that my session had used its retry allowance. I exported the result before closing the connection.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "SBT",
+                "start": 0,
+                "end": 3,
+                "score": 0.9976491332054138,
+                "label": "named entity"
+              },
+              {
+                "name": "session",
+                "start": 21,
+                "end": 28,
+                "score": 0.7391663193702698,
+                "label": "relation endpoint"
+              },
+              {
+                "name": "retry allowance",
+                "start": 42,
+                "end": 57,
+                "score": 0.7391663193702698,
+                "label": "relation endpoint"
+              },
+              {
+                "name": "result",
+                "start": 74,
+                "end": 80,
+                "score": 0.5812883973121643,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "session",
+                  "start": 21,
+                  "end": 28,
+                  "score": 0.5060995817184448
+                },
+                "tail": {
+                  "name": "retry allowance",
+                  "start": 42,
+                  "end": 57,
+                  "score": 0.5060995817184448
+                },
+                "predicate": "uses",
+                "score": 0.5060995817184448,
+                "polarity": "positive",
+                "literal_support": true,
+                "start": 0,
+                "end": 58
+              },
+              {
+                "head": {
+                  "name": "session",
+                  "start": 21,
+                  "end": 28,
+                  "score": 0.7391663193702698
+                },
+                "tail": {
+                  "name": "retry allowance",
+                  "start": 42,
+                  "end": 57,
+                  "score": 0.7391663193702698
+                },
+                "predicate": "depends_on",
+                "score": 0.7391663193702698,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 58
+              },
+              {
+                "head": {
+                  "name": "SBT",
+                  "start": 0,
+                  "end": 3,
+                  "score": 0.5812883973121643
+                },
+                "tail": {
+                  "name": "result",
+                  "start": 74,
+                  "end": 80,
+                  "score": 0.5812883973121643
+                },
+                "predicate": "produces",
+                "score": 0.5812883973121643,
+                "polarity": "uncertain",
+                "literal_support": false,
+                "start": 0,
+                "end": 111
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "I reproduced the limit independently. The Session Budget Tracker measures the remaining retries.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "Session Budget Tracker",
+                "start": 42,
+                "end": 64,
+                "score": 0.9434596300125122,
+                "label": "named entity"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "SBT stands for Session Budget Tracker. The tracker now includes the retry caused by the connection reset.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "SBT",
+                "start": 0,
+                "end": 3,
+                "score": 0.994665265083313,
+                "label": "named entity"
+              },
+              {
+                "name": "connection reset",
+                "start": 88,
+                "end": 104,
+                "score": 0.9021996259689331,
+                "label": "topic or process"
+              },
+              {
+                "name": "retry",
+                "start": 68,
+                "end": 73,
+                "score": 0.7925148010253906,
+                "label": "topic or process"
+              },
+              {
+                "name": "tracker",
+                "start": 43,
+                "end": 50,
+                "score": 0.6860874891281128,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "tracker",
+                  "start": 43,
+                  "end": 50,
+                  "score": 0.6860874891281128
+                },
+                "tail": {
+                  "name": "connection reset",
+                  "start": 88,
+                  "end": 104,
+                  "score": 0.6860874891281128
+                },
+                "predicate": "depends_on",
+                "score": 0.6860874891281128,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 38,
+                "end": 105
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Session Budget Tracker",
+                  "confidence": 0.9978499412536621,
+                  "start": 15,
+                  "end": 37
+                },
+                "short_name": {
+                  "text": "SBT",
+                  "confidence": 0.9974996447563171,
+                  "start": 0,
+                  "end": 3
+                },
+                "syntax_rules": [
+                  "stands_for"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "bc2b3bdb8faf991839cbb40e41f9215cc9921cc77c13f568b08ced54bf7c135b",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Session Budget Tracker",
+                  "start": 15,
+                  "end": 37
+                },
+                "short_name": {
+                  "text": "SBT",
+                  "start": 0,
+                  "end": 3
+                },
+                "rule": "stands_for",
+                "source_text_hash": "bc2b3bdb8faf991839cbb40e41f9215cc9921cc77c13f568b08ced54bf7c135b"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        }
+      ]
+    },
+    {
+      "case": {
+        "id": "acronym_dev_013",
+        "domain": "storage_operations",
+        "phenomena": [
+          "definition_paraphrase"
+        ],
+        "posts": [
+          {
+            "actor": "alice",
+            "kind": "note",
+            "visibility": "team",
+            "body": "The Vault Relay Monitor watches transfers from the staging vault. Operators refer to it as VRM."
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "VRM is the abbreviation for Vault Relay Monitor in this runbook. Its transfer count agrees with my audit."
+          }
+        ],
+        "rationale": "The naming statements identify one monitor.",
+        "expect": {
+          "aliases": [
+            {
+              "canonical": "Vault Relay Monitor",
+              "alias": "VRM"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "allowed": {
+          "aliases": [
+            {
+              "canonical": "Vault Relay Monitor",
+              "alias": "VRM"
+            }
+          ]
+        },
+        "hard_negative": []
+      },
+      "predictions_sha256": "97b1f82ecf4a70d5f66b35ab3c785bcd07beff616222087bfce459843cfa9160",
+      "records": [
+        {
+          "body": "The Vault Relay Monitor watches transfers from the staging vault. Operators refer to it as VRM.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "VRM",
+                "start": 91,
+                "end": 94,
+                "score": 0.9922203421592712,
+                "label": "named entity"
+              },
+              {
+                "name": "Vault Relay Monitor",
+                "start": 4,
+                "end": 23,
+                "score": 0.7663791179656982,
+                "label": "named entity"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "VRM is the abbreviation for Vault Relay Monitor in this runbook. Its transfer count agrees with my audit.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "VRM",
+                "start": 0,
+                "end": 3,
+                "score": 0.9947044253349304,
+                "label": "named entity"
+              },
+              {
+                "name": "audit",
+                "start": 99,
+                "end": 104,
+                "score": 0.9728925228118896,
+                "label": "topic or process"
+              },
+              {
+                "name": "Vault Relay Monitor",
+                "start": 28,
+                "end": 47,
+                "score": 0.5444473028182983,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "VRM",
+                  "start": 0,
+                  "end": 3,
+                  "score": 0.5444473028182983
+                },
+                "tail": {
+                  "name": "Vault Relay Monitor",
+                  "start": 28,
+                  "end": 47,
+                  "score": 0.5444473028182983
+                },
+                "predicate": "replaces",
+                "score": 0.5444473028182983,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 64
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Vault Relay Monitor",
+                  "confidence": 0.9987986087799072,
+                  "start": 28,
+                  "end": 47
+                },
+                "short_name": {
+                  "text": "VRM",
+                  "confidence": 0.996637225151062,
+                  "start": 0,
+                  "end": 3
+                },
+                "syntax_rules": [
+                  "copular_name_for"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "7ebd3a47e0ee5e58a0a684048e4f25c49f0ba20d09b9fc413874dcae07bfb59c",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Vault Relay Monitor",
+                  "start": 28,
+                  "end": 47
+                },
+                "short_name": {
+                  "text": "VRM",
+                  "start": 0,
+                  "end": 3
+                },
+                "rule": "copular_name_for",
+                "source_text_hash": "7ebd3a47e0ee5e58a0a684048e4f25c49f0ba20d09b9fc413874dcae07bfb59c"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        }
+      ]
+    },
+    {
+      "case": {
+        "id": "acronym_dev_019",
+        "domain": "mechanical_maintenance",
+        "phenomena": [
+          "punctuation",
+          "definition_paraphrase"
+        ],
+        "posts": [
+          {
+            "actor": "alice",
+            "kind": "note",
+            "visibility": "team",
+            "body": "Rotor Bearing Survey \u2014 RBS for short \u2014 lists the vibration readings from each bearing station."
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "RBS stands for Rotor Bearing Survey. I added the readings taken after balancing the rotor."
+          }
+        ],
+        "rationale": "Punctuation separates a supported abbreviation without changing its identity.",
+        "expect": {
+          "aliases": [
+            {
+              "canonical": "Rotor Bearing Survey",
+              "alias": "RBS"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "allowed": {
+          "aliases": [
+            {
+              "canonical": "Rotor Bearing Survey",
+              "alias": "RBS"
+            }
+          ]
+        },
+        "hard_negative": []
+      },
+      "predictions_sha256": "98688f59549e240eb5e26fe8346ef9363fa391fd86c490a79c6bd5e4e8b040d4",
+      "records": [
+        {
+          "body": "Rotor Bearing Survey \u2014 RBS for short \u2014 lists the vibration readings from each bearing station.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "Rotor Bearing Survey",
+                "start": 0,
+                "end": 20,
+                "score": 0.9926037192344666,
+                "label": "named entity"
+              },
+              {
+                "name": "RBS",
+                "start": 23,
+                "end": 26,
+                "score": 0.9898778796195984,
+                "label": "named entity"
+              },
+              {
+                "name": "vibration readings",
+                "start": 49,
+                "end": 67,
+                "score": 0.7530654072761536,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "Rotor Bearing Survey",
+                  "start": 0,
+                  "end": 20,
+                  "score": 0.5808817744255066
+                },
+                "tail": {
+                  "name": "vibration readings",
+                  "start": 49,
+                  "end": 67,
+                  "score": 0.5808817744255066
+                },
+                "predicate": "produces",
+                "score": 0.5808817744255066,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 94
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "RBS stands for Rotor Bearing Survey. I added the readings taken after balancing the rotor.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "RBS",
+                "start": 0,
+                "end": 3,
+                "score": 0.9977099895477295,
+                "label": "named entity"
+              },
+              {
+                "name": "Rotor Bearing Survey",
+                "start": 15,
+                "end": 35,
+                "score": 0.9643362760543823,
+                "label": "topic or process"
+              },
+              {
+                "name": "rotor",
+                "start": 84,
+                "end": 89,
+                "score": 0.8751882910728455,
+                "label": "object or substance"
+              },
+              {
+                "name": "Rotor",
+                "start": 15,
+                "end": 20,
+                "score": 0.8006282448768616,
+                "label": "object or substance"
+              },
+              {
+                "name": "readings",
+                "start": 49,
+                "end": 57,
+                "score": 0.6035335063934326,
+                "label": "relation endpoint"
+              }
+            ],
+            "relations": [
+              {
+                "head": {
+                  "name": "RBS",
+                  "start": 0,
+                  "end": 3,
+                  "score": 0.6035335063934326
+                },
+                "tail": {
+                  "name": "readings",
+                  "start": 49,
+                  "end": 57,
+                  "score": 0.6035335063934326
+                },
+                "predicate": "produces",
+                "score": 0.6035335063934326,
+                "polarity": "uncertain",
+                "literal_support": false,
+                "start": 0,
+                "end": 90
+              },
+              {
+                "head": {
+                  "name": "RBS",
+                  "start": 0,
+                  "end": 3,
+                  "score": 0.5226331949234009
+                },
+                "tail": {
+                  "name": "Rotor",
+                  "start": 15,
+                  "end": 20,
+                  "score": 0.5226331949234009
+                },
+                "predicate": "replaces",
+                "score": 0.5226331949234009,
+                "polarity": "positive",
+                "literal_support": false,
+                "start": 0,
+                "end": 36
+              }
+            ],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Rotor Bearing Survey",
+                  "confidence": 0.9994557499885559,
+                  "start": 15,
+                  "end": 35
+                },
+                "short_name": {
+                  "text": "RBS",
+                  "confidence": 0.9977905750274658,
+                  "start": 0,
+                  "end": 3
+                },
+                "syntax_rules": [
+                  "stands_for"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "04e14f4e6cbddcff9364cf6130e4f95a7d35ff8b882a3028ca48176ece93a4c6",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Rotor Bearing Survey",
+                  "start": 15,
+                  "end": 35
+                },
+                "short_name": {
+                  "text": "RBS",
+                  "start": 0,
+                  "end": 3
+                },
+                "rule": "stands_for",
+                "source_text_hash": "04e14f4e6cbddcff9364cf6130e4f95a7d35ff8b882a3028ca48176ece93a4c6"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        }
+      ]
+    },
+    {
+      "case": {
+        "id": "acronym_dev_021",
+        "domain": "replication_operations",
+        "phenomena": [
+          "short_first",
+          "late_identity"
+        ],
+        "posts": [
+          {
+            "actor": "alice",
+            "kind": "note",
+            "visibility": "team",
+            "body": "SSR contains the sequence at which my replica caught up. I attached the receipt to the incident."
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "The Source Sync Receipt from my replica records the same handoff sequence."
+          },
+          {
+            "actor": "cam",
+            "kind": "note",
+            "visibility": "team",
+            "body": "SSR means Source Sync Receipt. Source Sync Receipt is the receipt generated at the end of each completed synchronization."
+          }
+        ],
+        "rationale": "A late explicit identity can connect earlier observations without assuming a familiar expansion.",
+        "expect": {
+          "aliases": [
+            {
+              "canonical": "Source Sync Receipt",
+              "alias": "SSR"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "allowed": {
+          "aliases": [
+            {
+              "canonical": "Source Sync Receipt",
+              "alias": "SSR"
+            }
+          ]
+        },
+        "hard_negative": []
+      },
+      "predictions_sha256": "cbde3cff0800ee041e4113b9222af14704990e5d3b9f8dbd6dceb951db46f726",
+      "records": [
+        {
+          "body": "SSR contains the sequence at which my replica caught up. I attached the receipt to the incident.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "SSR",
+                "start": 0,
+                "end": 3,
+                "score": 0.9964052438735962,
+                "label": "named entity"
+              },
+              {
+                "name": "incident",
+                "start": 87,
+                "end": 95,
+                "score": 0.8970516324043274,
+                "label": "topic or process"
+              },
+              {
+                "name": "sequence",
+                "start": 17,
+                "end": 25,
+                "score": 0.6361352205276489,
+                "label": "topic or process"
+              },
+              {
+                "name": "replica",
+                "start": 38,
+                "end": 45,
+                "score": 0.879582405090332,
+                "label": "object or substance"
+              },
+              {
+                "name": "receipt",
+                "start": 72,
+                "end": 79,
+                "score": 0.7972553968429565,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "The Source Sync Receipt from my replica records the same handoff sequence.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "replica",
+                "start": 32,
+                "end": 39,
+                "score": 0.8991550803184509,
+                "label": "named entity"
+              },
+              {
+                "name": "handoff sequence",
+                "start": 57,
+                "end": 73,
+                "score": 0.6355425119400024,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "SSR means Source Sync Receipt. Source Sync Receipt is the receipt generated at the end of each completed synchronization.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "SSR",
+                "start": 0,
+                "end": 3,
+                "score": 0.9722663164138794,
+                "label": "named entity"
+              },
+              {
+                "name": "synchronization",
+                "start": 105,
+                "end": 120,
+                "score": 0.9468463659286499,
+                "label": "topic or process"
+              },
+              {
+                "name": "Source Sync Receipt",
+                "start": 10,
+                "end": 29,
+                "score": 0.5555790662765503,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Source Sync Receipt",
+                  "confidence": 0.9985155463218689,
+                  "start": 10,
+                  "end": 29
+                },
+                "short_name": {
+                  "text": "SSR",
+                  "confidence": 0.9885550141334534,
+                  "start": 0,
+                  "end": 3
+                },
+                "syntax_rules": [
+                  "active_subject_definition"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "d3e594cc372c6a55dbfde32f03ef5a9247782ba76c7762e31fbc803167d198b0",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Source Sync Receipt",
+                  "start": 10,
+                  "end": 29
+                },
+                "short_name": {
+                  "text": "SSR",
+                  "start": 0,
+                  "end": 3
+                },
+                "rule": "active_subject_definition",
+                "source_text_hash": "d3e594cc372c6a55dbfde32f03ef5a9247782ba76c7762e31fbc803167d198b0"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        }
+      ]
+    },
+    {
+      "case": {
+        "id": "acronym_dev_023",
+        "domain": "batch_reporting",
+        "phenomena": [
+          "known_as_definition"
+        ],
+        "posts": [
+          {
+            "actor": "alice",
+            "kind": "note",
+            "visibility": "team",
+            "body": "Uniform Batch Register is known as UBR on the packing line. The register contains the final unit count."
+          },
+          {
+            "actor": "ben",
+            "kind": "note",
+            "visibility": "team",
+            "body": "UBR means Uniform Batch Register. My count in the register includes the replacement cartons."
+          }
+        ],
+        "rationale": "Ordinary naming prose provides the alias.",
+        "expect": {
+          "aliases": [
+            {
+              "canonical": "Uniform Batch Register",
+              "alias": "UBR"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "allowed": {
+          "aliases": [
+            {
+              "canonical": "Uniform Batch Register",
+              "alias": "UBR"
+            }
+          ]
+        },
+        "hard_negative": []
+      },
+      "predictions_sha256": "cb54053e2deca573f0988486fd6934d8aab34e2fa4c5b20820d97055cb3169b5",
+      "records": [
+        {
+          "body": "Uniform Batch Register is known as UBR on the packing line. The register contains the final unit count.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "UBR",
+                "start": 35,
+                "end": 38,
+                "score": 0.9941973686218262,
+                "label": "named entity"
+              },
+              {
+                "name": "packing line",
+                "start": 46,
+                "end": 58,
+                "score": 0.8596009016036987,
+                "label": "topic or process"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [],
+            "conflict_definitions": [],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        },
+        {
+          "body": "UBR means Uniform Batch Register. My count in the register includes the replacement cartons.",
+          "original_metadata": {
+            "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v10:13bd03ff453f6a18",
+            "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+            "dimensions": 1024
+          },
+          "result": {
+            "concepts": [
+              {
+                "name": "UBR",
+                "start": 0,
+                "end": 3,
+                "score": 0.9904928803443909,
+                "label": "named entity"
+              },
+              {
+                "name": "replacement cartons",
+                "start": 72,
+                "end": 91,
+                "score": 0.9266002774238586,
+                "label": "object or substance"
+              }
+            ],
+            "relations": [],
+            "chunks": [],
+            "corroborated_definitions": [
+              {
+                "full_name": {
+                  "text": "Uniform Batch Register",
+                  "confidence": 0.9979473948478699,
+                  "start": 10,
+                  "end": 32
+                },
+                "short_name": {
+                  "text": "UBR",
+                  "confidence": 0.9969744682312012,
+                  "start": 0,
+                  "end": 3
+                },
+                "syntax_rules": [
+                  "active_subject_definition"
+                ],
+                "syntax_rule_revision": "r5-copular-development:7fde15e1b9c5f8f6cb627618dfd2849ba0d3b76d2892897199b5f1c56c4eb827",
+                "source_text_hash": "394095109ea4de7608df66f0c01fb363896a2018b529c83dec9ce927a0018c26",
+                "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+                "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+              }
+            ],
+            "conflict_definitions": [
+              {
+                "full_name": {
+                  "text": "Uniform Batch Register",
+                  "start": 10,
+                  "end": 32
+                },
+                "short_name": {
+                  "text": "UBR",
+                  "start": 0,
+                  "end": 3
+                },
+                "rule": "active_subject_definition",
+                "source_text_hash": "394095109ea4de7608df66f0c01fb363896a2018b529c83dec9ce927a0018c26"
+              }
+            ],
+            "conflict_coverage_revision": "conflict-v1"
+          }
+        }
+      ]
+    }
+  ]
+}

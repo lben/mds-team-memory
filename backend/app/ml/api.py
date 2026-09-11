@@ -74,6 +74,12 @@ def decide(key: str, decision: Decision, admin: Account = Depends(require_admin)
     if row is None or row.kind in {"bootstrap", "term", "alias_definition"}:
         raise HTTPException(404, "Finding not found")
     payload = json.loads(row.payload)
+    if decision.mode == "pinned" and row.kind == "concept" and not row.canonical_id:
+        term = db.query(ConceptTerm).filter_by(term=adapter.normalize(payload["name"])).first()
+        alias = db.query(Finding).filter_by(kind="alias", canonical_id=term.id).first() if term else None
+        if alias and json.loads(alias.payload).get("direction") == "inverse":
+            owner = db.get(Concept, term.concept_id)
+            raise HTTPException(400, f"'{term.display}' is already used by the concept '{owner.name if owner else '?'}'")
     fixed = db.get(Override, key)
     if decision.mode == "automatic":
         if fixed:
