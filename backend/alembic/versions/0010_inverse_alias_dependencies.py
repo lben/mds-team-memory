@@ -57,11 +57,42 @@ def _replace_triggers(inverse):
         op.execute(f"CREATE TRIGGER {name} AFTER {action} ON ml_overrides BEGIN {_profiles(affected)} END")
 
 
+def _invalidate_dependent_profiles():
+    # A policy revision in either direction invalidates retained identity
+    # routes for the other revision. Profiles whose contributed evidence
+    # carried routes, and profiles with expertise findings, must be recomputed
+    # before any dependent expertise can stay public; invalidate and requeue
+    # them now so reads before worker replay cannot serve stale authority.
+    now = "CAST(strftime('%s', 'now') AS REAL)"
+    return [
+        """UPDATE ml_sources SET valid=0 WHERE kind='profile' AND id IN (
+            SELECT DISTINCT author_id FROM ml_evidence
+            WHERE json_type(features,'$.identity_routes')='array')""",
+        """UPDATE ml_sources SET valid=0 WHERE kind='profile' AND id IN (
+            SELECT DISTINCT json_extract(payload,'$.profile_id') FROM ml_findings
+            WHERE kind='expertise')""",
+        f"""INSERT INTO ml_jobs(source_kind,source_id,available_at,created_at,updated_at)
+            SELECT DISTINCT 'profile',author_id,{now},{now},{now} FROM ml_evidence
+            WHERE json_type(features,'$.identity_routes')='array'
+            ON CONFLICT(source_kind,source_id) DO UPDATE SET generation=ml_jobs.generation+1,
+              priority=0,available_at={now},attempts=0,error=NULL,updated_at={now}""",
+        f"""INSERT INTO ml_jobs(source_kind,source_id,available_at,created_at,updated_at)
+            SELECT DISTINCT 'profile',json_extract(payload,'$.profile_id'),{now},{now},{now} FROM ml_findings
+            WHERE kind='expertise'
+            ON CONFLICT(source_kind,source_id) DO UPDATE SET generation=ml_jobs.generation+1,
+              priority=0,available_at={now},attempts=0,error=NULL,updated_at={now}""",
+    ]
+
+
 def upgrade():
     _replace_triggers(True)
+    for statement in _invalidate_dependent_profiles():
+        op.execute(statement)
     op.execute("""UPDATE ml_state SET backfill_kind='item',backfill_cursor='',
       backfill_generation=backfill_generation+1 WHERE id=1""")
 
 
 def downgrade():
     _replace_triggers(False)
+    for statement in _invalidate_dependent_profiles():
+        op.execute(statement)
