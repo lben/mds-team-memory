@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { api } from '../api'
+import { useAsk } from '../ask'
+import AskModal from './AskModal.vue'
 import { knowledgeRevision, store } from '../store'
 
 interface Finding {
@@ -22,6 +24,7 @@ const rows = ref<Finding[]>([])
 const selected = ref<{ finding: Finding; evidence: Evidence[] } | null>(null)
 const busy = ref(false)
 const correctedTopic = ref('')
+const { ask, askUser, answerAsk } = useAsk()
 const names = computed(() => new Map(props.concepts.map(c => [c.id, c.name])))
 const people = computed(() => new Map(props.profiles.map(p => [p.id, p.label])))
 const labels: Record<string, string> = { active: 'Applied automatically', held: 'Awaiting evidence', weak: 'Weak association', stale: 'Rechecking evidence', withdrawn: 'Support removed', suppressed: 'Suppressed', pinned: 'Manually fixed' }
@@ -66,13 +69,33 @@ async function correctTopic() {
 }
 async function decide(row: Finding, mode: string) {
   if (busy.value) return
+  // Restoring automation on an expertise mapping releases manual authority and
+  // lets the automatic checks re-derive it; without qualifying evidence the
+  // mapping is withdrawn. That is destructive, so explain and confirm first.
+  if (mode === 'automatic' && row.kind === 'expertise') {
+    const answer = await askUser({
+      title: 'Release this expertise mapping?',
+      message: 'Automatic checks will re-derive the mapping from the team\'s contributions. Without qualifying evidence it will be withdrawn and removed from routing.',
+      confirmLabel: 'Release and reassess',
+      danger: true,
+    })
+    if (answer === null) return
+  }
   busy.value = true
   try {
-    await api.put(`/api/ml/findings/${row.key}/decision`, { mode })
+    const result = await api.put<{ state: string }>(`/api/ml/findings/${row.key}/decision`, { mode })
     selected.value = null
     await load()
     emit('changed')
-    store.notify(mode === 'automatic' ? 'Automatic checks will reassess this finding' : mode === 'suppressed' ? 'Finding suppressed until you restore it' : 'Your decision is now fixed')
+    if (mode === 'automatic' && row.kind === 'expertise') {
+      store.notify(result.state === 'active'
+        ? 'Mapping released; automatic checks kept it active'
+        : result.state === 'held'
+          ? 'Mapping released; automatic checks are awaiting more evidence'
+          : 'Mapping released and withdrawn — no qualifying automatic evidence')
+    } else {
+      store.notify(mode === 'automatic' ? 'Automatic checks will reassess this finding' : mode === 'suppressed' ? 'Finding suppressed until you restore it' : 'Your decision is now fixed')
+    }
   } catch (error) { store.fail(error, 'Could not save the decision') }
   finally { busy.value = false }
 }
@@ -84,6 +107,15 @@ onMounted(load)
 
 <template>
   <section class="card findings" data-testid="ml-findings">
+    <AskModal
+      v-if="ask"
+      :title="ask.title"
+      :message="ask.message"
+      :input-label="ask.inputLabel"
+      :confirm-label="ask.confirmLabel"
+      :danger="ask.danger"
+      @resolve="answerAsk"
+    />
     <h3>Automatic knowledge</h3>
     <p class="muted">Qualified findings take effect on their own. Uncertain findings wait for more evidence. Review is optional.</p>
     <div class="row gap8 filters">
