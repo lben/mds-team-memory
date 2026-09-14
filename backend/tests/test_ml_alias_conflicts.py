@@ -214,7 +214,8 @@ def test_syntax_only_definition_never_supplies_publication_evidence(make_client,
         assert client.delete(f"/api/items/{item}").status_code == 200
 
 
-def test_old_structural_marker_requires_reprocessing_before_single_source_publication(make_client):
+@pytest.mark.parametrize("coverage", ["old_structure", "old_revision"])
+def test_old_coverage_requires_reprocessing_before_single_source_publication(make_client, coverage):
     from sqlalchemy import text
     from app.db import SessionLocal
     from app.ml import adapter
@@ -237,8 +238,11 @@ def test_old_structural_marker_requires_reprocessing_before_single_source_public
                 with SessionLocal() as db:
                     stored = db.get(Source, ("item", item))
                     data = json.loads(stored.result)
-                    data["definitions_indexed"] = 1
-                    del data["conflict_definitions"], data["conflict_coverage_revision"]
+                    if coverage == "old_structure":
+                        data["definitions_indexed"] = 1
+                        del data["conflict_definitions"], data["conflict_coverage_revision"]
+                    else:
+                        data["conflict_coverage_revision"] = "previous-conflict-rules"
                     stored.result = json.dumps(data)
                     db.commit()
                     assert adapter.cached_result(db, snapshot(db, "item", item), stored.model_version) is None

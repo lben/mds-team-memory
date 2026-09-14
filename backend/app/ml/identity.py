@@ -13,9 +13,23 @@ from .sources import digest, finding_key
 VERSION = "exact-scored-identity-v2"
 
 
+def coverage_current(result):
+    return (result.get("definitions_indexed", 0) >= 2
+            and result.get("conflict_coverage_revision") == syntax.CONFLICT_REVISION
+            and isinstance(result.get("conflict_definitions"), list))
+
+
+def incomplete_coverage(source):
+    # Internal table aliases only. Keep publication and stored-route reads at
+    # the same generation boundary as cache reuse and replay completion.
+    return f"""(COALESCE(json_extract({source}.result,'$.definitions_indexed'),0)<2
+      OR COALESCE(json_extract({source}.result,'$.conflict_coverage_revision'),'')!='{syntax.CONFLICT_REVISION}'
+      OR COALESCE(json_type({source}.result,'$.conflict_definitions'),'')!='array')"""
+
+
 def definitions_pending(db):
-    return db.execute(text("""SELECT 1 FROM ml_sources WHERE kind IN ('item','passage')
-      AND valid=1 AND COALESCE(json_extract(result,'$.definitions_indexed'),0)<2 LIMIT 1""")).first() is not None
+    return db.execute(text(f"""SELECT 1 FROM ml_sources WHERE kind IN ('item','passage')
+      AND valid=1 AND {incomplete_coverage('ml_sources')} LIMIT 1""")).first() is not None
 
 
 def valid_routes():
@@ -71,7 +85,7 @@ def valid_routes():
           AND EXISTS (SELECT 1 FROM ml_sources owner WHERE owner.kind=ml_evidence.source_kind
             AND owner.id=ml_evidence.source_id AND owner.valid=1 AND owner.content_hash=ml_evidence.source_hash)
           AND NOT EXISTS (SELECT 1 FROM ml_sources pending WHERE pending.kind IN ('item','passage')
-            AND pending.valid=1 AND COALESCE(json_extract(pending.result,'$.definitions_indexed'),0)<2)
+            AND pending.valid=1 AND {incomplete_coverage('pending')})
           AND NOT EXISTS (SELECT 1 FROM concept_terms short WHERE short.term=json_extract(route.value,'$.alias_key')
             AND short.is_canonical=1 AND (target.canonical_id IS NULL OR short.concept_id!=target.canonical_id))
           AND NOT EXISTS (SELECT 1 FROM ml_overrides fixed WHERE fixed.mode='suppressed' AND

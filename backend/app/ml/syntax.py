@@ -3,8 +3,8 @@
 import re
 
 
-REVISION = "r6-postverbal-stands-for"
-CONFLICT_REVISION = "conflict-v1"
+REVISION = "r7-explicit-acronym-grammar"
+CONFLICT_REVISION = "conflict-v2"
 UNCERTAIN = frozenset("if unless whether perhaps maybe possibly hypothetical potential unverified unconfirmed propose proposal plan consider assume assumption suppose suggest recommend wish hope intend pretend reject deny dispute rumor incorrect false wrong mistaken misleading".split())
 MODALS = {"may", "might", "could", "would", "should", "will"}
 
@@ -61,7 +61,7 @@ def propose(row, *, conflict=False):
         if (not (full["end"] <= short["start"] or short["end"] <= full["start"])
                 or full["text"].casefold() == short["text"].casefold()):
             return
-        if rule == "active_subject_definition":
+        if rule in {"active_subject_definition", "copular_acronym_expansion", "compact_refers_to"}:
             capitals = "".join(c for c in short["text"] if c.isupper())
             initials = "".join(word[0].upper() for word in re.findall(r"[A-Za-z]+", full["text"]))
             if (not re.fullmatch(r"[A-Za-z][A-Za-z0-9-]{1,11}", short["text"])
@@ -124,7 +124,7 @@ def propose(row, *, conflict=False):
         passive = one(dependents(i, {"nsubjpass"}))
         obj = one(dependents(i, {"dobj"}))
         complement = one(dependents(i, {"oprd"}))
-        if (lemma in {"call", "name", "abbreviate"} or (conflict and lemma == "shorten")) and (passive is not None or t["dep"] == "acl"):
+        if (lemma in {"call", "name", "abbreviate", "know"} or (conflict and lemma == "shorten")) and (passive is not None or t["dep"] == "acl"):
             full = passive if passive is not None else t["head"]
             short = complement if complement is not None else prep_object(i, {"as", "to"})
             emit("passive_or_nominal_naming", i, full, short)
@@ -149,6 +149,8 @@ def propose(row, *, conflict=False):
             emit("expands_to", i, prep_object(i, {"to"}), obj if obj is not None else subject)
         elif lemma == "denote":
             emit("denotes", i, obj, subject)
+        elif lemma == "refer" and subject is not None:
+            emit("compact_refers_to", i, prep_object(i, {"to"}), subject)
         elif lemma == "define":
             full = prep_object(obj, {"as"}) if obj is not None else None
             if full is None:
@@ -162,6 +164,7 @@ def propose(row, *, conflict=False):
                 if adjective["lemma"].lower() == "short":
                     emit("is_short_for", i, prep_object(adjective["i"], {"for"}), subject)
             attribute = one(dependents(i, {"attr"}))
+            emit("copular_acronym_expansion", i, attribute, subject)
             for naming, alias in ((subject, attribute), (attribute, subject)):
                 if naming is None or tokens[naming]["lemma"].lower() not in {
                         "name", "title", "label", "form", "abbreviation", "alias"}:
@@ -187,4 +190,9 @@ def propose(row, *, conflict=False):
                 start, end = alias["raw_chunk"]["start_token"], alias["raw_chunk"]["end_token"]
                 if start > 0 and end < len(tokens) and tokens[start - 1]["text"] == "(" and tokens[end]["text"] == ")":
                     emit("parenthetical_compact_name", i, t["head"], i)
+            full, short = argument(i), argument(t["head"])
+            if full and short and re.fullmatch(r"[A-Z][A-Z0-9-]{1,11}", short["text"]):
+                start, end = full["raw_chunk"]["start_token"], full["raw_chunk"]["end_token"]
+                if start > 0 and end < len(tokens) and tokens[start - 1]["text"] == "(" and tokens[end]["text"] == ")":
+                    emit("parenthetical_full_name", i, i, t["head"])
     return list(proposed.values())

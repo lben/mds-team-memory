@@ -28,6 +28,8 @@ def apply(item, record, *, cached=False, empty=False, roles=True):
                    {"version": version + ":" + policy.VERSION})
         result = copy.deepcopy(record["result"]) if source else None
         if result:
+            # Mechanical replay; parser coverage has its own retained-output tests.
+            result["conflict_coverage_revision"] = syntax.CONFLICT_REVISION
             # These original definitions have no fronted context adjunct. Their
             # retained spans and scores are replayed, not recertified inference.
             for definition in result.get("corroborated_definitions", []):

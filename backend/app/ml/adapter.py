@@ -402,7 +402,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
     authors = {row.author_id for row in prior if row.author_id}
     db.query(Evidence).filter_by(source_kind=source_kind, source_id=source_id).delete(synchronize_session="fetch")
     stored = db.get(Source, (source_kind, source_id))
-    indexing_old_source = stored is not None and json.loads(stored.result).get("definitions_indexed", 0) < 2
+    indexing_old_source = stored is not None and not identity.coverage_current(json.loads(stored.result))
     if source is None:
         embeddings.invalidate_source(db, source_kind, source_id)
         if stored:
@@ -760,8 +760,7 @@ def cached_result(db, source, model_version):
     if stored is None or stored.model_version != model_version:
         return None
     data = json.loads(stored.result)
-    if len(model_version.split(":")) == 5 and (data.get("definitions_indexed", 0) < 2
-            or data.get("conflict_coverage_revision") != syntax.CONFLICT_REVISION):
+    if len(model_version.split(":")) == 5 and not identity.coverage_current(data):
         return None
     if data.get("text_hash") != digest(source.text):
         return None

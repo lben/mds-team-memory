@@ -17,17 +17,45 @@ The full objective remains active. Historical requirements and results are in
   suite passes 33 checks, including real migration and queue behavior.
 - Restored the exact pinned syntax model and verified all three model assets.
   Prior extractor and embedding weights remain unchanged.
+- Added explicit naming grammar with unchanged score and evidence requirements.
+  Recorded model/parser observations recovered two additional development
+  definitions; adversarial controls added no unsupported identities.
+- Fixed definition coverage across rule revisions in publication, stored
+  identity routes, cache reuse, replay completion, and expertise invalidation.
+  The before-fix regressions failed through public APIs, including profiles
+  computed before source replay. Migration `0012` adds the missing invalidation.
+- The full offline Linux regression suite passes: 456 tests in 194 seconds.
 
 ## Current measurement
 
-A frozen source snapshot is running the existing 24-case cross-domain
+A frozen source snapshot completed the existing 24-case cross-domain
 development baseline with actual models, the production queue, and public APIs.
-It runs offline in Linux, within four CPUs and five GiB, using a private database.
+It ran offline in Linux, within four CPUs and five GiB, using a private database.
 This is diagnostic development evidence, not a new release-quality evaluation.
 
 Evidence is retained under `data/ml-runs/astra-sep14/` (excluded from Git).
-The active baseline container is `mds-astra-sep14-baseline-r3`; export its
-`/tmp/astra-baseline` directory before removing it.
+The baseline evidence is exported to `baseline-r3/ml-quality-4_nsurau/`.
+All 60 inference calls completed in 282.7 seconds; sampled process-tree peak
+RSS was 3.99 GB. Positive assertions passed: concepts 32/38, aliases 2/3,
+relationships 6/9, expertise 1/2. All 48 negative assertions passed. These
+assertion counts are not complete-output precision or release acceptance.
+Missing entity confidence and missing independently supported relation
+extractions account for several failures; publication correctly withholds them.
+
+The full 48-case acronym development run then completed all 100 inference calls
+in 425.1 seconds. It published 19/24 selected aliases (previously 17/24), with
+zero false positives among the 24 selected negatives. All 22 published aliases
+matched the frozen complete-output labels. Both actual edit/delete withdrawals
+passed. Peak sampled process-tree RSS was 3.97 GB within four CPUs/five GiB.
+Results: `grammar-development/ml-quality-0ujrnen5/`. This development sample
+cannot establish release quality; its status is `INSUFFICIENT_EVIDENCE`.
+
+The untried GLiNER2.5 multilingual checkpoint is being screened under the same
+resource and evidence constraints. Its immutable model revision and a frozen
+early-stop gate are recorded in `multi-checkpoint-trial/`. It remains an
+experiment, not the selected model. The screen stops at the first completed
+case that fails a negative or loses a previously satisfied positive; a failed
+screen cannot be repaired by threshold tuning or selective output union.
 
 Two environment failures were preserved before the current launch: the older
 unit-test image lacked spaCy; the complete inference image then competed with

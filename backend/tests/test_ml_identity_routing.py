@@ -68,6 +68,9 @@ def apply(item, record, *, cached=False, empty=False):
         metadata = (version, record['original_metadata']['embedding_version'], 1024)
         result = copy.deepcopy(record['result']) if source else None
         if result:
+            # Mechanical identity replay retains these conflict observations.
+            # Current parser behavior is exercised in test_ml_alias_grammar.
+            result['conflict_coverage_revision'] = syntax.CONFLICT_REVISION
             # These retained definitions do not use the corrected stands-for
             # branch. Replay their unchanged scores and spans in this generation.
             for definition in result.get('corroborated_definitions', []):
@@ -180,7 +183,8 @@ def test_unqualified_role_and_distinct_descriptor_do_not_route_entity_scores(mak
 
 
 @pytest.mark.parametrize('processed', [True, False], ids=['replayed', 'before_source_replay'])
-def test_conditional_term_only_contributions_invalidate_expertise_with_live_manual_concept(make_client, admin_client, tmp_path, processed):
+@pytest.mark.parametrize('coverage', ['old_structure', 'old_revision'])
+def test_conditional_term_only_contributions_invalidate_expertise_with_live_manual_concept(make_client, admin_client, tmp_path, processed, coverage):
     """Mechanical empty-extraction control; recorded entity/role data stay fixed."""
     from app.ml.sources import finding_key
     from test_ml_automation import _profile_work
@@ -291,7 +295,10 @@ def test_conditional_term_only_contributions_invalidate_expertise_with_live_manu
             source = db.get(Source, ('item', items[0]))
             original_result = source.result
             data = json.loads(source.result)
-            data['definitions_indexed'] = 1
+            if coverage == 'old_structure':
+                data['definitions_indexed'] = 1
+            else:
+                data['conflict_coverage_revision'] = 'previous-conflict-rules'
             source.result = json.dumps(data)
             db.commit()
         assert names(asker, 'Threaded Index')['Threaded Index'] == canonical

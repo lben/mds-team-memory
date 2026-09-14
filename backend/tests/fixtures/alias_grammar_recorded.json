@@ -1,0 +1,6341 @@
+{
+  "purpose": "Recorded local GLiNER and spaCy outputs. Development regressions, not independent quality evidence.",
+  "original_inputs_sha256": {
+    "/repo/data/ml-runs/astra-sep14/alias-grammar-trial/candidate.py": "a9824c177f30d4cccb358347dc8506c41bfa6be38b6c89d0a9eca1969ac52b79",
+    "/repo/data/ml-runs/astra-sep14/alias-grammar-trial/controls.json": "b60c0ec82fc7bbc632cd29840427381816ee0518d5c977f48416de32207ef0d9",
+    "/repo/data/ml-runs/astra-sep14/alias-grammar-trial/plan.txt": "5b1502ea8291ad7a8afcca9a696dfa72ec241a0fa509d630818f9ea4f621f991",
+    "/repo/data/ml-runs/astra-sep14/alias-grammar-trial/run.py": "39ffd6459e3db5359321000dc3a5c69045d9ace04e5518dbb06eb6d5230d2509",
+    "/repo/backend/tests/fixtures/ml_acronyms_development.json": "6bc710c17e2b14e092f9badfe5817d12d807916674956f2268b7a0610d1b1351",
+    "/repo/backend/app/ml/runtime.py": "12552224d8123a983ff826d85d755c52ebf451a3ab5b7b08decf461477efff04",
+    "/repo/backend/app/ml/syntax.py": "817c11927c6a77220a1c25d3b3911bb715d9739deed8e94aeb9abfa9dc494977",
+    "/models/models.json": "bd1628f16ce4a97690adb95fb6d405d6066ffc8c6dad236acee553c315a86edb"
+  },
+  "cases": [
+    {
+      "input": {
+        "actor": "alice",
+        "kind": "note",
+        "visibility": "team",
+        "body": "CVM (Cryogenic Valve Map) shows the isolation valves between the separator and the cold return.",
+        "id": "acronym_dev_006:0",
+        "case_expected": {
+          "aliases": [
+            {
+              "canonical": "Cryogenic Valve Map",
+              "alias": "CVM"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "case_allowed": {
+          "aliases": [
+            {
+              "canonical": "Cryogenic Valve Map",
+              "alias": "CVM"
+            }
+          ]
+        }
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Cryogenic Valve Map",
+              "confidence": 0.9287901520729065,
+              "start": 5,
+              "end": 24
+            },
+            "short_name": {
+              "text": "CVM",
+              "confidence": 0.992159903049469,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "CVM (Cryogenic Valve Map) shows the isolation valves between the separator and the cold return.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "CVM",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "CVM",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [
+              1,
+              4,
+              5
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "(",
+            "whitespace": "",
+            "start": 4,
+            "end": 5,
+            "lemma": "(",
+            "pos": "PUNCT",
+            "tag": "-LRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Cryogenic",
+            "whitespace": " ",
+            "start": 5,
+            "end": 14,
+            "lemma": "Cryogenic",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              4,
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Valve",
+            "whitespace": " ",
+            "start": 15,
+            "end": 20,
+            "lemma": "Valve",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              4,
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Map",
+            "whitespace": "",
+            "start": 21,
+            "end": 24,
+            "lemma": "Map",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "appos",
+            "head": 0,
+            "children": [
+              3
+            ],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": ")",
+            "whitespace": " ",
+            "start": 24,
+            "end": 25,
+            "lemma": ")",
+            "pos": "PUNCT",
+            "tag": "-RRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "shows",
+            "whitespace": " ",
+            "start": 26,
+            "end": 31,
+            "lemma": "show",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 6,
+            "children": [
+              0,
+              9,
+              17
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "the",
+            "whitespace": " ",
+            "start": 32,
+            "end": 35,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "isolation",
+            "whitespace": " ",
+            "start": 36,
+            "end": 45,
+            "lemma": "isolation",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "valves",
+            "whitespace": " ",
+            "start": 46,
+            "end": 52,
+            "lemma": "valve",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 6,
+            "children": [
+              7,
+              8,
+              10
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "between",
+            "whitespace": " ",
+            "start": 53,
+            "end": 60,
+            "lemma": "between",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 9,
+            "children": [
+              12
+            ],
+            "ancestors": [
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "the",
+            "whitespace": " ",
+            "start": 61,
+            "end": 64,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 12,
+            "children": [],
+            "ancestors": [
+              12,
+              10,
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "separator",
+            "whitespace": " ",
+            "start": 65,
+            "end": 74,
+            "lemma": "separator",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 10,
+            "children": [
+              11,
+              13,
+              16
+            ],
+            "ancestors": [
+              10,
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "and",
+            "whitespace": " ",
+            "start": 75,
+            "end": 78,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 12,
+            "children": [],
+            "ancestors": [
+              12,
+              10,
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "the",
+            "whitespace": " ",
+            "start": 79,
+            "end": 82,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 16,
+            "children": [],
+            "ancestors": [
+              16,
+              12,
+              10,
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "cold",
+            "whitespace": " ",
+            "start": 83,
+            "end": 87,
+            "lemma": "cold",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 16,
+            "children": [],
+            "ancestors": [
+              16,
+              12,
+              10,
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "return",
+            "whitespace": "",
+            "start": 88,
+            "end": 94,
+            "lemma": "return",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "conj",
+            "head": 12,
+            "children": [
+              14,
+              15
+            ],
+            "ancestors": [
+              12,
+              10,
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": ".",
+            "whitespace": "",
+            "start": 94,
+            "end": 95,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 5,
+            "end": 24,
+            "root_token": 4
+          },
+          {
+            "start_token": 7,
+            "end_token": 10,
+            "end": 52,
+            "root_token": 9
+          },
+          {
+            "start_token": 11,
+            "end_token": 13,
+            "end": 74,
+            "root_token": 12
+          },
+          {
+            "start_token": 14,
+            "end_token": 17,
+            "end": 94,
+            "root_token": 16
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 18
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [
+        {
+          "rule": "parenthetical_full_name",
+          "trigger_token": 4,
+          "full_name": {
+            "text": "Cryogenic Valve Map",
+            "start": 5,
+            "end": 24
+          },
+          "short_name": {
+            "text": "CVM",
+            "start": 0,
+            "end": 3
+          }
+        }
+      ],
+      "baseline": [],
+      "candidate": [
+        {
+          "full_name": {
+            "text": "Cryogenic Valve Map",
+            "confidence": 0.9287901520729065,
+            "start": 5,
+            "end": 24
+          },
+          "short_name": {
+            "text": "CVM",
+            "confidence": 0.992159903049469,
+            "start": 0,
+            "end": 3
+          },
+          "syntax_rules": [
+            "parenthetical_full_name"
+          ],
+          "syntax_rule_revision": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "actor": "alice",
+        "kind": "note",
+        "visibility": "team",
+        "body": "Uniform Batch Register is known as UBR on the packing line. The register contains the final unit count.",
+        "id": "acronym_dev_023:0",
+        "case_expected": {
+          "aliases": [
+            {
+              "canonical": "Uniform Batch Register",
+              "alias": "UBR"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "case_allowed": {
+          "aliases": [
+            {
+              "canonical": "Uniform Batch Register",
+              "alias": "UBR"
+            }
+          ]
+        }
+      },
+      "raw_aliases": {},
+      "parse": {
+        "body": "Uniform Batch Register is known as UBR on the packing line. The register contains the final unit count.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Uniform",
+            "whitespace": " ",
+            "start": 0,
+            "end": 7,
+            "lemma": "Uniform",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "Batch",
+            "whitespace": " ",
+            "start": 8,
+            "end": 13,
+            "lemma": "Batch",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 14,
+            "end": 22,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubjpass",
+            "head": 4,
+            "children": [
+              0,
+              1
+            ],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "is",
+            "whitespace": " ",
+            "start": 23,
+            "end": 25,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "auxpass",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "known",
+            "whitespace": " ",
+            "start": 26,
+            "end": 31,
+            "lemma": "know",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "ROOT",
+            "head": 4,
+            "children": [
+              2,
+              3,
+              5,
+              7,
+              11
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "as",
+            "whitespace": " ",
+            "start": 32,
+            "end": 34,
+            "lemma": "as",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 4,
+            "children": [
+              6
+            ],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "UBR",
+            "whitespace": " ",
+            "start": 35,
+            "end": 38,
+            "lemma": "UBR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "on",
+            "whitespace": " ",
+            "start": 39,
+            "end": 41,
+            "lemma": "on",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 4,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "the",
+            "whitespace": " ",
+            "start": 42,
+            "end": 45,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "packing",
+            "whitespace": " ",
+            "start": 46,
+            "end": 53,
+            "lemma": "packing",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "line",
+            "whitespace": "",
+            "start": 54,
+            "end": 58,
+            "lemma": "line",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 7,
+            "children": [
+              8,
+              9
+            ],
+            "ancestors": [
+              7,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": " ",
+            "start": 58,
+            "end": 59,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "The",
+            "whitespace": " ",
+            "start": 60,
+            "end": 63,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "register",
+            "whitespace": " ",
+            "start": 64,
+            "end": 72,
+            "lemma": "register",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 14,
+            "children": [
+              12
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "contains",
+            "whitespace": " ",
+            "start": 73,
+            "end": 81,
+            "lemma": "contain",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 14,
+            "children": [
+              13,
+              18,
+              19
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "the",
+            "whitespace": " ",
+            "start": 82,
+            "end": 85,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "final",
+            "whitespace": " ",
+            "start": 86,
+            "end": 91,
+            "lemma": "final",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": "unit",
+            "whitespace": " ",
+            "start": 92,
+            "end": 96,
+            "lemma": "unit",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 18,
+            "text": "count",
+            "whitespace": "",
+            "start": 97,
+            "end": 102,
+            "lemma": "count",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "dobj",
+            "head": 14,
+            "children": [
+              15,
+              16,
+              17
+            ],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 19,
+            "text": ".",
+            "whitespace": "",
+            "start": 102,
+            "end": 103,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 3,
+            "end": 22,
+            "root_token": 2
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 38,
+            "root_token": 6
+          },
+          {
+            "start_token": 8,
+            "end_token": 11,
+            "end": 58,
+            "root_token": 10
+          },
+          {
+            "start_token": 12,
+            "end_token": 14,
+            "end": 72,
+            "root_token": 13
+          },
+          {
+            "start_token": 15,
+            "end_token": 19,
+            "end": 102,
+            "root_token": 18
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          },
+          {
+            "start_token": 12,
+            "end_token": 20
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [
+        {
+          "rule": "passive_or_nominal_naming",
+          "trigger_token": 4,
+          "full_name": {
+            "text": "Uniform Batch Register",
+            "start": 0,
+            "end": 22
+          },
+          "short_name": {
+            "text": "UBR",
+            "start": 35,
+            "end": 38
+          }
+        }
+      ],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "actor": "alice",
+        "kind": "note",
+        "visibility": "team",
+        "body": "DEL is the Device Exception Ledger. Device Exception Ledger contains the unhandled device faults from the last shift.",
+        "id": "acronym_dev_024:0",
+        "case_expected": {
+          "aliases": [
+            {
+              "canonical": "Device Exception Ledger",
+              "alias": "DEL"
+            }
+          ],
+          "absent_aliases": []
+        },
+        "case_allowed": {
+          "aliases": [
+            {
+              "canonical": "Device Exception Ledger",
+              "alias": "DEL"
+            }
+          ]
+        }
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Device Exception Ledger",
+              "confidence": 0.95188969373703,
+              "start": 11,
+              "end": 34
+            },
+            "short_name": {
+              "text": "DEL",
+              "confidence": 0.9981085062026978,
+              "start": 0,
+              "end": 3
+            }
+          },
+          {
+            "full_name": {
+              "text": "Device Exception Ledger",
+              "confidence": 0.9247431755065918,
+              "start": 36,
+              "end": 59
+            },
+            "short_name": {
+              "text": "DEL",
+              "confidence": 0.9981085062026978,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "DEL is the Device Exception Ledger. Device Exception Ledger contains the unhandled device faults from the last shift.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "DEL",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "DEL",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "is",
+            "whitespace": " ",
+            "start": 4,
+            "end": 6,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              5,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "the",
+            "whitespace": " ",
+            "start": 7,
+            "end": 10,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Device",
+            "whitespace": " ",
+            "start": 11,
+            "end": 17,
+            "lemma": "Device",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Exception",
+            "whitespace": " ",
+            "start": 18,
+            "end": 27,
+            "lemma": "Exception",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [
+              3
+            ],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Ledger",
+            "whitespace": "",
+            "start": 28,
+            "end": 34,
+            "lemma": "Ledger",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "attr",
+            "head": 1,
+            "children": [
+              2,
+              4
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": ".",
+            "whitespace": " ",
+            "start": 34,
+            "end": 35,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Device",
+            "whitespace": " ",
+            "start": 36,
+            "end": 42,
+            "lemma": "Device",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              9,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Exception",
+            "whitespace": " ",
+            "start": 43,
+            "end": 52,
+            "lemma": "Exception",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 9,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              9,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Ledger",
+            "whitespace": " ",
+            "start": 53,
+            "end": 59,
+            "lemma": "Ledger",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 10,
+            "children": [
+              8
+            ],
+            "ancestors": [
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "contains",
+            "whitespace": " ",
+            "start": 60,
+            "end": 68,
+            "lemma": "contain",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 10,
+            "children": [
+              9,
+              14,
+              19
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "the",
+            "whitespace": " ",
+            "start": 69,
+            "end": 72,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "unhandled",
+            "whitespace": " ",
+            "start": 73,
+            "end": 82,
+            "lemma": "unhandled",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "device",
+            "whitespace": " ",
+            "start": 83,
+            "end": 89,
+            "lemma": "device",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 14,
+            "children": [],
+            "ancestors": [
+              14,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": "faults",
+            "whitespace": " ",
+            "start": 90,
+            "end": 96,
+            "lemma": "fault",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "dobj",
+            "head": 10,
+            "children": [
+              11,
+              12,
+              13,
+              15
+            ],
+            "ancestors": [
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 15,
+            "text": "from",
+            "whitespace": " ",
+            "start": 97,
+            "end": 101,
+            "lemma": "from",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 14,
+            "children": [
+              18
+            ],
+            "ancestors": [
+              14,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 16,
+            "text": "the",
+            "whitespace": " ",
+            "start": 102,
+            "end": 105,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              15,
+              14,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 17,
+            "text": "last",
+            "whitespace": " ",
+            "start": 106,
+            "end": 110,
+            "lemma": "last",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 18,
+            "children": [],
+            "ancestors": [
+              18,
+              15,
+              14,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 18,
+            "text": "shift",
+            "whitespace": "",
+            "start": 111,
+            "end": 116,
+            "lemma": "shift",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 15,
+            "children": [
+              16,
+              17
+            ],
+            "ancestors": [
+              15,
+              14,
+              10
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 19,
+            "text": ".",
+            "whitespace": "",
+            "start": 116,
+            "end": 117,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 6,
+            "end": 34,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 10,
+            "end": 59,
+            "root_token": 9
+          },
+          {
+            "start_token": 11,
+            "end_token": 15,
+            "end": 96,
+            "root_token": 14
+          },
+          {
+            "start_token": 16,
+            "end_token": 19,
+            "end": 116,
+            "root_token": 18
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 7
+          },
+          {
+            "start_token": 7,
+            "end_token": 20
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [
+        {
+          "rule": "copular_acronym_expansion",
+          "trigger_token": 1,
+          "full_name": {
+            "text": "Device Exception Ledger",
+            "start": 11,
+            "end": 34
+          },
+          "short_name": {
+            "text": "DEL",
+            "start": 0,
+            "end": 3
+          }
+        }
+      ],
+      "baseline": [],
+      "candidate": [
+        {
+          "full_name": {
+            "text": "Device Exception Ledger",
+            "confidence": 0.95188969373703,
+            "start": 11,
+            "end": 34
+          },
+          "short_name": {
+            "text": "DEL",
+            "confidence": 0.9981085062026978,
+            "start": 0,
+            "end": 3
+          },
+          "syntax_rules": [
+            "copular_acronym_expansion"
+          ],
+          "syntax_rule_revision": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "id": "known_as_positive",
+        "body": "The Thermal Boundary Register is known as TBR in the maintenance guide.",
+        "expected": {
+          "full_name": "Thermal Boundary Register",
+          "short_name": "TBR"
+        },
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {},
+      "parse": {
+        "body": "The Thermal Boundary Register is known as TBR in the maintenance guide.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "The",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "Thermal",
+            "whitespace": " ",
+            "start": 4,
+            "end": 11,
+            "lemma": "Thermal",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Boundary",
+            "whitespace": " ",
+            "start": 12,
+            "end": 20,
+            "lemma": "Boundary",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 3,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              3,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 21,
+            "end": 29,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubjpass",
+            "head": 5,
+            "children": [
+              0,
+              2
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "is",
+            "whitespace": " ",
+            "start": 30,
+            "end": 32,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "auxpass",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "known",
+            "whitespace": " ",
+            "start": 33,
+            "end": 38,
+            "lemma": "know",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "ROOT",
+            "head": 5,
+            "children": [
+              3,
+              4,
+              6,
+              8,
+              12
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "as",
+            "whitespace": " ",
+            "start": 39,
+            "end": 41,
+            "lemma": "as",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "TBR",
+            "whitespace": " ",
+            "start": 42,
+            "end": 45,
+            "lemma": "TBR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "in",
+            "whitespace": " ",
+            "start": 46,
+            "end": 48,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              11
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "the",
+            "whitespace": " ",
+            "start": 49,
+            "end": 52,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "maintenance",
+            "whitespace": " ",
+            "start": 53,
+            "end": 64,
+            "lemma": "maintenance",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "guide",
+            "whitespace": "",
+            "start": 65,
+            "end": 70,
+            "lemma": "guide",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 8,
+            "children": [
+              9,
+              10
+            ],
+            "ancestors": [
+              8,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": ".",
+            "whitespace": "",
+            "start": 70,
+            "end": 71,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 4,
+            "end": 29,
+            "root_token": 3
+          },
+          {
+            "start_token": 7,
+            "end_token": 8,
+            "end": 45,
+            "root_token": 7
+          },
+          {
+            "start_token": 9,
+            "end_token": 12,
+            "end": 70,
+            "root_token": 11
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [
+        {
+          "rule": "passive_or_nominal_naming",
+          "trigger_token": 5,
+          "full_name": {
+            "text": "Thermal Boundary Register",
+            "start": 4,
+            "end": 29
+          },
+          "short_name": {
+            "text": "TBR",
+            "start": 42,
+            "end": 45
+          }
+        }
+      ],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "known_as_negated",
+        "body": "The Thermal Boundary Register is not known as TBR in this guide.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {},
+      "parse": {
+        "body": "The Thermal Boundary Register is not known as TBR in this guide.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "The",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "Thermal",
+            "whitespace": " ",
+            "start": 4,
+            "end": 11,
+            "lemma": "Thermal",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Boundary",
+            "whitespace": " ",
+            "start": 12,
+            "end": 20,
+            "lemma": "Boundary",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 3,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              3,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 21,
+            "end": 29,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubjpass",
+            "head": 6,
+            "children": [
+              0,
+              2
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "is",
+            "whitespace": " ",
+            "start": 30,
+            "end": 32,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "auxpass",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "not",
+            "whitespace": " ",
+            "start": 33,
+            "end": 36,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "known",
+            "whitespace": " ",
+            "start": 37,
+            "end": 42,
+            "lemma": "know",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "ROOT",
+            "head": 6,
+            "children": [
+              3,
+              4,
+              5,
+              7,
+              9,
+              12
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "as",
+            "whitespace": " ",
+            "start": 43,
+            "end": 45,
+            "lemma": "as",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              8
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "TBR",
+            "whitespace": " ",
+            "start": 46,
+            "end": 49,
+            "lemma": "TBR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "in",
+            "whitespace": " ",
+            "start": 50,
+            "end": 52,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              11
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "this",
+            "whitespace": " ",
+            "start": 53,
+            "end": 57,
+            "lemma": "this",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "guide",
+            "whitespace": "",
+            "start": 58,
+            "end": 63,
+            "lemma": "guide",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 9,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              9,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": ".",
+            "whitespace": "",
+            "start": 63,
+            "end": 64,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 4,
+            "end": 29,
+            "root_token": 3
+          },
+          {
+            "start_token": 8,
+            "end_token": 9,
+            "end": 49,
+            "root_token": 8
+          },
+          {
+            "start_token": 10,
+            "end_token": 12,
+            "end": 63,
+            "root_token": 11
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "known_as_hypothetical",
+        "body": "If the Thermal Boundary Register were known as TBR, its title would fit.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "the Thermal Boundary Register",
+              "confidence": 0.7575621604919434,
+              "start": 3,
+              "end": 32
+            },
+            "short_name": {
+              "text": "TBR",
+              "confidence": 0.9976311922073364,
+              "start": 47,
+              "end": 50
+            }
+          },
+          {
+            "full_name": {
+              "text": "Thermal Boundary Register",
+              "confidence": 0.7486077547073364,
+              "start": 7,
+              "end": 32
+            },
+            "short_name": {
+              "text": "TBR",
+              "confidence": 0.9970756769180298,
+              "start": 47,
+              "end": 50
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "If the Thermal Boundary Register were known as TBR, its title would fit.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "If",
+            "whitespace": " ",
+            "start": 0,
+            "end": 2,
+            "lemma": "if",
+            "pos": "SCONJ",
+            "tag": "IN",
+            "dep": "mark",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "the",
+            "whitespace": " ",
+            "start": 3,
+            "end": 6,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Thermal",
+            "whitespace": " ",
+            "start": 7,
+            "end": 14,
+            "lemma": "Thermal",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Boundary",
+            "whitespace": " ",
+            "start": 15,
+            "end": 23,
+            "lemma": "Boundary",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 24,
+            "end": 32,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubjpass",
+            "head": 6,
+            "children": [
+              1,
+              2,
+              3
+            ],
+            "ancestors": [
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "were",
+            "whitespace": " ",
+            "start": 33,
+            "end": 37,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBD",
+            "dep": "auxpass",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "known",
+            "whitespace": " ",
+            "start": 38,
+            "end": 43,
+            "lemma": "know",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "advcl",
+            "head": 13,
+            "children": [
+              0,
+              4,
+              5,
+              7
+            ],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "as",
+            "whitespace": " ",
+            "start": 44,
+            "end": 46,
+            "lemma": "as",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 6,
+            "children": [
+              8
+            ],
+            "ancestors": [
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "TBR",
+            "whitespace": "",
+            "start": 47,
+            "end": 50,
+            "lemma": "TBR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              6,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": ",",
+            "whitespace": " ",
+            "start": 50,
+            "end": 51,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "its",
+            "whitespace": " ",
+            "start": 52,
+            "end": 55,
+            "lemma": "its",
+            "pos": "PRON",
+            "tag": "PRP$",
+            "dep": "poss",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "title",
+            "whitespace": " ",
+            "start": 56,
+            "end": 61,
+            "lemma": "title",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 13,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": "would",
+            "whitespace": " ",
+            "start": 62,
+            "end": 67,
+            "lemma": "would",
+            "pos": "AUX",
+            "tag": "MD",
+            "dep": "aux",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 13,
+            "text": "fit",
+            "whitespace": "",
+            "start": 68,
+            "end": 71,
+            "lemma": "fit",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 13,
+            "children": [
+              6,
+              9,
+              11,
+              12,
+              14
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 14,
+            "text": ".",
+            "whitespace": "",
+            "start": 71,
+            "end": 72,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 13,
+            "children": [],
+            "ancestors": [
+              13
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 5,
+            "end": 32,
+            "root_token": 4
+          },
+          {
+            "start_token": 8,
+            "end_token": 9,
+            "end": 50,
+            "root_token": 8
+          },
+          {
+            "start_token": 10,
+            "end_token": 12,
+            "end": 61,
+            "root_token": 11
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 15
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "known_as_question",
+        "body": "Is the Thermal Boundary Register known as TBR?",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {},
+      "parse": {
+        "body": "Is the Thermal Boundary Register known as TBR?",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Is",
+            "whitespace": " ",
+            "start": 0,
+            "end": 2,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "auxpass",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "the",
+            "whitespace": " ",
+            "start": 3,
+            "end": 6,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Thermal",
+            "whitespace": " ",
+            "start": 7,
+            "end": 14,
+            "lemma": "Thermal",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              4,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Boundary",
+            "whitespace": " ",
+            "start": 15,
+            "end": 23,
+            "lemma": "Boundary",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              4,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 24,
+            "end": 32,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubjpass",
+            "head": 5,
+            "children": [
+              1,
+              3
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "known",
+            "whitespace": " ",
+            "start": 33,
+            "end": 38,
+            "lemma": "know",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "ROOT",
+            "head": 5,
+            "children": [
+              0,
+              4,
+              6,
+              8
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "as",
+            "whitespace": " ",
+            "start": 39,
+            "end": 41,
+            "lemma": "as",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 5,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "TBR",
+            "whitespace": "",
+            "start": 42,
+            "end": 45,
+            "lemma": "TBR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              5
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "?",
+            "whitespace": "",
+            "start": 45,
+            "end": 46,
+            "lemma": "?",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 5,
+            "end": 32,
+            "root_token": 4
+          },
+          {
+            "start_token": 7,
+            "end_token": 8,
+            "end": 45,
+            "root_token": 7
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 9
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "refers_positive",
+        "body": "WPR refers to Water Pressure Register in the inspection checklist.",
+        "expected": {
+          "full_name": "Water Pressure Register",
+          "short_name": "WPR"
+        },
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Water Pressure Register",
+              "confidence": 0.9959585070610046,
+              "start": 14,
+              "end": 37
+            },
+            "short_name": {
+              "text": "WPR",
+              "confidence": 0.9983115196228027,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "WPR refers to Water Pressure Register in the inspection checklist.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "WPR",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "WPR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "refers",
+            "whitespace": " ",
+            "start": 4,
+            "end": 10,
+            "lemma": "refer",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              6,
+              10
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "to",
+            "whitespace": " ",
+            "start": 11,
+            "end": 13,
+            "lemma": "to",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 1,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Water",
+            "whitespace": " ",
+            "start": 14,
+            "end": 19,
+            "lemma": "Water",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              5,
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Pressure",
+            "whitespace": " ",
+            "start": 20,
+            "end": 28,
+            "lemma": "Pressure",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [
+              3
+            ],
+            "ancestors": [
+              5,
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 29,
+            "end": 37,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 2,
+            "children": [
+              4
+            ],
+            "ancestors": [
+              2,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "in",
+            "whitespace": " ",
+            "start": 38,
+            "end": 40,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 1,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "the",
+            "whitespace": " ",
+            "start": 41,
+            "end": 44,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "inspection",
+            "whitespace": " ",
+            "start": 45,
+            "end": 55,
+            "lemma": "inspection",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "checklist",
+            "whitespace": "",
+            "start": 56,
+            "end": 65,
+            "lemma": "checklist",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 6,
+            "children": [
+              7,
+              8
+            ],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": "",
+            "start": 65,
+            "end": 66,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 6,
+            "end": 37,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 10,
+            "end": 65,
+            "root_token": 9
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [
+        {
+          "rule": "compact_refers_to",
+          "trigger_token": 1,
+          "full_name": {
+            "text": "Water Pressure Register",
+            "start": 14,
+            "end": 37
+          },
+          "short_name": {
+            "text": "WPR",
+            "start": 0,
+            "end": 3
+          }
+        }
+      ],
+      "baseline": [],
+      "candidate": [
+        {
+          "full_name": {
+            "text": "Water Pressure Register",
+            "confidence": 0.9959585070610046,
+            "start": 14,
+            "end": 37
+          },
+          "short_name": {
+            "text": "WPR",
+            "confidence": 0.9983115196228027,
+            "start": 0,
+            "end": 3
+          },
+          "syntax_rules": [
+            "compact_refers_to"
+          ],
+          "syntax_rule_revision": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "id": "refers_cross_reference",
+        "body": "The WPR document refers to Water Pressure Register in its bibliography.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Water Pressure Register",
+              "confidence": 0.9953344464302063,
+              "start": 27,
+              "end": 50
+            },
+            "short_name": {
+              "text": "WPR",
+              "confidence": 0.9876627922058105,
+              "start": 4,
+              "end": 7
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "The WPR document refers to Water Pressure Register in its bibliography.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "The",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "WPR",
+            "whitespace": " ",
+            "start": 4,
+            "end": 7,
+            "lemma": "WPR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "document",
+            "whitespace": " ",
+            "start": 8,
+            "end": 16,
+            "lemma": "document",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 3,
+            "children": [
+              0,
+              1
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "refers",
+            "whitespace": " ",
+            "start": 17,
+            "end": 23,
+            "lemma": "refer",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 3,
+            "children": [
+              2,
+              4,
+              8,
+              11
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "to",
+            "whitespace": " ",
+            "start": 24,
+            "end": 26,
+            "lemma": "to",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 3,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Water",
+            "whitespace": " ",
+            "start": 27,
+            "end": 32,
+            "lemma": "Water",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Pressure",
+            "whitespace": " ",
+            "start": 33,
+            "end": 41,
+            "lemma": "Pressure",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 7,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 42,
+            "end": 50,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 4,
+            "children": [
+              6
+            ],
+            "ancestors": [
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "in",
+            "whitespace": " ",
+            "start": 51,
+            "end": 53,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 3,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "its",
+            "whitespace": " ",
+            "start": 54,
+            "end": 57,
+            "lemma": "its",
+            "pos": "PRON",
+            "tag": "PRP$",
+            "dep": "poss",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              8,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "bibliography",
+            "whitespace": "",
+            "start": 58,
+            "end": 70,
+            "lemma": "bibliography",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 8,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              8,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": "",
+            "start": 70,
+            "end": 71,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 3,
+            "end": 16,
+            "root_token": 2
+          },
+          {
+            "start_token": 5,
+            "end_token": 8,
+            "end": 50,
+            "root_token": 7
+          },
+          {
+            "start_token": 9,
+            "end_token": 11,
+            "end": 70,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "refers_unrelated",
+        "body": "The WPR guide refers to Salt Pressure Register on the next page.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Salt Pressure Register",
+              "confidence": 0.992461621761322,
+              "start": 24,
+              "end": 46
+            },
+            "short_name": {
+              "text": "WPR",
+              "confidence": 0.9543272256851196,
+              "start": 4,
+              "end": 7
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "The WPR guide refers to Salt Pressure Register on the next page.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "The",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "WPR",
+            "whitespace": " ",
+            "start": 4,
+            "end": 7,
+            "lemma": "WPR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "guide",
+            "whitespace": " ",
+            "start": 8,
+            "end": 13,
+            "lemma": "guide",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 3,
+            "children": [
+              0,
+              1
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "refers",
+            "whitespace": " ",
+            "start": 14,
+            "end": 20,
+            "lemma": "refer",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 3,
+            "children": [
+              2,
+              4,
+              12
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "to",
+            "whitespace": " ",
+            "start": 21,
+            "end": 23,
+            "lemma": "to",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 3,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Salt",
+            "whitespace": " ",
+            "start": 24,
+            "end": 28,
+            "lemma": "Salt",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Pressure",
+            "whitespace": " ",
+            "start": 29,
+            "end": 37,
+            "lemma": "Pressure",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 7,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 38,
+            "end": 46,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 4,
+            "children": [
+              6,
+              8
+            ],
+            "ancestors": [
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "on",
+            "whitespace": " ",
+            "start": 47,
+            "end": 49,
+            "lemma": "on",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 7,
+            "children": [
+              11
+            ],
+            "ancestors": [
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "the",
+            "whitespace": " ",
+            "start": 50,
+            "end": 53,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8,
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "next",
+            "whitespace": " ",
+            "start": 54,
+            "end": 58,
+            "lemma": "next",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8,
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "page",
+            "whitespace": "",
+            "start": 59,
+            "end": 63,
+            "lemma": "page",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 8,
+            "children": [
+              9,
+              10
+            ],
+            "ancestors": [
+              8,
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": ".",
+            "whitespace": "",
+            "start": 63,
+            "end": 64,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 3,
+            "end": 13,
+            "root_token": 2
+          },
+          {
+            "start_token": 5,
+            "end_token": 8,
+            "end": 46,
+            "root_token": 7
+          },
+          {
+            "start_token": 9,
+            "end_token": 12,
+            "end": 63,
+            "root_token": 11
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "refers_negated",
+        "body": "WPR does not refer to Water Pressure Register in this collection.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Water Pressure Register",
+              "confidence": 0.9930942058563232,
+              "start": 22,
+              "end": 45
+            },
+            "short_name": {
+              "text": "WPR",
+              "confidence": 0.9980946183204651,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "WPR does not refer to Water Pressure Register in this collection.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "WPR",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "WPR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "does",
+            "whitespace": " ",
+            "start": 4,
+            "end": 8,
+            "lemma": "do",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "aux",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "not",
+            "whitespace": " ",
+            "start": 9,
+            "end": 12,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "refer",
+            "whitespace": " ",
+            "start": 13,
+            "end": 18,
+            "lemma": "refer",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 3,
+            "children": [
+              0,
+              1,
+              2,
+              4,
+              8,
+              11
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "to",
+            "whitespace": " ",
+            "start": 19,
+            "end": 21,
+            "lemma": "to",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 3,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Water",
+            "whitespace": " ",
+            "start": 22,
+            "end": 27,
+            "lemma": "Water",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Pressure",
+            "whitespace": " ",
+            "start": 28,
+            "end": 36,
+            "lemma": "Pressure",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 7,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              7,
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 37,
+            "end": 45,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 4,
+            "children": [
+              6
+            ],
+            "ancestors": [
+              4,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "in",
+            "whitespace": " ",
+            "start": 46,
+            "end": 48,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 3,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "this",
+            "whitespace": " ",
+            "start": 49,
+            "end": 53,
+            "lemma": "this",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              8,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "collection",
+            "whitespace": "",
+            "start": 54,
+            "end": 64,
+            "lemma": "collection",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 8,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              8,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": "",
+            "start": 64,
+            "end": 65,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 5,
+            "end_token": 8,
+            "end": 45,
+            "root_token": 7
+          },
+          {
+            "start_token": 9,
+            "end_token": 11,
+            "end": 64,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "copular_positive",
+        "body": "DEL is the Device Exception Ledger.",
+        "expected": {
+          "full_name": "Device Exception Ledger",
+          "short_name": "DEL"
+        },
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Device Exception Ledger",
+              "confidence": 0.8429438471794128,
+              "start": 11,
+              "end": 34
+            },
+            "short_name": {
+              "text": "DEL",
+              "confidence": 0.9975892305374146,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "DEL is the Device Exception Ledger.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "DEL",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "DEL",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "is",
+            "whitespace": " ",
+            "start": 4,
+            "end": 6,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              5,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "the",
+            "whitespace": " ",
+            "start": 7,
+            "end": 10,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Device",
+            "whitespace": " ",
+            "start": 11,
+            "end": 17,
+            "lemma": "device",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Exception",
+            "whitespace": " ",
+            "start": 18,
+            "end": 27,
+            "lemma": "exception",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 5,
+            "children": [
+              3
+            ],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Ledger",
+            "whitespace": "",
+            "start": 28,
+            "end": 34,
+            "lemma": "ledger",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "attr",
+            "head": 1,
+            "children": [
+              2,
+              4
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": ".",
+            "whitespace": "",
+            "start": 34,
+            "end": 35,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 6,
+            "end": 34,
+            "root_token": 5
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 7
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [
+        {
+          "rule": "copular_acronym_expansion",
+          "trigger_token": 1,
+          "full_name": {
+            "text": "Device Exception Ledger",
+            "start": 11,
+            "end": 34
+          },
+          "short_name": {
+            "text": "DEL",
+            "start": 0,
+            "end": 3
+          }
+        }
+      ],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "copular_class_membership",
+        "body": "DEL is an important incident report.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {},
+      "parse": {
+        "body": "DEL is an important incident report.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "DEL",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "DEL",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "is",
+            "whitespace": " ",
+            "start": 4,
+            "end": 6,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              5,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "an",
+            "whitespace": " ",
+            "start": 7,
+            "end": 9,
+            "lemma": "an",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "important",
+            "whitespace": " ",
+            "start": 10,
+            "end": 19,
+            "lemma": "important",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "incident",
+            "whitespace": " ",
+            "start": 20,
+            "end": 28,
+            "lemma": "incident",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "report",
+            "whitespace": "",
+            "start": 29,
+            "end": 35,
+            "lemma": "report",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "attr",
+            "head": 1,
+            "children": [
+              2,
+              3,
+              4
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": ".",
+            "whitespace": "",
+            "start": 35,
+            "end": 36,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 6,
+            "end": 35,
+            "root_token": 5
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 7
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "non_initial_alias",
+        "body": "DEL is the Network Exception Ledger.",
+        "expected": {
+          "full_name": "Network Exception Ledger",
+          "short_name": "DEL"
+        },
+        "note": "A locally defined alias need not match its initials; missing this is a recall failure, not evidence of a correct rejection.",
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Network Exception Ledger",
+              "confidence": 0.5806110501289368,
+              "start": 11,
+              "end": 35
+            },
+            "short_name": {
+              "text": "DEL",
+              "confidence": 0.9975353479385376,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "DEL is the Network Exception Ledger.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "DEL",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "DEL",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "is",
+            "whitespace": " ",
+            "start": 4,
+            "end": 6,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              5,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "the",
+            "whitespace": " ",
+            "start": 7,
+            "end": 10,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Network",
+            "whitespace": " ",
+            "start": 11,
+            "end": 18,
+            "lemma": "Network",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Exception",
+            "whitespace": " ",
+            "start": 19,
+            "end": 28,
+            "lemma": "Exception",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Ledger",
+            "whitespace": "",
+            "start": 29,
+            "end": 35,
+            "lemma": "Ledger",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "attr",
+            "head": 1,
+            "children": [
+              2,
+              3,
+              4
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": ".",
+            "whitespace": "",
+            "start": 35,
+            "end": 36,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 6,
+            "end": 35,
+            "root_token": 5
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 7
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "copular_negated",
+        "body": "DEL is not the Device Exception Ledger.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {},
+      "parse": {
+        "body": "DEL is not the Device Exception Ledger.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "DEL",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "DEL",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "is",
+            "whitespace": " ",
+            "start": 4,
+            "end": 6,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              6,
+              7
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "not",
+            "whitespace": " ",
+            "start": 7,
+            "end": 10,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "the",
+            "whitespace": " ",
+            "start": 11,
+            "end": 14,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Device",
+            "whitespace": " ",
+            "start": 15,
+            "end": 21,
+            "lemma": "device",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Exception",
+            "whitespace": " ",
+            "start": 22,
+            "end": 31,
+            "lemma": "exception",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Ledger",
+            "whitespace": "",
+            "start": 32,
+            "end": 38,
+            "lemma": "ledger",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "attr",
+            "head": 1,
+            "children": [
+              3,
+              4,
+              5
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": ".",
+            "whitespace": "",
+            "start": 38,
+            "end": 39,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 7,
+            "end": 38,
+            "root_token": 6
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 8
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "reverse_parenthetical",
+        "body": "RSM (Remote Sensor Map) lists every sensor.",
+        "expected": {
+          "full_name": "Remote Sensor Map",
+          "short_name": "RSM"
+        },
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Remote Sensor Map",
+              "confidence": 0.8780239820480347,
+              "start": 5,
+              "end": 22
+            },
+            "short_name": {
+              "text": "RSM",
+              "confidence": 0.9911575317382812,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "RSM (Remote Sensor Map) lists every sensor.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "RSM",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "RSM",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [
+              1,
+              4,
+              5
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "(",
+            "whitespace": "",
+            "start": 4,
+            "end": 5,
+            "lemma": "(",
+            "pos": "PUNCT",
+            "tag": "-LRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Remote",
+            "whitespace": " ",
+            "start": 5,
+            "end": 11,
+            "lemma": "remote",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              4,
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Sensor",
+            "whitespace": " ",
+            "start": 12,
+            "end": 18,
+            "lemma": "Sensor",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 4,
+            "children": [
+              2
+            ],
+            "ancestors": [
+              4,
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Map",
+            "whitespace": "",
+            "start": 19,
+            "end": 22,
+            "lemma": "Map",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "appos",
+            "head": 0,
+            "children": [
+              3
+            ],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": ")",
+            "whitespace": " ",
+            "start": 22,
+            "end": 23,
+            "lemma": ")",
+            "pos": "PUNCT",
+            "tag": "-RRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "lists",
+            "whitespace": " ",
+            "start": 24,
+            "end": 29,
+            "lemma": "list",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 6,
+            "children": [
+              0,
+              8,
+              9
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "every",
+            "whitespace": " ",
+            "start": 30,
+            "end": 35,
+            "lemma": "every",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "sensor",
+            "whitespace": "",
+            "start": 36,
+            "end": 42,
+            "lemma": "sensor",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "dobj",
+            "head": 6,
+            "children": [
+              7
+            ],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": ".",
+            "whitespace": "",
+            "start": 42,
+            "end": 43,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 5,
+            "end": 22,
+            "root_token": 4
+          },
+          {
+            "start_token": 7,
+            "end_token": 9,
+            "end": 42,
+            "root_token": 8
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 10
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [
+        {
+          "rule": "parenthetical_full_name",
+          "trigger_token": 4,
+          "full_name": {
+            "text": "Remote Sensor Map",
+            "start": 5,
+            "end": 22
+          },
+          "short_name": {
+            "text": "RSM",
+            "start": 0,
+            "end": 3
+          }
+        }
+      ],
+      "baseline": [],
+      "candidate": [
+        {
+          "full_name": {
+            "text": "Remote Sensor Map",
+            "confidence": 0.8780239820480347,
+            "start": 5,
+            "end": 22
+          },
+          "short_name": {
+            "text": "RSM",
+            "confidence": 0.9911575317382812,
+            "start": 0,
+            "end": 3
+          },
+          "syntax_rules": [
+            "parenthetical_full_name"
+          ],
+          "syntax_rule_revision": null
+        }
+      ]
+    },
+    {
+      "input": {
+        "id": "parenthetical_specification",
+        "body": "RSM (maximum load: 20 kilograms) limits the sender rate.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {},
+      "parse": {
+        "body": "RSM (maximum load: 20 kilograms) limits the sender rate.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "RSM",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "RSM",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 8,
+            "children": [
+              1,
+              3,
+              7
+            ],
+            "ancestors": [
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "(",
+            "whitespace": "",
+            "start": 4,
+            "end": 5,
+            "lemma": "(",
+            "pos": "PUNCT",
+            "tag": "-LRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "maximum",
+            "whitespace": " ",
+            "start": 5,
+            "end": 12,
+            "lemma": "maximum",
+            "pos": "ADJ",
+            "tag": "JJ",
+            "dep": "amod",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              0,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "load",
+            "whitespace": "",
+            "start": 13,
+            "end": 17,
+            "lemma": "load",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "appos",
+            "head": 0,
+            "children": [
+              2,
+              4,
+              6
+            ],
+            "ancestors": [
+              0,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": ":",
+            "whitespace": " ",
+            "start": 17,
+            "end": 18,
+            "lemma": ":",
+            "pos": "PUNCT",
+            "tag": ":",
+            "dep": "punct",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              0,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "20",
+            "whitespace": " ",
+            "start": 19,
+            "end": 21,
+            "lemma": "20",
+            "pos": "NUM",
+            "tag": "CD",
+            "dep": "nummod",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              3,
+              0,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "kilograms",
+            "whitespace": "",
+            "start": 22,
+            "end": 31,
+            "lemma": "kilogram",
+            "pos": "NOUN",
+            "tag": "NNS",
+            "dep": "appos",
+            "head": 3,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              3,
+              0,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": ")",
+            "whitespace": " ",
+            "start": 31,
+            "end": 32,
+            "lemma": ")",
+            "pos": "PUNCT",
+            "tag": "-RRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "limits",
+            "whitespace": " ",
+            "start": 33,
+            "end": 39,
+            "lemma": "limit",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 8,
+            "children": [
+              0,
+              11,
+              12
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "the",
+            "whitespace": " ",
+            "start": 40,
+            "end": 43,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "sender",
+            "whitespace": " ",
+            "start": 44,
+            "end": 50,
+            "lemma": "sender",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 11,
+            "children": [],
+            "ancestors": [
+              11,
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "rate",
+            "whitespace": "",
+            "start": 51,
+            "end": 55,
+            "lemma": "rate",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "dobj",
+            "head": 8,
+            "children": [
+              9,
+              10
+            ],
+            "ancestors": [
+              8
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": ".",
+            "whitespace": "",
+            "start": 55,
+            "end": 56,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 4,
+            "end": 17,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 7,
+            "end": 31,
+            "root_token": 6
+          },
+          {
+            "start_token": 9,
+            "end_token": 12,
+            "end": 55,
+            "root_token": 11
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "parenthetical_location",
+        "body": "RSM (in the Storage Room) remained on the shelf.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "RSM",
+              "confidence": 0.7504342794418335,
+              "start": 0,
+              "end": 3
+            },
+            "short_name": {
+              "text": "RSM",
+              "confidence": 0.9941120743751526,
+              "start": 0,
+              "end": 3
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "RSM (in the Storage Room) remained on the shelf.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "RSM",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "RSM",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 7,
+            "children": [
+              1,
+              2,
+              6
+            ],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "(",
+            "whitespace": "",
+            "start": 4,
+            "end": 5,
+            "lemma": "(",
+            "pos": "PUNCT",
+            "tag": "-LRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "in",
+            "whitespace": " ",
+            "start": 5,
+            "end": 7,
+            "lemma": "in",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 0,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "the",
+            "whitespace": " ",
+            "start": 8,
+            "end": 11,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              2,
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Storage",
+            "whitespace": " ",
+            "start": 12,
+            "end": 19,
+            "lemma": "Storage",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              2,
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Room",
+            "whitespace": "",
+            "start": 20,
+            "end": 24,
+            "lemma": "Room",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 2,
+            "children": [
+              3,
+              4
+            ],
+            "ancestors": [
+              2,
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": ")",
+            "whitespace": " ",
+            "start": 24,
+            "end": 25,
+            "lemma": ")",
+            "pos": "PUNCT",
+            "tag": "-RRB-",
+            "dep": "punct",
+            "head": 0,
+            "children": [],
+            "ancestors": [
+              0,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "remained",
+            "whitespace": " ",
+            "start": 26,
+            "end": 34,
+            "lemma": "remain",
+            "pos": "VERB",
+            "tag": "VBD",
+            "dep": "ROOT",
+            "head": 7,
+            "children": [
+              0,
+              8,
+              11
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "on",
+            "whitespace": " ",
+            "start": 35,
+            "end": 37,
+            "lemma": "on",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "prep",
+            "head": 7,
+            "children": [
+              10
+            ],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "the",
+            "whitespace": " ",
+            "start": 38,
+            "end": 41,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              8,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "shelf",
+            "whitespace": "",
+            "start": 42,
+            "end": 47,
+            "lemma": "shelf",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "pobj",
+            "head": 8,
+            "children": [
+              9
+            ],
+            "ancestors": [
+              8,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": "",
+            "start": 47,
+            "end": 48,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 3,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 6,
+            "end": 24,
+            "root_token": 5
+          },
+          {
+            "start_token": 9,
+            "end_token": 11,
+            "end": 47,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "quoted_definition",
+        "body": "The rejected caption said \"DEL is the Device Exception Ledger\".",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Device Exception Ledger",
+              "confidence": 0.7204651832580566,
+              "start": 38,
+              "end": 61
+            },
+            "short_name": {
+              "text": "DEL",
+              "confidence": 0.994731068611145,
+              "start": 27,
+              "end": 30
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "The rejected caption said \"DEL is the Device Exception Ledger\".",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "The",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "rejected",
+            "whitespace": " ",
+            "start": 4,
+            "end": 12,
+            "lemma": "reject",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "amod",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "caption",
+            "whitespace": " ",
+            "start": 13,
+            "end": 20,
+            "lemma": "caption",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 3,
+            "children": [
+              0,
+              1
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "said",
+            "whitespace": " ",
+            "start": 21,
+            "end": 25,
+            "lemma": "say",
+            "pos": "VERB",
+            "tag": "VBD",
+            "dep": "ROOT",
+            "head": 3,
+            "children": [
+              2,
+              4,
+              6,
+              11,
+              12
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "\"",
+            "whitespace": "",
+            "start": 26,
+            "end": 27,
+            "lemma": "\"",
+            "pos": "PUNCT",
+            "tag": "``",
+            "dep": "punct",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": true
+          },
+          {
+            "i": 5,
+            "text": "DEL",
+            "whitespace": " ",
+            "start": 27,
+            "end": 30,
+            "lemma": "DEL",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "is",
+            "whitespace": " ",
+            "start": 31,
+            "end": 33,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "ccomp",
+            "head": 3,
+            "children": [
+              5,
+              10
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "the",
+            "whitespace": " ",
+            "start": 34,
+            "end": 37,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              6,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Device",
+            "whitespace": " ",
+            "start": 38,
+            "end": 44,
+            "lemma": "device",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              10,
+              6,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Exception",
+            "whitespace": " ",
+            "start": 45,
+            "end": 54,
+            "lemma": "exception",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "compound",
+            "head": 10,
+            "children": [
+              8
+            ],
+            "ancestors": [
+              10,
+              6,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Ledger",
+            "whitespace": "",
+            "start": 55,
+            "end": 61,
+            "lemma": "ledger",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "attr",
+            "head": 6,
+            "children": [
+              7,
+              9
+            ],
+            "ancestors": [
+              6,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "\"",
+            "whitespace": "",
+            "start": 61,
+            "end": 62,
+            "lemma": "\"",
+            "pos": "PUNCT",
+            "tag": "''",
+            "dep": "punct",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": true
+          },
+          {
+            "i": 12,
+            "text": ".",
+            "whitespace": "",
+            "start": 62,
+            "end": 63,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 3,
+            "end": 20,
+            "root_token": 2
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 30,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 11,
+            "end": 61,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "relative_clause",
+        "body": "The guide that calls the sample TBR discusses Thermal Boundary Register.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Thermal Boundary Register",
+              "confidence": 0.9970967769622803,
+              "start": 46,
+              "end": 71
+            },
+            "short_name": {
+              "text": "TBR",
+              "confidence": 0.9958413243293762,
+              "start": 32,
+              "end": 35
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "The guide that calls the sample TBR discusses Thermal Boundary Register.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "The",
+            "whitespace": " ",
+            "start": 0,
+            "end": 3,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "guide",
+            "whitespace": " ",
+            "start": 4,
+            "end": 9,
+            "lemma": "guide",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 7,
+            "children": [
+              0,
+              3
+            ],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "that",
+            "whitespace": " ",
+            "start": 10,
+            "end": 14,
+            "lemma": "that",
+            "pos": "PRON",
+            "tag": "WDT",
+            "dep": "nsubj",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              1,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "calls",
+            "whitespace": " ",
+            "start": 15,
+            "end": 20,
+            "lemma": "call",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "relcl",
+            "head": 1,
+            "children": [
+              2,
+              5,
+              6
+            ],
+            "ancestors": [
+              1,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "the",
+            "whitespace": " ",
+            "start": 21,
+            "end": 24,
+            "lemma": "the",
+            "pos": "DET",
+            "tag": "DT",
+            "dep": "det",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              3,
+              1,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "sample",
+            "whitespace": " ",
+            "start": 25,
+            "end": 31,
+            "lemma": "sample",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "dobj",
+            "head": 3,
+            "children": [
+              4
+            ],
+            "ancestors": [
+              3,
+              1,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "TBR",
+            "whitespace": " ",
+            "start": 32,
+            "end": 35,
+            "lemma": "TBR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "oprd",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3,
+              1,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "discusses",
+            "whitespace": " ",
+            "start": 36,
+            "end": 45,
+            "lemma": "discuss",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 7,
+            "children": [
+              1,
+              10,
+              11
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Thermal",
+            "whitespace": " ",
+            "start": 46,
+            "end": 53,
+            "lemma": "Thermal",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Boundary",
+            "whitespace": " ",
+            "start": 54,
+            "end": 62,
+            "lemma": "Boundary",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Register",
+            "whitespace": "",
+            "start": 63,
+            "end": 71,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 7,
+            "children": [
+              8,
+              9
+            ],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": "",
+            "start": 71,
+            "end": 72,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 2,
+            "end": 9,
+            "root_token": 1
+          },
+          {
+            "start_token": 2,
+            "end_token": 3,
+            "end": 14,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 6,
+            "end": 31,
+            "root_token": 5
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 35,
+            "root_token": 6
+          },
+          {
+            "start_token": 8,
+            "end_token": 11,
+            "end": 71,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "input": {
+        "id": "passive_relation",
+        "body": "Thermal Boundary Register is used by TBR.",
+        "expected": null,
+        "control": true,
+        "visibility": "team",
+        "kind": "note"
+      },
+      "raw_aliases": {
+        "alias_definition": [
+          {
+            "full_name": {
+              "text": "Thermal Boundary Register",
+              "confidence": 0.9888654351234436,
+              "start": 0,
+              "end": 25
+            },
+            "short_name": {
+              "text": "TBR",
+              "confidence": 0.9953692555427551,
+              "start": 37,
+              "end": 40
+            }
+          }
+        ]
+      },
+      "parse": {
+        "body": "Thermal Boundary Register is used by TBR.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Thermal",
+            "whitespace": " ",
+            "start": 0,
+            "end": 7,
+            "lemma": "Thermal",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1,
+              2,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "Boundary",
+            "whitespace": " ",
+            "start": 8,
+            "end": 16,
+            "lemma": "Boundary",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "compound",
+            "head": 2,
+            "children": [
+              0
+            ],
+            "ancestors": [
+              2,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Register",
+            "whitespace": " ",
+            "start": 17,
+            "end": 25,
+            "lemma": "Register",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubjpass",
+            "head": 4,
+            "children": [
+              1
+            ],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "is",
+            "whitespace": " ",
+            "start": 26,
+            "end": 28,
+            "lemma": "be",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "auxpass",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "used",
+            "whitespace": " ",
+            "start": 29,
+            "end": 33,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBN",
+            "dep": "ROOT",
+            "head": 4,
+            "children": [
+              2,
+              3,
+              5,
+              7
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "by",
+            "whitespace": " ",
+            "start": 34,
+            "end": 36,
+            "lemma": "by",
+            "pos": "ADP",
+            "tag": "IN",
+            "dep": "agent",
+            "head": 4,
+            "children": [
+              6
+            ],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "TBR",
+            "whitespace": "",
+            "start": 37,
+            "end": 40,
+            "lemma": "TBR",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "pobj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              4
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": ".",
+            "whitespace": "",
+            "start": 40,
+            "end": 41,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 3,
+            "end": 25,
+            "root_token": 2
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 40,
+            "root_token": 6
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 8
+          }
+        ]
+      },
+      "baseline_proposals": [],
+      "candidate_proposals": [],
+      "baseline": [],
+      "candidate": []
+    }
+  ]
+}
