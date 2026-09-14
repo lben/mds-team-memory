@@ -1,7 +1,12 @@
 # Automatic maintenance: current status
 
 Branch: `astra-again-sep14`. Started 14 September 2026 from DeepSeek's `72e387e`.
-The full objective remains active. Historical requirements and results are in
+The full objective is unfinished. Execution is blocked at independent review
+and fresh evaluation authoring, pending the user's earlier decision on agent
+delegation. Session rules require explicit authorization; no authors or reviewer
+have been dispatched. This same condition has persisted across three goal turns.
+All launched verification jobs have finished, and the rejected model experiments
+remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
 ## Completed in this continuation
