@@ -10,8 +10,10 @@ The image pins Red Hat UBI 8.10, uv 0.12.10 and Python 3.12.14. Python includes
 SQLite 3.53.1, which contains the WAL-reset fix. Commands run as UID 10001.
 The compatibility image is about 351 MB before application or model dependencies.
 
-The current Docker Desktop engine has about 5.8 GiB RAM available. Use the
-4 GiB test limit without changing global Docker settings. The planned worker
+The current Docker Desktop engine has about 5.8 GiB RAM available. The complete
+three-model checks use a 5 GiB container limit without changing global Docker
+settings. Run heavy inference checks sequentially to avoid host-memory pressure.
+The planned worker
 ceiling of 8 GiB needs a host with sufficient assigned memory.
 
 UBI provides RHEL 8.10 userspace and glibc 2.28. Docker supplies the host kernel.
@@ -29,7 +31,7 @@ wheel. Every package version and accepted archive hash is pinned.
 docker build --platform linux/amd64 -t mds-ml-runtime:ubi8.10 \
   -f tools/ml-container/Dockerfile.ml .
 docker run --rm --platform linux/amd64 --network none \
-  --cpus 4 --memory 4g --memory-swap 4g --pids-limit 256 \
+  --cpus 4 --memory 5g --memory-swap 5g --pids-limit 256 \
   mds-ml-runtime:ubi8.10
 ```
 
@@ -49,18 +51,25 @@ docker run --rm --platform linux/amd64 \
 
 Check the generated file before replacing `tools/ml-container/requirements-linux.lock`.
 
-To exercise both downloaded models with network access disabled:
+Prepare a complete generation with `tools/ml_prepare.py` before testing. The
+worker requires extraction, embedding, and syntax assets; a historical
+two-model generation is incomplete. To exercise all three models with network
+access disabled, mount the repository so the check uses the actual application
+runtime:
 
 ```sh
 docker run --rm --platform linux/amd64 --network none \
-  --cpus 4 --memory 4g --memory-swap 4g --pids-limit 256 \
-  --mount "type=bind,src=$PWD/tools/ml-container,dst=/checks,readonly" \
+  --cpus 4 --memory 5g --memory-swap 5g --pids-limit 256 \
+  --mount "type=bind,src=$PWD,dst=/repo,readonly" \
   --mount "type=bind,src=$PWD/data/ml-assets,dst=/models,readonly" \
-  mds-ml-runtime:ubi8.10 python /checks/verify_models.py /models
+  mds-ml-runtime:ubi8.10 python /repo/tools/ml-container/verify_models.py /models
 ```
 
-This checks model loading, source span offsets and finite normalized 1,024-element
-embeddings. It does not measure the quality of concepts or relationships.
+This verifies the asset hashes, model loading, source span offsets, finite
+normalized 1,024-element embeddings, and an actual parser-corroborated alias
+record. It is a compatibility smoke check, not a quality evaluation. Rebuild
+an older image if it lacks the pinned spaCy dependencies; passing unit tests
+alone does not prove the full inference environment is installed.
 
 Run the complete backend suite in a test layer so worker and offline checks
 use the Linux ML environment. Build this layer while downloads are available,

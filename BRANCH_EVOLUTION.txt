@@ -39,7 +39,10 @@ main / origin/main
                     afa55a5  Stop unavailable inference before corpus repetition
                     c6e2df9  Extend explicit naming grammar; invalidate obsolete
                              coverage and dependent expertise across rule changes
-                    Current continuation: narrow "known as" versus "known to";
+                    28f7ae7  Narrow "known as" versus "known to"; record the next
+                             independent evaluation protocol
+                    Current continuation: verify complete offline installation
+                    and the fixed 50,000-item/50-client concurrent-load gate;
                     final backend suite: 457 passed. Acronym development:
                     19/24 selected aliases, all 22 published aliases correct
                     under the frozen labels. Release quality remains open.

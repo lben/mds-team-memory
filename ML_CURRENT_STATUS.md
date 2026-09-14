@@ -28,6 +28,23 @@ The full objective remains active. Historical requirements and results are in
   identity or false conflict. Its regression fails before the fix and passes
   afterward. All 119 retained trial observations remain exactly unchanged.
 - The final offline Linux regression suite passes: 457 tests in 193 seconds.
+- The fixed 50,000-item/50-client capacity check passes. All 2,855 requests
+  succeeded and all 565 writes were preserved. Five real sources/chunks
+  completed during worker-on traffic. Write p95 was 4.316 seconds with ML
+  versus 4.770 seconds without it (5.963-second limit). No unhandled locks,
+  lost/duplicate writes, integrity errors, or worker job errors occurred.
+  ML peak RSS was 3.80 GB; the combined container remained under five GiB.
+  These are emulated Linux results, not deployment-server latency promises.
+- Complete offline transfer and installation pass. The 2.99 GB model/wheel
+  archive was split into 32 hash-verified parts, reassembled, and extracted.
+  All 88 pinned packages installed in a fresh network-disabled Linux environment;
+  dependency checks and the actual three-model inference smoke check passed.
+  Managed transfer bytes peaked at 15.09 GB, below the 16 GiB ceiling, while
+  preserving the filesystem reserve. Temporary transfer copies were removed
+  after their verified replacements; manifests and proof remain retained.
+- Updated the model compatibility checker to verify all asset hashes and run
+  the actual parser-backed alias path. It now rejects incomplete two-model
+  generations. Earlier installation instructions only exercised two models.
 
 ## Current measurement
 
@@ -37,6 +54,9 @@ It ran offline in Linux, within four CPUs and five GiB, using a private database
 This is diagnostic development evidence, not a new release-quality evaluation.
 
 Evidence is retained under `data/ml-runs/astra-sep14/` (excluded from Git).
+Capacity evidence is in `capacity/`; complete offline evidence and the prepared
+generation are in `offline-verification/`. The compatibility smoke check
+reports the same production inference fingerprint as the capacity check.
 The baseline evidence is exported to `baseline-r3/ml-quality-4_nsurau/`.
 All 60 inference calls completed in 282.7 seconds; sampled process-tree peak
 RSS was 3.99 GB. Positive assertions passed: concepts 32/38, aliases 2/3,
@@ -84,8 +104,10 @@ cannot start, instead of repeating that failure across the corpus.
    reusing spent holdouts as unseen evidence.
 3. Freeze the selected implementation and establish quality using fresh,
    independently labeled evaluation data with complete-output auditing.
-4. Complete the regression suite, live application and lifecycle checks, offline
-   bundle verification, and resource/concurrent-load verification on that source.
+4. After selecting a quality-qualified implementation, verify any affected
+   regression, live application, lifecycle, offline, and capacity behavior on
+   that final source. The checks above establish the current branch's
+   engineering behavior; they cannot substitute for the unmet quality gate.
 
 Acceptance targets remain: 98% precision for concepts and relationships, 99% for
 aliases, 95% for expertise; at least 50% recall; and per-category minima of 300

@@ -12,41 +12,41 @@ os.environ["TRANSFORMERS_OFFLINE"] = "1"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 import numpy as np
-import torch
-from gliner2 import AutoExtractor
-from sentence_transformers import SentenceTransformer
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from backend.app.ml import runtime
+from backend.app.ml.queue import sqlite_is_safe
 
 
 assert os.getuid() != 0
-assert sqlite3.sqlite_version_info >= (3, 51, 3)
-assert torch.version.cuda is None
-torch.set_num_threads(4)
-torch.set_num_interop_threads(1)
+assert sqlite_is_safe(sqlite3.sqlite_version_info)
 assets = Path(sys.argv[1]).resolve()
-extractor = AutoExtractor.from_pretrained(str(assets / "extractor"), map_location="cpu")
-text = "Aurora uses PostgreSQL to store audit events. Kafka sends events to Aurora."
-entities = extractor.extract_entities(
-    text, ["software system", "database", "message broker"],
-    include_spans=True, include_confidence=True,
-)
-relations = extractor.extract_relations(
-    text, ["uses", "sends events to"], include_spans=True, include_confidence=True,
-)
-spans = [span for group in entities["entities"].values() for span in group]
+manifest = runtime.verified_manifest(assets)
+if set(manifest["models"]) != {"extractor", "embeddings", "syntax"}:
+    raise ValueError("Automatic maintenance requires extractor, embeddings, and syntax assets")
+models = runtime.LocalModels(assets)
+assert models.torch.version.cuda is None
+text = "Earth is part of the Solar System. The Sun is also part of the Solar System and lies at its center."
+result = models.analyze(text)
+spans = result["concepts"]
 assert spans
-assert all(text[span["start"]:span["end"]] == span["text"] for span in spans)
-assert any(relations["relation_extraction"].values())
+assert all(text[span["start"]:span["end"]] == span["name"] for span in spans)
+assert any(relation["literal_support"] for relation in result["relations"])
 
-embeddings = SentenceTransformer(str(assets / "embeddings"), device="cpu", local_files_only=True)
-vectors = embeddings.encode(
-    ["PostgreSQL stores audit events.", "Kafka transports messages."],
-    batch_size=2, normalize_embeddings=True, show_progress_bar=False,
-)
-assert vectors.shape == (2, 1024)
+vectors = np.stack([np.frombuffer(chunk["vector"], dtype="<f4") for chunk in result["chunks"]])
+assert vectors.shape[1] == 1024
 assert np.isfinite(vectors).all()
 assert np.allclose(np.linalg.norm(vectors, axis=1), 1, atol=1e-5)
+
+# This exact development source has retained successful model observations.
+# Exercise the third model and the actual scored alias path, not just imports.
+definition_text = "CVM (Cryogenic Valve Map) shows the isolation valves between the separator and the cold return."
+definitions = models.analyze(definition_text)["corroborated_definitions"]
+assert any(record["full_name"]["text"] == "Cryogenic Valve Map"
+           and record["short_name"]["text"] == "CVM" for record in definitions)
 print(json.dumps({
-    "entities": entities, "relations": relations, "embedding_shape": list(vectors.shape),
+    "entities": spans, "relations": result["relations"], "embedding_shape": list(vectors.shape),
+    "corroborated_definitions": definitions, "model_version": models.version,
     "peak_rss_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
-    "torch": torch.__version__, "sqlite": sqlite3.sqlite_version,
+    "torch": models.torch.__version__, "sqlite": sqlite3.sqlite_version,
 }))
