@@ -2,6 +2,8 @@
 
 Status: implementation approved on 8 September 2026. Audit baseline: commit `3243b0b5e81a37afda56a024e5d3b62a5c1ea367`. Implementation uses gauntlet review. Overall release acceptance remains open. The clarifications below address the subsequent concurrency, evaluation, storage, and deployment requirements.
 
+Continuation on 14 September: branch `astra-again-sep14` starts from DeepSeek's `72e387e`. See `BRANCH_EVOLUTION.txt` for ancestry and `ML_CURRENT_STATUS.md` for the active work and verification status. Historical results below remain unchanged.
+
 Progress checklist:
 
 - [x] Audit manual admin work and downstream effects; approve the implementation plan.

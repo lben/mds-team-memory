@@ -16,6 +16,21 @@ def checker(monkeypatch):
     return ml_quality_check
 
 
+def test_missing_parser_runtime_fails_before_starting_corpus(checker, monkeypatch):
+    checked = []
+
+    def installed(name):
+        checked.append(name)
+        return None if name in {"spacy", "spacy_curated_transformers"} else object()
+
+    monkeypatch.setattr(checker.importlib.util, "find_spec", installed)
+    with pytest.raises(RuntimeError, match="spacy, spacy_curated_transformers"):
+        checker.check_runtime_dependencies({"models": {"extractor": {}, "embeddings": {}, "syntax": {}}})
+    checked.clear()
+    checker.check_runtime_dependencies({"models": {"extractor": {}, "embeddings": {}}})
+    assert "spacy" not in checked
+
+
 def scenario(identity="evaluation_one"):
     targets = {
         "concepts": "Compiler",

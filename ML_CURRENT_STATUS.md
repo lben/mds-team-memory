@@ -26,8 +26,18 @@ It runs offline in Linux, within four CPUs and five GiB, using a private databas
 This is diagnostic development evidence, not a new release-quality evaluation.
 
 Evidence is retained under `data/ml-runs/astra-sep14/` (excluded from Git).
-The baseline container is `mds-astra-sep14-baseline`; export its
+The active baseline container is `mds-astra-sep14-baseline-r3`; export its
 `/tmp/astra-baseline` directory before removing it.
+
+Two environment failures were preserved before the current launch: the older
+unit-test image lacked spaCy; the complete inference image then competed with
+the earlier demo's resident worker and suffered a host-memory OOM kill. The
+demo's ML worker was gracefully stopped while its web process stayed running.
+Restore that worker after measurements using the recorded command in
+`data/ml-runs/astra-sep14/demo-worker-restart.json`. The correct inference image
+is `mds-ml-e2e:ubi8.10`; its dependency versions match the pinned requirements.
+The evaluator now checks dependencies before starting and stops if inference
+cannot start, instead of repeating that failure across the corpus.
 
 ## Remaining work
 

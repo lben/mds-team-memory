@@ -13,6 +13,7 @@ import argparse
 import base64
 from contextlib import ExitStack
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -30,6 +31,15 @@ import traceback
 FIXTURE_SHA256 = "d5621a5bc88fa67a341b0750bf0fe78d8eb8bcc1d96c71047cdbc37c1cd17289"
 CATEGORIES = ("concepts", "aliases", "relationships", "expertise")
 CASE_TIMEOUT_SECONDS = 1200
+
+
+def check_runtime_dependencies(manifest):
+    modules = ["torch", "gliner2", "sentence_transformers", "psutil"]
+    if "syntax" in manifest.get("models", {}):
+        modules.extend(("spacy", "spacy_curated_transformers"))
+    missing = [name for name in modules if importlib.util.find_spec(name) is None]
+    if missing:
+        raise RuntimeError("Evaluation runtime is missing required modules: " + ", ".join(missing))
 
 
 def normalize(value):
@@ -648,6 +658,7 @@ def main(argv=None):
     fixture_sha256 = hashlib.sha256(fixture_raw).hexdigest()
     manifest_raw = (models / "models.json").read_bytes()
     manifest = json.loads(manifest_raw)
+    check_runtime_dependencies(manifest)
     sys.path.insert(0, str(source_root / "backend"))
     from app.ml.runtime import configure_cpu
     from app.ml.worker import lower_priority
@@ -701,6 +712,8 @@ def main(argv=None):
             report["assertions"] = summarize(corpus, report["cases"])
             write_json(output / "report.json", report)
             print(json.dumps({"case": case["id"], "status": result["status"], "seconds": result["seconds"]}), flush=True)
+            if result["status"] == "ERROR" and inference.calls == 0:
+                raise RuntimeError("Evaluation stopped before any successful inference: " + result.get("error", case["id"]))
         if (models / "models.json").read_bytes() != manifest_raw or cases.read_bytes() != fixture_raw:
             raise RuntimeError("Model manifest or frozen cases changed during evaluation")
         statuses = {case["status"] for case in report["cases"]}
