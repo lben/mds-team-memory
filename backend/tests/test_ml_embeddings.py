@@ -169,6 +169,71 @@ def test_rebuild_keeps_old_generation_until_every_source_is_current(store):
     assert len(embeddings.nearest(store, vector((0.0, 1.0, 0.0, 0.0)), "new")) == 3
 
 
+def test_rollback_cancels_only_staging_and_retains_charged_active_vectors(store, monkeypatch):
+    sources = [add_source(store, name) for name in ("one", "two", "three")]
+    for source in sources:
+        save(store, source)
+    save(store, sources[0], "abandoned")
+    for source in sources:
+        save(store, source, "old")
+    idle(store)
+    before = dict(budget(store))
+    active = store.execute(text("SELECT key,vector FROM ml_embeddings WHERE generation='old' ORDER BY key")).all()
+
+    assert embeddings.prepare_generation(store, "old")
+    after = budget(store)
+    assert after["active_generation"] == "old" and after["staging_generation"] is None
+    assert after["staging_bytes"] == after["staging_reserved_bytes"] == 0
+    assert after["embedding_bytes"] == before["embedding_bytes"]
+    assert store.execute(text("SELECT key,vector FROM ml_embeddings WHERE generation='old' ORDER BY key")).all() == active
+    monkeypatch.setattr(embeddings, "CANDIDATE_LIMIT", 2)
+    finish(store)
+    assert budget(store)["embedding_bytes"] == 3 * VECTOR_BYTES
+    assert store.execute(text("SELECT key,vector FROM ml_embeddings WHERE generation='old' ORDER BY key")).all() == active
+
+
+def test_same_selected_staging_generation_resumes_without_changing_progress(store):
+    sources = [add_source(store, name) for name in ("one", "two")]
+    for source in sources:
+        save(store, source)
+    save(store, sources[0], "new")
+    store.execute(text("UPDATE ml_budget SET staging_cursor='item:one' WHERE id=1"))
+    before = dict(budget(store))
+    vectors = store.execute(text("SELECT key,vector FROM ml_embeddings ORDER BY key")).all()
+    assert embeddings.prepare_generation(store, "new")
+    assert dict(budget(store)) == before
+    assert store.execute(text("SELECT key,vector FROM ml_embeddings ORDER BY key")).all() == vectors
+
+
+def test_replacement_rebuild_reclaims_abandoned_rows_before_tight_quota_reservation(store, monkeypatch):
+    sources = [add_source(store, name) for name in ("one", "two", "three")]
+    for source in sources:
+        save(store, source)
+    save(store, sources[0], "abandoned")
+    save(store, sources[1], "abandoned")
+    active = store.execute(text("SELECT key,vector FROM ml_embeddings WHERE generation='old' ORDER BY key")).all()
+    ceiling = 6 * VECTOR_BYTES  # Exactly the active generation and one complete replacement.
+    monkeypatch.setattr(embeddings, "CANDIDATE_LIMIT", 2)
+    ready = False
+    for _ in range(10):
+        before = budget(store)["embedding_bytes"]
+        ready = embeddings.prepare_generation(store, "replacement")
+        assert 0 <= before - budget(store)["embedding_bytes"] <= 2 * VECTOR_BYTES
+        store.commit()  # A restart resumes from the persisted cleanup cursor.
+        if ready:
+            break
+    assert ready
+    assert budget(store)["embedding_bytes"] == 3 * VECTOR_BYTES
+    assert store.execute(text("SELECT key,vector FROM ml_embeddings WHERE generation='old' ORDER BY key")).all() == active
+    for source in sources:
+        save(store, source, "replacement", max_bytes=ceiling)
+    idle(store)
+    finish(store)
+    assert budget(store)["active_generation"] == "replacement"
+    assert budget(store)["staging_generation"] is None
+    assert store.execute(text("SELECT DISTINCT generation FROM ml_embeddings")).scalars().all() == ["replacement"]
+
+
 @pytest.mark.parametrize("mismatch", ["extraction_identity", "embedding_version", "source_hash", "vector_count"])
 def test_staging_completion_requires_coherent_current_source_metadata(store, mismatch):
     source = add_source(store, "source")

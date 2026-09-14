@@ -191,6 +191,26 @@ def invalidate_source(db, kind, source_id):
     db.execute(text("DELETE FROM ml_embeddings WHERE source_kind=:kind AND source_id=:id"), parameters)
 
 
+def prepare_generation(db, selected):
+    """Reconcile a release's embedding pin before claiming new source work.
+
+    The selected staging generation remains resumable. A different selection
+    abandons only its staging reservation; vectors stay charged until bounded
+    housekeeping deletes them. Before starting a replacement generation, finish
+    that cleanup so abandoned rows cannot strand its rebuild under the quota.
+    False means commit this page, heartbeat, then call again.
+    """
+    budget = _budget(db)
+    staging = budget["staging_generation"]
+    if staging and staging != selected:
+        db.execute(text("""UPDATE ml_budget SET staging_generation=NULL,
+          staging_cursor='',staging_reserved_bytes=0,staging_bytes=0 WHERE id=1"""))
+        staging = None
+    if selected == budget["active_generation"] or staging == selected:
+        return True
+    return not finish_generation(db)
+
+
 def nearest(db, vector, generation, exclude_source=None, limit=8):
     """Return at most eight source windows from at most 256 indexed candidates."""
     limit = max(0, min(8, limit))

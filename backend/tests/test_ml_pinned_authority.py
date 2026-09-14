@@ -2,12 +2,15 @@
 import copy
 import json
 
+import pytest
+
 from test_ml_alias_conflicts import automated
 from test_ml_identity_routing import embedding_generation_isolation, capture
 from test_ml_inverse_alias import CASES, apply, replay, terms, cleanup
 
 
-def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_client):
+@pytest.mark.parametrize("include_entity_spans", [True, False])
+def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_client, include_entity_spans):
     from app.db import SessionLocal
     from app.ml import adapter, runtime, syntax
     from app.ml.sources import digest, finding_key, snapshot
@@ -15,13 +18,16 @@ def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_cli
     # Isolate this mechanical authority check from the separate test that
     # deliberately gives PGM two permanent identities. Substitutions preserve
     # span lengths; these fixture scores are not new inference observations.
-    encoded = json.dumps(CASES[0]).replace('Packet Gap Monitor', 'Packet Lag Monitor').replace('PGM', 'PLM')
-    encoded = encoded.replace('packet gap monitor', 'packet lag monitor').replace('pgm', 'plm')
+    full_name, short_name = ('Packet Lag Monitor', 'PLM') if include_entity_spans else ('Packet Key Monitor', 'PKM')
+    encoded = json.dumps(CASES[0]).replace('Packet Gap Monitor', full_name).replace('PGM', short_name)
+    encoded = encoded.replace('packet gap monitor', full_name.lower()).replace('pgm', short_name.lower())
     for record in CASES[0]['records']:
-        changed = record['body'].replace('Packet Gap Monitor', 'Packet Lag Monitor').replace('PGM', 'PLM')
+        changed = record['body'].replace('Packet Gap Monitor', full_name).replace('PGM', short_name)
         encoded = encoded.replace(digest(record['body']),
                                   digest(changed))
     saved = json.loads(encoded)
+    full_key, short_key = full_name.lower(), short_name.lower()
+    tail_name = 'Telemetry Store ' + short_name
     case, records = saved['case'], saved['records']
     clients, items = capture(make_client, case)
     extra, alias_key = [], None
@@ -30,26 +36,26 @@ def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_cli
             apply(item, record)
         replay(items, records)
         replay(items, records)
-        short = terms()['plm'][0]
-        alias_key = finding_key('alias', 'packet lag monitor', short)
-        assert 'packet lag monitor' in terms(), {
-            'full': admin_client.get(f'/api/ml/findings/{finding_key("concept", "packet lag monitor")}').json(),
+        short = terms()[short_key][0]
+        alias_key = finding_key('alias', full_key, short)
+        assert full_key in terms(), {
+            'full': admin_client.get(f'/api/ml/findings/{finding_key("concept", full_key)}').json(),
             'alias': admin_client.get(f'/api/ml/findings/{alias_key}').json(),
         }
-        assert terms()['packet lag monitor'] == (short, False)
-        assert admin_client.put(f'/api/ml/findings/{finding_key("concept", "plm")}/decision', json={'mode':'pinned'}).status_code == 200
-        tail = admin_client.post('/api/admin/concepts', json={'name':'Telemetry Store'}).json()['id']
+        assert terms()[full_key] == (short, False)
+        assert admin_client.put(f'/api/ml/findings/{finding_key("concept", short_key)}/decision', json={'mode':'pinned'}).status_code == 200
+        tail = admin_client.post('/api/admin/concepts', json={'name':tail_name}).json()['id']
         parts = records[0]['original_metadata']['model_version'].split(':')
         models = {role:{'revision':rev} for role,rev in zip(('extractor','embeddings','syntax'),parts[:3])}
         version = runtime.inference_version(models)
         relation_items = []
         for ending in ('during nightly validation.', 'during the independent daytime audit.'):
             client = make_client()
-            body = 'Packet Lag Monitor uses Telemetry Store ' + ending
+            body = f'{full_name} uses {tail_name} ' + ending
             item = client.post('/api/capture', data={'body':body}).json()['item']['id']
             extra.append((client,item))
-            spans = [{'name':name, 'start':body.index(name), 'end':body.index(name)+len(name), 'score':0.95, 'label':'relation endpoint'} for name in ('Packet Lag Monitor','Telemetry Store')]
-            result = {'concepts':spans, 'relations':[{'head':spans[0], 'tail':spans[1], 'predicate':'uses', 'start':0, 'end':len(body), 'score':0.95, 'polarity':'positive', 'literal_support':True}], 'chunks':[], 'corroborated_definitions':[], 'conflict_definitions':[], 'conflict_coverage_revision':syntax.CONFLICT_REVISION}
+            spans = [{'name':name, 'start':body.index(name), 'end':body.index(name)+len(name), 'score':0.95, 'label':'relation endpoint'} for name in (full_name,tail_name)]
+            result = {'concepts':spans if include_entity_spans else [], 'relations':[{'head':spans[0], 'tail':spans[1], 'predicate':'uses', 'start':0, 'end':len(body), 'score':0.95, 'polarity':'positive', 'literal_support':True}], 'chunks':[], 'corroborated_definitions':[], 'conflict_definitions':[], 'conflict_coverage_revision':syntax.CONFLICT_REVISION}
             relation_items.append((item,result))
         def apply_relations():
             for item,result in relation_items:
@@ -66,7 +72,7 @@ def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_cli
         assert len(graph()) == 1
         owner = clients[case['posts'][1]['actor']]
         assert owner.put(f'/api/items/{items[1]}',json={'body':'The obsolete definition was removed.'}).status_code == 200
-        assert terms()['packet lag monitor'] == (short,False)
+        assert terms()[full_key] == (short,False)
         after = graph()
         apply(items[1],records[1],empty=True)
         apply_relations()
@@ -89,5 +95,5 @@ def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_cli
             client.delete(f'/api/items/{item}')
         if alias_key:
             admin_client.put(f'/api/ml/findings/{alias_key}/decision', json={'mode':'automatic'})
-        admin_client.put(f'/api/ml/findings/{finding_key("concept", "plm")}/decision', json={'mode':'automatic'})
+        admin_client.put(f'/api/ml/findings/{finding_key("concept", short_key)}/decision', json={'mode':'automatic'})
         cleanup(clients, items, case, records)

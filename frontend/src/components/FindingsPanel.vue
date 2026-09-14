@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
-import { api } from '../api'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { ApiError, api } from '../api'
 import { useAsk } from '../ask'
 import AskModal from './AskModal.vue'
 import { knowledgeRevision, store } from '../store'
@@ -22,6 +22,9 @@ const offset = ref(0)
 const total = ref(0)
 const rows = ref<Finding[]>([])
 const selected = ref<{ finding: Finding; evidence: Evidence[] } | null>(null)
+const selectedKey = ref<string | null>(null)
+let listRequest = 0
+let detailRequest = 0
 const busy = ref(false)
 const correctedTopic = ref('')
 const { ask, askUser, answerAsk } = useAsk()
@@ -42,25 +45,47 @@ function editLink(row: Finding) {
   return { path: '/admin/expertise', query: { link: row.canonical_id || undefined } }
 }
 async function load() {
+  const request = ++listRequest
   try {
     const data = await api.get<{ total: number; findings: Finding[] }>(`/api/ml/findings?state=${state.value}&kind=${kind.value}&offset=${offset.value}`)
+    if (request !== listRequest) return
     rows.value = data.findings
     total.value = data.total
-  } catch (error) { store.fail(error, 'Could not load automatic findings') }
+  } catch (error) { if (request === listRequest) store.fail(error, 'Could not load automatic findings') }
+}
+function clearSelection() {
+  detailRequest++
+  selectedKey.value = null
+  selected.value = null
+  correctedTopic.value = ''
+}
+async function loadSelected() {
+  const key = selectedKey.value
+  if (!key) return
+  const request = ++detailRequest
+  const previousTopic = selected.value?.finding.payload.concept_id || ''
+  try {
+    const data = await api.get<Finding & { evidence: Evidence[] }>(`/api/ml/findings/${key}`)
+    if (request !== detailRequest || selectedKey.value !== key) return
+    selected.value = { finding: data, evidence: data.evidence }
+    if (correctedTopic.value === previousTopic) correctedTopic.value = data.payload.concept_id || ''
+  } catch (error) {
+    if (request !== detailRequest || selectedKey.value !== key) return
+    clearSelection()
+    if (!(error instanceof ApiError && error.status === 404)) store.fail(error, 'Could not load the supporting evidence')
+  }
 }
 async function inspect(row: Finding) {
-  try {
-    const data = await api.get<Finding & { evidence: Evidence[] }>(`/api/ml/findings/${row.key}`)
-    selected.value = { finding: data, evidence: data.evidence }
-    correctedTopic.value = data.payload.concept_id || ''
-  } catch (error) { store.fail(error, 'Could not load the supporting evidence') }
+  if (selectedKey.value !== row.key) clearSelection()
+  selectedKey.value = row.key
+  await loadSelected()
 }
 async function correctTopic() {
   if (!selected.value || !correctedTopic.value || busy.value) return
   busy.value = true
   try {
     await api.put(`/api/ml/findings/${selected.value.finding.key}/topic`, { concept_id: correctedTopic.value })
-    selected.value = null
+    clearSelection()
     await load()
     emit('changed')
     store.notify('Topic correction saved')
@@ -84,7 +109,7 @@ async function decide(row: Finding, mode: string) {
   busy.value = true
   try {
     const result = await api.put<{ state: string }>(`/api/ml/findings/${row.key}/decision`, { mode })
-    selected.value = null
+    clearSelection()
     await load()
     emit('changed')
     if (mode === 'automatic' && row.kind === 'expertise') {
@@ -99,10 +124,11 @@ async function decide(row: Finding, mode: string) {
   } catch (error) { store.fail(error, 'Could not save the decision') }
   finally { busy.value = false }
 }
-watch([state, kind], () => { offset.value = 0; selected.value = null; load() })
+watch([state, kind], () => { offset.value = 0; clearSelection(); load() })
 watch(offset, load)
-watch(knowledgeRevision, load)
+watch(knowledgeRevision, () => { load(); loadSelected() })
 onMounted(load)
+onBeforeUnmount(() => { listRequest++; clearSelection() })
 </script>
 
 <template>
@@ -146,8 +172,8 @@ onMounted(load)
       <button class="btn small" :disabled="offset + 50 >= total" @click="offset += 50">Next</button>
     </div>
     <div v-if="selected" class="evidence-box">
-      <div class="row gap8"><strong>{{ title(selected.finding) }}</strong><button class="btn small" @click="selected = null">Close evidence</button></div>
-      <p class="muted">Policy: {{ selected.finding.policy_version }}. A model score is not a probability that a claim is correct.</p>
+      <div class="row gap8"><strong>{{ title(selected.finding) }}</strong><button class="btn small" @click="clearSelection">Close evidence</button></div>
+      <p class="muted">{{ labels[selected.finding.state] || selected.finding.state }} · Policy: {{ selected.finding.policy_version }}. A model score is not a probability that a claim is correct.</p>
       <div v-if="selected.finding.kind === 'mention'" class="row gap8 filters">
         <select v-model="correctedTopic" aria-label="Correct topic">
           <option v-for="concept in concepts" :key="concept.id" :value="concept.id">{{ concept.name }}</option>

@@ -48,6 +48,13 @@ def _override(db, row, mode, username, payload=None):
 
 def _evidence(db, row, source, start, end, score, version, polarity="positive", **features):
     key = finding_key("evidence", row.key, source.kind, source.id, polarity)
+    if row.kind == "relationship" and features.get("identity_routes"):
+        # Independent identity witnesses can expire separately. Keep the best
+        # evidence for each complete dependency set rather than letting one
+        # route erase another route (or an unconditional literal assertion).
+        routes = sorted({_json(route) for route in features["identity_routes"]})
+        features["identity_routes"] = [json.loads(route) for route in routes]
+        key = finding_key("evidence", row.key, source.kind, source.id, polarity, "identity_routes", routes)
     prior = db.get(Evidence, key)
     if prior:
         previous_features = json.loads(prior.features)
@@ -627,7 +634,9 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                     if term:
                         concepts[normalize(name)] = _concept(db, name)
                         alias = db.query(Finding).filter_by(kind="alias", canonical_id=term.id).first()
-                        if alias and json.loads(alias.payload).get("identity_routing") and not db.get(Override, alias.key):
+                        route_payload = json.loads(alias.payload) if alias else {}
+                        if route_payload.get("identity_routing") and (
+                                route_payload.get("direction") == "inverse" or not db.get(Override, alias.key)):
                             certificate = identity.route(db, normalize(name))
                             if certificate:
                                 routes_by_spelling[normalize(name)] = certificate
@@ -792,12 +801,17 @@ def _route_open_question(db, question):
 
 
 def apply_profile(db, profile_id):
+    from . import projection
+
     profile = db.get(Profile, profile_id)
     eligible = profile and profile.account_id and db.get(Account, profile.account_id)
     before = {row.concept_id for row in effective.expertise(db).filter(ExpertiseMapping.profile_id == profile_id)}
     events = db.query(ImpactEvent).filter_by(beneficiary_profile_id=profile_id).all() if eligible else []
     source_hash = digest([(e.id, e.event_type, e.item_id, e.actor_profile_id) for e in sorted(events, key=lambda e: e.id)])
-    db.merge(Source(kind="profile", id=profile_id, content_hash=source_hash, valid=bool(eligible), model_version=policy.VERSION, updated_at=utcnow()))
+    pipeline = db.execute(text("SELECT pipeline_version FROM ml_state WHERE id=1")).scalar_one()
+    db.merge(Source(kind="profile", id=profile_id, content_hash=source_hash, valid=bool(eligible),
+                    model_version=policy.VERSION, updated_at=utcnow(),
+                    result=_json({"projection_contract": projection.contract(), "pipeline_version": pipeline})))
     old = db.query(Finding).filter(Finding.kind == "expertise", func.json_extract(Finding.payload, "$.profile_id") == profile_id)
     affected = {row.key for row in old}
     db.query(Evidence).filter_by(source_kind="profile", source_id=profile_id).delete(synchronize_session="fetch")

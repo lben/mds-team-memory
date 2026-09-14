@@ -1,12 +1,11 @@
 # Automatic maintenance: current status
 
 Branch: `astra-again-sep14`. Started 14 September 2026 from DeepSeek's `72e387e`.
-The full objective is unfinished. Execution is blocked at independent review
-and fresh evaluation authoring, pending the user's earlier decision on agent
-delegation. Session rules require explicit authorization; no authors or reviewer
-have been dispatched. This same condition has persisted across three goal turns.
-All launched verification jobs have finished, and the rejected model experiments
-remain closed. Historical requirements and results are in
+The full objective is unfinished. On September 14 the user authorized independent
+agents to review the work. Three reviewers have been dispatched for correctness,
+model quality/evaluation, and operational readiness. Fresh evaluation authoring
+will use separate agents who have not reviewed implementation or model outputs.
+The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
 ## Completed in this continuation
@@ -130,8 +129,8 @@ cannot start, instead of repeating that failure across the corpus.
 ## Remaining work
 
 1. Obtain an independent review of this verified continuation and prepare the
-   new blind corpus under `ML_EVALUATION_PROTOCOL.md`. Explicit authorization
-   for agent delegation has been requested and remains pending.
+   new blind corpus under `ML_EVALUATION_PROTOCOL.md`. Agent delegation is now
+   authorized; independent reviews are in progress.
 2. Improve all four finding categories without altering the release targets or
    reusing spent holdouts as unseen evidence.
 3. Freeze the selected implementation and establish quality using fresh,

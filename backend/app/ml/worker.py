@@ -3,9 +3,11 @@
 import argparse
 from collections import Counter
 import json
+import math
 import multiprocessing
 import os
 from pathlib import Path
+from queue import Empty, Queue
 import signal
 import sqlite3
 import sys
@@ -22,6 +24,15 @@ from . import queue
 from .runtime import inference_version
 
 MEMORY_CEILING = 8 * 1024**3
+LOAD_TIMEOUT_SECONDS = 300.0
+JOB_TIMEOUT_SECONDS = 1800.0
+
+
+def positive_seconds(value):
+    seconds = float(value)
+    if not math.isfinite(seconds) or seconds <= 0:
+        raise ValueError("Inference deadlines must be finite positive seconds")
+    return seconds
 
 
 class Stopped(RuntimeError):
@@ -142,48 +153,75 @@ def _child_entry(connection, assets, target, parent_pid):
 
 
 class InferenceProcess:
-    def __init__(self, assets, *, target=_model_loop, limit=None):
+    def __init__(self, assets, *, target=_model_loop, limit=None,
+                 load_timeout=LOAD_TIMEOUT_SECONDS, job_timeout=JOB_TIMEOUT_SECONDS):
         self.assets, self.target = str(assets), target
+        self.load_timeout, self.job_timeout = positive_seconds(load_timeout), positive_seconds(job_timeout)
         self.limit = memory_limit() if limit is None else min(limit, memory_limit())
         self.process = self.connection = None
         self.metadata = None
+        self.exchange_thread = None
 
     def check_memory(self):
         used = process_tree_rss()
         if used > self.limit:
             raise MemoryError(f"ML process RSS {used} exceeds the {self.limit}-byte limit")
 
-    def _receive(self, heartbeat):
+    def _receive(self, heartbeat, deadline, phase, body=None):
+        # poll() can become readable before a complete pickled message arrives.
+        # Keep both sending and receiving off the heartbeat/deadline loop so a
+        # stalled child cannot block supervision inside either pipe operation.
+        responses = Queue(maxsize=1)
+        connection = self.connection
+
+        def exchange():
+            try:
+                if body is not None:
+                    connection.send(body)
+                responses.put((True, connection.recv()))
+            except BaseException as error:
+                responses.put((False, error))
+
+        self.exchange_thread = threading.Thread(target=exchange, daemon=True, name="ml-inference-exchange")
+        self.exchange_thread.start()
         while True:
             heartbeat()
             self.check_memory()
-            if self.connection.poll(0.5):
-                try:
-                    message = self.connection.recv()
-                except (EOFError, OSError) as error:
-                    raise RuntimeError("Inference child exited before returning a result") from error
-                if message[0] == "error":
-                    raise RuntimeError(message[1])
-                return message
-            if not self.process.is_alive():
-                raise RuntimeError(f"Inference child exited with code {self.process.exitcode}")
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError(f"{phase} exceeded its deadline")
+            try:
+                success, message = responses.get(timeout=min(0.5, remaining))
+            except Empty:
+                if not self.process.is_alive():
+                    raise RuntimeError(f"Inference child exited with code {self.process.exitcode}")
+                continue
+            self.exchange_thread.join(timeout=1)
+            self.exchange_thread = None
+            if time.monotonic() >= deadline:
+                raise TimeoutError(f"{phase} exceeded its deadline")
+            if not success:
+                raise RuntimeError("Inference child exited before returning a result") from message
+            if message[0] == "error":
+                raise RuntimeError(message[1])
+            return message
 
     def analyze(self, body, heartbeat):
         try:
             if self.process is None:
+                deadline = time.monotonic() + self.load_timeout
                 context = multiprocessing.get_context("spawn")
                 self.connection, child_connection = context.Pipe()
                 self.process = context.Process(target=_child_entry, args=(child_connection, self.assets, self.target, os.getpid()))
                 self.process.start()
                 child_connection.close()
-                ready = self._receive(heartbeat)
+                ready = self._receive(heartbeat, deadline, "Model loading")
                 if ready[0] != "ready" or len(ready) != 4:
                     raise RuntimeError("Invalid inference initialization response")
                 self.metadata = ready[1:]
             heartbeat()
             self.check_memory()
-            self.connection.send(body)
-            message = self._receive(heartbeat)
+            message = self._receive(heartbeat, time.monotonic() + self.job_timeout, "Inference", body)
             if message[0] != "result" or len(message) != 2:
                 raise RuntimeError("Invalid inference response")
             self.check_memory()
@@ -221,6 +259,9 @@ class InferenceProcess:
             process.close()
         if self.connection is not None:
             self.connection.close()
+        if self.exchange_thread is not None:
+            self.exchange_thread.join(timeout=1)
+            self.exchange_thread = None
         self.process = self.connection = self.metadata = None
 
 
@@ -236,11 +277,11 @@ def status(path):
 
 
 class Supervisor:
-    def __init__(self, path, assets, stop):
+    def __init__(self, path, assets, stop, *, load_timeout=LOAD_TIMEOUT_SECONDS, job_timeout=JOB_TIMEOUT_SECONDS):
         self.path, self.assets, self.stop = path, Path(assets), stop
         self.connection = queue.connect_worker(path)
         self.engine = create_engine("sqlite://", creator=lambda: queue.connect_worker(path), poolclass=NullPool)
-        self.inference = InferenceProcess(assets)
+        self.inference = InferenceProcess(assets, load_timeout=load_timeout, job_timeout=job_timeout)
         self.token = None
         self.claim = None
         self.next_renewal = 0
@@ -359,13 +400,15 @@ class Supervisor:
                     db.execute(text("BEGIN IMMEDIATE"))
                     with embeddings.reserve_growth(db):
                         adapter.bootstrap(db)
+                        generation_ready = embeddings.prepare_generation(db, models["embeddings"]["revision"])
                         previous = db.execute(text("SELECT pipeline_version,decision_policy FROM ml_state WHERE id=1")).one()
                         if previous.pipeline_version != version or previous.decision_policy != "{}":
                             queue.request_backfill(db)
                             db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy='{}' WHERE id=1"),
                                        {"version": version})
                     db.commit()
-                break
+                if generation_ready:
+                    break
             except OperationalError as error:
                 if not database_busy(error.orig):
                     raise
@@ -453,6 +496,12 @@ def main(argv=None):
     actions.add_argument("--drain", action="store_true", help="process the queue and bounded backfill")
     actions.add_argument("--status", action="store_true", help="read queue status without loading models")
     parser.add_argument("--assets", type=Path, help="verified local model asset directory")
+    parser.add_argument("--load-timeout-seconds", type=positive_seconds,
+                        default=os.environ.get("MDS_ML_LOAD_TIMEOUT_SECONDS", LOAD_TIMEOUT_SECONDS),
+                        help="Finite model-load deadline (default 300 s; MDS_ML_LOAD_TIMEOUT_SECONDS)")
+    parser.add_argument("--job-timeout-seconds", type=positive_seconds,
+                        default=os.environ.get("MDS_ML_JOB_TIMEOUT_SECONDS", JOB_TIMEOUT_SECONDS),
+                        help="Finite per-source inference deadline (default 1800 s; MDS_ML_JOB_TIMEOUT_SECONDS)")
     args = parser.parse_args(argv)
     if not args.status and args.assets is None:
         parser.error("--assets is required to run the worker")
@@ -474,7 +523,8 @@ def main(argv=None):
                              "alias and definition extraction is disabled without it")
         for signum in (signal.SIGINT, signal.SIGTERM):
             previous[signum] = signal.signal(signum, lambda *_: stop.set())
-        supervisor = Supervisor(path, args.assets, stop)
+        supervisor = Supervisor(path, args.assets, stop,
+                                load_timeout=args.load_timeout_seconds, job_timeout=args.job_timeout_seconds)
         return supervisor.run("once" if args.once else "drain" if args.drain else "daemon")
     except Stopped:
         return 0

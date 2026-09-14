@@ -10,6 +10,7 @@ import sqlite3
 import subprocess
 import sys
 import time
+from types import SimpleNamespace
 
 import pytest
 
@@ -41,6 +42,25 @@ allocation = bytearray(256 * 1024**2)
 time.sleep(60)
 """])
     Path(assets).write_text(str(process.pid))
+    time.sleep(60)
+
+
+def hanging_child(connection, assets):
+    directory = Path(assets)
+    if directory.name != "loading":
+        connection.send(("ready", "model", "embeddings", 1024))
+        connection.recv()
+    descendant = subprocess.Popen([sys.executable, "-c", """
+import signal, time
+signal.signal(signal.SIGTERM, signal.SIG_IGN)
+time.sleep(60)
+"""])
+    if directory.name == "partial":
+        # A readable pipe is not necessarily a complete result. recv() blocks
+        # after this header unless supervision can still enforce its deadline.
+        import struct
+        os.write(connection.fileno(), struct.pack("!i", 1000) + b"x")
+    (directory / "ready.json").write_text(json.dumps([os.getpid(), descendant.pid]))
     time.sleep(60)
 
 
@@ -76,6 +96,61 @@ def test_model_load_failure_closes_the_child(tmp_path):
     with pytest.raises(RuntimeError, match="Test loader failure"):
         child.analyze("body", lambda: None)
     assert child.process is None
+
+
+@requires_ml
+@pytest.mark.parametrize("phase", ["loading", "inference", "partial"])
+def test_inference_deadline_keeps_heartbeats_kills_descendants_and_can_retry(tmp_path, monkeypatch, phase):
+    from app.ml import worker
+
+    directory = tmp_path / phase
+    directory.mkdir()
+    marker = directory / "ready.json"
+    ticks = []
+    marker_ticks = 0
+    expired = False
+
+    def heartbeat():
+        nonlocal marker_ticks, expired
+        ticks.append(time.monotonic())
+        if marker.exists():
+            marker_ticks += 1
+            expired = marker_ticks >= 2
+
+    # Wait for actual child/descendant startup before advancing the clock.
+    # This tests finite monotonic deadlines without short real-time deadlines
+    # that flake when Linux process startup is emulated or under load.
+    monkeypatch.setattr(worker, "time", SimpleNamespace(monotonic=lambda: time.monotonic() + (60 if expired else 0)))
+    child = InferenceProcess(directory, target=hanging_child, load_timeout=30, job_timeout=30)
+    with pytest.raises(TimeoutError, match="Model loading" if phase == "loading" else "Inference"):
+        child.analyze("body", heartbeat)
+    assert len(ticks) >= 2 and marker_ticks >= 2
+    assert child.process is child.connection is child.metadata is child.exchange_thread is None
+    assert all(process_ended(pid) for pid in json.loads(marker.read_text()))
+
+    child.target = echo_child
+    try:
+        result, _ = child.analyze("retry", lambda: None)
+        assert result["body"] == "retry"
+    finally:
+        child.close()
+
+
+@pytest.mark.parametrize("value", [0, -1, float("inf"), float("nan")])
+@pytest.mark.parametrize("option", ["load_timeout", "job_timeout"])
+def test_inference_deadlines_must_be_finite_and_positive(value, option):
+    with pytest.raises(ValueError, match="finite positive"):
+        InferenceProcess("unused", **{option: value})
+
+
+@pytest.mark.parametrize("variable", ["MDS_ML_LOAD_TIMEOUT_SECONDS", "MDS_ML_JOB_TIMEOUT_SECONDS"])
+def test_invalid_deadline_environment_is_rejected_before_start(monkeypatch, variable):
+    from app.ml.worker import main
+
+    monkeypatch.setenv(variable, "nan")
+    with pytest.raises(SystemExit) as error:
+        main(["--status"])
+    assert error.value.code == 2
 
 
 @requires_ml
@@ -280,6 +355,41 @@ def test_policy_upgrade_reselects_literal_evidence_from_cache(worker_store, monk
     assert db.execute(text("SELECT pipeline_version,backfill_kind,backfill_generation FROM ml_state WHERE id=1")).one() == (
         version + ":" + policy.VERSION, None, generation + 1)
     assert db.execute(text("SELECT count(*) FROM ml_jobs")).scalar_one() == 0
+
+
+@pytest.mark.parametrize("selected", ["old", "replacement"])
+def test_worker_prepares_selected_generation_before_claiming_source_work(worker_store, monkeypatch, selected):
+    from sqlalchemy import text
+    from app.ml import adapter, embeddings, queue, worker
+    from test_ml_embeddings import add_source, save
+
+    db, path, assets = worker_store
+    sources = [add_source(db, name) for name in ("one", "two", "three")]
+    for source in sources:
+        save(db, source)
+    save(db, sources[0], "abandoned")
+    manifest = json.loads((assets / "models.json").read_text())
+    manifest["models"]["embeddings"]["revision"] = selected
+    (assets / "models.json").write_text(json.dumps(manifest))
+    adapter.bootstrap(db)
+    db.execute(text("DELETE FROM ml_jobs"))
+    queue.enqueue(db, "profile", "author", priority=-1)
+    db.commit()
+    monkeypatch.setattr(embeddings, "CANDIDATE_LIMIT", 2)
+    original = worker.Supervisor.process_claim
+    observed = []
+
+    def check_preparation(supervisor):
+        state = supervisor.connection.execute("SELECT active_generation,staging_generation FROM ml_budget WHERE id=1").fetchone()
+        assert state == ("old", None)
+        count = supervisor.connection.execute("SELECT count(*) FROM ml_embeddings WHERE generation='abandoned'").fetchone()[0]
+        assert count == (1 if selected == "old" else 0)
+        observed.append(supervisor.claim.source_kind)
+        return original(supervisor)
+
+    monkeypatch.setattr(worker.Supervisor, "process_claim", check_preparation)
+    assert run_once(path, assets)[0] == 0
+    assert observed == ["profile"]
 
 
 def test_cached_source_job_rolls_back_derived_growth_and_can_retract(worker_store, monkeypatch):

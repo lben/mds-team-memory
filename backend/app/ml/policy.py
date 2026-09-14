@@ -6,7 +6,7 @@ from . import syntax
 from .runtime import inference_version, specific_name
 
 
-VERSION = "grounded-cold-start-v6"
+VERSION = "grounded-cold-start-v7"
 
 
 def acronym_definitions(text):

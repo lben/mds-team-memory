@@ -32,9 +32,12 @@ def supported():
 
 
 def enabled():
+    from . import projection
+
     pinned = exists(select(Override.key).where(Override.key == Finding.key, Override.mode == "pinned").correlate(Finding))
     suppressed = exists(select(Override.key).where(Override.key == Finding.key, Override.mode == "suppressed").correlate(Finding))
-    return and_(~suppressed, or_(pinned, and_(Finding.state == "active", supported(), identity.current_decision())))
+    return and_(~suppressed, or_(pinned, and_(Finding.state == "active", supported(), identity.current_decision(),
+                                            or_(Finding.kind != "expertise", projection.current()))))
 
 
 def concepts(db):
