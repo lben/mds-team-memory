@@ -225,6 +225,63 @@ def test_worker_ignores_old_fitted_assets_and_clears_withdrawn_scores(worker_sto
     assert (row.state, row.score, row.calibrated, row.policy_version) == ("withdrawn", 0.0, False, policy.VERSION)
 
 
+def test_policy_upgrade_reselects_literal_evidence_from_cache(worker_store, monkeypatch):
+    import threading
+    from sqlalchemy import text
+    from app.ml import adapter, policy, syntax, worker
+    from app.ml.models import Evidence, Finding
+    from app.ml.runtime import inference_version
+    from test_ml_embeddings import add_source
+    from test_ml_runtime import _analyze, _span
+
+    db, path, assets = worker_store
+    body = "Citrine Pump uses Emerald Cell. Citrine Pump was inspected alongside Emerald Cell."
+    source = add_source(db, "mixed-source", body=body)
+    names = "Citrine Pump", "Emerald Cell"
+    first = [_span(body, name, score=.76) for name in names]
+    last = [_span(body, name, start=body.rindex(name), score=.99) for name in names]
+    result = _analyze(body, [_span(body, name, score=.996) for name in names],
+                      {"uses": [{"head": h, "tail": t} for h, t in (first, last)]}, full=True)
+    result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION)
+    version = inference_version(json.loads((assets / "models.json").read_text())["models"])
+    adapter.bootstrap(db)
+    adapter.apply_source(db, "item", source.id, source, result, version, "old", 1024)
+    stored = (db.query(Evidence).join(Finding, Finding.key == Evidence.finding_key)
+              .filter(Finding.kind == "relationship", Evidence.source_id == source.id).one())
+    finding = db.get(Finding, stored.finding_key)
+    # Reproduce the old committed selection; the complete raw cache still
+    # contains the lower-scoring literal extraction needed to repair it.
+    unsupported = next(r for r in result["relations"] if not r["literal_support"])
+    stored.raw_score, stored.start, stored.end = unsupported["score"], unsupported["start"], unsupported["end"]
+    stored.features = json.dumps({**json.loads(stored.features), "literal_support": False,
+                                 "head": unsupported["head"], "tail": unsupported["tail"]})
+    finding.policy_version = "grounded-cold-start-v5"
+    key = stored.key
+    db.execute(text("DELETE FROM ml_jobs"))
+    db.execute(text("UPDATE ml_state SET backfill_kind=NULL,pipeline_version=:version WHERE id=1"),
+               {"version": version + ":grounded-cold-start-v5"})
+    generation = db.execute(text("SELECT backfill_generation FROM ml_state WHERE id=1")).scalar_one()
+    db.commit()
+
+    def unexpected_inference(*args):
+        pytest.fail("A policy-only replay must reuse the complete current model cache")
+
+    monkeypatch.setattr(worker.InferenceProcess, "analyze", unexpected_inference)
+    supervisor = worker.Supervisor(path, assets, threading.Event())
+    try:
+        assert supervisor.run("drain") == 0
+    finally:
+        supervisor.close()
+    db.expire_all()
+    restored = db.get(Evidence, key)
+    assert restored.raw_score == .76 and json.loads(restored.features)["literal_support"]
+    assert body[restored.start:restored.end] == "Citrine Pump uses Emerald Cell."
+    assert db.get(Finding, restored.finding_key).policy_version == policy.VERSION
+    assert db.execute(text("SELECT pipeline_version,backfill_kind,backfill_generation FROM ml_state WHERE id=1")).one() == (
+        version + ":" + policy.VERSION, None, generation + 1)
+    assert db.execute(text("SELECT count(*) FROM ml_jobs")).scalar_one() == 0
+
+
 def test_cached_source_job_rolls_back_derived_growth_and_can_retract(worker_store, monkeypatch):
     from sqlalchemy import text
     from app.ml import adapter, embeddings, queue

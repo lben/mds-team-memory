@@ -50,8 +50,8 @@ def _evidence(db, row, source, start, end, score, version, polarity="positive", 
     key = finding_key("evidence", row.key, source.kind, source.id, polarity)
     prior = db.get(Evidence, key)
     if prior:
+        previous_features = json.loads(prior.features)
         if row.kind in {"alias", "alias_definition"}:
-            previous_features = json.loads(prior.features)
             methods = previous_features.get("definition_methods", []) + features.get("definition_methods", [])
             methods = list({_json(method): method for method in methods}.values())
             if prior.raw_score >= score:
@@ -60,9 +60,15 @@ def _evidence(db, row, source, start, end, score, version, polarity="positive", 
             features["definition_methods"] = methods
         # Different spellings can resolve to one concept. Relation confidence
         # must not displace its entity evidence from the same source.
-        prior_entity = row.kind == "concept" and json.loads(prior.features).get("label") != "relation endpoint"
-        current_entity = row.kind == "concept" and features.get("label") != "relation endpoint"
-        if (prior_entity, prior.raw_score) >= (current_entity, score):
+        prior_preferred = row.kind == "concept" and previous_features.get("label") != "relation endpoint"
+        current_preferred = row.kind == "concept" and features.get("label") != "relation endpoint"
+        if row.kind == "relationship":
+            # Keep a literal assertion or contradiction before comparing scores.
+            # Another mention of the same pair cannot erase it merely because
+            # an unsupported extraction has a higher raw model score.
+            prior_preferred = bool(previous_features.get("literal_support") and previous_features.get("assertion_allowed"))
+            current_preferred = bool(features.get("literal_support") and features.get("assertion_allowed"))
+        if (prior_preferred, prior.raw_score) >= (current_preferred, score):
             return
     values = dict(finding_key=row.key, source_kind=source.kind, source_id=source.id,
                   source_hash=source.content_hash, group_key=source.group_key, author_id=source.author_id,
