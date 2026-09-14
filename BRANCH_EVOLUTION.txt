@@ -1,0 +1,64 @@
+MDS TEAM MEMORY — GIT BRANCH EVOLUTION
+Updated: 2026-09-14
+
+This map records verified Git ancestry and the purpose of each work branch.
+Milestones below are historical references; branch tips may advance.
+
+main / origin/main
+  3243b0b  Make the dialogs usable without a mouse
+  Baseline before the automatic knowledge-maintenance work.
+  |
+  +-- codex/ml-admin-scale-astra
+        8661eaa  Local ML evidence and decision pipeline
+        27c49c3  Durable queue and bounded SQLite storage
+        0cd3c26  Automatic knowledge across the app; persistent opt-outs
+        c167442  Offline CPU models and deployment lifecycle
+        ...      Quality evaluation, lifecycle fixes, model experiments
+        94a801c  Pinned syntax inference corroborates automatic aliases
+        Original Astra branch tip retained here.
+        |
+        +-- ml-admin-scale-deepseek-v4pro
+              e83c874  Snapshot of Astra's uncommitted mid-flight work:
+                       forward identity routing and acronym context fixes
+              13cc95b  Inverse-alias routing preserves an established short ID
+              2155f1c  Pinned inverse aliases survive definition removal
+              8718b4d  Invalidate expertise across the v1/v2 identity boundary
+              46102eb  Fail fast without the syntax model; correct admin copy
+              7a6347a  Confirm releasing a manual expertise mapping
+              497b9eb  Record the second full-site review
+              72e387e  Record next quality steps in cost order
+              DeepSeek branch tip when independently reviewed on September 14.
+              |
+              +-- astra-again-sep14
+                    Created from 72e387e on 2026-09-14 at the user's request.
+                    Continues the full automatic-maintenance objective.
+                    Initial work: fix the September 14 review findings, then
+                    improve measured quality and complete release verification.
+
+STATE AT THE SEPTEMBER 14 HANDOFF
+
+- The branches above form one continuous ancestry chain. No merge commit
+  separates the Astra, DeepSeek, and resumed Astra work.
+- main and the earlier work branches were not moved when astra-again-sep14
+  was created. Nothing from this new branch has been merged or pushed.
+- Independent review of 72e387e: 428 backend tests pass in offline Linux;
+  the frontend production build passes.
+- Two additional reproductions fail: newly pinned aliases can temporarily
+  lose existing graph relationships before replay, and migration downgrade
+  does not schedule the source rebuild needed to recover valid aliases.
+- Historical unseen acronym quality: 92.45% precision, 32.7% recall, and
+  53 applied predictions. The corresponding targets are 99%, 50%, and 100.
+  These results do not establish completion of the global objective.
+
+GLOBAL OBJECTIVE
+
+Replace routine manual knowledge administration with reliable automatic
+maintenance using pretrained models running locally on CPU. Cover concepts,
+aliases, relationships, expertise, graph, search, tags, and question routing.
+Apply high-confidence findings automatically; hold uncertain findings for
+evidence. Preserve administrator edits and opt-outs. Respect shared-server
+limits, support offline deployment, and pass quality and lifecycle checks.
+
+The detailed requirements and historical results are in
+ML_IMPLEMENTATION_PLAN.md. Update this map when another branch or a major
+handoff changes the line of development; preserve historical commit IDs.
