@@ -41,11 +41,17 @@ main / origin/main
                              coverage and dependent expertise across rule changes
                     28f7ae7  Narrow "known as" versus "known to"; record the next
                              independent evaluation protocol
-                    Current continuation: verify complete offline installation
-                    and the fixed 50,000-item/50-client concurrent-load gate;
-                    final backend suite: 457 passed. Acronym development:
+                    bedd280  Verify complete offline installation and the fixed
+                             50,000-item/50-client concurrent-load gate
+                    8509bbd  Preserve literal relationship assertions and
+                             contradictions before comparing model scores;
+                             repair existing evidence through cached backfill
+                    Current backend suite: 462 passed. Acronym development:
                     19/24 selected aliases, all 22 published aliases correct
-                    under the frozen labels. Release quality remains open.
+                    under the frozen labels. A subsequent literal-predicate
+                    extraction trial stopped at its predeclared futility gate
+                    with no useful additions; it was not integrated.
+                    Release quality remains open.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

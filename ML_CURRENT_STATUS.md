@@ -27,7 +27,7 @@ The full objective remains active. Historical requirements and results are in
 - A final grammar review narrowed `known as` so `known to` cannot propose an
   identity or false conflict. Its regression fails before the fix and passes
   afterward. All 119 retained trial observations remain exactly unchanged.
-- The final offline Linux regression suite passes: 457 tests in 193 seconds.
+- The current offline Linux regression suite passes: 462 tests in 196 seconds.
 - The fixed 50,000-item/50-client capacity check passes. All 2,855 requests
   succeeded and all 565 writes were preserved. Five real sources/chunks
   completed during worker-on traffic. Write p95 was 4.316 seconds with ML
@@ -45,6 +45,19 @@ The full objective remains active. Historical requirements and results are in
 - Updated the model compatibility checker to verify all asset hashes and run
   the actual parser-backed alias path. It now rejects incomplete two-model
   generations. Earlier installation instructions only exercised two models.
+- Found and fixed source-level relationship evidence selection. When one source
+  contains a literal assertion and another unsupported extraction of the same
+  relationship, the unsupported result's higher score must not erase the real
+  assertion. The same defect could erase a contradiction and leave a false
+  solid graph edge. Four public API regressions reproduce both failures before
+  the fix, in both extraction orders. Original scores remain unchanged.
+- Advanced the application policy revision to v6 so the normal bounded worker
+  backfill reselects evidence from complete current caches. The extraction
+  fingerprint, model assets, publication thresholds, and inference cost are
+  unchanged. Separate verification covers cache reuse without new inference.
+  Commit: `8509bbd`. Current regression evidence is
+  `relationship-evidence-full.log`; the four failing before-fix reproductions
+  are retained in `relationship-evidence-before.log`.
 
 ## Current measurement
 
@@ -57,6 +70,8 @@ Evidence is retained under `data/ml-runs/astra-sep14/` (excluded from Git).
 Capacity evidence is in `capacity/`; complete offline evidence and the prepared
 generation are in `offline-verification/`. The compatibility smoke check
 reports the same production inference fingerprint as the capacity check.
+Those capacity and installation measurements were taken at `bedd280`, before
+the policy-v6 evidence-selection change; the 462-test result includes that fix.
 The baseline evidence is exported to `baseline-r3/ml-quality-4_nsurau/`.
 All 60 inference calls completed in 282.7 seconds; sampled process-tree peak
 RSS was 3.99 GB. Positive assertions passed: concepts 32/38, aliases 2/3,
@@ -81,6 +96,18 @@ shows ERROR, while `multi-checkpoint-trial/results/screen-stop.json` identifies
 the deliberate STOP and preserves the complete disqualifying case. No further
 cases were run and no full-corpus quality estimate is claimed. The existing
 base checkpoint remains selected; no model or score threshold was changed.
+
+A separate literal-relationship prototype also stopped at its frozen futility
+gate. It intersected a scored natural record's head, literal predicate phrase,
+and tail with exact typed parser arguments. The selected input was 71 exposed
+development posts plus 26 controls, with a predeclared early stop. It completed
+all 26 controls and the first three complete scenarios (15 posts). Only one
+record qualified, duplicating an existing native control result; it added no
+supported source facts. No schema rewording or lower threshold was attempted,
+and the prototype was not integrated or replayed into the application.
+The stopped run completed normally in 213 seconds, with 4.10 GB peak RSS and
+no OOM under four CPUs/five GiB. Its frozen inputs, every raw prediction and
+parse, and the rejection decision remain in `literal-relation-trial/`.
 
 Two environment failures were preserved before the current launch: the older
 unit-test image lacked spaCy; the complete inference image then competed with
