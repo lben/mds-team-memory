@@ -3,8 +3,8 @@
 import re
 
 
-REVISION = "r7-explicit-acronym-grammar"
-CONFLICT_REVISION = "conflict-v2"
+REVISION = "r8-known-as-only"
+CONFLICT_REVISION = "conflict-v3"
 UNCERTAIN = frozenset("if unless whether perhaps maybe possibly hypothetical potential unverified unconfirmed propose proposal plan consider assume assumption suppose suggest recommend wish hope intend pretend reject deny dispute rumor incorrect false wrong mistaken misleading".split())
 MODALS = {"may", "might", "could", "would", "should", "will"}
 
@@ -126,7 +126,11 @@ def propose(row, *, conflict=False):
         complement = one(dependents(i, {"oprd"}))
         if (lemma in {"call", "name", "abbreviate", "know"} or (conflict and lemma == "shorten")) and (passive is not None or t["dep"] == "acl"):
             full = passive if passive is not None else t["head"]
-            short = complement if complement is not None else prep_object(i, {"as", "to"})
+            if lemma == "know":
+                # "Known to" describes familiarity, not an alternate name.
+                short = prep_object(i, {"as"})
+            else:
+                short = complement if complement is not None else prep_object(i, {"as", "to"})
             emit("passive_or_nominal_naming", i, full, short)
         elif (lemma in {"mean", "name", "abbreviate"} and t["pos"] == "VERB" and subject is not None
               and obj is not None and complement is None and prep_object(i, {"as", "to"}) is None):

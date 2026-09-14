@@ -34,6 +34,15 @@ main / origin/main
                     Continues the full automatic-maintenance objective.
                     Initial work: fix the September 14 review findings, then
                     improve measured quality and complete release verification.
+                    b1c9e51  Record this verified branch history
+                    523475e  Fix immediate alias pinning and rollback replay
+                    afa55a5  Stop unavailable inference before corpus repetition
+                    c6e2df9  Extend explicit naming grammar; invalidate obsolete
+                             coverage and dependent expertise across rule changes
+                    Current continuation: narrow "known as" versus "known to";
+                    final backend suite: 457 passed. Acronym development:
+                    19/24 selected aliases, all 22 published aliases correct
+                    under the frozen labels. Release quality remains open.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

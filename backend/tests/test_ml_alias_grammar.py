@@ -1,5 +1,6 @@
 """Explicit naming and adversarial controls from fixed pretrained outputs."""
 import json
+import copy
 from pathlib import Path
 
 import pytest
@@ -29,3 +30,14 @@ def test_explicit_alias_grammar_with_fixed_model_observations(case):
         # Even unscored conflict candidates must describe an actual definition.
         conflicts = syntax.propose(case["parse"], conflict=True)
         assert {(p["full_name"]["text"], p["short_name"]["text"]) for p in conflicts} <= allowed
+
+
+def test_known_to_is_familiarity_not_an_alias_definition():
+    # Hold the supplied dependency structure fixed while changing the exact
+    # preposition. This is a guard test, not a new parser/model observation.
+    case = next(case for case in CASES if case["input"]["id"] == "known_as_positive")
+    parsed = copy.deepcopy(case["parse"])
+    parsed["body"] = parsed["body"].replace("known as", "known to")
+    token = next(token for token in parsed["tokens"] if token["text"] == "as")
+    token["text"] = token["lemma"] = "to"
+    assert syntax.propose(parsed, conflict=True) == []

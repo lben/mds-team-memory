@@ -24,7 +24,10 @@ The full objective remains active. Historical requirements and results are in
   identity routes, cache reuse, replay completion, and expertise invalidation.
   The before-fix regressions failed through public APIs, including profiles
   computed before source replay. Migration `0012` adds the missing invalidation.
-- The full offline Linux regression suite passes: 456 tests in 194 seconds.
+- A final grammar review narrowed `known as` so `known to` cannot propose an
+  identity or false conflict. Its regression fails before the fix and passes
+  afterward. All 119 retained trial observations remain exactly unchanged.
+- The final offline Linux regression suite passes: 457 tests in 193 seconds.
 
 ## Current measurement
 
@@ -50,27 +53,33 @@ passed. Peak sampled process-tree RSS was 3.97 GB within four CPUs/five GiB.
 Results: `grammar-development/ml-quality-0ujrnen5/`. This development sample
 cannot establish release quality; its status is `INSUFFICIENT_EVIDENCE`.
 
-The untried GLiNER2.5 multilingual checkpoint is being screened under the same
-resource and evidence constraints. Its immutable model revision and a frozen
-early-stop gate are recorded in `multi-checkpoint-trial/`. It remains an
-experiment, not the selected model. The screen stops at the first completed
-case that fails a negative or loses a previously satisfied positive; a failed
-screen cannot be repaired by threshold tuning or selective output union.
+The GLiNER2.5 multilingual checkpoint failed its frozen screening gate on the
+first completed case: it lost the previously published Earth/Sun membership
+relationships with the Solar System. Both inference calls completed. The
+screen stopped as planned after 77.6 seconds; its interrupted aggregate report
+shows ERROR, while `multi-checkpoint-trial/results/screen-stop.json` identifies
+the deliberate STOP and preserves the complete disqualifying case. No further
+cases were run and no full-corpus quality estimate is claimed. The existing
+base checkpoint remains selected; no model or score threshold was changed.
 
 Two environment failures were preserved before the current launch: the older
 unit-test image lacked spaCy; the complete inference image then competed with
 the earlier demo's resident worker and suffered a host-memory OOM kill. The
 demo's ML worker was gracefully stopped while its web process stayed running.
-Restore that worker after measurements using the recorded command in
-`data/ml-runs/astra-sep14/demo-worker-restart.json`. The correct inference image
+That worker is now restored and verified healthy, with the web process still
+alive. Its read-only `/repo` mount follows the current checkout, so restoration
+uses an archived `72e387e` source tree inside the container to retain the
+original behavior without migrating the demo database. The exact restoration
+is recorded in `demo-worker-restored.json`. The correct inference image
 is `mds-ml-e2e:ubi8.10`; its dependency versions match the pinned requirements.
 The evaluator now checks dependencies before starting and stops if inference
 cannot start, instead of repeating that failure across the corpus.
 
 ## Remaining work
 
-1. Attribute development failures to extraction, identity resolution, publication,
-   or source support; select a bounded improvement experiment from that evidence.
+1. Obtain an independent review of this verified continuation and prepare the
+   new blind corpus under `ML_EVALUATION_PROTOCOL.md`. Explicit authorization
+   for agent delegation has been requested and remains pending.
 2. Improve all four finding categories without altering the release targets or
    reusing spent holdouts as unseen evidence.
 3. Freeze the selected implementation and establish quality using fresh,
