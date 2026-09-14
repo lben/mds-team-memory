@@ -21,6 +21,9 @@ def definitions_pending(db):
 def valid_routes():
     # The same guard is used for scores and stored decisions. A stale maximum
     # cannot remain public merely because weaker direct evidence still exists.
+    # A new pin also authorizes older automatic inverse routes that lack a
+    # pinned_alias_key; their exact spelling, declaration and owner still must
+    # match the current pinned alias below.
     return literal_column(f"""NOT EXISTS (
       SELECT 1 FROM json_each(ml_evidence.features,'$.identity_routes') route
       WHERE NOT EXISTS (
@@ -111,7 +114,9 @@ def valid_routes():
         JOIN ml_findings target ON target.key=json_extract(route.value,'$.concept_key') AND target.kind='concept'
         JOIN ml_sources owner ON owner.kind=ml_evidence.source_kind AND owner.id=ml_evidence.source_id
         JOIN ml_state state ON state.id=1
-        WHERE alias.key=json_extract(route.value,'$.pinned_alias_key') AND alias.kind='alias'
+        WHERE alias.kind='alias'
+          AND (json_extract(route.value,'$.pinned_alias_key') IS NULL
+            OR alias.key=json_extract(route.value,'$.pinned_alias_key'))
           AND json_extract(alias.payload,'$.direction')='inverse'
           AND json_extract(route.value,'$.direction')='inverse'
           AND json_extract(route.value,'$.routing_policy')='{VERSION}'

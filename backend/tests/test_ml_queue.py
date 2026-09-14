@@ -210,6 +210,30 @@ def test_additive_migration_round_trip_preserves_sources_and_fts(queue_db):
         conn.close()
 
 
+@requires_fixed_sqlite
+@pytest.mark.parametrize("target", ["0010", "0009"])
+def test_identity_policy_downgrade_requeues_existing_sources(queue_db, target):
+    migrate(queue_db, "upgrade", "head")
+    with connect(queue_db) as conn:
+        add_item(conn, "first")
+        add_item(conn, "second")
+        conn.execute("DELETE FROM ml_jobs")
+        conn.execute("UPDATE ml_state SET backfill_kind=NULL,backfill_cursor='' WHERE id=1")
+        generation = conn.execute("SELECT backfill_generation FROM ml_state WHERE id=1").fetchone()[0]
+        before = conn.execute("SELECT id,body FROM knowledge_items ORDER BY id").fetchall()
+    migrate(queue_db, "downgrade", target)
+    conn = queue.connect_worker(queue_db)
+    try:
+        assert conn.execute("SELECT backfill_generation FROM ml_state WHERE id=1").fetchone()[0] > generation
+        worker = queue.acquire_worker(conn)
+        assert queue.backfill_page(conn, worker) == 2
+        assert job(conn, source_id="first") and job(conn, source_id="second")
+        assert conn.execute("SELECT id,body FROM knowledge_items ORDER BY id").fetchall() == before
+        assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
+    finally:
+        conn.close()
+
+
 def test_worker_refuses_unsafe_sqlite_and_sets_connection_limits(queue_db):
     assert all(queue.sqlite_is_safe(version) for version in ((3, 44, 6), (3, 50, 7), (3, 51, 3), (3, 53, 1)))
     assert not any(queue.sqlite_is_safe(version) for version in ((3, 44, 5), (3, 45, 1), (3, 50, 6), (3, 51, 2)))
