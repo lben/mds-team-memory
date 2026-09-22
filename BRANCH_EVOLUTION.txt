@@ -74,8 +74,11 @@ SEPTEMBER 22 CONTINUATION ON THE SAME BRANCH
 - The controller refuses rollback to code incompatible with the human-feedback
   schema before changing processes or release links. Automatic downgrade across
   0015 is disabled; preserved human confirmations require a reviewed recovery.
-- September 22 implementation checkpoint: all 754 backend tests pass in offline
-  Linux; the frontend build and 10 browser feedback checks pass. Fresh independent
+- September 22 implementation checkpoint c9c4c54: all 754 backend tests pass in offline
+  Linux; the frontend build and 10 browser feedback checks pass. Its three-model
+  offline compatibility and fixed 50,000-item/50-client capacity checks also pass:
+  1,328 successful requests and 268 preserved writes, within the 5 GiB limit.
+  Fresh independent
   quality/effects evaluation remains open. The historical quality failures below remain visible. There has
   been no merge, push, or deployment from this continuation.
 

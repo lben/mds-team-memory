@@ -314,19 +314,37 @@ wheel and lock files match the prior offline transfer bundle byte-for-byte
 (2,993,060,653 bytes). Fresh quality evaluation still awaits independent semantic
 approval of revised corpora. These engineering passes do not establish quality.
 
+Commit `c9c4c54` saves this implementation checkpoint. The frozen source also
+passed the actual three-model offline compatibility check in a four-CPU,
+5 GiB Linux container with no network or extra swap. Peak process RSS was
+4,054,110,208 bytes; the container exited successfully without an OOM event.
+The complete result and raw log are retained in
+`fresh-evaluation-sep22/offline-model-smoke-result.json` and
+`fresh-evaluation-sep22/offline-model-smoke.log`. This is compatibility evidence,
+not an accuracy measurement.
+
+The same frozen source passed the fixed 50,000-item/50-client capacity check in
+246.11 seconds. All 1,328 API requests succeeded and all 268 writes were preserved,
+with no integrity errors or unhandled lock failures. Write p95 was 8.455 seconds
+with the loaded worker idle and 9.173 seconds during inference, below the fixed
+10.568-second limit. Seven real inference chunks completed during traffic.
+Peak combined cgroup memory was 5,301,137,408 of 5,368,709,120 bytes (98.74%);
+memory headroom remains tight. Source hashes match the frozen candidate.
+`fresh-evaluation-sep22/capacity/` retains the report, logs, request traces and
+private test database; `capacity-summary.json` records the cross-check. This
+emulated Linux run does not establish deployment-server latency or full-backlog
+drain time and does not add independent quality decisions.
+
 ## Remaining work
 
-1. Complete the reproduced independent-review repairs and their integration
-   checks, then prepare the new blind corpus under `ML_EVALUATION_PROTOCOL.md`
-   using fresh authors who have not inspected implementation or model outputs.
-2. Improve all four finding categories without altering the release targets or
-   reusing spent holdouts as unseen evidence.
-3. Freeze the selected implementation and establish quality using fresh,
-   independently labeled evaluation data with complete-output auditing.
-4. After selecting a quality-qualified implementation, verify any affected
-   regression, live application, lifecycle, offline, and capacity behavior on
-   that final source. The checks above establish the current branch's
-   engineering behavior; they cannot substitute for the unmet quality gate.
+1. Finish independent semantic and independence review of the 300 new cases;
+   retain original seals and freeze the approved corpus before inference.
+2. Run the frozen candidate once against that corpus, retaining complete
+   outputs, public effects and demonstrated lifecycle behavior. Evaluate the
+   unchanged targets, including sample sizes and applied-prediction minima.
+3. If quality requires implementation changes, preserve these results and obtain
+   appropriate fresh validation for
+   the next candidate; exposed cases cannot become unseen evidence again.
 
 Acceptance targets remain: 98% precision for concepts and relationships, 99% for
 aliases, 95% for expertise; at least 50% recall; and per-category minima of 300
