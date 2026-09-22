@@ -734,7 +734,7 @@ def main(argv=None):
                     + [Path(__file__).resolve(), Path(ml_effect_check.__file__).resolve(),
                        Path(ml_feedback_check.__file__).resolve()])
     report = {"status": "RUNNING", "output": str(output), "fixture_sha256": fixture_sha256,
-              "fixture_purpose": corpus["purpose"], "training": False,
+              "fixture_purpose": corpus.get("purpose"), "training": False,
               "models_manifest_sha256": hashlib.sha256(manifest_raw).hexdigest(),
               "model_pins": {role: {key: entry.get(key) for key in ("repository", "revision", "license")}
                              for role, entry in manifest["models"].items()},
