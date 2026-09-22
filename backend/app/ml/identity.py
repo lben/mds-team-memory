@@ -1,20 +1,117 @@
 """Exact scored alias witnesses and their conditional evidence provenance."""
 
 import json
+from functools import lru_cache
 
-from sqlalchemy import func, literal_column, or_, text
+from sqlalchemy import and_, exists, func, literal_column, or_, select, text
 
 from ..models import Account, ConceptTerm, Profile
 from . import policy, syntax
-from .models import Finding, Override, Source
+from .models import Evidence, Finding, Override, Source
 from .runtime import normalize
 from .sources import digest, finding_key
 
 VERSION = "exact-scored-identity-v2"
+TERM_VERSION = "published-term-dependency-v1"
+
+
+def scope_contract():
+    from .runtime import inference_version
+
+    models = {role: {"revision": "alias-scope-contract"}
+              for role in ("extractor", "embeddings", "syntax")}
+    return digest(["full-source-alias-scope-v1", TERM_VERSION, inference_version(models)])
+
+
+def term_route(db, spelling, concept_id):
+    """Record an existing published mapping, never establish an equivalence."""
+    term = db.query(ConceptTerm).filter_by(term=normalize(spelling), concept_id=concept_id, is_canonical=False).first()
+    alias = db.query(Finding).filter_by(kind="alias", canonical_id=term.id).first() if term else None
+    if alias is None:
+        return None
+    return {"version": TERM_VERSION, "alias_key": alias.key, "surface": term.term, "concept_id": concept_id}
+
+
+@lru_cache(maxsize=16)
+def _term_authority_query(contract, policy_version, routing_version, scope_guard, route_guard):
+    # Cache query structure only. Every statement reads current database data.
+    supported = exists(select(Evidence.key).join(Source, and_(
+        Source.kind == Evidence.source_kind, Source.id == Evidence.source_id,
+        Source.content_hash == Evidence.source_hash, Source.valid.is_(True))).where(
+        Evidence.finding_key == Finding.key, current_scope_evidence()).correlate(Finding))
+    return (select(Finding.key.label("alias_key"), ConceptTerm.term.label("surface"), ConceptTerm.concept_id, ConceptTerm.id.label("term_id"))
+        .join(ConceptTerm, ConceptTerm.id == Finding.canonical_id)
+        .outerjoin(Override, Override.key == Finding.key)
+        .where(Finding.kind == "alias", ConceptTerm.is_canonical.is_(False),
+            func.json_extract(Finding.payload, "$.alias_key") == ConceptTerm.term,
+            func.json_extract(Finding.payload, "$.concept_id") == ConceptTerm.concept_id,
+            func.coalesce(Override.mode, "") != "suppressed",
+            or_(Override.mode == "pinned", and_(Finding.state == "active", supported, scope_guard(), route_guard())))
+        .cte("authoritative_aliases").prefix_with("NOT MATERIALIZED"))
+
+
+def term_authorities():
+    return _term_authority_query(scope_contract(), policy.VERSION, VERSION, current_scope_decision, current_decision)
+
+
+def _term_mapping(route):
+    authority = term_authorities()
+    return exists(select(authority.c.alias_key).where(
+        authority.c.alias_key == func.json_extract(route.c.value, "$.alias_key"),
+        authority.c.surface == func.json_extract(route.c.value, "$.surface"),
+        authority.c.concept_id == func.json_extract(route.c.value, "$.concept_id"),
+        func.json_extract(route.c.value, "$.version") == TERM_VERSION).correlate(route))
+
+
+@lru_cache(maxsize=16)
+def _term_evidence_query(authority, contract, policy_version):
+    return select(Evidence.key).where(_valid_term_routes()).cte(
+        "current_term_evidence").prefix_with("NOT MATERIALIZED")
+
+
+def valid_term_routes():
+    current = _term_evidence_query(term_authorities(), scope_contract(), policy.VERSION)
+    return exists(select(current.c.key).where(current.c.key == Evidence.key).correlate(Evidence))
+
+
+def _valid_term_routes():
+    routes = func.json_each(Evidence.features, "$.term_routes").table_valued("key", "value").alias("term_route")
+    owner = exists(select(Source.id).where(Source.kind == Evidence.source_kind, Source.id == Evidence.source_id,
+        Source.valid.is_(True), Source.content_hash == Evidence.source_hash, current_scope_evidence())
+        .correlate(Evidence))
+    return ~exists(select(routes.c.key).where(
+        ~func.coalesce(and_(_term_mapping(routes), owner), False)).correlate(Evidence))
+
+
+def current_scope_evidence():
+    from .runtime import inference_version
+
+    models = {role: {"revision": "alias-scope-contract"}
+              for role in ("extractor", "embeddings", "syntax")}
+    suffix = ":" + ":".join(inference_version(models).split(":")[-2:])
+    return and_(
+        func.json_extract(Source.result, "$.alias_scope_contract") == scope_contract(),
+        Source.model_version == Evidence.model_version,
+        Evidence.model_version + ":" + policy.VERSION == literal_column(
+            "(SELECT pipeline_version FROM ml_state WHERE id=1)"),
+        func.length(Evidence.model_version) - func.length(func.replace(Evidence.model_version, ":", "")) == 4,
+        func.substr(Evidence.model_version, -len(suffix)) == suffix)
+
+
+def current_scope_decision():
+    # A stored alias score must not survive loss of any contributing source's
+    # inference contract. Explicit admin pins bypass automatic decisions.
+    valid = exists(select(Source.id).where(
+        Source.kind == Evidence.source_kind, Source.id == Evidence.source_id,
+        Source.valid.is_(True), Source.content_hash == Evidence.source_hash,
+        current_scope_evidence()).correlate(Evidence))
+    return ~exists(select(Evidence.key).where(
+        Evidence.finding_key == Finding.key, ~valid).correlate(Finding))
 
 
 def coverage_current(result):
     return (result.get("definitions_indexed", 0) >= 2
+            and result.get("alias_scope_contract") == scope_contract()
             and result.get("conflict_coverage_revision") == syntax.CONFLICT_REVISION
             and isinstance(result.get("conflict_definitions"), list))
 
@@ -23,6 +120,7 @@ def incomplete_coverage(source):
     # Internal table aliases only. Keep publication and stored-route reads at
     # the same generation boundary as cache reuse and replay completion.
     return f"""(COALESCE(json_extract({source}.result,'$.definitions_indexed'),0)<2
+      OR COALESCE(json_extract({source}.result,'$.alias_scope_contract'),'')!='{scope_contract()}'
       OR COALESCE(json_extract({source}.result,'$.conflict_coverage_revision'),'')!='{syntax.CONFLICT_REVISION}'
       OR COALESCE(json_type({source}.result,'$.conflict_definitions'),'')!='array')"""
 
@@ -32,7 +130,17 @@ def definitions_pending(db):
       AND valid=1 AND {incomplete_coverage('ml_sources')} LIMIT 1""")).first() is not None
 
 
+@lru_cache(maxsize=16)
+def _route_evidence_query(contract, policy_version, routing_version, syntax_version):
+    return select(Evidence.key).where(_valid_routes()).cte("current_identity_evidence").prefix_with("NOT MATERIALIZED")
+
+
 def valid_routes():
+    current = _route_evidence_query(scope_contract(), policy.VERSION, VERSION, syntax.REVISION)
+    return exists(select(current.c.key).where(current.c.key == Evidence.key).correlate(Evidence))
+
+
+def _valid_routes():
     # The same guard is used for scores and stored decisions. A stale maximum
     # cannot remain public merely because weaker direct evidence still exists.
     # A new pin also authorizes older automatic inverse routes that lack a
@@ -77,13 +185,15 @@ def valid_routes():
                   AND native_source.valid=1 AND native_source.content_hash=native.source_hash
                   AND native_source.model_version=native.model_version
                   AND native.model_version=witness.model_version
-                  AND json_type(native.features,'$.identity_routes') IS NULL)))
+                  AND json_type(native.features,'$.identity_routes') IS NULL
+                  AND json_type(native.features,'$.term_routes') IS NULL)))
           AND EXISTS (SELECT 1 FROM json_each(witness.features,'$.definition_methods') method
             WHERE method.value=json_extract(route.value,'$.method_json')
               AND json_extract(method.value,'$.syntax_rule_revision')='{syntax.REVISION}'
               AND json_extract(method.value,'$.source_text_hash')=json_extract(source.result,'$.text_hash'))
           AND EXISTS (SELECT 1 FROM ml_sources owner WHERE owner.kind=ml_evidence.source_kind
-            AND owner.id=ml_evidence.source_id AND owner.valid=1 AND owner.content_hash=ml_evidence.source_hash)
+            AND owner.id=ml_evidence.source_id AND owner.valid=1 AND owner.content_hash=ml_evidence.source_hash
+            AND owner.model_version=ml_evidence.model_version)
           AND NOT EXISTS (SELECT 1 FROM ml_sources pending WHERE pending.kind IN ('item','passage')
             AND pending.valid=1 AND {incomplete_coverage('pending')})
           AND NOT EXISTS (SELECT 1 FROM concept_terms short WHERE short.term=json_extract(route.value,'$.alias_key')
@@ -154,8 +264,9 @@ def valid_routes():
 
 
 def current_decision():
-    return literal_column(f"""NOT EXISTS (SELECT 1 FROM ml_evidence WHERE ml_evidence.finding_key=ml_findings.key
-      AND json_type(ml_evidence.features,'$.identity_routes')='array' AND NOT ({valid_routes()}))""")
+    return ~exists(select(Evidence.key).where(Evidence.finding_key == Finding.key,
+        func.json_type(Evidence.features, "$.identity_routes") == "array",
+        ~valid_routes()).correlate(Finding))
 
 
 def route(db, spelling):
@@ -215,7 +326,7 @@ def route(db, spelling):
             native = []
             for evidence in effective.evidence_rows(db, target.key):
                 source = db.get(Source, (evidence["source_kind"], evidence["source_id"]))
-                if (evidence.get("identity_routes") or generation != evidence["model_version"] + ":" + policy.VERSION
+                if (evidence.get("identity_routes") or evidence.get("term_routes") or generation != evidence["model_version"] + ":" + policy.VERSION
                         or source.model_version != evidence["model_version"]):
                     continue
                 if any(normalize(span["name"]) == spelling and span["label"] != "relation endpoint"

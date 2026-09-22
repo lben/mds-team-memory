@@ -9,9 +9,9 @@ import pytest
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import Session
 
-from app.ml import embeddings, policy, runtime
+from app.ml import embeddings, policy, relation_syntax, runtime, syntax
 from app.ml.sources import digest, snapshot
-from test_ml_queue import queue_db, queue_template
+from test_ml_queue import current_queue_db as queue_db, current_queue_template, queue_template
 
 VECTOR_BYTES = embeddings.ROW_OVERHEAD + 12
 
@@ -41,7 +41,11 @@ def chunks(source, values=(1.0, 0.0, 0.0)):
 
 
 def save(db, source, generation="old", values=(1.0, 0.0, 0.0), *, max_bytes=embeddings.MAX_BYTES, reuse=False):
-    version = runtime.inference_version({"extractor": {"revision": "extractor"}, "embeddings": {"revision": generation}})
+    from app.ml import identity
+
+    # Explicit current synthetic source for storage mechanics, not model output.
+    version = runtime.inference_version({"extractor": {"revision": "extractor"}, "embeddings": {"revision": generation},
+                                         "syntax": {"revision": "syntax"}})
     db.execute(text("UPDATE ml_state SET pipeline_version=:version WHERE id=1"),
                {"version": version + ":" + policy.VERSION})
     result = None if reuse else chunks(source, values)
@@ -52,6 +56,10 @@ def save(db, source, generation="old", values=(1.0, 0.0, 0.0), *, max_bytes=embe
       model_version=excluded.model_version,result=excluded.result"""),
         {"kind": source.kind, "id": source.id, "hash": source.content_hash, "version": version,
          "result": json.dumps({"text_hash": digest(source.text), "embedding_version": generation,
+                               "concepts": [], "corroborated_definitions": [], "conflict_definitions": [],
+                               "conflict_coverage_revision": syntax.CONFLICT_REVISION, "definitions_indexed": 2,
+                               "alias_scope_contract": identity.scope_contract(),
+                               "relations": [], "relation_guard_revision": relation_syntax.REVISION,
                                "dimensions": len(values), "embedding_count": len(chunks(source, values))})})
 
 
@@ -234,7 +242,8 @@ def test_replacement_rebuild_reclaims_abandoned_rows_before_tight_quota_reservat
     assert store.execute(text("SELECT DISTINCT generation FROM ml_embeddings")).scalars().all() == ["replacement"]
 
 
-@pytest.mark.parametrize("mismatch", ["extraction_identity", "embedding_version", "source_hash", "vector_count"])
+@pytest.mark.parametrize("mismatch", ["extraction_identity", "embedding_version", "source_hash", "vector_count",
+                                     "missing_relation_guard", "obsolete_relation_guard"])
 def test_staging_completion_requires_coherent_current_source_metadata(store, mismatch):
     source = add_source(store, "source")
     save(store, source)
@@ -248,6 +257,10 @@ def test_staging_completion_requires_coherent_current_source_metadata(store, mis
         store.execute(text("UPDATE ml_sources SET result=json_set(result,'$.embedding_version','old') WHERE id='source'"))
     elif mismatch == "source_hash":
         store.execute(text("UPDATE ml_embeddings SET source_hash='stale' WHERE generation='new'"))
+    elif mismatch == "missing_relation_guard":
+        store.execute(text("UPDATE ml_sources SET result=json_remove(result,'$.relation_guard_revision') WHERE id='source'"))
+    elif mismatch == "obsolete_relation_guard":
+        store.execute(text("UPDATE ml_sources SET result=json_set(result,'$.relation_guard_revision','obsolete') WHERE id='source'"))
     else:
         store.execute(text("DELETE FROM ml_embeddings WHERE generation='new'"))
     assert not embeddings.finish_generation(store)

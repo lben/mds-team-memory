@@ -38,7 +38,7 @@ export const store = reactive({
    * showed a number the server never had. The server's `created` flag is the
    * only thing that decides whether the count moved.
    */
-  async markHelped(item: Item): Promise<void> {
+  async markHelped(item: Item): Promise<boolean> {
     try {
       const r = await api.post<{ created: boolean }>(`/api/items/${item.id}/helped`)
       item.marked_helped = true
@@ -46,12 +46,14 @@ export const store = reactive({
         item.helped += 1
         this.notify('Contributor impact increased')
       }
+      return true
     } catch (e) {
       this.fail(e, 'Could not mark as helpful')
+      return false
     }
   },
 
-  /** The one implementation of "Endorse as expert".
+  /** The one implementation of "Endorse contribution".
    *
    * The second copy of this updated only its own local flag, so the count and
    * the button disagreed with the server — the same divergence `markHelped`
@@ -65,7 +67,7 @@ export const store = reactive({
         item.endorsements += 1
         item.endorsed = true
       }
-      this.notify('Endorsed as an expert')
+      this.notify('Contribution endorsed')
     } catch (e) {
       this.fail(e, 'Could not endorse')
     }

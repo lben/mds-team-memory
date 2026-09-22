@@ -411,7 +411,8 @@ with sync_playwright() as pw:
     check("the asker can accept the answer", card.get_by_test_id("accept-answer").count() > 0)
     check("exactly one answer is offered for acceptance", card.get_by_test_id("accept-answer").count() == 1,
           f"{card.get_by_test_id('accept-answer').count()} accept buttons")
-    card.get_by_test_id("accept-answer").first.click(); U.wait_for_timeout(1600)
+    card.get_by_test_id("accept-answer").first.click()
+    card.get_by_test_id("accept-without-topics").click(); U.wait_for_timeout(1600)
     card = U.locator(".question-card", has_text="fairest seed system").first
     check("accepting resolves the question", "RESOLVED" in card.inner_text(), card.inner_text()[:80])
     card.locator(".q-head").click(); U.wait_for_timeout(900)

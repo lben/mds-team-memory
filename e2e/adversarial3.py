@@ -131,7 +131,7 @@ with sync_playwright() as pw:
     U.reload(); U.wait_for_timeout(2200)
     ucard = U.locator(".question-card", has_text="How many endings").first
     ucard.locator(".q-head").click(); U.wait_for_timeout(1200)
-    endorse = ucard.get_by_role("button", name="Endorse as expert")
+    endorse = ucard.get_by_role("button", name="Endorse contribution")
     check("an answer from someone with an account offers an endorse action",
           endorse.count() > 0, ucard.inner_text()[:120])
     endorse.first.click(); U.wait_for_timeout(2500)
@@ -160,14 +160,14 @@ with sync_playwright() as pw:
     # Anyone may endorse, so the count is the point: the action stops being
     # offered to the person who already used it, not to everybody else.
     check("the person who already endorsed is not offered it again",
-          ucard.get_by_role("button", name="Endorse as expert").count() == 0,
+          ucard.get_by_role("button", name="Endorse contribution").count() == 0,
           ucard.inner_text()[:180])
     check("and it still shows as endorsed", "ENDORSED" in ucard.inner_text(), ucard.inner_text()[:180])
     V.reload(); V.wait_for_timeout(2000)
     vcard = V.locator(".question-card", has_text="How many endings").first
     vcard.locator(".q-head").click(); V.wait_for_timeout(1200)
     check("you cannot endorse your own answer",
-          vcard.get_by_role("button", name="Endorse as expert").count() == 0)
+          vcard.get_by_role("button", name="Endorse contribution").count() == 0)
 
     V.goto(base+"/"); V.wait_for_timeout(2000)
     target = V.get_by_test_id("knowledge-column").locator(".card.result").filter(has_text="twelve endings").first

@@ -99,17 +99,24 @@ def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str], use
             400, f"'{taken.display}' is already used by the concept '{owner.name if owner else '?'}'"
         )
 
-    db.query(ConceptTerm).filter(ConceptTerm.concept_id == concept.id).delete()
+    # Preserve the unchanged canonical identity across alias-only edits. Its
+    # revision belongs to human topic confirmations, not to term-row churn.
+    existing = {row.term: row for row in concept.terms}
+    for term, row in existing.items():
+        if term not in wanted:
+            db.delete(row)
     db.flush()
     for term, display in wanted.items():
-        db.add(
-            ConceptTerm(
+        if term in existing:
+            existing[term].display = display
+            existing[term].is_canonical = term == canonical_term
+        else:
+            db.add(ConceptTerm(
                 concept_id=concept.id,
                 term=term,
                 display=display,
                 is_canonical=term == canonical_term,
-            )
-        )
+            ))
     try:
         db.flush()
         db.expire(concept, ["terms"])
@@ -242,10 +249,7 @@ def list_profiles(db: Session = Depends(get_db)):
 
 @router.get("/endorsements", dependencies=[Depends(require_admin)])
 def endorsement_ranking(db: Session = Depends(get_db)):
-    """Who the team actually treats as an expert, and on what.
-
-    Anyone can endorse, so this is the evidence an admin maps expertise from.
-    """
+    """Whole-contribution endorsements, without inferred topic attribution."""
     rows = (
         db.query(ImpactEvent.beneficiary_profile_id, func.count())
         .filter(ImpactEvent.event_type == "sme_endorsed")
@@ -256,26 +260,6 @@ def endorsement_ranking(db: Session = Depends(get_db)):
     profiles = {
         p.id: p for p in db.query(Profile).filter(Profile.id.in_(list(counts) or [""])).all()
     }
-    # A concept's name is a derived property, not a column, so the topics are
-    # resolved from concept ids rather than selected in the join.
-    topic_rows = (
-        db.query(ImpactEvent.beneficiary_profile_id, ItemConcept.concept_id)
-        .join(ItemConcept, ItemConcept.item_id == ImpactEvent.item_id)
-        .filter(ImpactEvent.event_type == "sme_endorsed")
-        .distinct()
-        .all()
-    )
-    names = {
-        c.id: c.name
-        for c in db.query(Concept)
-        .filter(Concept.id.in_([cid for _, cid in topic_rows] or [""]))
-        .all()
-    }
-    concepts_by_profile: dict[str, set[str]] = {}
-    for pid, cid in topic_rows:
-        if cid in names:
-            concepts_by_profile.setdefault(pid, set()).add(names[cid])
-
     return sorted(
         (
             {
@@ -283,7 +267,10 @@ def endorsement_ranking(db: Session = Depends(get_db)):
                 "label": profiles[pid].label if pid in profiles else "Unknown",
                 "has_account": pid in profiles and profiles[pid].has_account,
                 "endorsements": count,
-                "topics": sorted(concepts_by_profile.get(pid, ())),
+                # Kept for old clients. A generic endorsement never identifies
+                # which of an item's topics the endorser intended to endorse.
+                "topics": [],
+                "topic_attribution": "unscoped",
             }
             for pid, count in counts.items()
         ),

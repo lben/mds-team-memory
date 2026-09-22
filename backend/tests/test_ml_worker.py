@@ -15,7 +15,7 @@ from types import SimpleNamespace
 import pytest
 
 from app.ml.worker import InferenceProcess, Stopped, process_tree_rss
-from test_ml_queue import queue_db, queue_template
+from test_ml_queue import current_queue_db as queue_db, current_queue_template, queue_template
 
 ROOT = Path(__file__).resolve().parents[2]
 requires_ml = pytest.mark.skipif(importlib.util.find_spec("psutil") is None,
@@ -248,7 +248,8 @@ def worker_store(app_modules, queue_db, tmp_path, monkeypatch):
     assets = tmp_path / "assets"
     assets.mkdir()
     (assets / "models.json").write_text(json.dumps({"models": {
-        "extractor": {"revision": "extractor"}, "embeddings": {"revision": "old"}}}))
+        "extractor": {"revision": "extractor"}, "embeddings": {"revision": "old"},
+        "syntax": {"revision": "syntax"}}}))
     monkeypatch.setattr(worker, "lower_priority", lambda: None)
     monkeypatch.setattr(embeddings, "_free_bytes", lambda db: 20 * 1024**3)
     engine = create_engine(f"sqlite:///{queue_db}")
@@ -307,7 +308,7 @@ def test_policy_upgrade_reselects_literal_evidence_from_cache(worker_store, monk
     from app.ml.models import Evidence, Finding
     from app.ml.runtime import inference_version
     from test_ml_embeddings import add_source
-    from test_ml_runtime import _analyze, _span
+    from ml_relation_helpers import analyze as _analyze, span as _span, DeclaredGuard, declaration
 
     db, path, assets = worker_store
     body = "Citrine Pump uses Emerald Cell. Citrine Pump was inspected alongside Emerald Cell."
@@ -316,13 +317,16 @@ def test_policy_upgrade_reselects_literal_evidence_from_cache(worker_store, monk
     first = [_span(body, name, score=.76) for name in names]
     last = [_span(body, name, start=body.rindex(name), score=.99) for name in names]
     result = _analyze(body, [_span(body, name, score=.996) for name in names],
-                      {"uses": [{"head": h, "tail": t} for h, t in (first, last)]}, full=True)
+                      {"uses": [{"head": h, "tail": t} for h, t in (first, last)]}, full=True,
+                      guard=DeclaredGuard(body, [declaration(body, names[0], "uses", names[1],
+                                                            end=body.index(".") + 1)]))
     result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION)
     version = inference_version(json.loads((assets / "models.json").read_text())["models"])
     adapter.bootstrap(db)
     adapter.apply_source(db, "item", source.id, source, result, version, "old", 1024)
     stored = (db.query(Evidence).join(Finding, Finding.key == Evidence.finding_key)
-              .filter(Finding.kind == "relationship", Evidence.source_id == source.id).one())
+              .filter(Finding.kind == "relationship", Evidence.source_id == source.id,
+                      Evidence.polarity == "positive").one())
     finding = db.get(Finding, stored.finding_key)
     # Reproduce the old committed selection; the complete raw cache still
     # contains the lower-scoring literal extraction needed to repair it.
@@ -445,6 +449,13 @@ def test_profile_job_rolls_back_derived_growth_and_can_retract(worker_store, mon
     db.execute(text("""INSERT INTO impact_events(id,event_type,actor_profile_id,beneficiary_profile_id,item_id,points,dedup_key,created_at)
       VALUES ('help','helped','actor','author','source',1,'helped:actor:item:source',datetime('now'))"""))
     adapter.bootstrap(db)
+    from app.models import Account, Concept, KnowledgeItem, Profile
+    from app.topic_feedback import TopicFeedbackIn, feedback_dict, save_selection
+    item, actor, account = db.get(KnowledgeItem, 'source'), db.get(Profile, 'actor'), db.get(Account, 'actor-account')
+    context = feedback_dict(db, item, actor, account)
+    request = TopicFeedbackIn(kind='helped', expected_context=context['context_token'], topics=[
+        {'concept_id': 'topic', 'identity_revision': db.get(Concept, 'topic').credit_identity_revision}])
+    save_selection(db, item, actor, account, 'helped', request)
     db.execute(text("DELETE FROM ml_jobs"))
     queue.enqueue(db, "profile", "author")
     db.commit()
@@ -578,7 +589,7 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
     """Run the real queue and supervisor with supplied extraction, not quality evidence."""
     import threading
     from sqlalchemy import text
-    from app.ml import api, queue, worker
+    from app.ml import api, queue, relation_syntax, syntax, worker
     from app.ml.models import Finding
     from app.ml.runtime import inference_version
     from app.models import Account
@@ -595,7 +606,10 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
             self.calls += 1
             return {"concepts": [{"name": name, "start": body.index(name),
                     "end": body.index(name) + len(name), "score": 0.96, "label": "named entity"}
-                    for name in names if name in body], "relations": [], "chunks": []}, metadata
+                    for name in names if name in body], "relations": [], "chunks": [],
+                    "corroborated_definitions": [], "conflict_definitions": [],
+                    "conflict_coverage_revision": syntax.CONFLICT_REVISION,
+                    "relation_guard_revision": relation_syntax.REVISION}, metadata
 
         def check_memory(self):
             self.iterations += 1

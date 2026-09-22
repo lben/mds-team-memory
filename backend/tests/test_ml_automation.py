@@ -5,6 +5,8 @@ import uuid
 
 import pytest
 
+from ml_synthetic_records import current_synthetic_metadata, current_synthetic_result, select_synthetic_pipeline
+
 
 @pytest.fixture(autouse=True)
 def automation(app_modules):
@@ -59,9 +61,10 @@ def _apply(source_id, names=(), *, relation=False, cached=False, omitted_entity=
     from app.ml import adapter, syntax
     from app.ml.sources import snapshot
 
-    metadata = ("fixture-extractor:fixture-embedding", "fixture-embedding", 1024)
+    metadata = current_synthetic_metadata()
     with SessionLocal() as db:
         db.execute(text("BEGIN IMMEDIATE"))
+        select_synthetic_pipeline(db, metadata)
         source = snapshot(db, kind, source_id)
         result = None
         if source and cached:
@@ -79,6 +82,7 @@ def _apply(source_id, names=(), *, relation=False, cached=False, omitted_entity=
                 result["relations"] = [{"head": spans[0], "tail": spans[1], "predicate": "uses",
                                         "score": 0.9, "start": 0, "end": len(source.text),
                                         "polarity": "positive", "literal_support": True}]
+            result = current_synthetic_result(result)
         adapter.apply_source(db, kind, source_id, source, result, *metadata)
         db.commit()
 
@@ -326,8 +330,9 @@ def _apply_role_definition(item_id, name, alias, *, cached=False, entity_score=0
     from app.ml import adapter, syntax
     from app.ml.sources import digest, snapshot
 
-    metadata = ("fixture-alias-runtime", "fixture-embedding", 1024)
+    metadata = current_synthetic_metadata()
     with SessionLocal() as db:
+        select_synthetic_pipeline(db, metadata)
         source = snapshot(db, "item", item_id)
         if cached:
             result, cached_metadata = adapter.cached_result(db, source, metadata[0])
@@ -347,6 +352,7 @@ def _apply_role_definition(item_id, name, alias, *, cached=False, entity_score=0
                           "syntax_rules": ["parenthetical_compact_name" if "(" in source.text else "denotes"],
                           "syntax_rule_revision": "fixture-r4",
                           "alias_model_revision": "fixture-extractor", "syntax_model_revision": "fixture-syntax"}]}
+            result = current_synthetic_result(result)
         adapter.apply_source(db, "item", item_id, source, result, *metadata)
         db.commit()
 
@@ -640,6 +646,19 @@ def _profile_work(profile_id):
         db.commit()
 
 
+def _confirm_topic(client, item_id, kind, topic):
+    """An explicit new user action, never an upgrade of an old generic vote."""
+    response = client.get(f"/api/items/{item_id}/topic-feedback", params={"q": topic})
+    assert response.status_code == 200, response.text
+    context = response.json()
+    choice, = [row for row in context["topics"] if row["name"] == topic]
+    response = client.put(f"/api/items/{item_id}/topic-feedback", json={
+        "kind": kind, "expected_context": context["context_token"],
+        "topics": [{"concept_id": choice["concept_id"], "identity_revision": choice["identity_revision"]}]})
+    assert response.status_code == 200, response.text
+    return response.json()
+
+
 def test_expertise_outcomes_route_old_questions_once_and_respect_overrides(make_client, admin_client, obsolete_policy):
     expert, asker, reader = make_client(), make_client(), make_client()
     suffix = uuid.uuid4().hex[:6]
@@ -659,12 +678,17 @@ def test_expertise_outcomes_route_old_questions_once_and_respect_overrides(make_
     _apply(answer, [name])
     assert asker.post(f"/api/questions/{answered}/accept", json={"answer_id": answer}).status_code == 200
     assert reader.post(f"/api/items/{note}/helped").status_code == 200
+    _confirm_topic(asker, answer, "accepted", name)
+    _confirm_topic(reader, note, "helped", name)
     _profile_work(profile_id)
     assert not any(row["label"] == username for row in reader.get("/api/expertise").json())
 
     last_note = _capture(expert, f"Inspect the {name} retention manifest before exporting historical receipts.")
     _apply(last_note, [name])
     assert reader.post(f"/api/items/{last_note}/endorse").status_code == 200
+    _profile_work(profile_id)
+    assert not any(row["label"] == username for row in reader.get("/api/expertise").json()), "Generic endorsements supply no topic credit"
+    _confirm_topic(reader, last_note, "helped", name)
     _profile_work(profile_id)
     assert next(row for row in reader.get("/api/expertise").json() if row["label"] == username)["areas"] == [name]
     questions = {row["id"]: row for row in expert.get("/api/questions").json()}
@@ -696,7 +720,7 @@ def test_expertise_outcomes_route_old_questions_once_and_respect_overrides(make_
 
 def _apply_current_definition(item_id, name, alias, *, field_score=0.995, entity_score=0.995,
                               spans=None, cached=False, revision=None, rule="denotes"):
-    """Supply pinned records at the existing expensive-inference boundary."""
+    """Supply synthetic current records at the expensive-inference boundary."""
     from app.db import SessionLocal
     from sqlalchemy import text
     from app.ml import adapter, policy, syntax
@@ -727,6 +751,7 @@ def _apply_current_definition(item_id, name, alias, *, field_score=0.995, entity
                           "syntax_rule_revision": revision or syntax.REVISION,
                           "alias_model_revision": models["extractor"]["revision"],
                           "syntax_model_revision": models["syntax"]["revision"]}]}
+            result = current_synthetic_result(result)
         adapter.apply_source(db, "item", item_id, source, result, *metadata)
         db.commit()
 

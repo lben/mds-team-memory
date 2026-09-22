@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { api, type Item } from '../api'
+import { nextTick, ref, watch } from 'vue'
+import { api, type Item, type TopicFeedbackContext } from '../api'
 import { knowledgeRevision, store } from '../store'
 import AskModal from './AskModal.vue'
 import { useAsk } from '../ask'
+import HelpfulActions from './HelpfulActions.vue'
+import TopicCreditPanel from './TopicCreditPanel.vue'
 
 interface QuestionDetail extends Item {
   answers: Item[]
@@ -22,10 +24,19 @@ const answerDraft = ref('')
 // The draft is only cleared once the server replies, so without this an
 // impatient second click posts the same answer twice.
 const busy = ref(false)
+const topicAnswerId = ref<string | null>(null)
+const acceptedTopics = ref<TopicFeedbackContext | null>(null)
+let feedbackTrigger: HTMLElement | null = null
 
 async function loadDetail() {
   try {
     detail.value = await api.get<QuestionDetail>(`/api/questions/${props.question.id}`)
+    acceptedTopics.value = null
+    if (detail.value.is_mine && detail.value.accepted_answer_id) {
+      const answerId = detail.value.accepted_answer_id
+      const feedback = await api.get<TopicFeedbackContext>(`/api/items/${answerId}/topic-feedback`)
+      if (detail.value?.accepted_answer_id === answerId) acceptedTopics.value = feedback
+    }
   } catch (e) {
     store.fail(e, 'Could not open that question')
   }
@@ -52,18 +63,26 @@ async function postAnswer() {
   }
 }
 
-async function accept(answer: Item) {
-  if (busy.value) return
-  busy.value = true
-  try {
-    await api.post(`/api/questions/${props.question.id}/accept`, { answer_id: answer.id })
+function openTopicFeedback(answer: Item, event: Event) {
+  feedbackTrigger = event.currentTarget as HTMLElement
+  topicAnswerId.value = answer.id
+}
+
+async function closeTopicFeedback() {
+  topicAnswerId.value = null
+  await nextTick()
+  feedbackTrigger?.focus()
+}
+
+async function topicFeedbackSaved() {
+  const newlyAccepted = !detail.value?.accepted_answer_id
+  await loadDetail()
+  emit('changed')
+  if (newlyAccepted) {
     store.notify('Answer accepted')
-    await loadDetail()
-    emit('changed')
-  } catch (e) {
-    store.fail(e, 'Could not accept the answer')
-  } finally {
-    busy.value = false
+    topicAnswerId.value = null
+    await nextTick()
+    document.getElementById(`accepted-feedback-${props.question.id}`)?.focus()
   }
 }
 
@@ -158,26 +177,39 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
         <p>{{ answer.body }}</p>
         <div class="meta"><span>{{ answer.helped }} Helpful marks</span></div>
         <div class="result-actions">
-          <button
-            class="btn small"
-            :class="{ success: answer.marked_helped }"
-            :disabled="answer.is_mine"
-            @click="store.markHelped(answer)"
-          >
-            {{ answer.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
-          </button>
+          <HelpfulActions :item="answer" @changed="emit('changed')" />
           <button
             v-if="detail.is_mine && !detail.accepted_answer_id"
             class="btn small"
             data-testid="accept-answer"
-            @click="accept(answer)"
+            @click="openTopicFeedback(answer, $event)"
           >
             Accept answer
           </button>
+          <button
+            v-if="detail.is_mine && detail.accepted_answer_id === answer.id"
+            :id="`accepted-feedback-${question.id}`"
+            class="btn small"
+            data-testid="edit-accepted-topics"
+            @click="openTopicFeedback(answer, $event)"
+          >Edit topic feedback</button>
           <button v-if="!answer.is_mine && !answer.endorsed_by_me && answer.author_verified" class="btn small" @click="store.endorse(answer)">
-            Endorse as expert
+            Endorse contribution
           </button>
         </div>
+        <p v-if="detail.is_mine && answer.id === detail.accepted_answer_id && acceptedTopics" class="muted" data-testid="accepted-topic-summary">
+          <template v-if="acceptedTopics.feedback.accepted.some(t => t.state === 'current')">Resolved topics: {{ acceptedTopics.feedback.accepted.filter(t => t.state === 'current').map(t => t.name).join(', ') }}</template>
+          <template v-else-if="acceptedTopics.feedback.accepted.some(t => t.state === 'stale')">The answer or topic changed. Topic feedback needs confirmation.</template>
+          <template v-else>Accepted · no topic confirmed</template>
+        </p>
+        <TopicCreditPanel
+          v-if="topicAnswerId === answer.id"
+          :item-id="answer.id"
+          kind="accepted"
+          :accept-question-id="!detail.accepted_answer_id ? detail.id : undefined"
+          @close="closeTopicFeedback"
+          @saved="topicFeedbackSaved"
+        />
       </div>
 
       <div class="answer-compose">

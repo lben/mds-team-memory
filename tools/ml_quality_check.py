@@ -27,6 +27,9 @@ import threading
 import time
 import traceback
 
+import ml_effect_check
+import ml_feedback_check
+
 
 FIXTURE_SHA256 = "d5621a5bc88fa67a341b0750bf0fe78d8eb8bcc1d96c71047cdbc37c1cd17289"
 CATEGORIES = ("concepts", "aliases", "relationships", "expertise")
@@ -95,6 +98,8 @@ def load_cases(path, expected_sha256=None):
             for action in case.get("actions", []):
                 if type(action["post"]) is not int or not 0 <= action["post"] < len(case["posts"]):
                     raise ValueError("An action must reference an existing post")
+            ml_feedback_check.validate(case)
+            ml_effect_check.validate(case)
     else:
         raise ValueError("Unsupported evaluation corpus version")
     return raw, corpus
@@ -206,8 +211,18 @@ def request(client, method, path, trace, *, expected=200, **kwargs):
     return response.json()
 
 
-def create_posts(case, clients, trace, after_post=None):
+def create_posts(case, clients, trace, after_post=None, after_feedback=None):
     posts = []
+
+    def finish_post(index):
+        if after_post:
+            after_post(index)
+        for action in case.get("feedback", []):
+            if action["after_post"] == index:
+                ml_feedback_check.apply(action, posts, clients, trace, request)
+                if after_feedback:
+                    after_feedback(index)
+
     for index, post in enumerate(case["posts"]):
         client = clients[post["actor"]]
         if post["visibility"] == "private":
@@ -217,8 +232,7 @@ def create_posts(case, clients, trace, after_post=None):
                           json={"name": f"Evaluation private note {index + 1}"})
             request(client, "PUT", f"/api/scratchpad/{pad['id']}", trace, json={"content": post["body"]})
             posts.append({"id": pad["id"], "storage_kind": "scratchpad", "actor": post["actor"]})
-            if after_post:
-                after_post(index)
+            finish_post(index)
             continue
         if post["kind"] == "note":
             item = request(client, "POST", "/api/capture", trace, data={"body": post["body"]})["item"]
@@ -237,14 +251,16 @@ def create_posts(case, clients, trace, after_post=None):
             parent = posts[post["parent"]]
             request(clients[parent["actor"]], "POST", f"/api/questions/{parent['id']}/accept", trace,
                     json={"answer_id": item["id"]})
-        if after_post:
-            after_post(index)
+        finish_post(index)
     return posts
 
 
 def apply_actions(case, posts, clients, trace):
     for action in case.get("actions", []):
         post = posts[action["post"]]
+        if action["type"] == "topic_feedback":
+            ml_feedback_check.apply(action, posts, clients, trace, request)
+            continue
         client = clients[post["actor"]]
         if post["storage_kind"] != "item":
             raise ValueError("Frozen edit/delete cases must refer to public items")
@@ -311,6 +327,8 @@ def observe(case, posts, clients, reader, labels, trace):
         terms = [{"name": row.display, "concept_id": row.concept_id, "is_canonical": row.is_canonical}
                  for row in effective.terms(db) if row.concept_id in by_id]
     names = {term["name"] for term in terms}
+    names.update(check["query"] for values in case.get("effects", {}).values()
+                 for check in values if check["kind"] == "search_items")
     for category in CATEGORIES:
         for key in (category, "absent_" + category):
             for assertion in case["expect"][key]:
@@ -339,10 +357,19 @@ def observe(case, posts, clients, reader, labels, trace):
             route = "questions" if case["posts"][index]["kind"] == "question" else "items"
             content = request(reader, "GET", f"/api/{route}/{post['id']}", trace,
                               expected=404 if post.get("deleted") else 200)
-        details.append({"post": index, "storage_kind": post["storage_kind"], "response": content})
+        details.append({"post": index, "storage_kind": post["storage_kind"],
+                        "status": 404 if post.get("deleted") else 200, "response": content})
+    effect_actors = {check["actor"] for values in case.get("effects", {}).values()
+                     for check in values if "actor" in check}
+    if case.get("routing_suppression"):
+        effect_actors.add(case["routing_suppression"]["actor"])
+    questions = {actor: request(clients[actor], "GET", "/api/questions", trace) for actor in sorted(effect_actors)}
+    notifications = {actor: request(clients[actor], "GET", "/api/notifications", trace)
+                     for actor in sorted(effect_actors)}
     return {"concepts": concepts, "terms": terms, "aliases": aliases, "relationships": claims,
             "expertise": expertise, "graph": graph, "link_evidence": evidence,
             "details": details, "searches": searches,
+            "actors_by_label": labels, "questions_by_actor": questions, "notifications_by_actor": notifications,
             "revision": request(reader, "GET", "/api/ml/revision", trace)}
 
 
@@ -467,7 +494,8 @@ def run_case(case, source_root, models, directory, inference, version=1):
     try:
         app, path, engine = case_database(source_root, directory)
         actors = sorted({post["actor"] for post in case["posts"]}
-                        | {actor for post in case["posts"] for actor in post.get("helped_by", [])})
+                        | {actor for post in case["posts"] for actor in post.get("helped_by", [])}
+                        | ml_feedback_check.actors(case))
         with ExitStack() as stack:
             clients = {actor: stack.enter_context(TestClient(app)) for actor in actors}
             labels = {}
@@ -483,7 +511,11 @@ def run_case(case, source_root, models, directory, inference, version=1):
             def after_post(index):
                 post_drains.append({"post": index, **drain(path, models, inference, f"post_{index + 1}")})
 
-            posts = create_posts(case, clients, result["api_trace"], after_post)
+            def after_feedback(index):
+                post_drains.append({"post": index, "feedback": True,
+                                    **drain(path, models, inference, f"feedback_after_{index + 1}")})
+
+            posts = create_posts(case, clients, result["api_trace"], after_post, after_feedback)
             result["posts"] = posts
             result["private_note_mapping"] = "Private notes use the public scratchpad API; no private item creation API exists."
             result["phases"]["initial"] = {"post_drains": post_drains,
@@ -491,13 +523,19 @@ def run_case(case, source_root, models, directory, inference, version=1):
                 "inference_calls": sum(row["inference_calls"] for row in post_drains)}
             initial = observe(case, posts, clients, reader, labels, result["api_trace"])
             result["phases"]["initial"]["observed"] = initial
+            result["effect_checks"] = ml_effect_check.grade(case, "initial", initial, posts)
             diagnostics(path, directory / "initial-diagnostics.json")
             final = initial
             if case.get("actions"):
                 apply_actions(case, posts, clients, result["api_trace"])
+                if case.get("effects", {}).get("before_replay"):
+                    immediate = observe(case, posts, clients, reader, labels, result["api_trace"])
+                    result["phases"]["before_replay"] = {"observed": immediate}
+                    result["effect_checks"].extend(ml_effect_check.grade(case, "before_replay", immediate, posts))
                 result["phases"]["after_actions"] = drain(path, models, inference, "after_actions")
                 final = observe(case, posts, clients, reader, labels, result["api_trace"])
                 result["phases"]["after_actions"]["observed"] = final
+                result["effect_checks"].extend(ml_effect_check.grade(case, "after_actions", final, posts))
                 targets = (case.get("retract", {}) if version == 2 else
                            {category: case["expect"]["absent_" + category] for category in CATEGORIES})
                 result["retractions"] = [
@@ -508,6 +546,18 @@ def run_case(case, source_root, models, directory, inference, version=1):
             result["checks"] = grade(case, final, version)
             if version == 2:
                 result["prediction_audit"] = audit_predictions(case, final)
+            # The new question challenge is engineering evidence only. Freeze
+            # quality at after_actions; its predictions never enlarge quality N.
+            challenge = case.get("routing_suppression")
+            if challenge:
+                target = posts[challenge["challenge_question"]]
+                request(clients[target["actor"]], "PUT", f"/api/items/{target['id']}", result["api_trace"],
+                        json={"body": challenge["body"]})
+                result["phases"]["after_challenge"] = drain(path, models, inference, "after_challenge")
+                challenged = observe(case, posts, clients, reader, labels, result["api_trace"])
+                result["phases"]["after_challenge"]["observed"] = challenged
+                result["effect_checks"].extend(ml_effect_check.grade(case, "after_challenge", challenged, posts))
+                result["routing_suppression"] = ml_effect_check.routing_suppression(case, result["phases"], posts)
             if result.get("retractions"):
                 if version == 2:
                     for row in result["retractions"]:
@@ -519,6 +569,10 @@ def run_case(case, source_root, models, directory, inference, version=1):
                     demonstrated = all(withdrawal_status(row) == "DEMONSTRATED" for row in result["retractions"])
                     result["retraction_status"] = "DEMONSTRATED" if demonstrated else "NOT_DEMONSTRATED"
             result["status"] = case_status(result["checks"], result.get("retractions", []), version)
+            if any(not row["passed"] for row in result["effect_checks"]):
+                result["status"] = "FAIL"
+            if result.get("routing_suppression", {}).get("status") == "FAIL":
+                result["status"] = "FAIL"
             if any(not row["correct"] for rows in result.get("prediction_audit", {}).values() for row in rows):
                 result["status"] = "FAIL"
             inference.check_memory()
@@ -629,12 +683,12 @@ def lifecycle_quality(results):
                      "application scenario. Untriggered checks establish final absence, not withdrawal."}
 
 
-def evaluation_status(quality, lifecycle):
-    if "FAIL" in (quality, lifecycle):
+def evaluation_status(quality, lifecycle, effects="NOT_DEMONSTRATED"):
+    if "FAIL" in (quality, lifecycle, effects):
         return "FAIL"
     if quality != "PASS":
         return quality
-    return "PASS" if lifecycle == "PASS" else "INCOMPLETE"
+    return "PASS" if lifecycle == "PASS" and effects == "PASS" else "INCOMPLETE"
 
 
 def main(argv=None):
@@ -675,14 +729,17 @@ def main(argv=None):
     output = Path(tempfile.mkdtemp(prefix="ml-quality-", dir=args.output_parent)).resolve()
     (output / "cases.json").write_bytes(fixture_raw)
     (output / "models.json").write_bytes(manifest_raw)
-    source_files = sorted((source_root / "backend/app").rglob("*.py")) + sorted((source_root / "backend/alembic").rglob("*.py"))
+    source_files = (sorted((source_root / "backend/app").rglob("*.py"))
+                    + sorted((source_root / "backend/alembic").rglob("*.py"))
+                    + [Path(__file__).resolve(), Path(ml_effect_check.__file__).resolve(),
+                       Path(ml_feedback_check.__file__).resolve()])
     report = {"status": "RUNNING", "output": str(output), "fixture_sha256": fixture_sha256,
               "fixture_purpose": corpus["purpose"], "training": False,
               "models_manifest_sha256": hashlib.sha256(manifest_raw).hexdigest(),
               "model_pins": {role: {key: entry.get(key) for key in ("repository", "revision", "license")}
                              for role, entry in manifest["models"].items()},
               "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-              "source_hash_scope": "Python files under backend/app and backend/alembic; dependencies and other files excluded",
+              "source_hash_scope": "Python files under backend/app and backend/alembic plus quality runner, effect checker, and feedback helper; dependencies and other files excluded",
               "source_sha256": {str(path.relative_to(source_root)): hashlib.sha256(path.read_bytes()).hexdigest()
                                 for path in source_files},
               "runtime": {"python": sys.version, "sqlite": sqlite3.sqlite_version,
@@ -740,11 +797,13 @@ def main(argv=None):
             gate, decisions = release_quality(corpus, report["cases"])
             report["statistical_release_gate"] = gate
             report["lifecycle_gate"] = lifecycle_quality(report["cases"])
+            report["product_effects_gate"] = ml_effect_check.summarize(corpus, report["cases"])
             with (output / "decisions.jsonl").open("w", encoding="utf-8") as stream:
                 for row in decisions:
                     stream.write(json.dumps(row) + "\n")
             if report["status"] != "ERROR":
-                report["status"] = evaluation_status(gate["status"], report["lifecycle_gate"]["status"])
+                report["status"] = evaluation_status(gate["status"], report["lifecycle_gate"]["status"],
+                                                     report["product_effects_gate"]["status"])
         write_json(output / "report.json", report)
     print(json.dumps({"status": report["status"], "report": str(output / "report.json")}), flush=True)
     return {"PASS": 0, "FAIL": 1, "INCOMPLETE": 2, "INSUFFICIENT_EVIDENCE": 2, "ERROR": 2}[report["status"]]

@@ -1,4 +1,4 @@
-"""Public graph behavior with real persisted model findings and source changes."""
+"""Public graph behavior with explicitly synthetic persisted claims and edits."""
 
 import json
 import uuid
@@ -24,13 +24,17 @@ def automated_graph(admin_client):
 
 
 def seed_claim(src, dst, items, *, kind="relationship", predicate="feeds", link_id=None, score=0.8):
+    from ml_synthetic_records import current_synthetic_metadata, select_synthetic_pipeline
     from app.db import SessionLocal
     from app.models import RELATED_TO_ID, Relationship, utcnow
     from app.ml.models import Evidence, Finding, Source
+    from app.ml import identity, relation_syntax, syntax
     from app.ml.policy import VERSION
     from app.ml.sources import finding_key, snapshot
 
     with SessionLocal() as db:
+        metadata = current_synthetic_metadata()
+        select_synthetic_pipeline(db, metadata)
         link = db.get(Relationship, link_id) if link_id else Relationship(
             src_kind="concept", src_id=src["id"], dst_kind="concept", dst_id=dst["id"],
             relationship_type_id=RELATED_TO_ID, state="suggested")
@@ -45,12 +49,18 @@ def seed_claim(src, dst, items, *, kind="relationship", predicate="feeds", link_
         for item in items:
             source = snapshot(db, "item", item["id"])
             db.merge(Source(kind="item", id=source.id, content_hash=source.content_hash, valid=True,
-                            model_version="fixture-model", updated_at=utcnow()))
+                            model_version=metadata[0], updated_at=utcnow(),
+                            result=json.dumps({"relation_guard_revision": relation_syntax.REVISION,
+                                               "alias_scope_contract": identity.scope_contract(),
+                                               "definitions_indexed": 2,
+                                               "conflict_coverage_revision": syntax.CONFLICT_REVISION,
+                                               "conflict_definitions": []})))
             db.add(Evidence(key=finding_key("evidence", key, source.id), finding_key=key,
                             source_kind="item", source_id=source.id, source_hash=source.content_hash,
                             group_key=source.group_key, author_id=source.author_id, start=0, end=len(source.text),
-                            raw_score=score, polarity="positive", model_version="fixture-model",
+                            raw_score=score, polarity="positive", model_version=metadata[0],
                             features=json.dumps({"text_hash": source.text_hash, "literal_support": True,
+                                                 "relation_guard_revision": relation_syntax.REVISION,
                                                  "assertion_allowed": True, "locator": "", "origin": "note"})))
         db.commit()
         return link.id
@@ -60,6 +70,33 @@ def capture(client, body):
     result = client.post("/api/capture", data={"body": body})
     assert result.status_code == 200
     return result.json()["item"]
+
+
+@pytest.mark.parametrize("polarity", ["positive", "negative"])
+@pytest.mark.parametrize("missing_support", ["literal_support", "assertion_allowed"])
+def test_unqualified_records_are_context_not_counted_support_or_conflict(
+        automated_graph, make_client, polarity, missing_support):
+    from app.db import SessionLocal
+    from app.ml.models import Evidence
+
+    left, right, _ = automated_graph
+    owners = [make_client() for _ in range(3)]
+    items = [capture(owner, body) for owner, body in zip(owners, (
+        f"{left['name']} feeds {right['name']} through the morning import pipeline.",
+        f"The independent warehouse deployment transfers records from {left['name']} to {right['name']}.",
+        f"A pending question mentions {left['name']} beside {right['name']}; no factual support is supplied."))]
+    link_id = seed_claim(left, right, items)
+    with SessionLocal() as db:
+        row = db.query(Evidence).filter_by(source_kind="item", source_id=items[-1]["id"]).one()
+        row.polarity = polarity
+        row.features = json.dumps({**json.loads(row.features), missing_support: False})
+        db.commit()
+    detail = owners[0].get(f"/api/graph/links/{link_id}/evidence").json()
+    claim = next(row for row in detail["claims"] if row["predicate"] == "feeds")
+    assert claim["state"] == "active" and claim["support_count"] == 2 and not claim["conflicts"]
+    assert detail["summary"]["support_count"] == 2
+    context = next(row for row in claim["sources"] if row["source_id"] == items[-1]["id"])
+    assert context["polarity"] == polarity and context[missing_support] is False
 
 
 def test_graph_live_claims_direction_weak_toggle_and_source_retraction(automated_graph, make_client):

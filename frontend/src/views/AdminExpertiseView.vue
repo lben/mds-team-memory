@@ -205,7 +205,9 @@ onMounted(loadState)
         <div class="card card-pad">
           <h3>How tagging works</h3>
           <p class="muted" style="font-size: 12px; margin-top: 6px; line-height: 1.5">
-            Team contributions provide evidence for concepts, topic matches, relationships, and expertise.
+            Team contributions provide evidence for concepts, topic matches, and relationships.
+            Explicit feedback about topics resolved or helped supports automatic expertise.
+            Broad helpful marks and endorsements still count toward contributor impact.
             Qualified findings take effect automatically. Use the controls above to keep a decision fixed,
             correct it, or suppress it. The knowledge graph is on the Home page.
           </p>

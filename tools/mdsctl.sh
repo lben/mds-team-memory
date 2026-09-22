@@ -66,6 +66,64 @@ current_release() {
   readlink "$CURRENT"
 }
 
+# This check belongs to the controller, not the target release's deploylib:
+# a rollback target can predate the schema and have no compatibility check.
+# Read only schema metadata and literal capability declarations; never import
+# target application code or restore an older database over human writes.
+require_compatible_database() {
+  local release interpreter
+  release="$1"
+  [ -d "$release" ] || die "$release does not exist"
+  if [ -x "$release/.venv/bin/python" ]; then
+    interpreter="$release/.venv/bin/python"
+  elif [ -x "$CURRENT/.venv/bin/python" ]; then
+    interpreter="$CURRENT/.venv/bin/python"
+  else
+    interpreter="$("$UV" python find --offline --no-python-downloads "$PYTHON_VERSION")" \
+      || die "cannot inspect database compatibility without an installed Python"
+  fi
+  "$interpreter" -I - "$release" <<'PY' || die "database compatibility check failed; no process or release link was changed by this command"
+import ast
+import os
+from pathlib import Path
+import sqlite3
+import sys
+
+release = Path(sys.argv[1]).resolve()
+url = os.environ.get("MDS_DATABASE_URL", "sqlite:///" + str(Path(os.environ["MDS_DATA_DIR"]) / "mds.sqlite3"))
+if not url.startswith("sqlite:///") or "?" in url or url.endswith(":memory:"):
+    sys.exit("Compatibility check requires a file-backed sqlite:/// database URL without query parameters.")
+database = Path(url[len("sqlite:///"):])
+if not database.is_absolute():
+    database = release / database
+try:
+    if not database.exists():
+        sys.exit(0)
+    with sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True, timeout=5) as db:
+        explicit_topics = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='topic_confirmations'").fetchone()
+    if explicit_topics:
+        def literal(path, name):
+            for node in ast.parse(path.read_text(encoding="utf-8")).body:
+                if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == name for target in node.targets):
+                    return ast.literal_eval(node.value)
+            return None
+
+        contract = literal(release / "backend/app/topic_feedback.py", "CONTRACT_VERSION")
+        migration = literal(release / "backend/alembic/versions/0015_explicit_topic_feedback.py", "revision")
+        if contract != "explicit-topic-feedback-v1" or migration != "0015":
+            raise ValueError("target does not declare the explicit-topic-feedback-v1 / 0015 contract")
+except (OSError, sqlite3.Error, ValueError, SyntaxError) as error:
+    sys.exit("Cannot use release {} with database {}: {}. Choose a release supporting explicit topic feedback; preserve the shared database and its human confirmations.".format(release.name, database, error))
+PY
+}
+
+cmd_compatible() {
+  local release
+  release="$(release_dir "${1:-}" compatible)"
+  require_compatible_database "$release"
+  echo "database is compatible with $1"
+}
+
 # The command line of a running process. /proc is always there on Linux, and
 # procps (ps) is not: a minimal RedHat install can lack it, and falling back to
 # an empty answer would make every pid look dead and start a second server.
@@ -130,6 +188,7 @@ cmd_ml_stop() {
 cmd_ml_start() {
   local release assets pid args i
   release="$(current_release)"
+  require_compatible_database "$release"
   if [ ! -f "$release/ml-runtime.json" ]; then
     running_ml_pid >/dev/null && die "a worker from another release is running; stop it first"
     echo "ML: not configured for this release"
@@ -219,13 +278,14 @@ wait_healthy() {
 }
 
 cmd_start() {
+  release="$(current_release)"
+  require_compatible_database "$release"
   if pid="$(running_pid)"; then
     health_once || die "pid $pid is running but not answering $HEALTH_URL"
     echo "already running (pid $pid)"
     cmd_ml_start
     return 0
   fi
-  release="$(current_release)"
   [ -x "$release/.venv/bin/uvicorn" ] || die "$release has no .venv; run 'setup' for it"
   rm -f "$PIDFILE"
   # nohup plus all three descriptors redirected is what keeps the server alive
@@ -277,6 +337,7 @@ cmd_stop() {
 }
 
 cmd_restart() {
+  require_compatible_database "$(current_release)"
   cmd_stop
   cmd_start
 }
@@ -362,8 +423,8 @@ cmd_setup() {
   echo "environment ready for $1"
 }
 
-# A code rollback is only honest if the schema can come back too, so the
-# database is copied while the server is stopped and before alembic runs.
+# Keep a recovery snapshot before migration. Code rollback never restores it:
+# doing so could discard human writes made after deployment.
 cmd_backup() {
   [ -n "${1:-}" ] || die "backup needs a release stamp"
   cmd_ml_stop
@@ -390,18 +451,19 @@ cmd_manage() {
 }
 
 cmd_migrate() {
+  release="$(release_dir "${1:-}" migrate)"
+  require_compatible_database "$release"
   cmd_ml_stop
   running_pid >/dev/null && die "stop the server before migration"
-  release="$(release_dir "${1:-}" migrate)"
   "$release/.venv/bin/alembic" -c "$release/backend/alembic.ini" upgrade head
   echo "migrated to the schema of $1"
 }
 
 cmd_activate() {
+  release="$(release_dir "${1:-}" activate)"
+  require_compatible_database "$release"
   cmd_ml_stop
   running_pid >/dev/null && die "stop the server before activation"
-  release="$(release_dir "${1:-}" activate)"
-  [ -d "$release" ] || die "$release does not exist"
   # Going back to the release 'previous' already names is a rollback: keep it
   # where it is. Rotating would make the release we are abandoning — typically
   # one that just failed to start — the next rollback target.
@@ -416,6 +478,7 @@ cmd_activate() {
 cmd_rollback() {
   [ -L "$PREVIOUS" ] || die "no previous release to roll back to"
   target="$(basename "$(readlink "$PREVIOUS")")"
+  require_compatible_database "$(release_dir "$target" rollback)"
   cmd_stop
   cmd_activate "$target"
   cmd_start
@@ -424,6 +487,7 @@ cmd_rollback() {
 cmd_preflight() {
   local release interpreter
   release="$(current_release)"
+  require_compatible_database "$release"
   interpreter="$("$UV" python find --offline --no-python-downloads "$PYTHON_VERSION")"
   "$interpreter" "$release/tools/deploylib.py" preflight --root "$ROOT" --release "$release"
 }
@@ -451,7 +515,7 @@ cmd_prune() {
 command="${1:-}"
 [ $# -gt 0 ] && shift
 case "$command" in
-  start|stop|restart|status|health|logs|releases|manage|unpack|setup|backup|migrate|activate|rollback|prune|ml-start|ml-stop|ml-status|ml-logs|preflight)
+  start|stop|restart|status|health|logs|releases|manage|unpack|setup|backup|migrate|activate|rollback|prune|ml-start|ml-stop|ml-status|ml-logs|preflight|compatible)
     "cmd_${command//-/_}" "$@"
     ;;
   *)

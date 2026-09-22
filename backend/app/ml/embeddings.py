@@ -251,6 +251,8 @@ def nearest(db, vector, generation, exclude_source=None, limit=8):
 
 def finish_generation(db):
     """Advance one bounded completion/pruning batch; True means work advanced."""
+    from . import relationship_grounding
+
     budget = _budget(db)
     staging = budget["staging_generation"]
     if staging:
@@ -272,6 +274,7 @@ def finish_generation(db):
             result = json.loads(row["result"]) if row["result"] else {}
             if (not row["valid"] or result.get("embedding_version") != staging
                     or row["model_version"] != model_version
+                    or not relationship_grounding.current_result(result)
                     or result.get("embedding_count") != row["stored_count"]):
                 return False
         if page:

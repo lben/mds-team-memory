@@ -7,6 +7,7 @@ import ItemDetailModal from '../components/ItemDetailModal.vue'
 import KnowledgeGraph from '../components/KnowledgeGraph.vue'
 import QuestionCard from '../components/QuestionCard.vue'
 import SuccessModal from '../components/SuccessModal.vue'
+import HelpfulActions from '../components/HelpfulActions.vue'
 import { knowledgeRevision, store } from '../store'
 
 interface PassageHit {
@@ -289,9 +290,7 @@ onMounted(async () => {
                 <span>{{ item.helped }} Helpful marks</span>
               </div>
               <div class="result-actions">
-                <button class="btn small" :class="{ success: item.marked_helped }" :disabled="item.is_mine" @click="store.markHelped(item)">
-                  {{ item.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
-                </button>
+                <HelpfulActions :item="item" />
                 <button v-if="item.kind === 'answer'" class="btn small" @click="item.parent_id && expandQuestion(item.parent_id)">
                   Open question
                 </button>
@@ -349,9 +348,7 @@ onMounted(async () => {
                 <span>{{ item.helped }} Helpful marks</span>
               </div>
               <div class="result-actions">
-                <button class="btn small" :class="{ success: item.marked_helped }" :disabled="item.is_mine" @click="store.markHelped(item)">
-                  {{ item.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
-                </button>
+                <HelpfulActions :item="item" />
                 <button v-if="item.kind === 'answer'" class="btn small" @click="item.parent_id && expandQuestion(item.parent_id)">
                   Open question
                 </button>

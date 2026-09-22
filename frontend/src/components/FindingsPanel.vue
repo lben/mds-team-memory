@@ -13,7 +13,11 @@ interface Finding {
   payload: Record<string, string>
   policy_version: string
 }
-interface Evidence { key: string; source_kind: string; source_id: string; quote?: string; locator?: string; originals?: number; actors?: string[]; accepted_answers?: number }
+interface Evidence {
+  key: string; source_kind: string; source_id: string; quote?: string; locator?: string
+  originals?: number; actors?: string[]; accepted_answers?: number
+  topic_confirmations?: { id: string; kind: 'helped' | 'accepted'; item_id: string; concept_id: string }[]
+}
 const props = defineProps<{ concepts: { id: string; name: string }[]; profiles: { id: string; label: string }[] }>()
 const emit = defineEmits<{ changed: [] }>()
 const state = ref('active')
@@ -183,7 +187,14 @@ onBeforeUnmount(() => { listRequest++; clearSelection() })
       <p v-if="!selected.evidence.length" class="muted">No current supporting evidence. A manual decision can remain fixed.</p>
       <div v-for="entry in selected.evidence" :key="entry.key" class="evidence-entry">
         <blockquote v-if="entry.quote">{{ entry.quote }}</blockquote>
-        <p v-else-if="entry.actors">{{ entry.originals }} contributions · {{ entry.actors.length }} independent people · {{ entry.accepted_answers }} accepted answers</p>
+        <p v-else-if="entry.actors">Confirmed topic feedback: {{ entry.originals }} contribution groups · {{ entry.actors.length }} accounts · {{ entry.accepted_answers }} accepted answers</p>
+        <ul v-if="entry.topic_confirmations?.length">
+          <li v-for="confirmation in entry.topic_confirmations" :key="confirmation.id">
+            <router-link :to="{ path: '/', query: { item: confirmation.item_id } }">
+              {{ confirmation.kind === 'accepted' ? 'Accepted topic confirmation' : 'Helpful topic confirmation' }}
+            </router-link>
+          </li>
+        </ul>
         <span class="muted">{{ entry.locator }}</span>
         <router-link v-if="entry.source_kind === 'item'" :to="{ path: '/', query: { item: entry.source_id } }">Open contribution</router-link>
       </div>

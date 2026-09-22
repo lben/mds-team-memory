@@ -4,7 +4,7 @@ import uuid
 
 import pytest
 
-from test_ml_automation import automation, _apply, _capture, _profile_work, _tags
+from test_ml_automation import automation, _apply, _capture, _confirm_topic, _profile_work, _tags
 
 
 @pytest.mark.parametrize("change", ["missing", "policy", "syntax", "schema", "pipeline"])
@@ -29,6 +29,7 @@ def test_expertise_projection_withholds_changed_generation_until_recomputed(
     _apply(answer, [topic])
     cid = _tags(expert, answer)[topic]
     assert asker.post(f'/api/questions/{question}/accept', json={'answer_id': answer}).status_code == 200
+    _confirm_topic(asker, answer, 'accepted', topic)
     items = [answer]
     for body in (f'I restored the saved clock configuration on {topic}.',
                  f'I calibrated the output voltage of {topic} against a reference meter.'):
@@ -36,6 +37,7 @@ def test_expertise_projection_withholds_changed_generation_until_recomputed(
         items.append(item)
         _apply(item, [topic])
         assert peer.post(f'/api/items/{item}/helped').status_code == 200
+        _confirm_topic(peer, item, 'helped', topic)
     _profile_work(profile['id'])
     key = finding_key('expertise', profile['id'], cid)
 

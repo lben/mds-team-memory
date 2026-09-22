@@ -118,6 +118,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     opened = a.locator(".question-card", has_text="opt-feed delayed").first
     expect(opened.get_by_test_id("accept-answer")).to_be_visible()
     opened.get_by_test_id("accept-answer").click()
+    opened.get_by_test_id("accept-without-topics").click()
     expect(opened).to_contain_text("ACCEPTED")
     expect(opened).to_contain_text("RESOLVED")
 

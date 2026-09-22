@@ -57,3 +57,87 @@ Detailed reproductions, isolated patches, logs and source hashes are retained in
 Each candidate experiment has a frozen plan and stop condition. A failed screen
 is retained as a failure, not repaired by changing its gold labels or lowering
 acceptance targets. Current model trials do not establish release readiness.
+
+## Follow-up implementation and verification
+
+The typed parser guard is integrated for learned positive proposals and
+entity-grounded negative vetoes. Negative vetoes carry zero confidence and
+cannot originate a positive scored relation. Full-source quotation/heading
+scope applies across model windows. The recorded parser corpus currently gives
+79/80 supported gold assertions and zero unsupported edges across 2,100 checked
+proposals; 224 focused runtime/scope tests pass. Migration 0014 and current
+source/record markers cover replay and rollback. Real-model release quality
+remains unmeasured for this candidate.
+
+Six additional reviewer probes reproduced global aliases from hypothetical or
+quoted definitions. Runtime and application boundaries now filter both role and
+lexical definitions using full-source scope. Current generation guards preserve
+manual pins and withhold obsolete automatic aliases before replay. A subsequent
+public transition test found a dependent tag surviving withdrawal of its alias;
+that published-term dependency repair remains in progress, including graph and
+expertise propagation.
+
+The first full integration run passed 503 tests with 21 failures and two errors.
+The graph/alias subset reproduced seven failures caused by incomplete synthetic
+source coverage; after fixing the fixture it passes all 15 tests. The current
+Linux worker/embedding subset passes 51 tests. These focused results do not
+replace a new full integration run after all repairs.
+
+The separate effects gate now checks actual public behavior and retained raw
+responses. An independent root review found that missing question-list results
+could certify deletion without a confirming 404 detail response; the two failing
+counterexamples and one valid-deletion control now pass. Uncertain relationship
+records remain available for inspection but do not count as supporting or
+opposing assertions. The frontend production build passes.
+
+## September 22 repair and review status
+
+The attribution finding above is addressed by deliberate, version-bound human
+canonical-topic feedback. Generic votes and broad acceptance never become topic
+credit. Automatic expertise requires two actor accounts, three original
+contribution/problem groups and one accepted-topic confirmation. These are
+account identities, not verified distinct humans. Existing factual/model quality
+requirements remain open for independent evaluation.
+
+Independent backend and product reviews exercised the API, database and compiled
+browser interface. They found and repaired nested-query correlation, canonical
+identity restoration, evidence-generation mismatch, FTS revision-trigger behavior
+and excessive item-update query work. Explicit confirmations become stale after
+source/question edits, acceptance changes, account reassignment or canonical
+identity changes, and require a new assertion to revive. Ten compiled-browser
+interaction checks and the production frontend build pass.
+
+Published-term dependencies now preserve separate evidence alternatives and
+check current ownership, source hashes and generation contracts on public reads.
+An additional ingestion-order reproduction exposed a circular concept/alias
+prerequisite. Exact scored identity certificates now supply their own mapping;
+both ingestion orders, withdrawal and restoration pass. The 42-test runtime and
+published-term sequence passes after removing obsolete synthetic test sources
+through the normal deletion path.
+
+The controller independently checks the target release against the shared
+schema before stopping processes or changing links. An incompatible rollback
+preserves both processes and human data. A database guard also prevents a stale
+worker from certifying its legacy generic-vote projection. All 27 supported-Linux
+controller/deployment checks pass; actual downgrade refusal preserves human
+confirmation rows and schema. A separate causal queue probe confirms that
+explicit off-tag topic credit recovers when its canonical concept regains support.
+No production deployment was performed.
+
+The second full Linux integration run reported 736 passes, one failure and 17
+fixture errors. Each remaining cause was identified in the isolated test database
+or test setup: two parser-unavailable fixtures retained obsolete coverage, and one
+rollback fixture bypassed the new projection contract. Corrected focused checks
+pass; a final complete run is in progress. Original failing logs are retained.
+
+Two fresh authors supplied 300 scenarios. Independent label reviewers identified
+semantic, exhaustiveness and narrative-independence problems before inference;
+separate reviewed copies are being corrected while original seals remain intact.
+The implementation candidate is frozen and its owner has not seen the new case
+contents or labels. This remains an AI-authored synthetic engineering evaluation,
+not a human study or a claim about workplace accuracy. No quality pass is claimed.
+
+Final checkpoint result: all **754 backend tests pass** in supported offline
+Linux (502.80 seconds), with no skips. The application and tests match the
+frozen candidate. Original failing integration runs remain retained. Fresh
+quality/effects evaluation is still pending independent corpus readiness.

@@ -7,7 +7,7 @@ import os
 import re
 from pathlib import Path
 
-from . import syntax
+from . import relation_syntax, syntax
 from .sources import digest
 
 
@@ -33,20 +33,11 @@ ALIAS_SCHEMA = {
     ],
 }
 ALIAS_SETTINGS = {"threshold": 0.5, "max_len": 512, "include_confidence": True, "include_spans": True}
-# These checks verify literal support for a model-extracted predicate. They do
-# not turn a high model score or co-occurrence into a factual assertion.
-CUES = {
-    "uses": (r"\b(?:use[sd]?|using|utilize[sd]?|(?:runs?|ran) on)\b", r"\b(?:used|utilized) by\b"),
-    "depends_on": (r"\b(?:depend(?:s|ed)? on|require[sd]?|(?:relies|relied|rely) on)\b", r"\brequired by\b"),
-    "part_of": (r"\b(?:part|component|module|subset) of\b", r"\b(?:include[sd]?|contain(?:s|ed)?)\b"),
-    "produces": (r"\b(?:produce[sd]?|generate[sd]?|emit(?:s|ted)?|create[sd]?|output(?:s|ted)?)\b", r"\b(?:produced|generated|emitted|created) by\b"),
-    "replaces": (r"\b(?:replace[sd]?|supersede[sd]?)\b", r"\b(?:replaced|superseded) by\b"),
-}
 NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can['’]t|doesn['’]t|don['’]t|didn['’]t|hasn['’]t|haven['’]t|hadn['’]t|isn['’]t|aren['’]t|wasn['’]t|weren['’]t)\b", re.I)
 UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
 # Bump for extraction behavior changes outside the schema, such as grounding or windowing.
-EXTRACTION_VERSION = "grounded-spans-v10"
+EXTRACTION_VERSION = "grounded-spans-v11"
 
 
 def inference_version(models):
@@ -54,7 +45,7 @@ def inference_version(models):
     roles = ["extractor", "embeddings"]
     if "syntax" in models:
         schemas.update(alias=ALIAS_SCHEMA, alias_settings=ALIAS_SETTINGS, syntax_rules=syntax.REVISION,
-                       conflict_rules=syntax.CONFLICT_REVISION)
+                       conflict_rules=syntax.CONFLICT_REVISION, relation_rules=relation_syntax.REVISION)
         roles.append("syntax")
     schema = json.dumps(schemas, sort_keys=True, separators=(",", ":"))
     fingerprint = hashlib.sha256(schema.encode()).hexdigest()[:16]
@@ -161,46 +152,15 @@ def corroborated_definitions(body, raw, proposals, offset):
                    "syntax_rules": rules, "syntax_rule_revision": syntax.REVISION}
 
 
-def relation_support(text, head, tail, predicate):
-    left, right = min(head["start"], tail["start"]), max(head["end"], tail["end"])
-    before = list(re.finditer(r"[.!?\n]", text[:left]))
-    after = re.search(r"[.!?\n]", text[right:])
-    start = before[-1].end() if before else 0
-    end = right + after.end() if after else len(text)
-    sentence = text[start:end]
-    if re.search(r"[.!?;\n]", text[left:right]):
-        return {"polarity": "uncertain", "literal_support": False, "start": start, "end": end}
-    # Entity names such as "Chute Plan" do not express speaker uncertainty.
-    context = list(sentence)
-    for span in (head, tail):
-        context[span["start"] - start:span["end"] - start] = " " * (span["end"] - span["start"])
-    context = "".join(context)
-    uncertain = ("?" in context or UNCERTAIN.search(context)
-                 or re.search(r"\b(?:unless|whether|when|whenever|until|provided|assuming|suppos\w*)\b", context, re.I))
-    # Negation in a separate semicolon clause does not contradict this claim.
-    clause_start = context.rfind(";", 0, left - start) + 1
-    clause_end = context.find(";", right - start)
-    clause = context[clause_start:clause_end if clause_end >= 0 else len(context)]
-    polarity = "uncertain" if uncertain else "negative" if NEGATION.search(clause) else "positive"
-    forward = head["start"] < tail["start"]
-    middle = text[head["end"]:tail["start"]] if forward else text[tail["end"]:head["start"]]
-    cue = CUES[predicate][0 if forward else 1]
-    match = re.search(cue, middle, re.I)
-    literal_support = bool(match)
-    inverse = re.search(CUES[predicate][1], middle, re.I)
-    if forward and inverse:
-        literal_support = bool(predicate == "part_of" and match
-                               and inverse.group().casefold() in {"included", "contained"}
-                               and re.fullmatch(r"\s+as\s+(?:(?:a|an|the)\s+)?",
-                                                middle[inverse.end():match.start()], re.I))
-    if match and match.group().casefold().endswith("ed") and re.search(
-            r"\b(?:(?:is|are|was|were)(?:n['’]t)?|be|been|being|gets?|got)\s+(?:(?:not|never|no longer|\w+ly)\s+)*$",
-            middle[:match.start()], re.I):
-        literal_support = False
-    return {"polarity": polarity, "literal_support": literal_support, "start": start, "end": end}
+def relation_support(text, head, tail, predicate, *, guard=None):
+    """Scores do not establish argument or assertion scope; a parser is required."""
+    if guard is not None:
+        return guard.support(head, tail, predicate)
+    return {"polarity": "uncertain", "literal_support": False,
+            "start": min(head["start"], tail["start"]), "end": max(head["end"], tail["end"])}
 
 
-def repair_relation_spans(text, head, tail, predicate, start, end):
+def repair_relation_spans(text, head, tail, predicate, start, end, *, guard=None):
     """Repair only an unambiguous repeated name in a model-proposed relation."""
     left, right = min(head["start"], tail["start"]), max(head["end"], tail["end"])
     if not re.search(r"[.!?\n]", text[left:right]):
@@ -220,28 +180,32 @@ def repair_relation_spans(text, head, tail, predicate, start, end):
     first, second = next(iter(candidates.values()))
     earlier, later = sorted((first, second), key=lambda span: span["start"])
     middle = text[earlier["end"]:later["start"]]
-    support = relation_support(text, first, second, predicate)
+    support = relation_support(text, first, second, predicate, guard=guard)
     if (not support["literal_support"] or re.search(r"[,;:]|\b(?:and|or|but|while|although|because|that|which|who)\b", middle, re.I)
             or (support["polarity"] == "negative" and not NEGATION.search(middle))):
         return head, tail
     return first, second
 
 
-def negative_relations(text, spans):
-    """A direct negative phrase can veto a claim, without a relation score."""
-    prefix = r"(?:(?:does|do|did|has|have|had|is|are|was|were) not|(?:doesn['’]t|don['’]t|didn['’]t|hasn['’]t|haven['’]t|hadn['’]t|isn['’]t|aren['’]t|wasn['’]t|weren['’]t)|(?:is |are |was |were )?(?:never|no longer))"
+def negative_relations(text, spans, *, guard=None):
+    """Grounded entity pairs can supply parser-verified vetoes, never confidence.
+
+    The shared window parse already indexes exact directed arguments. Check the
+    five supported predicates in both directions, including passive, copular,
+    and coordinated negatives that a phrase-between-names check would miss.
+    Only the entity pass supplies endpoints; positive relations still require
+    an independent scored proposal from the learned relation extractor.
+    """
+    if guard is None:
+        return
     ordered = sorted(spans, key=lambda span: (span["start"], span["end"]))
     for index, first in enumerate(ordered):
         for second in ordered[index + 1:]:
             if second["start"] < first["end"] or normalize(first["name"]) == normalize(second["name"]):
                 continue
-            middle = text[first["end"]:second["start"]]
-            for predicate, cues in CUES.items():
-                for direction, cue in enumerate(cues):
-                    if not re.fullmatch(rf"\s*{prefix}\s+(?:{cue})\s*(?:(?:a|an|the)\s+)?", middle, re.I):
-                        continue
-                    head, tail = (first, second) if direction == 0 else (second, first)
-                    support = relation_support(text, head, tail, predicate)
+            for predicate in RELATIONS:
+                for head, tail in ((first, second), (second, first)):
+                    support = relation_support(text, head, tail, predicate, guard=guard)
                     if support["polarity"] != "negative" or not support["literal_support"]:
                         continue
                     yield {"head": head, "tail": tail, "predicate": predicate, "score": 0.0, **support}
@@ -285,8 +249,13 @@ class LocalModels:
     def analyze(self, text):
         concepts, endpoints, relations, chunks = {}, {}, {}, []
         definitions, conflicts = [], []
+        source_scope = relation_syntax.SourceScope(text) if self.syntax is not None else None
+        parser_ran = False
         for start, end, body in windows(text, self.tokenizer, 192):
             window_spans = {}
+            parsed = self.syntax(body) if self.syntax is not None else None
+            guard = relation_syntax.prepare(parsed, text, start, source_scope=source_scope) if parsed is not None else None
+            parser_ran |= parsed is not None
             entities = self.extractor.extract(body, self.entity_schema, include_confidence=True,
                                               include_spans=True, max_len=512)
             for label, values in entities.get("entities", {}).items():
@@ -310,8 +279,8 @@ class LocalModels:
                         continue
                     if not specific_name(head["name"]) or not specific_name(tail["name"]):
                         continue
-                    head, tail = repair_relation_spans(text, head, tail, predicate, start, end)
-                    support = relation_support(text, head, tail, predicate)
+                    head, tail = repair_relation_spans(text, head, tail, predicate, start, end, guard=guard)
+                    support = relation_support(text, head, tail, predicate, guard=guard)
                     for span in (head, tail):
                         key = (span["start"], span["end"])
                         if span["score"] > endpoints.get(key, {}).get("score", -1):
@@ -321,19 +290,26 @@ class LocalModels:
                     key = (head["start"], tail["start"], predicate)
                     if relation["score"] > relations.get(key, {}).get("score", -1):
                         relations[key] = relation
-            for relation in negative_relations(text, window_spans.values()):
+            for relation in negative_relations(text, window_spans.values(), guard=guard):
                 key = (relation["head"]["start"], relation["tail"]["start"], relation["predicate"])
                 relations.setdefault(key, relation)
             if self.syntax is not None:
                 raw_aliases = self.extractor.extract(body, self.alias_schema, **ALIAS_SETTINGS)
-                parsed = self.syntax(body)
                 proposals = syntax.candidates(parsed)
                 for definition in corroborated_definitions(body, raw_aliases, proposals, start):
+                    fields = [definition[field] for field in ("full_name", "short_name")]
+                    if not source_scope.asserted(min(field["start"] for field in fields),
+                                                 max(field["end"] for field in fields)):
+                        continue
                     definitions.append({**definition, "source_text_hash": digest(text),
                                         "alias_model_revision": self.manifest["models"]["extractor"]["revision"],
                                         "syntax_model_revision": self.manifest["models"]["syntax"]["revision"]})
                 for candidate in syntax.candidates(parsed, conflict=True):
                     if not all(specific_name(candidate[field]["text"]) for field in ("full_name", "short_name")):
+                        continue
+                    fields = [candidate[field] for field in ("full_name", "short_name")]
+                    if not source_scope.asserted(start + min(field["start"] for field in fields),
+                                                 start + max(field["end"] for field in fields)):
                         continue
                     conflicts.append({"full_name": {**candidate["full_name"],
                         "start": candidate["full_name"]["start"] + start,
@@ -353,5 +329,13 @@ class LocalModels:
                 "relations": list(relations.values()), "chunks": chunks,
                 "corroborated_definitions": definitions}
         if self.syntax is not None:
+            if not parser_ran:
+                # Empty/whitespace sources have no extraction windows. Certify
+                # their empty relation result with the configured parser once,
+                # so current caches and generation completion can accept it.
+                self.syntax(text)
+                parser_ran = True
             result.update(conflict_definitions=conflicts, conflict_coverage_revision=syntax.CONFLICT_REVISION)
+        if parser_ran:
+            result["relation_guard_revision"] = relation_syntax.REVISION
         return result

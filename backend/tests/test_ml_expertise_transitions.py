@@ -10,10 +10,10 @@ import pytest
 
 from test_ml_alias_conflicts import automated
 from test_ml_identity_routing import CASES, apply, capture, embedding_generation_isolation, names, replay
-from test_ml_automation import _profile_work
+from test_ml_automation import _confirm_topic, _profile_work
 
 
-def test_grammar_only_transition_recomputes_conditional_expertise_without_source_replay(
+def test_grammar_transition_recomputes_direct_human_credit_without_requiring_alias_replay(
         make_client, admin_client, monkeypatch):
     from app.ml import syntax
     from app.ml.sources import digest, finding_key
@@ -49,10 +49,12 @@ def test_grammar_only_transition_recomputes_conditional_expertise_without_source
             'body': 'BIndex provides the current drawer label.'}).json()['id']
         extra.append((expert, answer))
         assert asker.post(f'/api/questions/{question}/accept', json={'answer_id': answer}).status_code == 200
+        _confirm_topic(asker, answer, 'accepted', 'Buffered Index')
         for body in ('BIndex recovered the requested drawer label.', 'BIndex preserves the drawer order.'):
             item = expert.post('/api/capture', data={'body': body}).json()['item']['id']
             extra.append((expert, item))
             assert reader.post(f'/api/items/{item}/helped').status_code == 200
+            _confirm_topic(reader, item, 'helped', 'Buffered Index')
         _profile_work(profile['id'])
         expertise_key = finding_key('expertise', profile['id'], cid)
 
@@ -65,14 +67,14 @@ def test_grammar_only_transition_recomputes_conditional_expertise_without_source
             grammar.setattr(syntax, 'CONFLICT_REVISION', syntax.CONFLICT_REVISION + '-transition')
             assert not names(asker, 'BIndex')
             assert 'Buffered Index' not in areas()
-            # Only recompute the profile: unchanged old source caches cannot
-            # authorize a fresh expertise projection under the new grammar.
+            # The profile generation needs recomputation, but direct human
+            # canonical choices do not inherit the source's alias dependency.
             _profile_work(profile['id'])
-            assert 'Buffered Index' not in areas()
+            assert 'Buffered Index' in areas()
             assert admin_client.put(f'/api/ml/findings/{expertise_key}/decision', json={'mode': 'pinned'}).status_code == 200
             assert 'Buffered Index' in areas()
             assert admin_client.put(f'/api/ml/findings/{expertise_key}/decision', json={'mode': 'automatic'}).status_code == 200
-            assert 'Buffered Index' not in areas()
+            assert 'Buffered Index' in areas()
         # Reverting the grammar makes the retained source evidence usable, but
         # the just-computed profile still requires its own generation replay.
         assert 'Buffered Index' not in areas()
@@ -97,57 +99,38 @@ def _migrate(database, direction, target):
     assert result.returncode == 0, result.stdout + result.stderr
 
 
-@pytest.mark.parametrize('direction,target', [('upgrade', 'head'), ('downgrade', '0012'), ('downgrade', '0010')])
+@pytest.mark.parametrize('direction,target', [('upgrade', '0014'), ('downgrade', '0012'), ('downgrade', '0010')])
 def test_projection_migration_protects_reader_without_generation_guard(
-        app_modules, tmp_path, monkeypatch, direction, target):
-    from sqlalchemy import create_engine, text, true
+        app_modules, tmp_path, direction, target):
+    from sqlalchemy import create_engine, text
     from sqlalchemy.orm import Session
-    from app.ml import policy, projection
-    from app.ml.models import Evidence, Finding, Override, Source
-    from app.models import Account, Concept, ConceptTerm, ExpertiseMapping, Profile, utcnow
-    from app.routers.expertise import who_knows_what
+    import ml_legacy_readers as legacy
 
     database = tmp_path / 'projection-migration.sqlite3'
-    _migrate(database, 'upgrade', '0012' if direction == 'upgrade' else 'head')
+    _migrate(database, 'upgrade', '0012' if direction == 'upgrade' else '0014')
     engine = create_engine(f'sqlite:///{database}')
-    # Model the old reader explicitly: schema rollback must remain safe when
-    # its application does not execute projection.current at all.
-    monkeypatch.setattr(projection, 'current', lambda: true())
     try:
         with Session(engine) as db:
-            db.add(Concept(id='topic'))
-            db.flush()
-            db.add(ConceptTerm(concept_id='topic', term='retained topic', display='Retained Topic', is_canonical=True))
+            legacy.insert(db, 'concepts', id='topic')
+            legacy.insert(db, 'concept_terms', concept_id='topic', term='retained topic', display='Retained Topic', is_canonical=1)
             for mode in ('automatic', 'pinned'):
-                db.add(Account(id=mode, username=mode, password_hash='unused'))
-                db.flush()
-                db.add(Profile(id=mode, account_id=mode, display_name=mode))
-                db.flush()
-                mapping = ExpertiseMapping(profile_id=mode, concept_id='topic')
-                db.add(mapping)
-                db.flush()
-                payload = json.dumps({'profile_id': mode, 'concept_id': 'topic'})
-                db.add(Finding(key=mode, kind='expertise', payload=payload, state='active', score=0,
-                               policy_version=policy.VERSION, canonical_id=mapping.id,
-                               created_at=utcnow(), updated_at=utcnow()))
-                db.flush()
-                db.add(Source(kind='profile', id=mode, content_hash=mode, valid=True,
-                              model_version=policy.VERSION, result='{}', updated_at=utcnow()))
-                db.add(Evidence(key=mode, finding_key=mode, source_kind='profile', source_id=mode,
-                                source_hash=mode, group_key=mode, author_id=mode, start=0, end=0,
-                                raw_score=0, polarity='positive', features='{}', model_version=policy.VERSION))
+                legacy.insert(db, 'accounts', id=mode, username=mode)
+                legacy.insert(db, 'profiles', id=mode, account_id=mode, display_name=mode)
+                mapping = legacy.insert(db, 'expertise_mappings', profile_id=mode, concept_id='topic')
+                payload = {'profile_id': mode, 'concept_id': 'topic'}
+                legacy.finding(db, mode, 'expertise', mapping, payload)
+                legacy.evidence(db, mode, mode, 'profile', mode, mode)
                 if mode == 'pinned':
-                    db.add(Override(key=mode, kind='expertise', mode='pinned', payload=payload,
-                                    username='reviewer', updated_at=utcnow()))
+                    legacy.pin(db, mode, 'expertise', payload)
             db.execute(text("UPDATE ml_state SET backfill_kind=NULL,backfill_cursor='' WHERE id=1"))
             before_generation = db.execute(text('SELECT backfill_generation FROM ml_state WHERE id=1')).scalar_one()
             db.commit()
-            assert {entry['label'] for entry in who_knows_what(db)} == {'automatic', 'pinned'}
+            assert legacy.expertise(db) == {'automatic', 'pinned'}
         _migrate(database, direction, target)
         with Session(engine) as db:
-            assert {entry['label'] for entry in who_knows_what(db)} == {'pinned'}
-            assert db.query(ExpertiseMapping).count() == 2
-            assert db.query(Source).filter_by(kind='profile', valid=True).count() == 0
+            assert legacy.expertise(db) == {'pinned'}
+            assert db.execute(text('SELECT count(*) FROM expertise_mappings')).scalar_one() == 2
+            assert db.execute(text("SELECT count(*) FROM ml_sources WHERE kind='profile' AND valid=1")).scalar_one() == 0
             state = db.execute(text('SELECT backfill_kind,backfill_generation FROM ml_state WHERE id=1')).one()
             assert state.backfill_kind == 'item' and state.backfill_generation > before_generation
             assert db.execute(text('PRAGMA foreign_key_check')).all() == []

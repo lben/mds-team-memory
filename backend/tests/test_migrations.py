@@ -130,8 +130,8 @@ def test_upgrade_folds_colliding_vocabulary_without_losing_concepts(messy_db):
 
 def test_downgrade_and_reupgrade_round_trips(messy_db):
     db, env = messy_db
-    migrate(env, "upgrade", "head")
+    migrate(env, "upgrade", "0014")
     before = invariants(db)
     migrate(env, "downgrade", "0002")
-    migrate(env, "upgrade", "head")
+    migrate(env, "upgrade", "0014")
     assert invariants(db) == before

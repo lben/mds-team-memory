@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pytest
 
+from ml_synthetic_records import current_synthetic_result
+
 from test_ml_alias_conflicts import automated
 from test_ml_identity_routing import capture, embedding_generation_isolation, names
 
@@ -41,6 +43,10 @@ def apply(item, record, *, cached=False, empty=False, roles=True):
             result, metadata = adapter.cached_result(db, source, version)
         if empty and result:
             result.update(concepts=[], relations=[], corroborated_definitions=[], conflict_definitions=[])
+        if source and not cached:
+            # Deliberately synthetic current input; immutable original model
+            # scores/identity spans remain recorded observations of their era.
+            result = current_synthetic_result(result)
         adapter.apply_source(db, "item", item, source, result, *metadata)
         db.commit()
 

@@ -1,0 +1,3623 @@
+{
+  "provenance": "Actual pinned spaCy syntax model, 2026-09-22. Frozen controls before inference; original observations retained including one unsupported ambiguous-mixed claim. Endpoint spans supplied manually. No GLiNER or scored extraction; development only.",
+  "cases": [
+    {
+      "id": "maybe-positive",
+      "body": "Maybe Orion uses Copper and Vega uses Quartz.",
+      "parse": {
+        "body": "Maybe Orion uses Copper and Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Maybe",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "maybe",
+            "pos": "ADV",
+            "tag": "RB",
+            "dep": "advmod",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 6,
+            "end": 11,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 12,
+            "end": 16,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 17,
+            "end": 23,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "and",
+            "whitespace": " ",
+            "start": 24,
+            "end": 27,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 28,
+            "end": 32,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 33,
+            "end": 37,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              5,
+              7,
+              8
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 38,
+            "end": 44,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": ".",
+            "whitespace": "",
+            "start": 44,
+            "end": 45,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 2,
+            "end": 11,
+            "root_token": 1
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 23,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 32,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 8,
+            "end": 44,
+            "root_token": 7
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 9
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 6,
+          "end": 11
+        },
+        {
+          "name": "Copper",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "name": "Vega",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "name": "Quartz",
+          "start": 38,
+          "end": 44
+        }
+      ]
+    },
+    {
+      "id": "maybe-negative",
+      "body": "Maybe Orion uses Copper and Vega does not use Quartz.",
+      "parse": {
+        "body": "Maybe Orion uses Copper and Vega does not use Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Maybe",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "maybe",
+            "pos": "ADV",
+            "tag": "RB",
+            "dep": "advmod",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 6,
+            "end": 11,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 12,
+            "end": 16,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              8
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 17,
+            "end": 23,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "and",
+            "whitespace": " ",
+            "start": 24,
+            "end": 27,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 28,
+            "end": 32,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "does",
+            "whitespace": " ",
+            "start": 33,
+            "end": 37,
+            "lemma": "do",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "aux",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "not",
+            "whitespace": " ",
+            "start": 38,
+            "end": 41,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "use",
+            "whitespace": " ",
+            "start": 42,
+            "end": 45,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              5,
+              6,
+              7,
+              9,
+              10
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 46,
+            "end": 52,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": "",
+            "start": 52,
+            "end": 53,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 1,
+            "end_token": 2,
+            "end": 11,
+            "root_token": 1
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 23,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 32,
+            "root_token": 5
+          },
+          {
+            "start_token": 9,
+            "end_token": 10,
+            "end": 52,
+            "root_token": 9
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 6,
+          "end": 11
+        },
+        {
+          "name": "Copper",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "name": "Vega",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "name": "Quartz",
+          "start": 46,
+          "end": 52
+        }
+      ]
+    },
+    {
+      "id": "possibly-positive",
+      "body": "Orion possibly uses Copper and Vega uses Quartz.",
+      "parse": {
+        "body": "Orion possibly uses Copper and Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "possibly",
+            "whitespace": " ",
+            "start": 6,
+            "end": 14,
+            "lemma": "possibly",
+            "pos": "ADV",
+            "tag": "RB",
+            "dep": "advmod",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 15,
+            "end": 19,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 20,
+            "end": 26,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "and",
+            "whitespace": " ",
+            "start": 27,
+            "end": 30,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 31,
+            "end": 35,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 36,
+            "end": 40,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              5,
+              7,
+              8
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 41,
+            "end": 47,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": ".",
+            "whitespace": "",
+            "start": 47,
+            "end": 48,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 26,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 35,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 8,
+            "end": 47,
+            "root_token": 7
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 9
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "name": "Vega",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "name": "Quartz",
+          "start": 41,
+          "end": 47
+        }
+      ]
+    },
+    {
+      "id": "possibly-negative",
+      "body": "Orion possibly uses Copper and Vega does not use Quartz.",
+      "parse": {
+        "body": "Orion possibly uses Copper and Vega does not use Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "possibly",
+            "whitespace": " ",
+            "start": 6,
+            "end": 14,
+            "lemma": "possibly",
+            "pos": "ADV",
+            "tag": "RB",
+            "dep": "advmod",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 15,
+            "end": 19,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              8
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 20,
+            "end": 26,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "and",
+            "whitespace": " ",
+            "start": 27,
+            "end": 30,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 31,
+            "end": 35,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "does",
+            "whitespace": " ",
+            "start": 36,
+            "end": 40,
+            "lemma": "do",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "aux",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "not",
+            "whitespace": " ",
+            "start": 41,
+            "end": 44,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "use",
+            "whitespace": " ",
+            "start": 45,
+            "end": 48,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              5,
+              6,
+              7,
+              9,
+              10
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 49,
+            "end": 55,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": "",
+            "start": 55,
+            "end": 56,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 26,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 35,
+            "root_token": 5
+          },
+          {
+            "start_token": 9,
+            "end_token": 10,
+            "end": 55,
+            "root_token": 9
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "name": "Vega",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "name": "Quartz",
+          "start": 49,
+          "end": 55
+        }
+      ]
+    },
+    {
+      "id": "modal-positive",
+      "body": "Orion may use Copper and Vega uses Quartz.",
+      "parse": {
+        "body": "Orion may use Copper and Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "may",
+            "whitespace": " ",
+            "start": 6,
+            "end": 9,
+            "lemma": "may",
+            "pos": "AUX",
+            "tag": "MD",
+            "dep": "aux",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "use",
+            "whitespace": " ",
+            "start": 10,
+            "end": 13,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 14,
+            "end": 20,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "and",
+            "whitespace": " ",
+            "start": 21,
+            "end": 24,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 25,
+            "end": 29,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 30,
+            "end": 34,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              5,
+              7,
+              8
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 35,
+            "end": 41,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": ".",
+            "whitespace": "",
+            "start": 41,
+            "end": 42,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 20,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 29,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 8,
+            "end": 41,
+            "root_token": 7
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 9
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "name": "Vega",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "name": "Quartz",
+          "start": 35,
+          "end": 41
+        }
+      ]
+    },
+    {
+      "id": "modal-negative",
+      "body": "Orion may use Copper and Vega does not use Quartz.",
+      "parse": {
+        "body": "Orion may use Copper and Vega does not use Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "may",
+            "whitespace": " ",
+            "start": 6,
+            "end": 9,
+            "lemma": "may",
+            "pos": "AUX",
+            "tag": "MD",
+            "dep": "aux",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "use",
+            "whitespace": " ",
+            "start": 10,
+            "end": 13,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              8
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 14,
+            "end": 20,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "and",
+            "whitespace": " ",
+            "start": 21,
+            "end": 24,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 25,
+            "end": 29,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "does",
+            "whitespace": " ",
+            "start": 30,
+            "end": 34,
+            "lemma": "do",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "aux",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "not",
+            "whitespace": " ",
+            "start": 35,
+            "end": 38,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "use",
+            "whitespace": " ",
+            "start": 39,
+            "end": 42,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              5,
+              6,
+              7,
+              9,
+              10
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 43,
+            "end": 49,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": ".",
+            "whitespace": "",
+            "start": 49,
+            "end": 50,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 8,
+            "children": [],
+            "ancestors": [
+              8,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 20,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 29,
+            "root_token": 5
+          },
+          {
+            "start_token": 9,
+            "end_token": 10,
+            "end": 49,
+            "root_token": 9
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 11
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "name": "Vega",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "name": "Quartz",
+          "start": 43,
+          "end": 49
+        }
+      ]
+    },
+    {
+      "id": "independent-and",
+      "body": "Orion uses Copper and Vega uses Quartz.",
+      "parse": {
+        "body": "Orion uses Copper and Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "orion",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 6,
+            "end": 10,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              3,
+              5
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 11,
+            "end": 17,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "and",
+            "whitespace": " ",
+            "start": 18,
+            "end": 21,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 22,
+            "end": 26,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 27,
+            "end": 31,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 1,
+            "children": [
+              4,
+              6,
+              7
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 32,
+            "end": 38,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": ".",
+            "whitespace": "",
+            "start": 38,
+            "end": 39,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 3,
+            "end": 17,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 26,
+            "root_token": 4
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 38,
+            "root_token": 6
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 8
+          }
+        ]
+      },
+      "gold": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "positive"
+        },
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "positive"
+        }
+      ],
+      "observed": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "positive"
+        },
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "positive"
+        }
+      ],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "name": "Vega",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "name": "Quartz",
+          "start": 32,
+          "end": 38
+        }
+      ]
+    },
+    {
+      "id": "local-negative",
+      "body": "Orion does not use Copper and Vega uses Quartz.",
+      "parse": {
+        "body": "Orion does not use Copper and Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "does",
+            "whitespace": " ",
+            "start": 6,
+            "end": 10,
+            "lemma": "do",
+            "pos": "AUX",
+            "tag": "VBZ",
+            "dep": "aux",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "not",
+            "whitespace": " ",
+            "start": 11,
+            "end": 14,
+            "lemma": "not",
+            "pos": "PART",
+            "tag": "RB",
+            "dep": "neg",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "use",
+            "whitespace": " ",
+            "start": 15,
+            "end": 18,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 3,
+            "children": [
+              0,
+              1,
+              2,
+              4,
+              5,
+              7
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 19,
+            "end": 25,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "and",
+            "whitespace": " ",
+            "start": 26,
+            "end": 29,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 3,
+            "children": [],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 30,
+            "end": 34,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 35,
+            "end": 39,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 3,
+            "children": [
+              6,
+              8,
+              9
+            ],
+            "ancestors": [
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 40,
+            "end": 46,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              3
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": ".",
+            "whitespace": "",
+            "start": 46,
+            "end": 47,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              3
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 25,
+            "root_token": 4
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 34,
+            "root_token": 6
+          },
+          {
+            "start_token": 8,
+            "end_token": 9,
+            "end": 46,
+            "root_token": 8
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 10
+          }
+        ]
+      },
+      "gold": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "negative"
+        },
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "positive"
+        }
+      ],
+      "observed": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "negative"
+        },
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "positive"
+        }
+      ],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "name": "Vega",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "name": "Quartz",
+          "start": 40,
+          "end": 46
+        }
+      ]
+    },
+    {
+      "id": "contrast-modal",
+      "body": "Orion may use Copper, but Vega uses Quartz.",
+      "parse": {
+        "body": "Orion may use Copper, but Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "may",
+            "whitespace": " ",
+            "start": 6,
+            "end": 9,
+            "lemma": "may",
+            "pos": "AUX",
+            "tag": "MD",
+            "dep": "aux",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "use",
+            "whitespace": " ",
+            "start": 10,
+            "end": 13,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VB",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              5,
+              7
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": "",
+            "start": 14,
+            "end": 20,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": ",",
+            "whitespace": " ",
+            "start": 20,
+            "end": 21,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "but",
+            "whitespace": " ",
+            "start": 22,
+            "end": 25,
+            "lemma": "but",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 26,
+            "end": 30,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 31,
+            "end": 35,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              6,
+              8,
+              9
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 36,
+            "end": 42,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": ".",
+            "whitespace": "",
+            "start": 42,
+            "end": 43,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 7,
+            "children": [],
+            "ancestors": [
+              7,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 20,
+            "root_token": 3
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 30,
+            "root_token": 6
+          },
+          {
+            "start_token": 8,
+            "end_token": 9,
+            "end": 42,
+            "root_token": 8
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 10
+          }
+        ]
+      },
+      "gold": [
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "positive"
+        }
+      ],
+      "observed": [
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "positive"
+        }
+      ],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "name": "Vega",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "name": "Quartz",
+          "start": 36,
+          "end": 42
+        }
+      ]
+    },
+    {
+      "id": "alternative-explicit",
+      "body": "Orion uses Copper or Vega uses Quartz.",
+      "parse": {
+        "body": "Orion uses Copper or Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 6,
+            "end": 10,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              3,
+              5
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 11,
+            "end": 17,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "or",
+            "whitespace": " ",
+            "start": 18,
+            "end": 20,
+            "lemma": "or",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 21,
+            "end": 25,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 26,
+            "end": 30,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 1,
+            "children": [
+              4,
+              6,
+              7
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 31,
+            "end": 37,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": ".",
+            "whitespace": "",
+            "start": 37,
+            "end": 38,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 3,
+            "end": 17,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 25,
+            "root_token": 4
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 37,
+            "root_token": 6
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 8
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "name": "Vega",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "name": "Quartz",
+          "start": 31,
+          "end": 37
+        }
+      ]
+    },
+    {
+      "id": "alternative-shared",
+      "body": "Orion uses Copper or uses Quartz.",
+      "parse": {
+        "body": "Orion uses Copper or uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "orion",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 6,
+            "end": 10,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              3,
+              4,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 11,
+            "end": 17,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "or",
+            "whitespace": " ",
+            "start": 18,
+            "end": 20,
+            "lemma": "or",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 21,
+            "end": 25,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 1,
+            "children": [
+              5
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 26,
+            "end": 32,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 4,
+            "children": [],
+            "ancestors": [
+              4,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": ".",
+            "whitespace": "",
+            "start": 32,
+            "end": 33,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 3,
+            "end": 17,
+            "root_token": 2
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 32,
+            "root_token": 5
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 7
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [],
+      "checked": 30,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "name": "Quartz",
+          "start": 26,
+          "end": 32
+        }
+      ]
+    },
+    {
+      "id": "neither-nor",
+      "body": "Orion neither uses Copper nor Vega uses Quartz.",
+      "parse": {
+        "body": "Orion neither uses Copper nor Vega uses Quartz.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "neither",
+            "whitespace": " ",
+            "start": 6,
+            "end": 13,
+            "lemma": "neither",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "preconj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 14,
+            "end": 18,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 2,
+            "children": [
+              0,
+              1,
+              3,
+              4,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 19,
+            "end": 25,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "nor",
+            "whitespace": " ",
+            "start": 26,
+            "end": 29,
+            "lemma": "nor",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 2,
+            "children": [],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 30,
+            "end": 34,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 35,
+            "end": 39,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 2,
+            "children": [
+              5,
+              7,
+              8
+            ],
+            "ancestors": [
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Quartz",
+            "whitespace": "",
+            "start": 40,
+            "end": 46,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": ".",
+            "whitespace": "",
+            "start": 46,
+            "end": 47,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              2
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 3,
+            "end_token": 4,
+            "end": 25,
+            "root_token": 3
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 34,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 8,
+            "end": 46,
+            "root_token": 7
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 9
+          }
+        ]
+      },
+      "gold": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "negative"
+        },
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "negative"
+        }
+      ],
+      "observed": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "negative"
+        },
+        {
+          "head": "Vega",
+          "predicate": "uses",
+          "tail": "Quartz",
+          "polarity": "negative"
+        }
+      ],
+      "checked": 60,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "name": "Vega",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "name": "Quartz",
+          "start": 40,
+          "end": 46
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-mixed",
+      "body": "Orion uses Copper and Vega uses Quartz or Helios uses Silver.",
+      "parse": {
+        "body": "Orion uses Copper and Vega uses Quartz or Helios uses Silver.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 6,
+            "end": 10,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              3,
+              5
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Copper",
+            "whitespace": " ",
+            "start": 11,
+            "end": 17,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": "and",
+            "whitespace": " ",
+            "start": 18,
+            "end": 21,
+            "lemma": "and",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 22,
+            "end": 26,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 27,
+            "end": 31,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 1,
+            "children": [
+              4,
+              6,
+              7,
+              9
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "Quartz",
+            "whitespace": " ",
+            "start": 32,
+            "end": 38,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "or",
+            "whitespace": " ",
+            "start": 39,
+            "end": 41,
+            "lemma": "or",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 5,
+            "children": [],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "Helios",
+            "whitespace": " ",
+            "start": 42,
+            "end": 48,
+            "lemma": "Helios",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 49,
+            "end": 53,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 5,
+            "children": [
+              8,
+              10,
+              11
+            ],
+            "ancestors": [
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "Silver",
+            "whitespace": "",
+            "start": 54,
+            "end": 60,
+            "lemma": "silver",
+            "pos": "NOUN",
+            "tag": "NN",
+            "dep": "dobj",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              5,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": ".",
+            "whitespace": "",
+            "start": 60,
+            "end": 61,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 9,
+            "children": [],
+            "ancestors": [
+              9,
+              5,
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 3,
+            "end": 17,
+            "root_token": 2
+          },
+          {
+            "start_token": 4,
+            "end_token": 5,
+            "end": 26,
+            "root_token": 4
+          },
+          {
+            "start_token": 6,
+            "end_token": 7,
+            "end": 38,
+            "root_token": 6
+          },
+          {
+            "start_token": 8,
+            "end_token": 9,
+            "end": 48,
+            "root_token": 8
+          },
+          {
+            "start_token": 10,
+            "end_token": 11,
+            "end": 60,
+            "root_token": 10
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 12
+          }
+        ]
+      },
+      "gold": [],
+      "observed": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "positive"
+        }
+      ],
+      "checked": 150,
+      "unsupported": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "positive"
+        }
+      ],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "name": "Vega",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "name": "Quartz",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "name": "Helios",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "name": "Silver",
+          "start": 54,
+          "end": 60
+        }
+      ]
+    },
+    {
+      "id": "contrast-alternative",
+      "body": "Orion uses Copper, but Vega uses Quartz or Helios uses Silver.",
+      "parse": {
+        "body": "Orion uses Copper, but Vega uses Quartz or Helios uses Silver.",
+        "tokens": [
+          {
+            "i": 0,
+            "text": "Orion",
+            "whitespace": " ",
+            "start": 0,
+            "end": 5,
+            "lemma": "Orion",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 1,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 6,
+            "end": 10,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "ROOT",
+            "head": 1,
+            "children": [
+              0,
+              2,
+              3,
+              4,
+              6
+            ],
+            "ancestors": [],
+            "is_quote": false
+          },
+          {
+            "i": 2,
+            "text": "Copper",
+            "whitespace": "",
+            "start": 11,
+            "end": 17,
+            "lemma": "Copper",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 3,
+            "text": ",",
+            "whitespace": " ",
+            "start": 17,
+            "end": 18,
+            "lemma": ",",
+            "pos": "PUNCT",
+            "tag": ",",
+            "dep": "punct",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 4,
+            "text": "but",
+            "whitespace": " ",
+            "start": 19,
+            "end": 22,
+            "lemma": "but",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 1,
+            "children": [],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 5,
+            "text": "Vega",
+            "whitespace": " ",
+            "start": 23,
+            "end": 27,
+            "lemma": "Vega",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 6,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 28,
+            "end": 32,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 1,
+            "children": [
+              5,
+              7,
+              8,
+              10,
+              12
+            ],
+            "ancestors": [
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 7,
+            "text": "Quartz",
+            "whitespace": " ",
+            "start": 33,
+            "end": 39,
+            "lemma": "Quartz",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 8,
+            "text": "or",
+            "whitespace": " ",
+            "start": 40,
+            "end": 42,
+            "lemma": "or",
+            "pos": "CCONJ",
+            "tag": "CC",
+            "dep": "cc",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 9,
+            "text": "Helios",
+            "whitespace": " ",
+            "start": 43,
+            "end": 49,
+            "lemma": "Helios",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "nsubj",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 10,
+            "text": "uses",
+            "whitespace": " ",
+            "start": 50,
+            "end": 54,
+            "lemma": "use",
+            "pos": "VERB",
+            "tag": "VBZ",
+            "dep": "conj",
+            "head": 6,
+            "children": [
+              9,
+              11
+            ],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 11,
+            "text": "Silver",
+            "whitespace": "",
+            "start": 55,
+            "end": 61,
+            "lemma": "Silver",
+            "pos": "PROPN",
+            "tag": "NNP",
+            "dep": "dobj",
+            "head": 10,
+            "children": [],
+            "ancestors": [
+              10,
+              6,
+              1
+            ],
+            "is_quote": false
+          },
+          {
+            "i": 12,
+            "text": ".",
+            "whitespace": "",
+            "start": 61,
+            "end": 62,
+            "lemma": ".",
+            "pos": "PUNCT",
+            "tag": ".",
+            "dep": "punct",
+            "head": 6,
+            "children": [],
+            "ancestors": [
+              6,
+              1
+            ],
+            "is_quote": false
+          }
+        ],
+        "noun_chunks": [
+          {
+            "start_token": 0,
+            "end_token": 1,
+            "end": 5,
+            "root_token": 0
+          },
+          {
+            "start_token": 2,
+            "end_token": 3,
+            "end": 17,
+            "root_token": 2
+          },
+          {
+            "start_token": 5,
+            "end_token": 6,
+            "end": 27,
+            "root_token": 5
+          },
+          {
+            "start_token": 7,
+            "end_token": 8,
+            "end": 39,
+            "root_token": 7
+          },
+          {
+            "start_token": 9,
+            "end_token": 10,
+            "end": 49,
+            "root_token": 9
+          },
+          {
+            "start_token": 11,
+            "end_token": 12,
+            "end": 61,
+            "root_token": 11
+          }
+        ],
+        "sentences": [
+          {
+            "start_token": 0,
+            "end_token": 13
+          }
+        ]
+      },
+      "gold": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "positive"
+        }
+      ],
+      "observed": [
+        {
+          "head": "Orion",
+          "predicate": "uses",
+          "tail": "Copper",
+          "polarity": "positive"
+        }
+      ],
+      "checked": 150,
+      "unsupported": [],
+      "missing": [],
+      "entities": [
+        {
+          "name": "Orion",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "name": "Copper",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "name": "Vega",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "name": "Quartz",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "name": "Helios",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "name": "Silver",
+          "start": 55,
+          "end": 61
+        }
+      ]
+    }
+  ]
+}

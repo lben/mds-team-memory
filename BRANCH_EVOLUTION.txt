@@ -1,5 +1,5 @@
 MDS TEAM MEMORY — GIT BRANCH EVOLUTION
-Updated: 2026-09-14
+Updated: 2026-09-22
 
 This map records verified Git ancestry and the purpose of each work branch.
 Milestones below are historical references; branch tips may advance.
@@ -46,12 +46,38 @@ main / origin/main
                     8509bbd  Preserve literal relationship assertions and
                              contradictions before comparing model scores;
                              repair existing evidence through cached backfill
-                    Current backend suite: 462 passed. Acronym development:
+                    5014d16  Repair independent-review provenance, expertise
+                             generation and worker lifecycle defects; refresh
+                             open finding evidence across knowledge revisions.
+                             Three independently scoped AI reviews were
+                             authorized by the user; these were not human
+                             quality evaluations. Targeted Linux checks:
+                             17 correctness + 49 worker/embedding tests pass.
+                    Previous full backend suite: 462 passed. Acronym development:
                     19/24 selected aliases, all 22 published aliases correct
                     under the frozen labels. A subsequent literal-predicate
                     extraction trial stopped at its predeclared futility gate
                     with no useful additions; it was not integrated.
                     Release quality remains open.
+
+SEPTEMBER 22 CONTINUATION ON THE SAME BRANCH
+
+- The user asked to continue until the full objective is achieved. No new
+  branch was introduced: astra-again-sep14 remains the active development line.
+- Independent review expanded the repair scope to typed assertion provenance,
+  published alias dependencies, account-based routing, and durable explicit
+  topic feedback. Generic acceptance/helpfulness/endorsement counts remain
+  broad impact; they are not silently converted into topical expertise.
+- Additive migrations 0014/0015 preserve prior data and withdraw obsolete
+  derived evidence. Revision checks prevent old human confirmations from
+  reviving after an edit-and-restore, account reassignment, or re-acceptance.
+- The controller refuses rollback to code incompatible with the human-feedback
+  schema before changing processes or release links. Automatic downgrade across
+  0015 is disabled; preserved human confirmations require a reviewed recovery.
+- September 22 implementation checkpoint: all 754 backend tests pass in offline
+  Linux; the frontend build and 10 browser feedback checks pass. Fresh independent
+  quality/effects evaluation remains open. The historical quality failures below remain visible. There has
+  been no merge, push, or deployment from this continuation.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

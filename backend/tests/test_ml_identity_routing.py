@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pytest
 
+from ml_synthetic_records import current_synthetic_result
+
 from test_ml_alias_conflicts import automated
 
 CASES = json.loads((Path(__file__).parent / 'fixtures/identity_routing_recorded.json').read_text())['cases']
@@ -81,6 +83,10 @@ def apply(item, record, *, cached=False, empty=False):
             result, metadata = adapter.cached_result(db, source, version)
         if empty:
             result.update(concepts=[], relations=[], corroborated_definitions=[], conflict_definitions=[])
+        if source and not cached:
+            # Synthetic application replay of retained geometry/scores, not a
+            # new parser/model observation or an upgrade of a stored cache.
+            result = current_synthetic_result(result)
         adapter.apply_source(db, 'item', item, source, result, *metadata)
         db.commit()
 
@@ -118,6 +124,7 @@ def test_exact_role_routes_reserved_entity_and_keeps_dependency_after_term_repla
         assert routed['raw_score'] == 0.9985187649726868
         assert (routed['start'], routed['end'], routed['quote']) == (71, 77, 'TIndex')
         certificate = routed['identity_routes'][0]
+        assert not routed.get('term_routes')
         assert certificate['witness_source_id'] == items[1]
         assert certificate['concept_key'] == key
         assert certificate['method_fingerprint']
@@ -184,10 +191,10 @@ def test_unqualified_role_and_distinct_descriptor_do_not_route_entity_scores(mak
 
 @pytest.mark.parametrize('processed', [True, False], ids=['replayed', 'before_source_replay'])
 @pytest.mark.parametrize('coverage', ['old_structure', 'old_revision'])
-def test_conditional_term_only_contributions_invalidate_expertise_with_live_manual_concept(make_client, admin_client, tmp_path, processed, coverage):
+def test_explicit_topic_credit_is_independent_of_alias_coverage_with_live_manual_concept(make_client, admin_client, tmp_path, processed, coverage):
     """Mechanical empty-extraction control; recorded entity/role data stay fixed."""
     from app.ml.sources import finding_key
-    from test_ml_automation import _profile_work
+    from test_ml_automation import _profile_work, _confirm_topic
 
     saved = CASES[0]
     case, records = saved['case'], saved['records']
@@ -226,6 +233,12 @@ def test_conditional_term_only_contributions_invalidate_expertise_with_live_manu
         if processed:
             for _, item in extra:
                 apply(item, records[0], empty=True)
+        _profile_work(profile)
+        assert not any('Threaded Index' in entry['areas'] for entry in asker.get('/api/expertise').json()
+                       if entry['label'] == profile_data['label'])
+        _confirm_topic(asker, answer, 'accepted', 'Threaded Index')
+        for _, credited_item in extra[2:]:
+            _confirm_topic(reader, credited_item, 'helped', 'Threaded Index')
         expertise_key = finding_key('expertise', profile, canonical)
         assert admin_client.post('/api/admin/expertise', json={
             'profile_id': profile, 'concept_id': canonical}).status_code == 200
@@ -280,16 +293,16 @@ def test_conditional_term_only_contributions_invalidate_expertise_with_live_manu
             assert 'tindex' not in {term.term for term in effective.terms(db)}
         assert 'Threaded Index' not in areas()
         _profile_work(profile)
-        assert 'Threaded Index' not in areas()
+        assert 'Threaded Index' in areas()
         assert admin_client.put(f'/api/ml/findings/{expertise_key}/decision', json={'mode': 'pinned'}).status_code == 200
         assert 'Threaded Index' in areas()
         assert admin_client.put(f'/api/ml/findings/{expertise_key}/decision', json={'mode': 'automatic'}).status_code == 200
-        assert 'Threaded Index' not in areas()
+        assert 'Threaded Index' in areas()
         transition(original_revision)
         _profile_work(profile)
         assert 'Threaded Index' in areas()
-        # A coverage gap invalidates the same conditional identity, including
-        # profiles computed before their contributions receive ML evidence.
+        # Explicit canonical-topic choices do not depend on an alias mention
+        # route, including contributions with no extraction records yet.
         from app.ml.models import Source
         with SessionLocal() as db:
             source = db.get(Source, ('item', items[0]))
@@ -302,9 +315,10 @@ def test_conditional_term_only_contributions_invalidate_expertise_with_live_manu
             source.result = json.dumps(data)
             db.commit()
         assert names(asker, 'Threaded Index')['Threaded Index'] == canonical
-        assert 'Threaded Index' not in areas()
+        # Older broad invalidation triggers may hold the projection until its
+        # queued refresh; the human topic credit survives that recomputation.
         _profile_work(profile)
-        assert 'Threaded Index' not in areas()
+        assert 'Threaded Index' in areas()
         with SessionLocal() as db:
             db.get(Source, ('item', items[0])).result = original_result
             db.commit()
@@ -313,9 +327,10 @@ def test_conditional_term_only_contributions_invalidate_expertise_with_live_manu
         # Manual concept authority remains, but does not pin its automatic alias.
         assert reader.put(f'/api/items/{items[1]}', json={'body': 'The card archive is retired.'}).status_code == 200
         assert names(asker, 'Threaded Index')['Threaded Index'] == canonical
-        assert 'Threaded Index' not in areas()
+        # Older broad invalidation triggers may hold the projection until its
+        # queued refresh; the human topic credit survives that recomputation.
         _profile_work(profile)
-        assert 'Threaded Index' not in areas()
+        assert 'Threaded Index' in areas()
         assert reader.put(f'/api/items/{items[1]}', json={'body': records[1]['body']}).status_code == 200
         apply(items[1], records[1])
         replay(items, records)
@@ -326,9 +341,10 @@ def test_conditional_term_only_contributions_invalidate_expertise_with_live_manu
         alias_key = finding_key('alias', 'tindex', canonical)
         assert admin_client.put(f'/api/ml/findings/{alias_key}/decision', json={'mode': 'suppressed'}).status_code == 200
         assert names(asker, 'Threaded Index')['Threaded Index'] == canonical
-        assert 'Threaded Index' not in areas()
+        # Older broad invalidation triggers may hold the projection until its
+        # queued refresh; the human topic credit survives that recomputation.
         _profile_work(profile)
-        assert 'Threaded Index' not in areas()
+        assert 'Threaded Index' in areas()
         assert admin_client.put(f'/api/ml/findings/{alias_key}/decision', json={'mode': 'automatic'}).status_code == 200
         assert admin_client.put(f'/api/ml/findings/{key}/decision', json={'mode': 'automatic'}).status_code == 200
     finally:

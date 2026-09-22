@@ -1127,7 +1127,8 @@ def test_anyone_can_endorse_and_the_admin_sees_who_the_team_endorsed(make_client
     ranking = admin_client.get("/api/admin/endorsements").json()
     row = next(e for e in ranking if e["profile_id"] == item["author_id"])
     assert row["endorsements"] >= 1
-    assert f"Ledger{suffix}" in row["topics"]
+    assert row["topics"] == [], "A whole-item endorsement cannot identify its intended topic"
+    assert row["topic_attribution"] == "unscoped"
 
 
 def test_a_new_concept_finds_links_in_content_that_already_exists(make_client, admin_client):

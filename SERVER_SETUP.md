@@ -154,37 +154,42 @@ server user's own crontab do it (no root needed, `crontab -e` on the server):
 
 ## Rolling back
 
-`uv run --python 3.12 tools\serverctl.py rollback` stops both processes, points
-`current` back at the previous release and starts its web server and worker.
+`uv run --python 3.12 tools\serverctl.py rollback` first checks that the previous
+release supports the shared database. If compatible, it stops both processes,
+points `current` back at that release and starts its web server and worker.
 Each release's `ml-runtime.json` pins its own generation and runtime. A later
 asset setting in `app.env` does not change those rollback pins.
+
+Once migration 0015 creates the explicit topic feedback schema, a release must
+support `explicit-topic-feedback-v1` to use that database. The controller checks
+the database schema and target code itself, without relying on an older release's
+helper. It refuses incompatible rollback, activation, web startup and worker
+startup. Restart and deployment also check before stopping processes. A refused
+rollback leaves the current processes, `current` and `previous` links, and human
+feedback intact. Direct `stop` remains available when shutdown is needed.
+
+If rollback is refused, inspect `status` and `logs`, then deploy a corrected
+release that supports the current schema. Keep using the controller uploaded
+with the newer release; do not replace it with an old copy to bypass the check.
+You can check a candidate before activation on the server with
+`bash <root>/mdsctl.sh compatible <stamp>`.
 
 Rolling back does not make the release you are leaving the next rollback target.
 That matters after a failed deploy, which rolls back on its own: `previous` keeps
 naming the release that was working, so a second rollback cannot put the broken
 one back. To go forward again, fix the problem and deploy.
 
-The schema is not rolled back with the code. If the release you are leaving ran
-a migration, the database copy taken just before it is in
-`<root>/backups/<stamp>/`. Restore it by hand only if the older code cannot read
-the newer schema, and replace the whole set of files rather than just the
-database — SQLite keeps recent writes in the `-wal` file, and leaving a newer
-one next to an older database corrupts it:
+The schema is not rolled back with the code. The database copy taken before a
+migration is kept in `<root>/backups/<stamp>/`; automatic recovery never restores
+it. Restoring it would discard later human feedback and other writes, so a
+compatibility refusal calls for a corrected release, not a database restore.
 
-In PowerShell, stop the server:
-
-```powershell
-uv run --python 3.12 tools\serverctl.py stop uat
-```
-
-then on the server:
-
-```bash
-rm -f ~/apps/mds-uat/data/mds.sqlite3 ~/apps/mds-uat/data/mds.sqlite3-wal ~/apps/mds-uat/data/mds.sqlite3-shm
-cp ~/apps/mds-uat/backups/<stamp>/* ~/apps/mds-uat/data/
-```
-
-Uploaded files are not part of that copy; only the database is.
+For a separate disaster recovery that explicitly accepts losing those writes,
+stop both processes and preserve the current database together with its `-wal`
+and `-shm` files before restoring anything. Restore the backup as a complete set;
+never leave a newer WAL beside an older database. Uploaded files are not part of
+the backup; only the database is. Migration 0015 also refuses Alembic downgrade
+because that would destroy confirmation history.
 
 ## Company package index
 

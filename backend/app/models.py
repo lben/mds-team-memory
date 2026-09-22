@@ -3,12 +3,15 @@ from datetime import datetime, timezone
 
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     DateTime,
     ForeignKey,
     Integer,
+    Index,
     String,
     Text,
     UniqueConstraint,
+    text as sql_text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -43,6 +46,7 @@ class Profile(Base):
     display_name: Mapped[str | None] = mapped_column(String(80))
     account_id: Mapped[str | None] = mapped_column(ForeignKey("accounts.id", ondelete="SET NULL"))
     claim_locked: Mapped[bool] = mapped_column(Boolean, default=False)
+    account_binding_revision: Mapped[int] = mapped_column(Integer, default=1, server_default="1")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     @property
@@ -99,6 +103,8 @@ class KnowledgeItem(Base):
     normalized_hash: Mapped[str | None] = mapped_column(String(64), index=True)
     question_status: Mapped[str | None] = mapped_column(String(12))  # open|answered|resolved
     accepted_answer_id: Mapped[str | None] = mapped_column(String(32))
+    evidence_revision: Mapped[int] = mapped_column(Integer, default=1, server_default="1")
+    acceptance_revision: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     correction_state: Mapped[str | None] = mapped_column(String(12))  # proposed|adopted
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, onupdate=utcnow)
@@ -155,6 +161,8 @@ class Concept(Base):
     __tablename__ = "concepts"
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    credit_identity_revision: Mapped[int] = mapped_column(Integer, default=1, server_default="1")
+    credit_identity_key: Mapped[str] = mapped_column(String(120), default="", server_default="")
 
     terms: Mapped[list["ConceptTerm"]] = relationship(
         back_populates="concept", cascade="all, delete-orphan", lazy="selectin"
@@ -250,6 +258,48 @@ class ImpactEvent(Base):
     points: Mapped[int] = mapped_column(Integer)
     dedup_key: Mapped[str] = mapped_column(String(200), unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
+
+
+class TopicConfirmation(Base):
+    """An authenticated person's explicit claim about exact content and one topic.
+
+    This is independent of the generic impact ledger. Historical clicks have
+    no rows here and cannot acquire topical meaning from later tagging.
+    """
+
+    __tablename__ = "topic_confirmations"
+    __table_args__ = (
+        CheckConstraint("kind IN ('helped','accepted')"),
+        CheckConstraint("state IN ('current','revoked','superseded')"),
+        CheckConstraint("actor_account_id != beneficiary_account_id"),
+        CheckConstraint("kind != 'accepted' OR (question_id IS NOT NULL AND acceptance_revision IS NOT NULL AND asker_profile_id IS NOT NULL AND asker_binding_revision IS NOT NULL)"),
+        CheckConstraint("(question_id IS NULL) = (question_evidence_revision IS NULL)"),
+        Index("uq_topic_confirmations_current", "actor_account_id", "item_id", "concept_id", "kind",
+              unique=True, sqlite_where=sql_text("state='current'")),
+    )
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    kind: Mapped[str] = mapped_column(String(16))
+    actor_account_id: Mapped[str] = mapped_column(ForeignKey("accounts.id", ondelete="CASCADE"), index=True)
+    actor_profile_id: Mapped[str] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), index=True)
+    actor_binding_revision: Mapped[int] = mapped_column(Integer)
+    beneficiary_account_id: Mapped[str] = mapped_column(ForeignKey("accounts.id", ondelete="CASCADE"), index=True)
+    beneficiary_profile_id: Mapped[str] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), index=True)
+    beneficiary_binding_revision: Mapped[int] = mapped_column(Integer)
+    item_id: Mapped[str] = mapped_column(ForeignKey("knowledge_items.id", ondelete="CASCADE"), index=True)
+    item_evidence_revision: Mapped[int] = mapped_column(Integer)
+    question_id: Mapped[str | None] = mapped_column(ForeignKey("knowledge_items.id", ondelete="CASCADE"), index=True)
+    question_evidence_revision: Mapped[int | None] = mapped_column(Integer)
+    acceptance_revision: Mapped[int | None] = mapped_column(Integer)
+    asker_profile_id: Mapped[str | None] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), index=True)
+    asker_binding_revision: Mapped[int | None] = mapped_column(Integer)
+    concept_id: Mapped[str] = mapped_column(ForeignKey("concepts.id", ondelete="CASCADE"), index=True)
+    concept_identity_revision: Mapped[int] = mapped_column(Integer)
+    contract_version: Mapped[str] = mapped_column(String(40))
+    state: Mapped[str] = mapped_column(String(16), default="current", index=True)
+    context_token: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    state_changed_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class Notification(Base):

@@ -11,8 +11,10 @@ accepted by `tools/ml_quality_check.py`. Two authors each prepare 150 cases;
 each contributes 75 positive and 75 negative preselected decisions **in each
 of the four categories**. Together they must supply at least 100 substantive
 hard negatives per category. An independent reviewer audits every label
-before inference. Agent delegation requires the user's authorization under
-the current session rules; no authors have been dispatched yet.
+before inference. The user authorized independent agents on September 14.
+Implementation reviewers and corpus authors must be separate agents; authors
+must not inherit implementation-review history. No new authors have been
+dispatched before the September 22 feedback-contract revision below.
 
 Authors may read the schema and product semantics, but not model outputs,
 failed holdout cases, confidence values, or implementation-specific extraction
@@ -85,3 +87,136 @@ candidate must also pass the existing 50,000-item/50-client concurrent-load
 gate, actual offline bundle verification, resource controls, migrations,
 rollback, admin controls, and live application behavior. Emulated Linux
 measurements cannot establish performance on the deployment server.
+
+## Separate public effects gate
+
+Version 2 also requires `product_effects_gate: PASS`. These are engineering
+assertions inside the authored cases, never additional quality decisions or
+independent samples. The four selected quality decisions and complete-output
+audit use the initial observation, or `after_actions` when actions exist.
+Routing challenge observations do not change those quality observations.
+An effects failure prevents overall PASS even when numeric quality passes;
+missing assertions, API evidence, or required coverage cannot certify PASS.
+
+Each case may declare `effects`, mapping a phase to an array of exact checks.
+Supported phases are `initial`, `before_replay`, `after_actions`, and
+`after_challenge`. The middle phases require source edit/delete actions;
+`after_challenge` requires the routing challenge below. All targets and
+expectations must be frozen with the corpus before inference.
+
+| `kind` | Target fields | `expected` |
+| --- | --- | --- |
+| `tags` | `post`: zero-based public post index | Exact concept-name list |
+| `search_items` | `query`: exact public search text | Exact returned post-index list |
+| `suggested_experts` | `post`: public question index | Exact case-actor list |
+| `question_match` | `post`: public question index; `actor`: signed-in case actor | Boolean `matches_me` |
+| `routing_notifications` | `actor`: signed-in case actor | Exact question-index list for `expertise_match` history |
+
+No other fields are accepted. List order is irrelevant; duplicates, unexpected
+names, unknown item IDs and extra notifications fail. Predicted aliases cannot
+substitute for frozen concept names. The runner records full public item and
+question details (including expected deletion 404s), search responses, expertise
+directory, signed-in question lists, notification history, revisions, and API
+request chronology for every observed phase. Missing response fields cannot
+be interpreted as empty results. Summary grading recomputes checks from those
+retained observations and the frozen assertions, rather than trusting stored
+pass flags or rewritten expectations. The runner and both evaluation helper
+sources are hashed in the report.
+
+Across the corpus, tags, search items, suggested experts and question matches
+each need at least one passing positive, passing negative and demonstrated
+initial-to-later withdrawal. An initially absent effect cannot prove withdrawal.
+Routing needs positive and negative checks plus a demonstrated *new-target*
+suppression challenge. Historical notifications are events: losing expertise
+does not require old notifications to disappear. Deleting a question may clean
+its historical notifications; the report labels this `question_delete_cleanup`
+and it does not count as suppression of future routing.
+
+A case can declare one small routing challenge:
+
+```json
+{
+  "routing_suppression": {
+    "actor": "expert",
+    "concept": "Ember Cache",
+    "historical_question": 4,
+    "challenge_question": 5,
+    "body": "How does Ember Cache rebuild a receipt?"
+  }
+}
+```
+
+Both questions must already exist, belong to another actor, be distinct, and
+remain untouched by ordinary case actions. The challenge body must change the
+second question. Declare an identical exact `routing_notifications` expectation
+for this actor in `initial`, `after_actions` and `after_challenge`; each must
+include the historical question and exclude the challenge question. For
+example, all three expectations can be `[4]`.
+
+The runner creates the unrelated second question before mutation. It records
+initial effects, applies the predeclared evidence edits/deletions, drains the
+production worker, and observes withdrawal. Only then does it edit the second
+question to the predeclared challenge body, drain again, and observe effects.
+The gate requires initial expertise for the exact actor/concept and its absence
+after mutation and after the challenge. The challenge question must be open and
+unanswered throughout; initially and after mutation it must lack the challenged
+topic, expert suggestion and signed-in match. After its edit it must carry the
+exact topic tag while still lacking the withdrawn expert suggestion, match and
+new notification. The original notification must remain. Thus an existing
+`route:question:profile` deduplication key cannot explain a successful challenge.
+
+These checks cover retained REST responses and synchronous production-queue
+drains in fresh databases. They do not establish browser refresh behavior,
+WebSocket delivery, arbitrary concurrent schedules, performance, real model
+accuracy, or results beyond public endpoint response limits. Those need their
+separate engineering and deployment evidence. Synthetic inference regressions
+validate the harness and fault detection only; they are not held-out quality N.
+
+## Prospective explicit topic feedback (September 22)
+
+The new interaction requires a deliberate canonical-topic choice. Historical
+`accepted: true`, `helped_by`, and endorsement actions remain broad impact only;
+they supply no automatic topical expertise. Previously frozen corpora retain
+their original bytes and interpretation. Their inputs must not be retrospectively
+filled with inferred choices. No quality target or independent sample minimum
+changes with this interaction.
+
+New cases may declare `feedback_contract: "explicit_topics_v1"` and a chronological
+`feedback` list. Each entry has exactly `after_post` (zero-based creation index),
+`post` (the contribution), `actor`, `kind` (`helped` or `accepted`), and `topics`
+(the exact, independently authored canonical names explicitly chosen). An
+optional `expected_status` can declare an intentional HTTP 401/403/409 refusal;
+otherwise success is required. Feedback runs after that source's normal worker
+drain, then the worker drains again before the next declared event. Several
+entries may share a timing index; their written order is authoritative.
+
+Accepted-topic feedback requires a currently accepted answer and the authenticated
+asker account. Helpful topic feedback requires an authenticated independent
+account. A generic acceptance can precede a later new topical confirmation;
+the later action must appear explicitly in the frozen chronology. The automatic
+expertise policy requires at least two actor accounts, three independent
+contribution/problem groups and one accepted-topic confirmation, for the same
+contributor and exact canonical topic. Copies and answers to the same problem
+do not multiply originality. Distinct accounts are not verified distinct humans.
+
+The runner reads the public feedback context and searches current canonical
+choices by the frozen names. It saves every lookup, selected ID/revision,
+request, response and unavailable choice. It never chooses from `expect` or
+`allowed`, seeds a missing concept, resolves an unchosen alias, or substitutes
+another prediction. If any intended choice is missing or ambiguous, no partial
+set is submitted; the missed coverage remains visible to quality grading.
+Empty topic lists explicitly revoke that actor's feedback of that kind.
+
+A lifecycle action may use `type: "topic_feedback"`, `post`, `actor`, `kind`,
+`topics`, and optional `expected_status`. This permits a predeclared replacement,
+revocation or explicit reconfirmation after an edit through the same public API.
+The before-replay and after-actions effect phases apply to those actions too.
+The selected quality decision and complete-output audit remain unchanged.
+
+Labels must independently describe what the contribution demonstrates. The
+choice itself is an input, not ground truth: a mistaken topical confirmation
+can still produce a false positive. Include broad-only outcomes, misleading
+choices, incidental/promotional topics, copied material, account reuse and
+stale/revoked feedback. Neither an explicit click nor a passing mechanics test
+establishes expertise precision. Authoring and review roles remain separated
+from implementation and model outputs.

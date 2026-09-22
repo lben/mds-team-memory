@@ -79,3 +79,31 @@ export interface Corroboration {
   group_size: number
   contributors: number
 }
+
+export type TopicFeedbackKind = 'helped' | 'accepted'
+
+export interface TopicFeedbackOption {
+  concept_id: string
+  name: string
+  identity_revision: number
+  suggested_for: TopicFeedbackKind[]
+}
+
+export interface TopicFeedbackEntry {
+  concept_id: string
+  name: string
+  state: 'current' | 'revoked' | 'stale'
+}
+
+export interface TopicFeedbackContext {
+  context_token: string
+  item_id: string
+  question_id: string | null
+  item: { body: string; author: string }
+  question: { id: string; body: string; author: string } | null
+  topics: TopicFeedbackOption[]
+  feedback: Record<TopicFeedbackKind, TopicFeedbackEntry[]>
+  can_confirm_helped: boolean
+  can_confirm_accepted: boolean
+  signed_in: boolean
+}

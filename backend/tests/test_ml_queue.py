@@ -55,6 +55,24 @@ def queue_db(queue_template, tmp_path):
     return path
 
 
+@pytest.fixture(scope="module")
+def current_queue_template(queue_template, tmp_path_factory):
+    """Current worker code needs the current application schema, not 0007."""
+    path = tmp_path_factory.mktemp("ml-current-template") / "db.sqlite3"
+    with sqlite3.connect(queue_template) as source, sqlite3.connect(path) as target:
+        source.backup(target)
+    migrate(path, "upgrade", "head")
+    return path
+
+
+@pytest.fixture
+def current_queue_db(current_queue_template, tmp_path):
+    path = tmp_path / "db.sqlite3"
+    with sqlite3.connect(current_queue_template) as source, sqlite3.connect(path) as target:
+        source.backup(target)
+    return path
+
+
 def add_item(conn, item_id="item", visibility="team", kind="note"):
     conn.execute("""INSERT INTO knowledge_items(id,kind,body,visibility,author_profile_id,created_at,updated_at)
       VALUES (?,?,'Initial source text',?,'author',datetime('now'),datetime('now'))""", (item_id, kind, visibility))
@@ -213,7 +231,7 @@ def test_additive_migration_round_trip_preserves_sources_and_fts(queue_db):
 @requires_fixed_sqlite
 @pytest.mark.parametrize("target", ["0010", "0009"])
 def test_identity_policy_downgrade_requeues_existing_sources(queue_db, target):
-    migrate(queue_db, "upgrade", "head")
+    migrate(queue_db, "upgrade", "0014")
     with connect(queue_db) as conn:
         add_item(conn, "first")
         add_item(conn, "second")

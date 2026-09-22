@@ -5,6 +5,7 @@ import { ApiError, api, type Item } from '../api'
 import AskModal from './AskModal.vue'
 import { useAsk } from '../ask'
 import { knowledgeRevision, store } from '../store'
+import HelpfulActions from './HelpfulActions.vue'
 
 interface Detail extends Item {
   concepts: { id: string; name: string }[]
@@ -79,12 +80,6 @@ async function load() {
 }
 
 watch(knowledgeRevision, load)
-
-async function markHelped() {
-  if (!detail.value) return
-  await store.markHelped(detail.value)
-  emit('changed')
-}
 
 async function endorse() {
   if (!detail.value) return
@@ -181,19 +176,17 @@ useDialog(dialogRoot, () => emit('close'))
           </span>
         </div>
         <div class="result-actions">
-          <button class="btn small" :class="{ success: detail.marked_helped }" :disabled="detail.is_mine" @click="markHelped">
-            {{ detail.marked_helped ? '✓ Marked helpful' : '✓ Helped me' }}
-          </button>
+          <HelpfulActions :item="detail" @changed="emit('changed')" />
           <button
             v-if="!detail.is_mine && !detail.endorsed_by_me && detail.author_verified"
             class="btn small"
             data-testid="endorse"
             @click="endorse"
           >
-            Endorse as expert
+            Endorse contribution
           </button>
-          <!-- Saying why beats an inert button: an endorsement is what an admin
-               maps expertise from, and expertise needs an account behind it. -->
+          <!-- Broad endorsement supports contributor impact and manual review;
+               it never certifies topic expertise. -->
           <span
             v-else-if="!detail.is_mine && !detail.author_verified"
             class="muted"

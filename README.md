@@ -136,8 +136,11 @@ uv run --python 3.12 tools\deploy.py prod    # asks you to type 'prod' first
 A deploy builds the frontend here, ships one archive, builds that release's
 Python 3.12 environment with `uv` on the server while the old release keeps
 serving, then migrates the database and swaps over. It waits for `/api/health`
-before reporting success, and restores the previous release if the new one does
-not come up. Releases are kept side by side so a rollback is a symlink away.
+before reporting success, and restores a compatible previous release if the new
+one does not come up. Releases are kept side by side. Once the database has the
+explicit topic feedback schema (migration 0015), older releases that lack that
+contract cannot be activated or started. A refused rollback preserves the
+current processes, release links and shared database, including human feedback.
 
 ```powershell
 uv run --python 3.12 tools\serverctl.py                # deployed release, process, health

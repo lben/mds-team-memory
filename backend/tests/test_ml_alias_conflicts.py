@@ -7,6 +7,8 @@ from types import SimpleNamespace
 
 import pytest
 
+from ml_synthetic_records import current_synthetic_result
+
 
 CASES = json.loads((Path(__file__).parent / "fixtures/alias_conflict_regressions.json").read_text())["cases"]
 
@@ -61,8 +63,9 @@ def apply_post(item_id, post, *, cached=False):
             return
         result = copy.deepcopy(post["result"])
         result["chunks"] = []
-        # Saved fixtures remain r4 predictions. Regenerate only their generation
-        # metadata for unchanged legacy rules; this is recorded-output replay.
+        # Saved fixtures remain r4 predictions. Reusing their fixed scores and
+        # spans with current identity metadata is a synthetic application input,
+        # not a fresh model observation or new quality evidence.
         for definition in result.get("corroborated_definitions", []):
             assert definition["syntax_rule_revision"].startswith("r4:")
             assert "copular_name_for" not in definition["syntax_rules"]
@@ -73,6 +76,9 @@ def apply_post(item_id, post, *, cached=False):
              "rule": d["syntax_rules"][0]} for d in result.get("corroborated_definitions", [])]
         result["conflict_definitions"] = [{**p, "source_text_hash": digest(source.text)} for p in possible]
         result["conflict_coverage_revision"] = syntax.CONFLICT_REVISION
+        # Port the fixed scores/identity spans into an explicit synthetic
+        # current-contract input; the recorded model fixture remains unchanged.
+        result = current_synthetic_result(result)
         db.execute(text("UPDATE ml_state SET pipeline_version=:version WHERE id=1"),
                    {"version": version + ":" + policy.VERSION})
         adapter.apply_source(db, "item", item_id, source, result, version, models["embeddings"]["revision"], 1024)
@@ -113,6 +119,7 @@ def test_current_competing_definition_blocks_public_alias(make_client, case, ord
     finally:
         for client, item in zip(clients, items):
             assert client.delete(f"/api/items/{item}").status_code == 200
+            apply_post(item, None)
 
 
 def insert_token(parsed, index, word, *, dep="advmod", quote=False):
@@ -187,6 +194,7 @@ def test_nonasserted_counterpart_does_not_block_public_alias(make_client, case, 
     finally:
         for item in items:
             assert client.delete(f"/api/items/{item}").status_code == 200
+            apply_post(item, None)
 
 
 @pytest.mark.parametrize("case", CASES, ids=lambda case: case["id"])
@@ -212,6 +220,7 @@ def test_syntax_only_definition_never_supplies_publication_evidence(make_client,
             "/api/search", params={"q": case["alias"]}).json()["concepts"]]
     finally:
         assert client.delete(f"/api/items/{item}").status_code == 200
+        apply_post(item, None)
 
 
 @pytest.mark.parametrize("coverage", ["old_structure", "old_revision"])
@@ -258,6 +267,7 @@ def test_old_coverage_requires_reprocessing_before_single_source_publication(mak
     finally:
         for item in items:
             assert client.delete(f"/api/items/{item}").status_code == 200
+            apply_post(item, None)
 
 
 @pytest.mark.parametrize("case", [CASES[2], CASES[3]], ids=lambda case: case["id"])
@@ -272,8 +282,8 @@ def test_arbitrary_relative_clause_is_not_a_heading_assertion(case):
 
 
 @pytest.mark.parametrize("case", CASES, ids=lambda case: case["id"])
-def test_actual_runtime_preserves_conflict_candidates_without_changing_publication_records(monkeypatch, case):
-    from app.ml import runtime, syntax
+def test_actual_runtime_preserves_conflict_candidates_without_changing_raw_records(monkeypatch, case):
+    from app.ml import relation_syntax, runtime, syntax
     from app.ml.sources import digest
 
     post = case["posts"][int(case["competing_phase"].split("_")[1]) - 1]
@@ -284,11 +294,21 @@ def test_actual_runtime_preserves_conflict_candidates_without_changing_publicati
     model.extractor = SimpleNamespace(extract=lambda body, schema, **kwargs: post["raw"][schema])
     model.syntax = lambda body: post["syntax"]
     monkeypatch.setattr(syntax, "candidates", lambda parsed, **kwargs: syntax.propose(parsed, **kwargs))
+    # These retained parser roles are already serialized. Exercise the real new
+    # relationship guard over them, without claiming a fresh parser observation.
+    monkeypatch.setattr(relation_syntax, "serialize", lambda parsed: parsed)
     vector = SimpleNamespace(astype=lambda dtype: SimpleNamespace(tobytes=lambda: b"\0" * 4))
     model.embedding = SimpleNamespace(encode=lambda body, **kwargs: vector)
     result = model.analyze(post["body"])
     assert result["concepts"] == post["result"]["concepts"]
-    assert result["relations"] == post["result"]["relations"]
+    # The current grammar deliberately recomputes assertion decisions. Keep
+    # extraction scores and argument geometry fixed; the retired decisions and
+    # the outer evidence window are both outputs of the changed grammar.
+    raw_fields = ("head", "tail", "predicate", "score")
+    assert [{key: row[key] for key in raw_fields} for row in result["relations"]] == [
+        {key: row[key] for key in raw_fields} for row in post["result"]["relations"]]
+    assert result["relation_guard_revision"] == relation_syntax.REVISION
+    assert all(row["relation_guard_revision"] == relation_syntax.REVISION for row in result["relations"])
     assert result["corroborated_definitions"] == post["result"]["corroborated_definitions"] == []
     assert result["conflict_coverage_revision"] == syntax.CONFLICT_REVISION
     candidates = result["conflict_definitions"]

@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from ..auth import get_admin, get_profile
+from ..auth import get_account, get_admin, get_profile
 from ..concepts import source_concepts
 from ..db import get_db
 from ..docstore import save_uploaded_document
@@ -15,6 +15,7 @@ from ..models import (
     Revision,
     utcnow,
 )
+from .. import topic_feedback
 
 router = APIRouter(prefix="/api", tags=["items"])
 
@@ -125,6 +126,7 @@ def edit_item(
     # old derivations behind.
     process_after_save(db, item)
     db.commit()
+    db.refresh(item)
     return item_dict(db, item, profile)
 
 
@@ -158,6 +160,27 @@ def helped(
     return {"created": created}
 
 
+@router.get("/items/{item_id}/topic-feedback")
+def get_topic_feedback(
+    item_id: str, q: str = Query("", max_length=120), profile: Profile = Depends(get_profile),
+    account: Account | None = Depends(get_account), db: Session = Depends(get_db),
+):
+    item = _get_item(db, item_id, profile)
+    return topic_feedback.feedback_dict(db, item, profile, account, q)
+
+
+@router.put("/items/{item_id}/topic-feedback")
+def put_topic_feedback(
+    item_id: str, payload: topic_feedback.TopicFeedbackIn, profile: Profile = Depends(get_profile),
+    account: Account | None = Depends(get_account), db: Session = Depends(get_db),
+):
+    topic_feedback.begin_write(db)
+    item = _get_item(db, item_id, profile)
+    topic_feedback.save_selection(db, item, profile, account, payload.kind, payload)
+    db.commit()
+    return topic_feedback.feedback_dict(db, item, profile, account)
+
+
 @router.post("/items/{item_id}/endorse")
 def endorse(
     item_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
@@ -184,7 +207,7 @@ def endorse(
         db, "sme_endorsed", item.author_profile_id, f"sme:{profile.id}:{item.id}", profile.id, item.id
     )
     if created:
-        notify(db, item.author_profile_id, "endorsed", "An expert endorsed your contribution.", item.id)
+        notify(db, item.author_profile_id, "endorsed", "A teammate endorsed your contribution.", item.id)
     db.commit()
     return {"created": created}
 

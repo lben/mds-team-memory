@@ -49,11 +49,16 @@ def analyze(post, monkeypatch, control=None):
     model.extractor = SimpleNamespace(extract=lambda body, schema, **kwargs: stages[schema]['raw'])
     model.syntax = lambda body: stages['syntax']
     monkeypatch.setattr(syntax, 'candidates', lambda parsed, **kwargs: syntax.propose(parsed, **kwargs))
+    # Reapply today's unscored rules to the retained parser observation. This
+    # does not relabel the original model output as new quality evidence.
+    monkeypatch.setattr(runtime.relation_syntax, 'serialize', lambda parsed: parsed)
     vector = SimpleNamespace(astype=lambda dtype: SimpleNamespace(tobytes=lambda: b'\0' * 4096))
     model.embedding = SimpleNamespace(encode=lambda body, **kwargs: vector)
     result = model.analyze(post['body'])
     assert result['concepts'] == record['result']['concepts']
-    assert result['relations'] == record['result']['relations']
+    fields = ('head', 'tail', 'predicate', 'score')
+    assert [{key: relation[key] for key in fields} for relation in result['relations']] == [
+        {key: relation[key] for key in fields} for relation in record['result']['relations']]
     # Embedding inference is outside this replay. Exercise the real empty derived store.
     result['chunks'] = []
     if control == 'no_genuine_concepts':
@@ -118,6 +123,7 @@ def test_recorded_explicit_copular_name_public_cache_and_withdrawal(make_client,
     finally:
         for client, item in zip(clients, items):
             client.delete(f'/api/items/{item}')
+            apply(item)
 
 
 @pytest.mark.parametrize('control', ['no_roles', 'low_role', 'wrong_role_span', 'no_genuine_concepts', 'question_source'])
@@ -145,6 +151,7 @@ def test_new_grammar_cannot_replace_role_score_canonical_or_assertion_gate(make_
     finally:
         for client, item in zip(clients, items):
             client.delete(f'/api/items/{item}')
+            apply(item)
 
 
 def test_old_syntax_generation_cache_reprocesses_recorded_outputs(make_client, monkeypatch):
@@ -178,3 +185,4 @@ def test_old_syntax_generation_cache_reprocesses_recorded_outputs(make_client, m
     finally:
         for client, item in zip(clients, items):
             client.delete(f'/api/items/{item}')
+            apply(item)

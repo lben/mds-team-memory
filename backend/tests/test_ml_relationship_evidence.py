@@ -6,6 +6,8 @@ import pytest
 
 from test_ml_automation import automation, _capture, _edge, _tags
 from test_ml_runtime import _analyze, _span
+from ml_relation_helpers import DeclaredGuard, declaration
+from ml_synthetic_records import current_synthetic_metadata, select_synthetic_pipeline
 
 
 @pytest.mark.parametrize("polarity", ["positive", "negative"])
@@ -21,10 +23,11 @@ def test_literal_relationship_evidence_survives_higher_unsupported_score(
     names = f"{prefix} Pump", f"{prefix} Battery"
     owners = [make_client() for _ in range(3)]
     items = []
-    metadata = "synthetic-evidence-selection", "fixture-embedding", 1024
+    metadata = current_synthetic_metadata()
 
     def apply(item_id, body=None, *, mixed=False, cached=False):
         with SessionLocal() as db:
+            select_synthetic_pipeline(db, metadata)
             source = snapshot(db, "item", item_id)
             if source is None:
                 result = None
@@ -41,12 +44,18 @@ def test_literal_relationship_evidence_survives_higher_unsupported_score(
                     predictions.append({"head": last[0], "tail": last[1]})
                     if not supported_first:
                         predictions.reverse()
-                result = _analyze(body, entities, {"uses": predictions}, full=True)
+                literal_end = body.index(".") + 1 if mixed else len(body)
+                # This test owns evidence selection, not parser semantics. Give
+                # the first source assertion explicit support; the other model
+                # proposal remains checked and unsupported at its real offsets.
+                guard = DeclaredGuard(body, [declaration(body, names[0], "uses", names[1],
+                                                        polarity if mixed else "positive", end=literal_end)])
+                result = _analyze(body, entities, {"uses": predictions}, full=True, guard=guard)
                 result.update(chunks=[], conflict_definitions=[],
                               conflict_coverage_revision=syntax.CONFLICT_REVISION)
                 if mixed:
                     assert {(r['polarity'], r['literal_support'], r['score']) for r in result['relations']} == {
-                        (polarity, True, .76), (polarity, False, .99)}
+                        (polarity, True, .76), ("uncertain", False, .99)}
             adapter.apply_source(db, "item", item_id, source, result, *metadata)
             db.commit()
 
@@ -82,7 +91,10 @@ def test_literal_relationship_evidence_survives_higher_unsupported_score(
                 detail = owners[0].get(f"/api/graph/links/{edge['link_id']}/evidence").json()
                 claim = next(c for c in detail['claims'] if c['predicate'] == 'uses' and c['state'] == 'active')
                 assert claim['support_count'] == 2
-                assert next(s['quote'] for s in claim['sources'] if s['source_id'] == mixed_id) == literal
+                assert next(s['quote'] for s in claim['sources']
+                            if s['source_id'] == mixed_id and s['polarity'] == 'positive') == literal
+                assert any(s['source_id'] == mixed_id and s['polarity'] == 'uncertain'
+                           for s in claim['sources'])
         assert owners[2].delete(f"/api/items/{mixed_id}").status_code == 200
         items.remove((owners[2], mixed_id))
         # Deletion invalidates immediately; removing a contradiction permits

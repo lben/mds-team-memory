@@ -4,7 +4,8 @@
 Builds the frontend here on the machine you deploy from, assembles a release
 the server can run without Node, uploads it over SSH, creates its Python 3.12
 environment with uv, migrates the shared database, and swaps the server onto
-it. If the new release does not answer /api/health, the previous is put back.
+it. If the new release does not answer /api/health, the previous is put back
+when it supports the shared database's schema.
 
 Usage:
     uv run --python 3.12 tools/deploy.py                  # uat
@@ -189,6 +190,7 @@ def main() -> None:
         # The environment is built while the old release keeps serving; only
         # the migration and the swap need the server down.
         run_step("installing dependencies with uv", ctl(target, "setup", stamp))
+        run_step("checking database compatibility", ctl(target, "compatible", stamp))
         reached = STOPPED
         run_step("stopping the server", ctl(target, "stop"))
         run_step("backing up the database", ctl(target, "backup", stamp))
@@ -217,7 +219,7 @@ def main() -> None:
 
 
 def recover(target: Target, reached: str) -> None:
-    """Put the server back the way this deploy found it."""
+    """Recover onto compatible code without replacing the shared database."""
     if reached == UNTOUCHED:
         print("The running server was never touched; it is still serving.", file=sys.stderr)
         return
@@ -229,15 +231,18 @@ def recover(target: Target, reached: str) -> None:
     if reached in (MIGRATED, SWAPPED):
         print(
             f"The database may have been migrated; the copy taken beforehand is in "
-            f"{target.root}/backups/. Restoring it is described in SERVER_SETUP.md.",
+            f"{target.root}/backups/. Keep the current database: restoring that copy "
+            "would discard later human writes. See SERVER_SETUP.md for recovery.",
             file=sys.stderr,
         )
     if restored:
         print("Restored the previous release; it is serving again.", file=sys.stderr)
         return
     print(
-        "Could not restore automatically - nothing is serving.\n"
+        "Could not restore a compatible release automatically. Inspect the current "
+        "processes before taking further action; a blocked rollback preserves them.\n"
         "  (on a first deploy there is no earlier release to fall back to)\n"
+        f"  python tools/serverctl.py status {target.name}    # current processes and release\n"
         f"  python tools/serverctl.py logs {target.name}      # what went wrong\n"
         f"  python tools/serverctl.py releases {target.name}  # what is available\n"
         f"  python tools/serverctl.py start {target.name}     # try again once fixed",

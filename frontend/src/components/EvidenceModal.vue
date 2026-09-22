@@ -15,6 +15,8 @@ interface ClaimSource {
   start: number
   end: number
   polarity: string
+  literal_support: boolean
+  assertion_allowed: boolean
   origin: string
   locator: string
   model_version: string
@@ -61,6 +63,11 @@ const evidence = ref<Evidence | null>(null)
 const isAdmin = computed(() => store.auth.is_admin)
 let requestId = 0
 const sourceSlice = (source: ClaimSource, start: number, end: number) => Array.from(source.text).slice(start, end).join('')
+function sourceLabel(source: ClaimSource, claim: Claim) {
+  if (source.context_source || claim.kind === 'association') return 'Context; association only'
+  if (!source.literal_support || !source.assertion_allowed || source.polarity === 'uncertain') return 'Uncertain extraction'
+  return source.polarity === 'negative' ? 'Opposing claim' : 'Supporting assertion'
+}
 
 /** Jump from the graph to this link's row in the admin curation table. */
 function manageLink() {
@@ -142,7 +149,7 @@ useDialog(dialogRoot, () => emit('close'))
             <div v-for="source in claim.sources" :key="`${source.source_kind}:${source.source_id}:${source.start}:${source.polarity}`" class="detail-section">
               <div class="meta">
                 <span>{{ source.filename || source.origin }} {{ source.locator }}</span>
-                <span>{{ source.context_source ? 'Similar context; association only' : source.polarity === 'negative' ? 'Opposing claim' : 'Supporting context' }}</span>
+                <span>{{ sourceLabel(source, claim) }}</span>
                 <span>Characters {{ source.start }}–{{ source.end }} (zero-based; end excluded)</span>
               </div>
               <p style="white-space: pre-wrap">{{ sourceSlice(source, Math.max(0, source.start - 120), source.start) }}<mark>{{ source.quote }}</mark>{{ sourceSlice(source, source.end, source.end + 120) }}</p>

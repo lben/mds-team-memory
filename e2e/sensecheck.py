@@ -152,7 +152,7 @@ with sync_playwright() as pw:
     V.goto(base+"/"); V.wait_for_timeout(2200)
     d = V.get_by_test_id("knowledge-column").locator(".card.result").first
     d.get_by_role("button", name="Details").click(); V.wait_for_timeout(1600)
-    btn = V.get_by_test_id("item-detail").get_by_role("button", name="Endorse as expert")
+    btn = V.get_by_test_id("item-detail").get_by_role("button", name="Endorse contribution")
     if btn.count():
         btn.click(); V.wait_for_timeout(2000)
         note("endorse", f"an ordinary teammate clicking Endorse gets: "

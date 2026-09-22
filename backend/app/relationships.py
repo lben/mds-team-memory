@@ -192,13 +192,15 @@ def relationship_claims(db: Session, link: Relationship) -> list[dict]:
         # A co-occurrence can never be presented as a factual relationship.
         if row.kind == "association" and not fixed and state in {"active", "held", "weak"}:
             state = "weak"
-        positive = [e for e in evidence if e["polarity"] == "positive"]
+        supporting = [e for e in evidence if row.kind != "relationship" or
+                      (e.get("literal_support") and e.get("assertion_allowed"))]
+        positive = [e for e in supporting if e["polarity"] == "positive"]
         claims.append({"finding_key": row.key, "kind": row.kind, "src_id": payload["src_id"],
                        "dst_id": payload["dst_id"], "predicate": predicate or payload["predicate"].replace("_", " "),
                        "state": state, "origin": "manual" if fixed and fixed.mode == "pinned" else "automatic",
                        "override": fixed.mode if fixed else "automatic", "policy_version": policy.VERSION,
                        "support_count": policy.independent_support(positive)[0],
-                       "conflicts": any(e["polarity"] == "negative" for e in evidence),
+                       "conflicts": any(e["polarity"] == "negative" for e in supporting),
                        "_score": score, "_evidence": evidence})
     return sorted(claims, key=lambda c: ({"active": 0, "held": 1, "weak": 2}.get(c["state"], 3),
                                          -c["_score"], c["finding_key"]))
@@ -231,7 +233,9 @@ def graph_link(db: Session, link: Relationship, claims: list[dict] | None = None
         state, origin = best["state"], best["origin"]
         label = winner["predicate"] if winner else "related to"
         src_id, dst_id = (winner["src_id"], winner["dst_id"]) if winner else pair
-        support = [e for c in visible if c["state"] == state for e in c["_evidence"] if e["polarity"] == "positive"]
+        support = [e for c in visible if c["state"] == state for e in c["_evidence"]
+                   if e["polarity"] == "positive" and (c["kind"] != "relationship" or
+                       (e.get("literal_support") and e.get("assertion_allowed")))]
         count = policy.independent_support(support)[0]
     else:
         if link.state not in VISIBLE_STATES:
@@ -324,7 +328,10 @@ def evidence_detail(db: Session, link: Relationship) -> dict:
                 sources.append({"source_kind": source.kind, "source_id": source.id,
                                 "source_hash": source.content_hash, "start": support["start"], "end": support["end"],
                                 "quote": source.text[support["start"]:support["end"]], "text": source.text,
-                                "context_source": support.get("context_source", False), "polarity": support["polarity"], "model_version": support["model_version"],
+                                "context_source": support.get("context_source", False), "polarity": support["polarity"],
+                                "literal_support": support.get("literal_support", False),
+                                "assertion_allowed": support.get("assertion_allowed", False),
+                                "model_version": support["model_version"],
                                 "locator": source.locator, "origin": source.origin,
                                 "document_id": passage.document_id if passage else None,
                                 "filename": document.filename if document else None,

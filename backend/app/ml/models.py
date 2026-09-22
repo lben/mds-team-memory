@@ -22,6 +22,7 @@ class Source(Base):
 
 class Finding(Base):
     __tablename__ = "ml_findings"
+    __table_args__ = (Index("ix_ml_findings_kind_canonical", "kind", "canonical_id"),)
 
     key: Mapped[str] = mapped_column(String(64), primary_key=True)
     kind: Mapped[str] = mapped_column(String(16), index=True)

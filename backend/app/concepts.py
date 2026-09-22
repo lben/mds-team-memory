@@ -14,13 +14,16 @@ from .impact import notify
 from .text import stem
 from .ml import effective
 from .models import (
+    Account,
     Concept,
     ConceptTerm,
     DocumentPassage,
     ExpertiseMapping,
     ItemConcept,
     KnowledgeItem,
+    Notification,
     PassageConcept,
+    Profile,
 )
 
 
@@ -142,22 +145,38 @@ def retag_everything(db: Session) -> None:
 
 
 def route_question(db: Session, question: KnowledgeItem, concepts: list[Concept]) -> None:
-    """Notify profiles whose expertise areas match the question's concepts."""
-    if not concepts:
+    """Notify each matching account once, using its normal sign-in profile."""
+    if (not concepts or question.kind != "question" or question.visibility != "team"
+            or question.accepted_answer_id or question.question_status == "resolved"):
         return
+    from .auth import account_profile
+
+    asker = db.get(Profile, question.author_profile_id)
     mappings = (
         effective.expertise(db)
         .filter(ExpertiseMapping.concept_id.in_([c.id for c in concepts]))
         .all()
     )
-    for m in mappings:
-        if m.profile_id == question.author_profile_id:
+    delivered_accounts = {account_id for (account_id,) in db.query(Profile.account_id)
+                          .join(Notification, Notification.profile_id == Profile.id)
+                          .filter(Notification.kind == "expertise_match", Notification.item_id == question.id,
+                                  Profile.account_id.isnot(None)).all()}
+    for m in sorted(mappings, key=lambda mapping: (mapping.profile_id, mapping.concept_id)):
+        account_id = m.profile.account_id
+        if (not account_id or account_id in delivered_accounts
+                or m.profile_id == question.author_profile_id
+                or (asker and asker.account_id == account_id)):
             continue
+        account = db.get(Account, account_id)
+        if account is None:
+            continue
+        recipient = account_profile(db, account)
         notify(
             db,
-            m.profile_id,
+            recipient.id,
             "expertise_match",
             f"A new question matches your expertise area '{m.concept.name}'.",
             question.id,
-            dedup_key=f"route:{question.id}:{m.profile_id}",
+            dedup_key=f"route-account:{question.id}:{account_id}",
         )
+        delivered_accounts.add(account_id)
