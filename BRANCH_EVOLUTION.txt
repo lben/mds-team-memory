@@ -93,6 +93,15 @@ SEPTEMBER 22 CONTINUATION ON THE SAME BRANCH
   Linux checks plus all six upgrade/suppression checks, without inference.
   The historical quality failures below remain visible. There has
   been no merge, push, or deployment from this continuation.
+- Repair commit a988634 and controller-fixture isolation bcca9d6 now pass one
+  clean packaged offline Linux invocation: 772 tests, zero failures/skips,
+  655.34 seconds; all 220 packaged files verified unchanged. This completes
+  regression verification for the current source, not model-quality approval.
+- Independent review rejected the prospective replacement evaluation set for
+  inconsistent concept annotations before any replacement inference. One
+  BGE-large INT8 memory/quality preservation experiment is prepared but disabled
+  while host free disk is below the required 2 GiB reserve. The previously
+  rejected BGE-small candidate remains closed; production models are unchanged.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

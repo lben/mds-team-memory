@@ -9,6 +9,41 @@ will use separate agents who have not reviewed implementation or model outputs.
 The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
+## Current position — September 22, evening
+
+The engineering checkpoint passes; the full objective does not yet pass.
+
+- **Regression verification:** 772 tests pass, with no failures or skips, in one
+  clean offline Linux run of the packaged application (655.34 seconds). All 220
+  packaged files still match their pre-run hashes. Application source includes
+  `a988634`; the isolated controller fixture includes `bcca9d6`. The two warnings
+  are dependency deprecations. The full log, container state and source checks
+  are in `fresh-evaluation-sep22/package-full-result.json` and its referenced files.
+- **Quality:** the interrupted 13-case measurement remains development evidence,
+  with zero selected relationships and 16/18 correct full-output concepts. It is
+  not a release pass. Only three expected relationships had both endpoint
+  concepts active, so adding relationship classification alone is insufficient.
+- **Independent evaluation review:** the prospective replacement set is NOT
+  APPROVED. Source scenarios and selected labels passed review, but allowed
+  concept names use inconsistent specificity and alternate-boundary standards
+  across the replacement and retained cases. No replacement inference ran.
+- **Resource experiment:** one fixed BGE-large INT8 versus FP32 screen is prepared,
+  with nine independent mechanics checks passing. The immutable preparation is
+  `embedding-int8-trial/screen-freeze.json`; execution is disabled. It must retain
+  all 16 development retrieval rankings and existing 0.75 positive decisions,
+  save at least 512 MiB during inference, and stay within the declared 2.5 GiB
+  embedding-process peak before any integration can advance.
+- **Immediate execution blocker:** physical host free space is about 1.8 GiB,
+  below the required 2 GiB reserve. Task-owned expendable cache and completed
+  test storage have already been reclaimed with evidence retained. The pending
+  user choice is to free at least 3 GiB or authorize deletion of one unrelated,
+  unused Demucs image. That unrelated image has not been removed.
+
+Selected production model assets and numeric evidence/acceptance rules remain
+unchanged. Final-source actual-model compatibility and capacity measurements
+will be required after any further model integration. Earlier dated sections
+below retain the work history; their intermediate pending states are historical.
+
 ## Completed in this continuation
 
 - Recorded the branch history in commit `b1c9e51`.
@@ -433,6 +468,12 @@ eight cold starts, 57 public-effects assertions and two routing challenges.
 Separate semantic review is in progress before any candidate inference. The
 original interrupted corpus remains unchanged and retained.
 
+The subsequent bounded independent review rejected the exact R3 replacement
+hashes. It found incidental descriptive concept labels and inconsistent handling
+of grammatical and secondary-name variants relative to the retained set. Counts
+alone were not used as a rejection rule. No approved copy was created, no
+historical exposed labels were changed, and there was no new inference.
+
 One separate BGE-small embedding candidate was rejected by its predeclared
 screen. In the same supported Linux image, BGE-large preserved all 16 existing
 retrieval comparisons; BGE-small preserved 15, and lost one existing positive
@@ -455,13 +496,18 @@ the full quality/effects and final application resource gates remain unchanged.
 
 ## Remaining work
 
-1. Complete supported-Linux replay/upgrade verification and preserve the failed
-   candidate, original corpus and all partial evidence.
-2. Resolve the demonstrated quality shortfall with a bounded development plan;
-   retain unchanged acceptance targets and do not reopen rejected tuning loops.
-3. Obtain prospective independent quality and public-effects validation for the
-   resulting candidate, followed by appropriate final-source compatibility,
-   regression and capacity checks. Exposed cases cannot become unseen again.
+1. Restore the physical disk reserve before actual model execution. The prepared
+   single INT8 experiment remains disabled until that condition is satisfied.
+2. Resolve the demonstrated concept and relationship coverage shortfall through
+   a qualified development experiment. No alternative extractor is qualified
+   yet; an embedding memory pass alone cannot establish extraction quality.
+3. Establish consistent prospective concept annotations for an independently
+   reviewed evaluation set. Preserve exposed historical labels and failed
+   results; source/label changes must precede inference and remain model-blind.
+4. Obtain independent quality and public-effects validation for the resulting
+   frozen candidate, followed by appropriate final-source actual-model
+   compatibility and capacity checks. The current complete regression suite
+   passes; repeat it only when further changes or new concerns justify it.
 
 Acceptance targets remain: 98% precision for concepts and relationships, 99% for
 aliases, 95% for expertise; at least 50% recall; and per-category minima of 300
