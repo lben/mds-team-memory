@@ -24,24 +24,49 @@ The engineering checkpoint passes; the full objective does not yet pass.
   not a release pass. Only three expected relationships had both endpoint
   concepts active, so adding relationship classification alone is insufficient.
 - **Independent evaluation review:** the prospective replacement set is NOT
-  APPROVED. Source scenarios and selected labels passed review, but allowed
-  concept names use inconsistent specificity and alternate-boundary standards
-  across the replacement and retained cases. No replacement inference ran.
-  A separate uniform annotation method is now independently approved in
-  `ML_CONCEPT_ANNOTATION_PROTOCOL.md`. A clean author is auditing all 300
-  unobserved scenarios under it, followed by independent all-case review. That
-  method approval does not approve a corpus or authorize inference.
-- **Resource experiment:** one fixed BGE-large INT8 versus FP32 screen is prepared,
-  with nine independent mechanics checks passing. The immutable preparation is
-  `embedding-int8-trial/screen-freeze.json`; execution is disabled. It must retain
-  all 16 development retrieval rankings and existing 0.75 positive decisions,
-  save at least 512 MiB during inference, and stay within the declared 2.5 GiB
-  embedding-process peak before any integration can advance.
-- **Immediate execution blocker:** physical host free space is about 1.8 GiB,
-  below the required 2 GiB reserve. Task-owned expendable cache and completed
-  test storage have already been reclaimed with evidence retained. The pending
-  user choice is to free at least 3 GiB or authorize deletion of one unrelated,
-  unused Demucs image. That unrelated image has not been removed.
+  APPROVED. An earlier source/selected-label review passed, but subsequent
+  review found inconsistent concept specificity and alternate-boundary standards
+  across the replacement and retained cases, followed by the fixed-label errors
+  described below. No replacement inference ran.
+  A separate uniform annotation method is independently approved in
+  `ML_CONCEPT_ANNOTATION_PROTOCOL.md`. Two clean authors have completed all 300
+  unobserved source reviews; their combined candidate preserves every other
+  field and remains NOT APPROVED. Independent review has confirmed seven
+  incorrect fixed concept labels in the first half alone. Correcting these
+  would leave 98 concept hard negatives, below the unchanged 100 minimum;
+  further author concerns await decisions. A separately approved prospective
+  method permits one exact, independently ruled polarity-correction round while
+  preserving source text, selected names, historical results and release minima.
+  No corpus or inference approval follows from these method approvals.
+- **Resource experiment:** the one fixed BGE-large INT8 versus FP32 screen ran
+  after physical free space recovered. It is REJECTED: INT8 preserved 14/16
+  retrieval rankings and lost two existing positive decisions at 0.75. Its
+  785,338,368-byte inference RSS saving and 2,432,053,248-byte process peak met the
+  memory gates, but cannot override failed accuracy preservation. Independent
+  audit verified all 96 vectors, execution/source/asset hashes and exact frozen
+  gates. The FP32 control exactly matches the prior baseline. This candidate is
+  closed; the production model remains FP32. Evidence: `embedding-int8-trial/`.
+- **Storage and staging:** the host initially recovered to approximately 2.1 GiB,
+  enough for the existing-asset INT8 screen. It subsequently recovered to about
+  21 GiB without further task cleanup. The pinned 780,735,696-byte classic GLiNER
+  medium checkpoint and 4.14 MB of package/configuration/tokenizer inputs are now
+  byte-verified for a separate development screen. Staging maintained more than
+  20 GiB free. No inference or model activation followed. No unrelated Demucs
+  image or other unrelated work was removed. Evidence: `classic-concept-trial/`.
+- **Next technical assessment:** sequential model loading is explicitly allowed
+  by the deployment plan and is being reviewed as a way to preserve FP32
+  embedding behavior while making room for native concept extraction. Independent
+  architecture review found it feasible: search consumes stored vectors and
+  does not require BGE residency. Repeated model loading may still fail the
+  unchanged capacity gate; the design is not implemented or measured. The single
+  Qwen2.5-3B-Instruct quantized-model
+  feasibility review found licensing, score-contract, offline dependency and
+  capacity prerequisites unresolved; no screen or integration follows.
+- **Prepared concept screen:** a source-only author is labeling all 60 original
+  development posts and two edited source versions before one native entity
+  comparison. A separate strict offline load-only preflight is being prepared.
+  Neither activity uses the prospective corpus or approves execution. All
+  original development labels/results and numeric publication rules are retained.
 
 Selected production model assets and numeric evidence/acceptance rules remain
 unchanged. Final-source actual-model compatibility and capacity measurements
@@ -498,10 +523,24 @@ BGE-large checkpoint for resource headroom and a separate concept-evidence
 strategy. Any new trial requires its own frozen, rejectable development screen;
 the full quality/effects and final application resource gates remain unchanged.
 
+That declared BGE-large INT8 screen has now completed and is rejected. The two
+processes used the same selected checkpoint, frozen development probes, pinned
+Linux image and four-CPU/five-GiB limits with no network or extra swap. All 48
+vectors per role were retained. FP32 preserved all 16 rankings; INT8 reversed
+rankings 07/14 and lost the existing 0.75 positive cutoff on 08/13. Neither run
+had an execution error or resource-limit failure. Observed inference RSS fell
+from 1,753,980,928 to 968,642,560 bytes; candidate startup/conversion peak was
+2,432,053,248 bytes. Both memory conditions passed, both quality-preservation
+conditions failed. There will be no per-channel, engine, cutoff or layer variant
+of this rejected configuration. Independent integrity review confirms rejection
+and bitwise equality of the new FP32 vectors with the previous FP32 baseline.
+The exact decision and independent audit are `embedding-int8-trial/results-v1/`
+and `embedding-int8-trial/results-v1-independent-audit.json`.
+
 ## Remaining work
 
-1. Restore the physical disk reserve before actual model execution. The prepared
-   single INT8 experiment remains disabled until that condition is satisfied.
+1. Preserve the physical disk reserve before any further managed allocation.
+   The BGE-small and BGE-large INT8 experiments are both closed as rejected.
 2. Resolve the demonstrated concept and relationship coverage shortfall through
    a qualified development experiment. No alternative extractor is qualified
    yet; an embedding memory pass alone cannot establish extraction quality.

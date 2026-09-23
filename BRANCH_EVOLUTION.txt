@@ -102,6 +102,21 @@ SEPTEMBER 22 CONTINUATION ON THE SAME BRANCH
   BGE-large INT8 memory/quality preservation experiment is prepared but disabled
   while host free disk is below the required 2 GiB reserve. The previously
   rejected BGE-small candidate remains closed; production models are unchanged.
+- Commit 3133a29 records the clean 772-test result. Commit f0b3388 publishes the
+  independently approved prospective concept-annotation protocol. Two clean
+  authors completed a uniform 300-case source audit; independent final review
+  and explicitly ruled label corrections remain separate from model quality.
+- Host space subsequently recovered enough for the frozen BGE-large INT8 trial.
+  It saved 785 MB during inference but preserved only 14/16 rankings and lost
+  two existing positive cutoff decisions. Independent integrity review confirms
+  rejection. The configuration is closed; selected FP32 model assets remain.
+- Disk later recovered to about 21 GiB without further task cleanup. One pinned
+  classic GLiNER medium checkpoint and its small offline dependencies were staged
+  and byte-verified for development screening. No model activation or inference
+  followed. Independent architecture review found sequential loading feasible,
+  with actual throughput and memory still to be measured. The seven independently
+  confirmed prospective concept-label errors already imply fewer than the fixed
+  100 hard-negative minimum; full annotation review is still in progress.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 
