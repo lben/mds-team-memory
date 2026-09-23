@@ -141,3 +141,30 @@ Final checkpoint result: all **754 backend tests pass** in supported offline
 Linux (502.80 seconds), with no skips. The application and tests match the
 frozen candidate. Original failing integration runs remain retained. Fresh
 quality/effects evaluation is still pending independent corpus readiness.
+
+
+## September 22 actual-run replay defect
+
+The frozen 300-case evaluation completed 13 cases before case 14 entered an
+endless cached source/vocabulary-backfill cycle. Independent reproduction used
+the exact retained model prediction: source-local acronym evidence depended on
+the alias it was defining, causing active/held/active transitions inside each
+replay transaction. The final projection was unchanged but each cycle restarted
+backfill. The interrupted report and all raw evidence are retained; this was
+not a quality pass.
+
+The adapter now avoids that self-dependency only when a unique current asserted
+local definition actually supplied identity. External alias-only sources retain
+their withdrawal dependencies. Policy v8 schedules one cached rebuild after
+upgrade without changing model inference or thresholds. The original replay
+regression fails against the frozen adapter. Supported Linux passes 93 focused
+replay/search/identity checks and six upgrade/suppression checks, including an
+actual v7 upgrade followed by an idle restart.
+
+An independent audit also distinguished the partial run's two extra concept
+errors: `dust shadow` was a plausible literal domain phenomenon outside the
+exhaustive labels, while `image` was a generic object promoted to a concept.
+Both remain errors under the unchanged approved labels. Neither was a stale
+projection or hallucinated span. These observations do not justify retuning
+a model or acceptance threshold on two examples. The partial run's zero of 13
+expected relationships remains a separate, unresolved quality shortfall.

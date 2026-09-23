@@ -531,7 +531,8 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                 # Multiple expansions in this source cannot establish a single
                 # source-wide identity for standalone occurrences.
                 continue
-            if targets and not (existing and existing.is_canonical):
+            selected_local_definition = bool(targets) and not (existing and existing.is_canonical)
+            if selected_local_definition:
                 row = concepts[next(iter(targets))]
             else:
                 matched = resolution.spelling_match(db, span["name"]) if not existing and not targets else None
@@ -569,11 +570,12 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                 else:
                     row = concepts.get(spelling) or _concept(db, span["name"])
             canonical_name = json.loads(row.payload)["name"]
-            # An exact scored definition already supplies this identity. Making
-            # that observation also depend on its eventual alias publication
-            # creates a cycle when the concept needs the routed entity score.
+            # A current local definition or an exact scored certificate supplies
+            # this identity independently of the published alias. Depending on
+            # that alias would temporarily hide its own defining evidence on
+            # every cached replay and continually restart vocabulary backfill.
             term_dependency = (identity.term_route(db, spelling, row.canonical_id)
-                               if row.canonical_id and not certificate else None)
+                               if row.canonical_id and not certificate and not selected_local_definition else None)
             if term_dependency:
                 terms_by_spelling[spelling] = term_dependency
             if (spelling != normalize(canonical_name)

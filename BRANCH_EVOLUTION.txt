@@ -78,15 +78,19 @@ SEPTEMBER 22 CONTINUATION ON THE SAME BRANCH
   Linux; the frontend build and 10 browser feedback checks pass. Its three-model
   offline compatibility and fixed 50,000-item/50-client capacity checks also pass:
   1,328 successful requests and 268 preserved writes, within the 5 GiB limit.
-  The 300-case independent corpus is approved and its actual quality/effects
-  evaluation is running. Commit 149755d records offline/capacity verification;
+  The 300-case independent corpus was approved before actual quality/effects
+  evaluation. Commit 149755d records offline/capacity verification;
   3c6722f fixes an optional report-metadata lookup that stopped the first launch
   before inference. Model decisions and approved corpus bytes are unchanged.
   A subsequent independent case audit found multiword canonical search missing
   earlier alias-only posts. The query parser and relevance calculation now use
   whole vocabulary phrases, with 13 independent targeted checks passing.
-  The frozen evaluation also exposed a cached-replay runtime issue under
-  investigation; its partial results are not a quality approval.
+  Commit b4cb651 saves the search repair. The frozen evaluation completed 13
+  cases before a source-local acronym self-dependency caused perpetual cached
+  replay in case 14. An independent bounded probe reproduced the loop; all raw
+  evidence and the gracefully interrupted ERROR report are retained. Its partial
+  results are not a quality approval. The minimal replay repair and policy-v8 cached upgrade pass 93 focused
+  Linux checks plus all six upgrade/suppression checks, without inference.
   The historical quality failures below remain visible. There has
   been no merge, push, or deployment from this continuation.
 

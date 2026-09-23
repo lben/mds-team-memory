@@ -1,0 +1,244 @@
+{
+  "provenance": {
+    "kind": "Retained actual model observation from interrupted frozen evaluation; regression evidence only, not fresh quality evidence",
+    "case": "a_audio_sidechain_bass",
+    "post_index": 0,
+    "source_artifact": "data/ml-runs/astra-sep14/fresh-evaluation-sep22/runtime-diagnosis/predictions.jsonl",
+    "source_sha256": "e946aabf3d71c3e33b5330be18172900f321f9c02165f4595f5057d48673d181",
+    "retained_fields": "Complete first prediction, including original text, scores, spans, model metadata, and serialized embedding",
+    "test_adaptations": "Tests omit embedding vectors. A separate synthetic alias-only source reuses the recorded short-name entity score with relocated offsets; it is explicitly not a new inference observation. No scores are invented or adjusted."
+  },
+  "prediction": {
+    "phase": "post_1",
+    "text": "In this project, Sidechain compression is also called SC. Sidechain compression uses External trigger. I used the drum signal to briefly reduce a sustained bass line, leaving space at each strike.",
+    "text_sha256": "9f040e07c384252bfd6daddbdb07a5525cec4b2f8e95be33588725fe9819a812",
+    "metadata": {
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v11:f460c0994293a206",
+      "embedding_version": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "dimensions": 1024
+    },
+    "result": {
+      "concepts": [
+        {
+          "name": "SC",
+          "start": 54,
+          "end": 56,
+          "score": 0.9931502938270569,
+          "label": "named entity"
+        },
+        {
+          "name": "Sidechain compression",
+          "start": 58,
+          "end": 79,
+          "score": 0.9450571537017822,
+          "label": "topic or process"
+        },
+        {
+          "name": "Sidechain compression",
+          "start": 17,
+          "end": 38,
+          "score": 0.9563258290290833,
+          "label": "topic or process"
+        },
+        {
+          "name": "bass line",
+          "start": 156,
+          "end": 165,
+          "score": 0.6113203167915344,
+          "label": "topic or process"
+        },
+        {
+          "name": "drum signal",
+          "start": 114,
+          "end": 125,
+          "score": 0.9649146199226379,
+          "label": "object or substance"
+        },
+        {
+          "name": "External trigger",
+          "start": 85,
+          "end": 101,
+          "score": 0.5761247277259827,
+          "label": "relation endpoint"
+        }
+      ],
+      "relations": [
+        {
+          "head": {
+            "name": "Sidechain compression",
+            "start": 58,
+            "end": 79,
+            "score": 0.5292044878005981
+          },
+          "tail": {
+            "name": "External trigger",
+            "start": 85,
+            "end": 101,
+            "score": 0.5292044878005981
+          },
+          "predicate": "uses",
+          "score": 0.5292044878005981,
+          "literal_support": true,
+          "polarity": "positive",
+          "start": 58,
+          "end": 102,
+          "relation_guard_revision": "r1-typed-predicate-assertions"
+        },
+        {
+          "head": {
+            "name": "Sidechain compression",
+            "start": 58,
+            "end": 79,
+            "score": 0.5052047967910767
+          },
+          "tail": {
+            "name": "drum signal",
+            "start": 114,
+            "end": 125,
+            "score": 0.5052047967910767
+          },
+          "predicate": "uses",
+          "score": 0.5052047967910767,
+          "literal_support": false,
+          "polarity": "uncertain",
+          "start": 58,
+          "end": 125,
+          "relation_guard_revision": "r1-typed-predicate-assertions"
+        },
+        {
+          "head": {
+            "name": "Sidechain compression",
+            "start": 58,
+            "end": 79,
+            "score": 0.5761247277259827
+          },
+          "tail": {
+            "name": "External trigger",
+            "start": 85,
+            "end": 101,
+            "score": 0.5761247277259827
+          },
+          "predicate": "depends_on",
+          "score": 0.5761247277259827,
+          "literal_support": false,
+          "polarity": "uncertain",
+          "start": 58,
+          "end": 101,
+          "relation_guard_revision": "r1-typed-predicate-assertions"
+        },
+        {
+          "head": {
+            "name": "Sidechain compression",
+            "start": 58,
+            "end": 79,
+            "score": 0.6731051802635193
+          },
+          "tail": {
+            "name": "drum signal",
+            "start": 114,
+            "end": 125,
+            "score": 0.6731051802635193
+          },
+          "predicate": "depends_on",
+          "score": 0.6731051802635193,
+          "literal_support": false,
+          "polarity": "uncertain",
+          "start": 58,
+          "end": 125,
+          "relation_guard_revision": "r1-typed-predicate-assertions"
+        },
+        {
+          "head": {
+            "name": "Sidechain compression",
+            "start": 58,
+            "end": 79,
+            "score": 0.5711531043052673
+          },
+          "tail": {
+            "name": "drum signal",
+            "start": 114,
+            "end": 125,
+            "score": 0.5711531043052673
+          },
+          "predicate": "produces",
+          "score": 0.5711531043052673,
+          "literal_support": false,
+          "polarity": "uncertain",
+          "start": 58,
+          "end": 125,
+          "relation_guard_revision": "r1-typed-predicate-assertions"
+        },
+        {
+          "head": {
+            "name": "Sidechain compression",
+            "start": 58,
+            "end": 79,
+            "score": 0.6662062406539917
+          },
+          "tail": {
+            "name": "bass line",
+            "start": 156,
+            "end": 165,
+            "score": 0.6662062406539917
+          },
+          "predicate": "produces",
+          "score": 0.6662062406539917,
+          "literal_support": false,
+          "polarity": "uncertain",
+          "start": 58,
+          "end": 165,
+          "relation_guard_revision": "r1-typed-predicate-assertions"
+        }
+      ],
+      "chunks": [
+        {
+          "start": 0,
+          "end": 196,
+          "vector_base64": "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"
+        }
+      ],
+      "corroborated_definitions": [
+        {
+          "full_name": {
+            "text": "Sidechain compression",
+            "confidence": 0.9994851350784302,
+            "start": 17,
+            "end": 38
+          },
+          "short_name": {
+            "text": "SC",
+            "confidence": 0.999261200428009,
+            "start": 54,
+            "end": 56
+          },
+          "syntax_rules": [
+            "passive_or_nominal_naming"
+          ],
+          "syntax_rule_revision": "r8-known-as-only",
+          "source_text_hash": "5f5bb1d4e93eedcbce024ab96cf861a7e0d063a3428a7acdba6c05aaeeb294c4",
+          "alias_model_revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",
+          "syntax_model_revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5"
+        }
+      ],
+      "conflict_definitions": [
+        {
+          "full_name": {
+            "text": "Sidechain compression",
+            "start": 17,
+            "end": 38
+          },
+          "short_name": {
+            "text": "SC",
+            "start": 54,
+            "end": 56
+          },
+          "rule": "passive_or_nominal_naming",
+          "source_text_hash": "5f5bb1d4e93eedcbce024ab96cf861a7e0d063a3428a7acdba6c05aaeeb294c4"
+        }
+      ],
+      "conflict_coverage_revision": "conflict-v3",
+      "relation_guard_revision": "r1-typed-predicate-assertions"
+    },
+    "seconds": 4.356353960999513
+  }
+}

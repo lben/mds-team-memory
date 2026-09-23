@@ -358,9 +358,10 @@ to an optional lookup; application behavior, scoring, effect checks and all
 corpus bytes are unchanged. The original failed launch log/metadata are retained.
 The replacement snapshot is `candidate-source-r2`, with freeze SHA256
 `16ce87d21f6e5576654eb5c35a02a11b38121464213c642fe347e21c9608e5d3`.
-The actual full evaluation is now running with four CPUs, 5 GiB, no extra swap
-and no network. `quality-execution-r2.json` records the exact image, command,
-source and corpus hashes. Results remain pending; no quality pass is claimed.
+The actual evaluation ran with four CPUs, 5 GiB, no extra swap and no network.
+`quality-execution-r2.json` records the exact image, command, source and corpus
+hashes. It was interrupted for an independently reproduced runtime loop, as
+described below; it is not a quality pass.
 
 An independent audit of the first completed case confirmed its concept, alias
 and expertise successes and exact grading, but found a separate public search
@@ -370,26 +371,56 @@ phrase before splitting words and uses the same phrase groups for relevance.
 Quoted phrases and prefixes retain their meaning; removed aliases cannot revive
 identity through stale stored tags. Four new API regressions and 49 existing
 workflow tests pass; independent expanded boundary/ranking checks pass all 13
-targeted tests. The running evaluator uses its unchanged read-only snapshot.
+targeted tests. Commit `b4cb651` saves this search repair; the interrupted
+evaluator used its unchanged read-only snapshot.
 
-The run completed 13 cases, then encountered repeated cached replay in case 14
-after one post and one model call. A consistent private database snapshot and
-raw output are retained in `fresh-evaluation-sep22/runtime-diagnosis/` for a
-bounded independent reproduction. This is an unresolved runtime issue, not a
-quality success; the existing per-case deadline and full-run reporting remain
-in force. The first 13 cases alone are not a release measurement.
+The run completed 13 cases, then repeatedly replayed the first post of case 14
+without another model call. An independent bounded reproduction found that
+source-local acronym evidence depended on its own published alias. Each cached
+replay temporarily held and reactivated the concept, scheduling another complete
+vocabulary backfill even though the final projection was unchanged. Four replay
+cycles reproduced four new backfill generations. Removing only that redundant
+self-dependency eliminated all four cycles while preserving external alias
+withdrawal dependencies.
+
+The run was gracefully interrupted after 1,206.5 seconds. All 67 actual inference
+calls had completed; the report records ERROR/KeyboardInterrupt, not PASS.
+`fresh-evaluation-sep22/interrupted-quality-run/` retains all partial reports,
+raw predictions, private databases and diagnostics. `quality-interruption.json`
+records the exposed case IDs and hashes. The original sealed corpus is unchanged.
+The first 13 completed cases and the partially observed 14th are now development
+evidence and cannot be called unseen again.
+
+The partial run found all 13 selected concepts, 12 of 13 selected aliases, none
+of the 13 selected relationships and all 13 selected expertise mappings. The
+complete-output concept audit found 16 correct of 18 published concepts. These
+small, positive-only partial results do not satisfy any release sample gate or
+establish precision on hard negatives. Missing relationship coverage remains a
+substantive quality concern; no score or acceptance threshold has been lowered.
+
+The minimal adapter repair gives a unique current asserted local definition its
+own identity authority. It keeps external alias dependencies, source validity,
+manual suppressions and the exception for an already distinct canonical concept.
+Five permanent recorded-score regressions verify settled cached replay,
+withdrawal after definition edits/deletion, admin alias suppression and a real
+v7-to-v8 worker upgrade. The replay regression fails against the frozen
+implementation and passes with the repair. All 93 focused Linux replay, identity
+and search checks pass. All six Linux upgrade/suppression checks also pass,
+including the existing policy-reselection regression; none were skipped. The
+policy revision advances to v8 so quiet existing databases replay their complete
+current caches once. Model versions, raw predictions and numeric decision rules
+are unchanged. The new upgrade test forbids inference and confirms that a second
+worker restart schedules no work.
 
 ## Remaining work
 
-1. Complete the frozen candidate's actual run against the approved corpus,
-   retaining complete
-   outputs, public effects and demonstrated lifecycle behavior. Evaluate the
-   unchanged targets, including sample sizes and applied-prediction minima.
-2. Resolve and verify the reproduced runtime issue; complete appropriate final
-   source regression and capacity checks after implementation changes.
-3. If quality requires implementation changes, preserve these results and obtain
-   appropriate fresh validation for
-   the next candidate; exposed cases cannot become unseen evidence again.
+1. Complete supported-Linux replay/upgrade verification and preserve the failed
+   candidate, original corpus and all partial evidence.
+2. Resolve the demonstrated quality shortfall with a bounded development plan;
+   retain unchanged acceptance targets and do not reopen rejected tuning loops.
+3. Obtain prospective independent quality and public-effects validation for the
+   resulting candidate, followed by appropriate final-source compatibility,
+   regression and capacity checks. Exposed cases cannot become unseen again.
 
 Acceptance targets remain: 98% precision for concepts and relationships, 99% for
 aliases, 95% for expertise; at least 50% recall; and per-category minima of 300
