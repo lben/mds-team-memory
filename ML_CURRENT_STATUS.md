@@ -27,6 +27,10 @@ The engineering checkpoint passes; the full objective does not yet pass.
   APPROVED. Source scenarios and selected labels passed review, but allowed
   concept names use inconsistent specificity and alternate-boundary standards
   across the replacement and retained cases. No replacement inference ran.
+  A separate uniform annotation method is now independently approved in
+  `ML_CONCEPT_ANNOTATION_PROTOCOL.md`. A clean author is auditing all 300
+  unobserved scenarios under it, followed by independent all-case review. That
+  method approval does not approve a corpus or authorize inference.
 - **Resource experiment:** one fixed BGE-large INT8 versus FP32 screen is prepared,
   with nine independent mechanics checks passing. The immutable preparation is
   `embedding-int8-trial/screen-freeze.json`; execution is disabled. It must retain

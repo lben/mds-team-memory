@@ -66,6 +66,18 @@ An independently identified labeling error must be documented transparently.
 Do not silently relabel an output as correct. Any changed corpus needs a new
 prospective evaluation plan; the exposed cases are no longer unseen.
 
+The September 22 interrupted evaluation exposed 14 cases, whose original labels
+and failed results remain unchanged. A proposed 14-case replacement plus the 286
+still-unobserved scenarios was rejected before inference because concept
+specificity and name variants were annotated inconsistently. The independently
+approved [uniform annotation protocol](ML_CONCEPT_ANNOTATION_PROTOCOL.md) defines
+a new prospective continuation: audit all 300 unobserved scenarios and permit
+only concept allowed-output list amendments in a separately sealed copy. All
+source and non-concept-list fields remain identical. This explicitly replaces
+the earlier complete retained-object identity requirement for that continuation;
+it changes no acceptance target or historical result. Independent all-case
+semantic approval and a new freeze are mandatory before any inference.
+
 ## Acceptance
 
 | Category | Required measured precision |
