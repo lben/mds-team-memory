@@ -67,7 +67,9 @@ def _test_processes(root, release):
     (runtime.parent / "__init__.py").touch()
     (runtime / "__init__.py").touch()
     (runtime / "worker.py").write_text("import time\ntime.sleep(60)\n")
+    # Python -m searches cwd before PYTHONPATH; isolate it from a backend test cwd.
     worker = subprocess.Popen([str(release / ".ml-venv/bin/python"), "-m", "app.ml.worker", "--assets", str(root)],
+                              cwd=root / "runtime",
                               env={**os.environ, "PYTHONPATH": str(root / "runtime")})
     for name, process in (("app", web), ("ml", worker)):
         (root / "run" / f"{name}.pid").write_text(str(process.pid))
