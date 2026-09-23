@@ -311,8 +311,8 @@ The implementation snapshot is in `fresh-evaluation-sep22/candidate-source`, wit
 202 file hashes in `candidate-freeze.json`; it was frozen before implementation
 owner access to the new evaluation cases or labels. All 131 retained model,
 wheel and lock files match the prior offline transfer bundle byte-for-byte
-(2,993,060,653 bytes). Fresh quality evaluation still awaits independent semantic
-approval of revised corpora. These engineering passes do not establish quality.
+(2,993,060,653 bytes). The fresh quality evaluation is described below.
+These engineering passes do not establish quality.
 
 Commit `c9c4c54` saves this implementation checkpoint. The frozen source also
 passed the actual three-model offline compatibility check in a four-CPU,
@@ -335,13 +335,58 @@ private test database; `capacity-summary.json` records the cross-check. This
 emulated Linux run does not establish deployment-server latency or full-backlog
 drain time and does not add independent quality decisions.
 
+## Fresh independent evaluation — September 22
+
+Two independent authors and two label reviewers completed and approved 300
+scenarios across 17 domains. All 1,200 selected labels and allowed outputs were
+reviewed before inference, including independence checks against 672 prior
+inputs. Each category has 150 positive and 150 negative decisions; substantive
+hard-negative counts are 105 concepts, 144 aliases, 136 relationships and 133
+expertise decisions. The frozen plan also contains 57 public-effects assertions
+and two fresh-target routing challenges. These are authored engineering
+scenarios, not representative workplace data or a human accuracy evaluation.
+
+The approved corpus is `fresh-evaluation-sep22/sealed/reviewed-corpus.json`, SHA256
+`7d7de42d726d7b3ac1e2bb00a43f49d845f0c11c2921a88b87ad21110371f447`.
+`review-summary.json` records counts and all original/revision/audit hashes.
+The implementation owner did not inspect the case contents or labels before
+freezing the implementation.
+
+The first launch stopped before inference: report construction indexed the
+optional descriptive `purpose` field. Commit `3c6722f` changes only that access
+to an optional lookup; application behavior, scoring, effect checks and all
+corpus bytes are unchanged. The original failed launch log/metadata are retained.
+The replacement snapshot is `candidate-source-r2`, with freeze SHA256
+`16ce87d21f6e5576654eb5c35a02a11b38121464213c642fe347e21c9608e5d3`.
+The actual full evaluation is now running with four CPUs, 5 GiB, no extra swap
+and no network. `quality-execution-r2.json` records the exact image, command,
+source and corpus hashes. Results remain pending; no quality pass is claimed.
+
+An independent audit of the first completed case confirmed its concept, alias
+and expertise successes and exact grading, but found a separate public search
+defect: the unquoted full concept name omitted earlier acronym-only posts that
+had current lexical tags. Search now recognizes the longest active vocabulary
+phrase before splitting words and uses the same phrase groups for relevance.
+Quoted phrases and prefixes retain their meaning; removed aliases cannot revive
+identity through stale stored tags. Four new API regressions and 49 existing
+workflow tests pass; independent expanded boundary/ranking checks pass all 13
+targeted tests. The running evaluator uses its unchanged read-only snapshot.
+
+The run completed 13 cases, then encountered repeated cached replay in case 14
+after one post and one model call. A consistent private database snapshot and
+raw output are retained in `fresh-evaluation-sep22/runtime-diagnosis/` for a
+bounded independent reproduction. This is an unresolved runtime issue, not a
+quality success; the existing per-case deadline and full-run reporting remain
+in force. The first 13 cases alone are not a release measurement.
+
 ## Remaining work
 
-1. Finish independent semantic and independence review of the 300 new cases;
-   retain original seals and freeze the approved corpus before inference.
-2. Run the frozen candidate once against that corpus, retaining complete
+1. Complete the frozen candidate's actual run against the approved corpus,
+   retaining complete
    outputs, public effects and demonstrated lifecycle behavior. Evaluate the
    unchanged targets, including sample sizes and applied-prediction minima.
+2. Resolve and verify the reproduced runtime issue; complete appropriate final
+   source regression and capacity checks after implementation changes.
 3. If quality requires implementation changes, preserve these results and obtain
    appropriate fresh validation for
    the next candidate; exposed cases cannot become unseen evidence again.

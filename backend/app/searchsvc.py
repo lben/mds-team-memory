@@ -10,7 +10,7 @@ from .concepts import match_concepts, term_groups
 from .knowledge import item_dict, item_dicts
 from .models import DocumentPassage, ItemConcept, KnowledgeItem, PassageConcept, Profile, Scratchpad, utcnow
 from .ml import effective
-from .text import build_fts_match, content_terms, find_matches
+from .text import build_fts_match, content_terms, find_matches, search_query_groups
 
 SEARCHABLE_KINDS = ("note", "question", "answer", "excerpt")
 
@@ -20,21 +20,20 @@ def _safe_snippet(raw: str) -> str:
     return html.escape(raw).replace("\x01", "<mark>").replace("\x02", "</mark>")
 
 
-def _coverage(text: str, terms: list[str], aliases: dict[str, list[str]]) -> float:
-    """Fraction of the query's meaningful words this text actually contains.
+def _coverage(text: str, groups: list[tuple[list[str], bool]]) -> float:
+    """Fraction of the query's meaningful groups this text actually contains.
 
     Ranking by coverage first is what keeps a result that matches one word of a
     long question below one that matches all of them.
     """
-    if not terms:
+    if not groups:
         return 1.0
     low = text.lower()
     hits = 0
-    for term in terms:
-        variants = aliases.get(term, [term])
+    for variants, _prefix in groups:
         if any(re.search(rf"(?<!\w){re.escape(v.lower())}", low) for v in variants):
             hits += 1
-    return hits / len(terms)
+    return hits / len(groups)
 
 
 def _signals(entry: dict, updated_at) -> float:
@@ -48,7 +47,7 @@ def _signals(entry: dict, updated_at) -> float:
     )
 
 
-def _item_hits(db: Session, match: str, profile: Profile, terms: list[str], aliases: dict) -> list[dict]:
+def _item_hits(db: Session, match: str, profile: Profile, groups: list) -> list[dict]:
     rows = db.execute(
         sql_text(
             "SELECT ki.id, snippet(items_fts, 0, char(1), char(2), ' … ', 28), bm25(items_fts) "
@@ -73,13 +72,13 @@ def _item_hits(db: Session, match: str, profile: Profile, terms: list[str], alia
         d["snippet"] = _safe_snippet(snip)
         if item.kind == "question":
             d["answer_count"] = answers.get(item.id, 0)
-        d["coverage"] = _coverage(item.body, terms, aliases)
+        d["coverage"] = _coverage(item.body, groups)
         d["score"] = -rank + _signals(d, item.updated_at)
         hits.append(d)
     return hits
 
 
-def _passage_hits(db: Session, match: str, terms: list[str], aliases: dict) -> list[dict]:
+def _passage_hits(db: Session, match: str, groups: list) -> list[dict]:
     rows = db.execute(
         sql_text(
             "SELECT p.id, snippet(passages_fts, 0, char(1), char(2), ' … ', 28), bm25(passages_fts) "
@@ -102,7 +101,7 @@ def _passage_hits(db: Session, match: str, terms: list[str], aliases: dict) -> l
                 "uploader": doc.uploader.label,
                 "uploaded_at": doc.uploaded_at.isoformat() + "Z",
                 "snippet": _safe_snippet(snip),
-                "coverage": _coverage(passage.text, terms, aliases),
+                "coverage": _coverage(passage.text, groups),
                 "score": -rank,
             }
         )
@@ -137,6 +136,7 @@ def _rank(hits: list[dict], group: bool) -> list[dict]:
 def search_all(db: Session, profile: Profile, query: str) -> dict:
     groups = term_groups(db)
     terms = content_terms(query)
+    coverage_groups = search_query_groups(query, groups)
     items: list[dict] = []
     passages: list[dict] = []
 
@@ -149,8 +149,8 @@ def search_all(db: Session, profile: Profile, query: str) -> dict:
     for expression in expressions:
         if not expression:
             continue
-        items += _item_hits(db, expression, profile, terms, groups)
-        passages += _passage_hits(db, expression, terms, groups)
+        items += _item_hits(db, expression, profile, coverage_groups)
+        passages += _passage_hits(db, expression, coverage_groups)
 
     # Concepts the query mentions, so the knowledge graph can focus on them.
     matched = match_concepts(db, query)
