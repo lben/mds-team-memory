@@ -412,6 +412,47 @@ current caches once. Model versions, raw predictions and numeric decision rules
 are unchanged. The new upgrade test forbids inference and confirms that a second
 worker restart schedules no work.
 
+## Subsequent verification and bounded model screening
+
+Commit `a988634` saves the local-definition replay repair and policy-v8 upgrade.
+The complete source-only Linux run passed 764 tests and reported eight setup
+failures in 750.19 seconds. Seven controller checks launched their dummy worker
+from the backend directory and therefore imported the real application; the
+controller's compatibility refusal itself succeeded. Independent reproduction
+and a fixture working-directory repair (`bcca9d6`) pass all 27 controller checks.
+The eighth failure was the SPA route because the Git-only source archive omitted
+ignored frontend build assets. A separate packaged snapshot includes the already
+verified compiled frontend. Its 28 controller/SPA checks pass. The complete
+failed run and focused follow-up are retained as `replay-fixed-full-linux.log`
+and `package-focused-linux.log`; this is not described as one clean full-suite
+invocation. The application code did not change for these setup corrections.
+
+The independent 14-case replacement draft preserves all 286 unexposed case
+objects byte-for-byte, the 150/150 balance in each category, hard negatives,
+eight cold starts, 57 public-effects assertions and two routing challenges.
+Separate semantic review is in progress before any candidate inference. The
+original interrupted corpus remains unchanged and retained.
+
+One separate BGE-small embedding candidate was rejected by its predeclared
+screen. In the same supported Linux image, BGE-large preserved all 16 existing
+retrieval comparisons; BGE-small preserved 15, and lost one existing positive
+at the unchanged 0.75 weak-association cutoff. Peak process RSS fell from
+1,755,430,912 to 626,438,144 bytes, but the quality-preservation gates failed.
+No selected model or cutoff changed. All 96 vectors, scores, logs, hashes,
+resource measurements and the failed decision remain in `embedding-small-trial/`.
+Its unselected 133 MB weight file was retired only after hash verification;
+exact public pins and preparation instructions remain. This candidate is closed.
+
+An exposed-case diagnostic also shows that only three of the 13 missing
+relationships have both endpoint concepts active. A relation-only NLI addition
+cannot solve that publication-coverage ceiling under the current concept rules.
+The separate NLI shadow runner/controls are prepared but blocked from execution;
+there has been no NLI model download, inference or production integration.
+Research is now considering a distinct integer representation of the selected
+BGE-large checkpoint for resource headroom and a separate concept-evidence
+strategy. Any new trial requires its own frozen, rejectable development screen;
+the full quality/effects and final application resource gates remain unchanged.
+
 ## Remaining work
 
 1. Complete supported-Linux replay/upgrade verification and preserve the failed
