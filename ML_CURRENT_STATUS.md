@@ -9,6 +9,66 @@ will use separate agents who have not reviewed implementation or model outputs.
 The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
+## Fixed contextual concept filter — September 27
+
+The user authorized one 20-minute test of a contextual filter on the current
+GLiNER2.5 extractor. One native span-attribute schema was frozen before
+inference: `knowledge_role` with `substantive knowledge topic` and
+`incidental background context`. The native two-label softmax decision had to
+select the substantive label with confidence strictly above 0.5. No label,
+confidence rule, name blacklist, or expected answer changed after observation.
+
+All original control proposals, extraction scores, and provenance were fixed.
+The native attributed extraction was matched by source, exact character span,
+and entity type. Every matching attribute had to pass; absent or conflicting
+matches were held. New spans were retained as raw evidence but could not enter
+publication. Original publication rules then evaluated the surviving evidence.
+
+| Measurement | Original extractor | Contextual filter |
+| --- | ---: | ---: |
+| Supported eligible subjects | 33 | 11 |
+| Unsupported eligible names | 3 | 0 |
+| Observed subject precision | 91.67% | 100% |
+| Selected targets recovered | 30/38 (78.95%) | 11/38 (28.95%) |
+
+Disposition: REJECTED_FIXED_CONTEXT_FILTER. It removes all three false positives
+but loses 19 of the 30 previously recovered selected targets and 22 correct
+subjects overall. This fails the predeclared requirement to retain all 30
+selected hits. The 100% precision is an observation on only eleven outputs,
+not release-quality certification. There is no reason to expose fresh release
+data or integrate this failed configuration.
+
+Of 185 original proposals, 34 survive, 123 fail the attribute gate, and 28 lack
+an exact match in the attributed extraction. Those last losses are caused by
+the changed joint extraction query, not an observed negative attribute. All
+three original false-positive phrases did have exact matches and were labeled
+incidental context. The native interface therefore supplied a useful signal for
+those errors but the complete fixed filter suppressed too much valid knowledge.
+This result does not establish that every contextual classifier would fail.
+
+The existing offline Linux image ran one zero-forward preparation and one
+60-call inference pass covering all 60 public source versions; two private
+records remained excluded. Full native inputs were verified without truncation
+(maximum 127 tokens). Preparation took 47.50 seconds, inference/retention 94.43
+seconds; peak inference cgroup memory was 2,389,159,936 bytes under the same
+four-CPU/five-GiB/no-extra-swap limits. No new model was downloaded or loaded
+alongside the current extractor. No application source or production setting
+changed, and the existing engineering baseline was not redundantly rerun.
+
+One independent reviewer verified the filtering, preserved scores/provenance,
+baseline equality, and rejection. A tuple/list representation check initially
+stopped grading; its sole repair canonicalizes the in-memory baseline through
+JSON before equality. The original frozen judge and partial output remain
+retained, and inference was not repeated. No scoring or acceptance rule changed.
+
+Evidence under `data/ml-runs/astra-sep14/classic-concept-trial/`:
+`context-filter-schema.json`, `context-filter-prepare-*`,
+`context-filter-infer-*`, `context-filter-judgment/decision.json`,
+`context-filter-judgment/filter-decisions.json`,
+`context-filter-false-positive-diagnostic.json`, and
+`context-filter-checkpoint-receipt.json`. The prospective corpus remains sealed;
+the global objective remains unfinished.
+
 ## Confidence and evidence rule validation — September 27
 
 At the user's request, the classic GLiNER short-label results underwent one

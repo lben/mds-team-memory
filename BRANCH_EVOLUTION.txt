@@ -147,6 +147,11 @@ SEPTEMBER 27 SHORT-LABEL SCHEMA CHECKPOINT (SAME BRANCH)
   The pooled result was 95.83% precision and 20/38 selected recall (52.63%).
   Precision fails the 98% target; the tuned rules were not integrated. A perfect
   full-development-data fit was explicitly retained as optimistic, not approval.
+- One subsequent fixed native contextual-filter trial on the current extractor
+  removed all 3 false positives but retained only 11/38 selected concepts, losing
+  19 of the baseline's 30 hits. It failed the preservation gate and was rejected.
+  A single independent reviewer confirmed the result. No downloads, production
+  changes, or prospective-corpus exposure followed.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 
