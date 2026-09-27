@@ -6,11 +6,43 @@ Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
 ## Current position — September 27
 
 Batch 2 recorded a development GO for the concept-eligibility filter; nothing
-is integrated into the application yet. Batch 3 (integration with staged model
-loading, then an application-level measurement on the expanded corpus) is
-proposed but not started. Alternative open-source structured-extraction
-approaches are under consideration first. Release quality remains open for
-every category.
+is integrated into the application yet. An open-weight "System One" decision
+model was screened next and rejected (below). Batch 3 (integration with staged
+model loading, then an application-level measurement on the expanded corpus)
+is proposed but not started. Release quality remains open for every category.
+
+## Open System One decision model screen — September 27
+
+"System One" decision models answer typed questions (yes/no, choice, score)
+with probabilities in one forward pass instead of generating text. The
+commercial example is hosted-only, which the offline requirement excludes.
+Among open-weight versions, `fastino/GLiNER2.5-Decide` (revision `7ee5da4`,
+Apache-2.0, 340M-parameter DeBERTa-v3-large) was selected: it leads the
+published open decision benchmark, runs on CPU, and uses the `gliner2` 2.0.0
+runtime the application already ships. Its 1B variant (4.8 GB) exceeds the
+memory budget. Kev (Qwen3.5-based LoRA plus pointer-head adapters) needs custom
+inference code and is CPU-feasible only at 0.8B, so it was not screened.
+
+Method: batch 2's evidence, judge, selection and gates unchanged; one yes/no
+question per candidate in each of two documented formats (plain question,
+described labels); a margin grid of unlabeled score deciles; plan frozen
+before scoring. Native CPU output matched the pinned Linux image to four
+decimals; 0.35 s per candidate.
+
+| Eligibility signal | Held-out precision | Selected recall | Decision |
+| --- | ---: | ---: | --- |
+| Qwen3-4B Yes/No margin (batch 2) | 498/507 (98.22%) | 99/150 | GO |
+| GLiNER2.5-Decide, plain question | 223/227 (98.24%) | 47/150 | NO_GO (recall) |
+| GLiNER2.5-Decide, described labels | 284/290 (97.93%) | 47/150 | NO_GO |
+
+Post-hoc and descriptive only: the AUC separating allowed from not-allowed
+candidate names is 0.85 for Qwen3-4B versus 0.68 and 0.72 for Decide. The
+specialist routing model reaches precision only by discarding most valid
+concepts; this judgment needs more language understanding. Batch 2's approach
+is already a System One pattern on an open model (one forward pass per typed
+question, probability from logits, no generated text). Evidence:
+`data/ml-runs/with-opus55/decide-screen/` (`plan.json`, `scores-*/`,
+`decision-*.json`, `posthoc-auc.json`, `receipt.json`).
 
 ## Expanded-corpus concept-eligibility screen — September 27 (`with-opus55`, batch 2)
 

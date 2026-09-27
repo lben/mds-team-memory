@@ -170,6 +170,10 @@ SEPTEMBER 27 NEW BRANCH: with-opus55
         selection: 98.22% held-out precision (proxy judge), 66% selected
         recall versus 95.70%/68% for the production rule. GO to integration
         and fresh validation; one independent reviewer returned PASS.
+        Tag with-opus55-batch2-go marks that state. An open System One
+        decision model (GLiNER2.5-Decide, Apache-2.0) was then screened on
+        the same benchmark and rejected: ~98% precision but only 47/150
+        selected recall. Qwen3-4B remains the selected eligibility signal.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 
