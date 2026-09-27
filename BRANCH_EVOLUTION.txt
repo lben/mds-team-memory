@@ -142,6 +142,11 @@ SEPTEMBER 27 SHORT-LABEL SCHEMA CHECKPOINT (SAME BRANCH)
 - The score/publication-policy mismatch remains unresolved. This fixed variant
   is closed; production models and thresholds remain unchanged. See the current
   status document for evidence and limits. Global quality remains unfinished.
+- A subsequent user-requested rule validation fitted thresholds on eight domains
+  and evaluated the ninth, rotating through all nine without new inference.
+  The pooled result was 95.83% precision and 20/38 selected recall (52.63%).
+  Precision fails the 98% target; the tuned rules were not integrated. A perfect
+  full-development-data fit was explicitly retained as optimistic, not approval.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

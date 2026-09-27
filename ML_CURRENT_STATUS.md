@@ -9,6 +9,64 @@ will use separate agents who have not reviewed implementation or model outputs.
 The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
+## Confidence and evidence rule validation — September 27
+
+At the user's request, the classic GLiNER short-label results underwent one
+retrospective calibration/validation analysis. No model inference or download
+was needed. The rule family remained: publish above a single-source score
+threshold, or above a lower threshold with at least two independent provenance
+groups. Names, grounding, ambiguity handling, current-public source selection,
+subject deduplication, and truth annotations were unchanged.
+
+For each of the nine annotated domains, fit both thresholds using only the other
+domains, then evaluate the omitted domain. Every case and all its source
+versions stay in one fold. Training maximizes supported subjects at a minimum
+98% training precision, with frozen tie-breaks. Threshold candidates come only
+from training scores. All 24 cases were evaluated exactly once, covering the
+same 38 selected targets. This is decision-rule tuning, not a calibrated
+probability model. The distinction and need to separate fitting/evaluation are
+consistent with the [scikit-learn calibration documentation](https://scikit-learn.org/1.8/modules/calibration.html).
+
+| Measurement | Supported subjects | Unsupported names | Precision | Selected recall |
+| --- | ---: | ---: | ---: | ---: |
+| Original publication rules | 4 | 0 | 100% | 4/38 (10.53%) |
+| Fit and score on all development cases, optimistic only | 25 | 0 | 100% | 21/38 (55.26%) |
+| Pooled omitted-domain evaluation | 23 | 1 | 95.83% | 20/38 (52.63%) |
+
+The omitted-domain result FAILS the required 98% precision. It also loses 15
+correct control subjects, although it recovers three selected control misses.
+The all-data thresholds (0.909037 single-source, 0.800734 corroborated) are
+training artifacts, not approved settings. Their apparently perfect fit must
+not be substituted for the failed validation. The one held-out false positive
+was the shortened name `Mars` in the exploration case, unsupported by the
+unchanged concept truth; no post-result label amendment or name blacklist was
+made. Correct extraction of an entity span does not by itself establish the
+application's substantive, reusable-concept requirement.
+
+The evidence-group checks confirm that repeated authors or copied text count
+only once, while different authors and distinct texts can provide independent
+groups. This validates those mechanics, not a guarantee that corroboration
+makes a candidate publishable. Descriptive score bins likewise remain small,
+correlated observations, not calibrated probabilities.
+
+Disposition: DO NOT integrate these tuned rules. No production threshold or
+model changed. This already-exposed development set is not prospective release
+evidence: 24 cases cannot satisfy the 300-decision/100-applied-prediction minima,
+and domains may share entity vocabulary. There is no basis here to certify
+automatic publication or close the global objective. The next model decision
+needs evidence of semantic concept eligibility, not another arbitrary threshold
+adjustment on this set.
+
+One independent reviewer recomputed the training-only threshold optima and
+held-out counts, verified the hashes and fold separation, and found no actionable
+defect. The original baseline was reproduced exactly before fitting. An initial
+tuple-versus-JSON-list assertion mismatch was repaired before any fitting ran;
+the original script and freeze are retained. Evidence under
+`data/ml-runs/astra-sep14/classic-concept-trial/` includes
+`policy-validation-plan.json`, `validate_short_label_policy.py`,
+`policy-validation-cases.json`, `policy-validation-result.json`, and
+`policy-validation-receipt.json`. The prospective release corpus was not opened.
+
 ## Fixed short-label concept schema — September 27
 
 The user authorized one bounded test of a model-appropriate schema using the
