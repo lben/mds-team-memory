@@ -3,6 +3,15 @@
 Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
 `551e52a`. The sections below that branch point describe `astra-again-sep14`.
 
+## Current position — September 27
+
+Batch 2 recorded a development GO for the concept-eligibility filter; nothing
+is integrated into the application yet. Batch 3 (integration with staged model
+loading, then an application-level measurement on the expanded corpus) is
+proposed but not started. Alternative open-source structured-extraction
+approaches are under consideration first. Release quality remains open for
+every category.
+
 ## Expanded-corpus concept-eligibility screen — September 27 (`with-opus55`, batch 2)
 
 Batch 1's small screen was too coarse to choose a rule (each error moved
