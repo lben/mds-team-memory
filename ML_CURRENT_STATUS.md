@@ -9,6 +9,57 @@ will use separate agents who have not reviewed implementation or model outputs.
 The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
+## Implementation checkpoint — September 27
+
+**Core workflows implemented; model quality and release acceptance pending.**
+The application includes automatic concept, alias, relationship and expertise
+pipelines; graph/search/tag/routing updates; persistent administrator overrides;
+bounded CPU workers; offline model installation; and migration, replay and
+rollback handling. Current application, frontend and tool source is unchanged
+from the packaged checkpoint with 772 passing Linux tests, zero failures and
+zero skips. This is engineering verification, not a model-quality certificate.
+
+Selected models remain GLiNER2.5 base, BGE-large-en-v1.5 and spaCy
+en_core_web_trf. The implementation combines learned extraction and embeddings
+with grammatical parsing, regex, conservative spelling/whole-word matching,
+stemming, fuzzy near-duplicate matching and explicit evidence/publication rules.
+It does not use a formal fuzzy inference engine, and similarity alone cannot
+establish an alias or a typed factual relationship.
+
+| Category | Required precision / recall | Evidence available | Acceptance |
+| --- | --- | --- | --- |
+| Concepts | 98% / 50% | Current 24-case development screen: 91.67% precision, 30/38 selected recall (78.95%) | Precision fails; development evidence only |
+| Aliases | 99% / 50% | Earlier completed 300-case independent evaluation: 92.45% precision, 32.67% recall; newer interrupted run recovered 12/13 selected aliases without an incorrect alias output | Earlier evaluation fails; newer partial evidence is insufficient |
+| Typed relationships | 98% / 50% | Newer interrupted run recovered 0/13 selected relationships and published none; precision undefined | Coverage fails; incomplete evaluation |
+| Expertise | 95% / 50% | Newer interrupted run recovered 13/13 selected mappings without an incorrect expertise output | Only 13 positive cases, no negative controls; insufficient evidence |
+
+These are different datasets and source snapshots, not one current-release
+benchmark. Each category additionally requires 300 independent decisions, 150
+positive examples, 100 hard negatives and 100 automatically applied predictions,
+with complete-output auditing and the required public effects/lifecycle checks.
+No category has a current release-quality pass. Earlier capacity and offline
+checks remain evidence for their recorded snapshots; final release verification
+and deployment-server UAT remain outstanding.
+
+The September 27 short-label, calibrated-score and contextual-filter experiments
+are rejected as tested. None changed selected production models or publication
+settings. Their results were committed in `b95f37d`, `19556ad` and `2178143`;
+the detailed local evidence remains under the ignored `data/ml-runs/` directory.
+Do not repeat these variants or treat their best isolated precision as approval.
+
+Remaining work is to qualify a configuration against the agreed accuracy and
+coverage targets, complete consistent independent evaluation, and verify the
+final release's actual-model behavior and operational limits. Further code
+changes may be required for quality, but no tested replacement is qualified.
+
+The objective remains reliable automatic knowledge maintenance with pretrained
+models running locally on CPU: maintain concepts, aliases, relationships and
+expertise and their graph/search/tag/routing effects; apply high-confidence
+findings automatically and hold uncertainty for evidence; preserve admin edits
+and opt-outs; support offline deployment and shared-server limits; and pass
+quality and lifecycle verification. Acronym testing is one milestone within
+that objective. The objective is not yet achieved.
+
 ## Fixed contextual concept filter — September 27
 
 The user authorized one 20-minute test of a contextual filter on the current
