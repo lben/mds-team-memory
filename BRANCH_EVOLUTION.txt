@@ -118,6 +118,19 @@ SEPTEMBER 22 CONTINUATION ON THE SAME BRANCH
   confirmed prospective concept-label errors already imply fewer than the fixed
   100 hard-negative minimum; full annotation review is still in progress.
 
+SEPTEMBER 26 BOUNDED FEASIBILITY CHECKPOINT (SAME BRANCH)
+
+- After two quota-limit interruptions, the user requested an execution audit
+  and approved one 30-minute checkpoint with one independent reviewer.
+- One fixed native entity comparison completed on the existing 24 development
+  cases. Classic GLiNER medium produced no proposals with the existing schema
+  and default proposal cutoff; it is rejected as this replacement candidate.
+- The current extractor recovered 30/38 selected concepts but scored 91.67%
+  full-output precision in the entity-only screen, below the 98% requirement.
+- Production model assets and numeric rules are unchanged. No new model trial,
+  release-corpus expansion, push or merge followed. Global quality remains open.
+- Detailed evidence and the execution reset are in ML_CURRENT_STATUS.md.
+
 STATE AT THE SEPTEMBER 14 HANDOFF
 
 - The branches above form one continuous ancestry chain. No merge commit

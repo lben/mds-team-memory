@@ -9,7 +9,87 @@ will use separate agents who have not reviewed implementation or model outputs.
 The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
-## Current position — September 22, evening
+## Bounded feasibility checkpoint — September 26
+
+The user resumed one 30-minute checkpoint after the process audit below. The
+single classic GLiNER candidate is now CLOSED / REJECTED under the frozen
+configuration. No production model or numeric publication rule changed.
+
+Both extractors completed all 60 public source versions from the existing
+24-case development fixture; two private records were explicitly skipped.
+Separate preparation verified every complete native input without truncation.
+Each inference pass made exactly 60 native entity calls in an offline four-CPU,
+five-GiB container with no additional swap. The current extractor took 97.68
+seconds including loading/retention; the candidate took 66.53 seconds. Both
+finished without OOM or operational errors. Peak cgroup memory was 2.439 GB and
+2.346 GB respectively. All frozen source/asset and retained artifact hashes pass.
+
+In this entity-only eligibility screen, the current extractor recovered 30/38
+selected positive concepts (78.95%). Its full output scored 33 supported subjects
+and three unsupported names, giving 91.67% precision against the required 98%.
+The unsupported names were contextual renovation/upgrade/audit phrases. Classic
+GLiNER returned no native proposals at its frozen default 0.5 proposal cutoff
+with the existing entity-description mapping: 0/38 recall, zero eligible
+concepts. Its precision is undefined, not an estimated 0%; the machine judge's
+numeric zero is a conservative failure sentinel. It loses all 33 correct control
+subjects and recovers no missed target, so it cannot advance to integration.
+This does not measure full-application accuracy or satisfy release sample minima.
+
+One independent reviewer approved the exact pre-existing truth corrections and
+identified three concrete harness/judge issues: ambiguity must consider all
+current public meanings; malformed/partial native results must be retained;
+and final evidence collection must obey deadline/reserve checks. Those issues
+were repaired before inference; focused mechanical checks pass. Original
+reviewed files, labels and preparations remain preserved. No prospective corpus
+work, alternate-model trial or post-observation label/threshold change occurred.
+
+Evidence is under `data/ml-runs/astra-sep14/classic-concept-trial/`:
+`bounded-screen-decision.json`, `bounded-checkpoint-final-verification.json`,
+the four `bounded-prepare-*` / `bounded-infer-*` result directories, and their
+frozen inputs. The global objective remains unfinished. Stop at this result;
+another implementation or research batch requires a new bounded decision.
+
+## Historical execution pause — September 26 process audit
+
+The user paused implementation to investigate excessive quota consumption. At
+the end of that audit, the goal was paused and no subagents were running. The
+user subsequently authorized the single bounded checkpoint recorded above.
+
+The task history records two turns ending at the account usage limit. The latest
+failed turn lasted 4.30 hours and contains 135 root shell calls, 11 distinct
+subagents and two context compactions. These are activity counts, not an
+itemized token bill. The goal counter stopped at 747,266 tokens on September 14;
+it is not a complete measure of subsequent work or account-wide consumption.
+
+Diagnosis: useful engineering fixes were followed by an expanding cycle of
+dataset authoring, independent audits, annotation corrections, experiment
+protocols and harness reviews. Individual experiments had limits; the overall
+research effort did not. After engineering tests passed, there was no timely
+go/no-go decision on the remaining model-quality feasibility. At audit time,
+eight of the branch's 20 commits since DeepSeek's baseline were documentation-only; the latest four were
+all documentation. Those facts do not make the repairs worthless, but show why
+continued activity did not amount to completing the objective.
+
+Preserve the verified checkpoint: 772 Linux tests pass. The full model-quality
+gate has not passed. The complete prospective audit found 21 incorrect concept
+polarities and 13 allowed-name issues; correcting the polarities leaves 84 valid
+concept hard negatives against the existing minimum of 100. The newer classic
+extractor passed strict offline loading in 26.65 seconds with all 224 parameter
+tensors verified, no inference and a 2,529,943,552-byte cgroup peak. It has not
+passed a concept-quality screen. Earlier dated pending states below are history.
+
+On an explicitly resumed task, use one bounded completion decision at a time:
+reuse completed reviews and passing checks; choose one existing candidate and
+one fixed development screen before more release-corpus expansion; use at most
+one independent reviewer for a concrete result; repair only identified defects;
+do not recursively review reviews or reopen closed model experiments. Report a
+failed feasibility result instead of automatically starting another model or
+protocol cycle. Preserve acceptance targets and the unseen evaluation boundary.
+Recommended first batch: a 30-minute feasibility checkpoint, with account usage
+checked at its start and end. This is a work bound, not a promise of completion
+or an enforceable per-task quota cap. No new test/model run occurred in this audit.
+
+## Historical position — September 22, evening
 
 The engineering checkpoint passes; the full objective does not yet pass.
 
