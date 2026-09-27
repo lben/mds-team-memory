@@ -165,6 +165,11 @@ SEPTEMBER 27 NEW BRANCH: with-opus55
         screened on the 24-case development set and rejected as configured
         (filter: 100% precision but 25/38 selected; agreement: 92.86%
         precision, 34/38). No production change. See ML_CURRENT_STATUS.md.
+        Batch 2: the same model as a Yes/No eligibility margin, re-screened on
+        the spent 300-case expanded corpus with leave-one-domain-out
+        selection: 98.22% held-out precision (proxy judge), 66% selected
+        recall versus 95.70%/68% for the production rule. GO to integration
+        and fresh validation; one independent reviewer returned PASS.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

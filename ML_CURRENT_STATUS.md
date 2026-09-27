@@ -3,6 +3,66 @@
 Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
 `551e52a`. The sections below that branch point describe `astra-again-sep14`.
 
+## Expanded-corpus concept-eligibility screen — September 27 (`with-opus55`, batch 2)
+
+Batch 1's small screen was too coarse to choose a rule (each error moved
+precision by three points), and its generated reasons were defective. Batch 2
+re-ran the check on the spent 300-case expanded corpus (`ml_heldout.json`,
+1,499 source versions, 12 domains), which is development evidence only.
+
+- **Extractor evidence:** the production GLiNER2.5 base entity pass (same
+  schema, windows and grounding as `runtime.py`) in the pinned offline image,
+  four CPUs, 5 GiB: all 1,499 sources, 3,060 s, 2.28 GB cgroup peak, no OOM.
+- **Eligibility signal:** the same Qwen3-4B-Instruct model and definition text,
+  but no generation: one fixed Yes/No question per candidate and the logit
+  margin of "Yes" over "No", reusing the post prefix in the KV cache. A
+  synthetic-post check confirmed rewind/fresh equality and order and thread
+  invariance. 3,387 candidates; every top token was Yes or No; median 1.8 s per
+  source on four development-machine CPU threads.
+- **Frozen before labeled results** (`plan.json`): the rule family (count only
+  evidence with margin ≥ τ, then publish at single-source score ≥ s1 or two
+  independent groups at ≥ s2; the production rule is one member), the grid,
+  leave-one-domain-out selection at ≥ 98.5% training precision, and the gates.
+
+| Rule (proxy judge, final state after edits/deletes) | Precision, all published names | Selected decisions | Selected recall |
+| --- | ---: | ---: | ---: |
+| Production rule | 579/605 (95.70%) | 102/102 | 102/150 (68%) |
+| Pooled held-out domains, eligibility-filtered | 498/507 (98.22%, Wilson 96.66–99.06%) | 99/99 | 99/150 (66%) |
+| All-data selection τ=4, s1=0.995, s2=0.9 (optimistic) | 529/537 (98.51%) | 106/106 | 106/150 (70.7%) |
+
+Disposition: GO_TO_INTEGRATION_AND_FRESH_VALIDATION under the frozen gates.
+Every fold selected s1 = 0.995; s2 ranged 0.8–0.94 and τ 2–8. This is not a
+release result: the judge is a proxy without the application's alias and
+definition identity paths, the corpus is spent, and the Wilson lower bound is
+below 98%. The integrated application must be measured on this corpus, then
+on fresh independent cases.
+
+One independent read-only reviewer returned PASS: an independent recomputation
+reproduced every count, and label isolation, final-state handling, fold
+separation and the hash freeze hold (plan SHA256 `2fd8eaa6…4f35c`, decision
+`09b9853e…e2ad0`). Its caveats bound the result:
+
+- The margin is thin: 11 unsupported names instead of 9 would fail. In 6 of 12
+  folds no configuration reached 98.5% training precision, and the
+  pre-registered highest-precision fallback applied.
+- The corpus was spent and earlier all-corpus score diagnostics informed the
+  grid, so 98.22% is an optimistic development estimate.
+- The proxy omits identity paths. The full application previously recorded
+  147/150 selected and 500/528 published concepts on this corpus, so proxy
+  absolute numbers do not transfer.
+- The gain comes from the eligibility filter: the same procedure without it
+  gives 96.44% (reviewer's own check, not pre-registered).
+
+Resources: the classifier alone peaked at 2.95 GB in a 5 GiB Linux cgroup
+(2,048-token context), so it cannot be resident with the three current models;
+the worker needs staged loading. A portable Linux build without the host's
+SIMD extensions ran about 28 times slower than the native build, so the
+deployment wheel must target the server's instruction set and be timed there.
+
+Evidence: `data/ml-runs/with-opus55/expanded-concepts/` (`plan.json`,
+`extract-control/`, `score-run-1/`, `control-only.json`, `decision.json`,
+`mechanics_check.py`) and `data/ml-runs/with-opus55/llm-linux/`.
+
 ## LLM concept-eligibility screen — September 27 (`with-opus55`, batch 1)
 
 Working rules for this branch: the acceptance targets stay fixed; evaluation
