@@ -9,6 +9,29 @@ will use separate agents who have not reviewed implementation or model outputs.
 The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
+## Publisher-example sanity check — September 26
+
+At the user's request, the same staged classic GLiNER checkpoint ran exactly
+two calls on its pinned publisher README example. With the documented short
+labels it returned 11 grounded entities; with the unchanged application
+entity-description mapping it returned zero. Both calls used native threshold
+0.5, identical source text and verified untruncated inputs. The offline run
+completed in 29.29 seconds. Evidence: `classic-concept-trial/publisher-sanity-results/`.
+
+This establishes working entity extraction on the publisher's task and narrows
+the earlier failure to the tested application configuration. Because the label
+categories and wording both differ, it does not isolate description length as
+the sole cause. It is not a concept-quality pass or authorization to integrate
+the model. No development/heldout case, threshold or production model changed.
+Any future candidate must use a model-appropriate schema and demonstrate useful
+concept extraction before larger evaluation or additional model downloads.
+
+Adding knowledge does not retrain the current extractor or feed the whole
+knowledge base into each extraction window. Independent source evidence and
+established vocabulary can improve corroboration and identity resolution after
+extraction; duplicated text/authors do not create independent support. More data
+alone does not resolve the demonstrated schema mismatch or guarantee precision.
+
 ## Bounded feasibility checkpoint — September 26
 
 The user resumed one 30-minute checkpoint after the process audit below. The
