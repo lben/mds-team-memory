@@ -1,6 +1,60 @@
 # Automatic maintenance: current status
 
-Branch: `astra-again-sep14`. Started 14 September 2026 from DeepSeek's `72e387e`.
+Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
+`551e52a`. The sections below that branch point describe `astra-again-sep14`.
+
+## LLM concept-eligibility screen — September 27 (`with-opus55`, batch 1)
+
+Working rules for this branch: the acceptance targets stay fixed; evaluation
+uses AI-authored cases only; permissively licensed CPU models may be added with
+pinned hashes; work proceeds in bounded batches with at most one independent
+reviewer per material change.
+
+The concept definition is semantic ("a substantive subject, not a mere
+occurrence"), which an entity extractor cannot judge. One untried direction was
+screened: a local instruction model checking the current extractor's proposals.
+Model: Qwen3-4B-Instruct-2507 (Apache-2.0), Q4_K_M GGUF from
+`unsloth/Qwen3-4B-Instruct-2507-GGUF@a06e946`, SHA256 `3605803b…c67e597`, run
+with llama-cpp-python 0.3.35 (MIT) on four CPU threads, greedy decoding and
+JSON-schema-constrained output. The prompt paraphrases the annotation
+protocol's concept definition. Prompt, variants and gates were hashed in
+`plan.json` before inference. Same 24-case development set and judge as the
+earlier screens; the control judgment reproduced exactly.
+
+| Variant | Supported | Unsupported | Precision | Selected hits | Gate |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Control (current rules) | 33 | 3 | 91.67% | 30/38 | — |
+| V1: control rules + LLM filter | 26 | 0 | 100% | 25/38 | FAIL (needs ≥28) |
+| V2: publish when both models agree | 52 | 4 | 92.86% | 34/38 | FAIL (needs 98%) |
+
+Disposition: REJECTED AS CONFIGURED. Production models, thresholds and
+application source are unchanged. The filter removed every unsupported name,
+and agreement found far more correct concepts, but neither rule met both gates.
+
+The configuration itself was defective: 171 of 179 free-text reasons hit the
+200-character schema cap before the accept field, 21 drifted into Chinese
+tokens, and one call produced invalid output (fail-closed, costing one selected
+hit). Decisions were inconsistent in both directions (for example rejecting
+"Arduino" as the board using PWM, accepting "equipment"). Generating the reasons
+dominated cost: median 11.5 s per post (about 180 output tokens). Peak RSS on
+the development machine was 5.5 GB with a 4,096-token context; Linux
+cgroup memory and x86 throughput were not measured.
+
+Context for the next decision: on the spent 300-case expanded corpus
+(`ml_heldout.json`, now development data), the earlier score-rule union reached
+337/345 correct concepts (97.68%) with 126/150 selected positives. At that scale
+one error moves precision by about 0.3 points rather than 3, so it is the
+appropriate development set for any further concept rule. Its per-post
+extractor outputs were not retained and would need regeneration.
+
+Evidence: `data/ml-runs/with-opus55/llm-concept-screen/` (`plan.json`,
+`run-1/`, `judge-repair.json`, `receipt.json`). The judge's baseline equality
+check needed the same JSON canonicalization as the earlier filter screen; the
+failed attempt is retained and no gate changed. Global quality remains open.
+
+## Earlier branch history (`astra-again-sep14`)
+
+Started 14 September 2026 from DeepSeek's `72e387e`.
 The full objective is unfinished. On September 14 the user authorized independent
 agents to review the work. Three independent reviews identified concrete
 correctness, quality/evaluation and operational defects. Their findings and the

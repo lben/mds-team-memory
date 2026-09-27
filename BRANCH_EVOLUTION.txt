@@ -153,6 +153,19 @@ SEPTEMBER 27 SHORT-LABEL SCHEMA CHECKPOINT (SAME BRANCH)
   A single independent reviewer confirmed the result. No downloads, production
   changes, or prospective-corpus exposure followed.
 
+SEPTEMBER 27 NEW BRANCH: with-opus55
+
+  astra-again-sep14 @ 551e52a
+  |
+  +-- with-opus55
+        Created 2026-09-27 at the user's request; continues the same global
+        objective with fixed targets, AI-authored evaluation cases, permissive
+        pinned model downloads, and bounded batches (one reviewer at most).
+        Batch 1: a local Qwen3-4B-Instruct concept-eligibility check was
+        screened on the 24-case development set and rejected as configured
+        (filter: 100% precision but 25/38 selected; agreement: 92.86%
+        precision, 34/38). No production change. See ML_CURRENT_STATUS.md.
+
 STATE AT THE SEPTEMBER 14 HANDOFF
 
 - The branches above form one continuous ancestry chain. No merge commit
