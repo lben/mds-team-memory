@@ -131,6 +131,18 @@ SEPTEMBER 26 BOUNDED FEASIBILITY CHECKPOINT (SAME BRANCH)
   release-corpus expansion, push or merge followed. Global quality remains open.
 - Detailed evidence and the execution reset are in ML_CURRENT_STATUS.md.
 
+SEPTEMBER 27 SHORT-LABEL SCHEMA CHECKPOINT (SAME BRANCH)
+
+- The user authorized one fixed short-label concept-schema test on the already
+  staged classic GLiNER checkpoint. No additional model was downloaded.
+- Fourteen generic short labels restored 158 native proposals. Existing-output
+  audit found 34/38 selected targets extracted, but only 4/38 qualified under
+  unchanged publication rules. The variant loses 29 correct control subjects
+  and recovers no control miss; one independent reviewer confirmed rejection.
+- The score/publication-policy mismatch remains unresolved. This fixed variant
+  is closed; production models and thresholds remain unchanged. See the current
+  status document for evidence and limits. Global quality remains unfinished.
+
 STATE AT THE SEPTEMBER 14 HANDOFF
 
 - The branches above form one continuous ancestry chain. No merge commit

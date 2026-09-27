@@ -9,6 +9,54 @@ will use separate agents who have not reviewed implementation or model outputs.
 The earlier rejected model experiments remain closed. Historical requirements and results are in
 `ML_IMPLEMENTATION_PLAN.md`; branch ancestry is in `BRANCH_EVOLUTION.txt`.
 
+## Fixed short-label concept schema — September 27
+
+The user authorized one bounded test of a model-appropriate schema using the
+already staged classic GLiNER medium checkpoint. One 14-label taxonomy was
+frozen before inference: person, organization, location, event, project,
+product, software, technology, scientific concept, method, process, material,
+organism, and physical object. The checkpoint, source text, truth annotations,
+native proposal cutoff (0.5), publication rules, and acceptance gates stayed
+fixed. The original control results were reused and hash-verified.
+
+The schema change restored extraction: 158 native proposals instead of zero.
+A descriptive audit of current public source versions found matching,
+unambiguous, source-supported proposals for 34/38 selected targets. Under the
+unchanged publication rules, however, only 4/38 targets qualified (10.53% recall,
+versus the control's 30/38). All four eligible subjects were supported; observed
+precision is 100% on just four outputs, not evidence of release-level precision.
+The candidate lost 29 of the control's 33 correct subjects and recovered no
+control miss. It fails the frozen replacement screen and is CLOSED in this
+configuration. This result is not a rejection of every possible use of the model.
+
+Thirty extracted targets were held; four had no qualifying raw proposal. The
+maximum native score was 0.968593; only six proposals reached 0.94 and none
+reached the single-source publication threshold of 0.985. The immediate
+integration obstacle is therefore the interaction of model scores with the
+publication policy, alongside remaining extraction gaps. These scores have not
+been calibrated as probabilities of correct publication. Lowering thresholds
+against these observed cases would not establish safe automation. A future
+integration decision would need separately validated confidence/evidence
+calibration, rather than another label sweep or model download. No such trial
+or production change was made in this batch.
+
+Token-only preparation passed with zero model forward calls. The single
+candidate inference pass completed 60 public source versions in 60.80 seconds,
+with two private records explicitly skipped, no truncation, and 2,255,720,448
+bytes peak cgroup memory. It used the existing offline Linux image, four CPUs,
+five GiB, and no additional swap. One initial sandbox Docker-access failure
+occurred before any container/model execution; the identical frozen preparation
+then ran with Docker access. One independent reviewer found no concrete defect,
+confirmed the reused control judgment was identical, and agreed with rejection.
+
+Evidence is in `data/ml-runs/astra-sep14/classic-concept-trial/`:
+`short-label-schema.json`, the `short-label-prepare-*` / `short-label-infer-*`
+artifacts, `short-label-judgment/bounded-screen-decision.json`,
+`short-label-proposal-diagnostic.json`, and `short-label-checkpoint-receipt.json`.
+The prospective release corpus was not accessed. The existing 772-test Linux
+engineering result remains the baseline; no application source changed or
+redundant full test run occurred. The global quality objective is unfinished.
+
 ## Publisher-example sanity check — September 26
 
 At the user's request, the same staged classic GLiNER checkpoint ran exactly
