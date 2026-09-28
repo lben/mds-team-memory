@@ -16,7 +16,7 @@ import time
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import NullPool
 
@@ -26,6 +26,7 @@ from .runtime import inference_version
 MEMORY_CEILING = 8 * 1024**3
 LOAD_TIMEOUT_SECONDS = 300.0
 JOB_TIMEOUT_SECONDS = 1800.0
+STORAGE_PAUSE_SECONDS = 300.0
 
 
 def positive_seconds(value):
@@ -125,6 +126,25 @@ def _model_loop(connection, assets):
         if body is None:
             return
         connection.send(("result", models.analyze(body)))
+
+
+def _verifier_loop(connection, assets):
+    from . import eligibility
+    from .runtime import configure_cpu, verified_manifest
+
+    configure_cpu()
+    directory = Path(assets).resolve()
+    manifest = verified_manifest(directory, ("verifier",))
+    files = manifest["models"]["verifier"]["files"]
+    if len(files) != 1:
+        raise ValueError("The verifier role must contain exactly one model file")
+    verifier = eligibility.Verifier(directory / "verifier" / files[0]["path"])
+    connection.send(("ready", eligibility.version(manifest["models"]), "", 0))
+    while True:
+        request = connection.recv()
+        if request is None:
+            return
+        connection.send(("result", verifier.margins(request["text"], request["candidates"])))
 
 
 def _child_entry(connection, assets, target, parent_pid):
@@ -282,6 +302,15 @@ class Supervisor:
         self.connection = queue.connect_worker(path)
         self.engine = create_engine("sqlite://", creator=lambda: queue.connect_worker(path), poolclass=NullPool)
         self.inference = InferenceProcess(assets, load_timeout=load_timeout, job_timeout=job_timeout)
+        # The verifier cannot share the memory budget with the extraction
+        # models, so at most one of the two children is alive (see stage()).
+        self.verifier = InferenceProcess(assets, target=_verifier_loop, load_timeout=load_timeout,
+                                         job_timeout=job_timeout)
+        self.model_version = self.eligibility_version = None
+        self.eligibility_cursor = ("", "")
+        self.eligibility_paused_until = 0.0
+        # (kind, id, content_hash): an edited source gets a new key and is checked again.
+        self.unverifiable = set()
         self.token = None
         self.claim = None
         self.next_renewal = 0
@@ -353,6 +382,11 @@ class Supervisor:
                     raise LeaseLost("Job changed before commit")
             db.commit()
 
+    def stage(self, active):
+        """Free the other model child before `active` loads or runs."""
+        other = self.verifier if active is self.inference else self.inference
+        other.close()
+
     def process_claim(self):
         from . import adapter
         from .sources import snapshot
@@ -364,14 +398,93 @@ class Supervisor:
                 if previous is not None:
                     models = json.loads((self.assets / "models.json").read_text())["models"]
                     version = inference_version(models)
-                    cached = adapter.cached_result(db, previous, version)
+                    cached = adapter.cached_result(db, previous, version, self.eligibility_version)
                     if cached is not None:
                         result, metadata = cached
             if previous is not None:
                 if result is None:
+                    self.stage(self.inference)
                     result, metadata = self.inference.analyze(previous.text, self.heartbeat)
         self.heartbeat()
         self.apply(previous, result, metadata)
+
+    def verify_eligibility(self, limit=8):
+        """Judge concept names of current cached sources that lack this verifier's judgment.
+
+        Runs only when no job is claimable, so a backlog swaps models once. A
+        source with a queued job is left to that job; its replay keeps any
+        current judgment and the next sweep checks the rest.
+        """
+        from . import adapter, eligibility, embeddings
+        from .sources import snapshot
+
+        if self.eligibility_version is None or time.monotonic() < self.eligibility_paused_until:
+            return 0
+        rows = []
+        # A primary-key cursor visits each cached source once per pass, so a
+        # large post-upgrade backlog is not rescanned for every small batch.
+        # The LIMIT leaves room for every skipped source, so a batch of only
+        # skipped sources means the end of the table: wrap once, then stop.
+        for _ in range(3):
+            found = self.connection.execute("""SELECT s.kind, s.id, s.content_hash FROM ml_sources s
+              WHERE (s.kind, s.id) > (?, ?) AND s.valid=1 AND s.kind IN ('item','passage') AND s.model_version=?
+                AND coalesce(json_extract(s.result,'$.eligibility.version'),'')!=?
+                AND NOT EXISTS (SELECT 1 FROM ml_jobs j WHERE j.source_kind=s.kind AND j.source_id=s.id)
+              ORDER BY s.kind, s.id LIMIT ?""", (*self.eligibility_cursor, self.model_version,
+                                                 self.eligibility_version, limit + len(self.unverifiable))).fetchall()
+            if found:
+                self.eligibility_cursor = tuple(found[-1][:2])
+                rows = [tuple(row) for row in found if tuple(row) not in self.unverifiable][:limit]
+                if rows:
+                    break
+            elif self.eligibility_cursor == ("", ""):
+                break
+            else:
+                self.eligibility_cursor = ("", "")
+        for kind, source_id, content_hash in rows:
+            self.heartbeat()
+            with Session(self.engine) as db:
+                source = snapshot(db, kind, source_id)
+                cached = adapter.cached_result(db, source, self.model_version) if source is not None else None
+            if cached is None:
+                # A queued job, not this sweep, restores a stale or withdrawn source.
+                self.unverifiable.add((kind, source_id, content_hash))
+                continue
+            result, metadata = cached
+            names = eligibility.candidates(source.text, result["concepts"])
+            margins = {}
+            if names:
+                self.stage(self.verifier)
+                try:
+                    margins, verified = self.verifier.analyze({"text": source.text, "candidates": names}, self.heartbeat)
+                except (RuntimeError, TimeoutError, MemoryError) as error:
+                    # Leave its concepts held; retry after the worker restarts.
+                    print(f"ML eligibility retained for {kind}:{source_id}: {type(error).__name__}: {error}",
+                          file=sys.stderr, flush=True)
+                    self.unverifiable.add((kind, source_id, content_hash))
+                    continue
+                if verified[0] != self.eligibility_version:
+                    raise AssetsChanged("Verifier assets changed during eligibility checks")
+            result["eligibility"] = {"version": self.eligibility_version, "margins": margins}
+            self.heartbeat()
+            try:
+                with Session(self.engine, autoflush=False, expire_on_commit=False) as db:
+                    db.execute(text("BEGIN IMMEDIATE"))
+                    with embeddings.reserve_growth(db):
+                        current = snapshot(db, kind, source_id)
+                        queued = db.execute(text("SELECT 1 FROM ml_jobs WHERE source_kind=:kind AND source_id=:id"),
+                                            {"kind": kind, "id": source_id}).first()
+                        if current is not None and current.content_hash == source.content_hash and not queued:
+                            adapter.apply_source(db, kind, source_id, current, result, *metadata)
+                    db.commit()
+            except (embeddings.StoragePressure, IntegrityError) as error:
+                if isinstance(error, IntegrityError) and "storage quota" not in str(error):
+                    raise
+                # Background allocation pauses while storage is refused; concepts stay held.
+                print(f"ML eligibility paused: {type(error).__name__}: {error}", file=sys.stderr, flush=True)
+                self.eligibility_paused_until = time.monotonic() + STORAGE_PAUSE_SECONDS
+                return 0
+        return len(rows)
 
     def run(self, mode):
         from . import adapter, embeddings, policy
@@ -393,6 +506,11 @@ class Supervisor:
         self.worker_deadline = time.time() + queue.LEASE_SECONDS
         models = json.loads((self.assets / "models.json").read_text())["models"]
         version = inference_version(models) + ":" + policy.VERSION
+        self.model_version = inference_version(models)
+        if "verifier" in models:
+            from . import eligibility
+
+            self.eligibility_version = eligibility.version(models)
         while True:
             self.heartbeat()
             try:
@@ -437,6 +555,9 @@ class Supervisor:
                         db.commit()
                     if advanced:
                         continue
+                    operation = "eligibility"
+                    if self.verify_eligibility():
+                        continue
                     pending = self.connection.execute("SELECT count(*) FROM ml_jobs").fetchone()[0]
                     if mode == "once" or (mode == "drain" and pending == 0):
                         return 0
@@ -472,6 +593,7 @@ class Supervisor:
 
     def close(self):
         self.inference.close()
+        self.verifier.close()
         try:
             if self.claim:
                 self.retry(Stopped("Worker stopped"))
@@ -521,6 +643,9 @@ def main(argv=None):
         if "syntax" not in manifest.get("models", {}):
             raise ValueError("models.json must include the syntax model; "
                              "alias and definition extraction is disabled without it")
+        if "verifier" not in manifest["models"]:
+            raise ValueError("models.json must include the verifier model; "
+                             "concepts cannot be published without eligibility checks")
         for signum in (signal.SIGINT, signal.SIGTERM):
             previous[signum] = signal.signal(signum, lambda *_: stop.set())
         supervisor = Supervisor(path, args.assets, stop,

@@ -174,6 +174,13 @@ SEPTEMBER 27 NEW BRANCH: with-opus55
         decision model (GLiNER2.5-Decide, Apache-2.0) was then screened on
         the same benchmark and rejected: ~98% precision but only 47/150
         selected recall. Qwen3-4B remains the selected eligibility signal.
+        Batch 3: the eligibility check is integrated (policy v9, verifier
+        model role, worker sweep with staged model loading, no migration).
+        Application-level development run: concept precision 93.71% ->
+        97.52%, alias precision 96.77% -> 98.70%; NO_GO against the fixed
+        98% concept target. 784 backend tests pass; one reviewer PASS after
+        two sweep repairs. Offline x86 packaging is still missing, so the
+        branch is not deployable yet.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

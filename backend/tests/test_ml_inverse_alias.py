@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from ml_synthetic_records import current_synthetic_result
+from ml_synthetic_records import current_synthetic_result, keep_single_source_publication
 
 from test_ml_alias_conflicts import automated
 from test_ml_identity_routing import capture, embedding_generation_isolation, names
@@ -46,7 +46,7 @@ def apply(item, record, *, cached=False, empty=False, roles=True):
         if source and not cached:
             # Deliberately synthetic current input; immutable original model
             # scores/identity spans remain recorded observations of their era.
-            result = current_synthetic_result(result)
+            result = current_synthetic_result(result, source.text)
         adapter.apply_source(db, "item", item, source, result, *metadata)
         db.commit()
 
@@ -101,9 +101,10 @@ def test_late_exact_definition_keeps_existing_id_and_score_ownership(make_client
             assert not evidence.get("identity_routes")
             assert evidence["quote"].casefold() == short.casefold()
             index = items.index(evidence["source_id"])
+            applied = keep_single_source_publication(copy.deepcopy(records[index]["result"]))
             assert any(span["name"].casefold() == short.casefold()
                        and span["score"] == evidence["raw_score"]
-                       for span in records[index]["result"]["concepts"])
+                       for span in applied["concepts"])
         for evidence in full_detail["evidence"]:
             assert not evidence.get("identity_routes")
         alias_key = finding_key("alias", full.casefold(), original)

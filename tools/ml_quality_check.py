@@ -40,6 +40,8 @@ def check_runtime_dependencies(manifest):
     modules = ["torch", "gliner2", "sentence_transformers", "psutil"]
     if "syntax" in manifest.get("models", {}):
         modules.extend(("spacy", "spacy_curated_transformers"))
+    if "verifier" in manifest.get("models", {}):
+        modules.append("llama_cpp")
     missing = [name for name in modules if importlib.util.find_spec(name) is None]
     if missing:
         raise RuntimeError("Evaluation runtime is missing required modules: " + ", ".join(missing))
@@ -109,9 +111,13 @@ class RecordedInference:
     """Record unchanged production predictions and sampled process-tree usage."""
 
     def __init__(self, models):
-        from app.ml.worker import InferenceProcess
+        from app.ml.worker import InferenceProcess, _verifier_loop
 
         self.child = InferenceProcess(models)
+        manifest = json.loads((Path(models) / "models.json").read_text())
+        # Shared across cases like the extraction child. Production stages the
+        # two children; this harness keeps both loaded and needs more memory.
+        self.verifier = InferenceProcess(models, target=_verifier_loop) if "verifier" in manifest["models"] else None
         self.path = None
         self.phase = None
         self.deadline = float("inf")
@@ -174,6 +180,8 @@ class RecordedInference:
 
     def close(self):
         self.child.close()
+        if self.verifier is not None:
+            self.verifier.close()
 
 
 def case_database(source_root, directory):
@@ -278,8 +286,11 @@ def drain(path, models, inference, phase):
     from app.ml.worker import Supervisor
 
     supervisor = Supervisor(path, models, threading.Event())
-    unused = supervisor.inference
+    unused, unused_verifier = supervisor.inference, supervisor.verifier
     supervisor.inference = inference
+    if getattr(inference, "verifier", None) is not None:
+        supervisor.verifier = inference.verifier
+        supervisor.stage = lambda active: None
     inference.phase = phase
     started, calls = time.monotonic(), inference.calls
     try:
@@ -290,7 +301,7 @@ def drain(path, models, inference, phase):
                 "lock_retries": dict(supervisor.lock_retries)}
     finally:
         # Each worker releases its own lease; only the outer owner closes models.
-        supervisor.inference = unused
+        supervisor.inference, supervisor.verifier = unused, unused_verifier
         supervisor.close()
 
 

@@ -201,7 +201,7 @@ def test_spelling_equivalent_endpoint_cannot_replace_entity_evidence(make_client
     body = f"{name} is reviewed. Vega Gateway uses {variant}."
     client = make_client()
     item_id = _capture(client, body)
-    entities = [_span(body, name, score=0.99), _span(body, "Vega Gateway", score=0.995)]
+    entities = [_span(body, name, score=0.996), _span(body, "Vega Gateway", score=0.995)]
     metadata = current_synthetic_metadata()
 
     def apply(result):
@@ -226,7 +226,7 @@ def test_spelling_equivalent_endpoint_cannot_replace_entity_evidence(make_client
             result["concepts"].reverse()
         apply(result)
         finding = _finding(admin_client, "concept", name=name)
-        assert (finding["state"], finding["raw_model_score"]) == ("active", 0.99)
+        assert (finding["state"], finding["raw_model_score"]) == ("active", 0.996)
         assert _tags(client, item_id)[name] == concept_id
         graph = client.get("/api/graph/local", params={"concept_id": concept_id}).json()
         assert any(node["id"] == f"c:{concept_id}" for node in graph["nodes"])

@@ -74,7 +74,7 @@ def _recorded_result(recorded):
 
     # The immutable record keeps its actual embedding. This application test
     # needs only the retained scores/spans and does not exercise vector search.
-    result = current_synthetic_result(recorded["result"])
+    result = current_synthetic_result(recorded["result"], recorded["text"])
     result["chunks"] = []
     for definition in result["corroborated_definitions"]:
         assert definition["syntax_rule_revision"] == syntax.REVISION

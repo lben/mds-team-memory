@@ -8,6 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from ml_synthetic_records import judged, keep_single_source_publication
 from test_ml_alias_conflicts import automated, capture_post
 
 FIXTURE = json.loads((Path(__file__).parent / 'fixtures/copular_alias_recorded.json').read_text())
@@ -63,7 +64,7 @@ def analyze(post, monkeypatch, control=None):
     result['chunks'] = []
     if control == 'no_genuine_concepts':
         result['concepts'], result['relations'] = [], []
-    return result
+    return judged(keep_single_source_publication(result), post['body'])
 
 
 def apply(item_id, result=None, *, version=None):

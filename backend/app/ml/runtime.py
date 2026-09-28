@@ -77,12 +77,16 @@ def configure_cpu():
         os.nice(10 - os.nice(0))
 
 
-def verified_manifest(directory):
+def verified_manifest(directory, roles=None):
+    """Validate the manifest and hash the files of `roles` (all roles when omitted)."""
     manifest = json.loads((directory / "models.json").read_text(encoding="utf-8"))
     if (manifest.get("version") != 1 or set(manifest.get("models", {})) not in
-            ({"extractor", "embeddings"}, {"extractor", "embeddings", "syntax"})):
+            ({"extractor", "embeddings"}, {"extractor", "embeddings", "syntax"},
+             {"extractor", "embeddings", "syntax", "verifier"})):
         raise ValueError("Unsupported model asset manifest")
     for role, model in manifest["models"].items():
+        if roles is not None and role not in roles:
+            continue
         for entry in model["files"]:
             relative = Path(entry["path"])
             if relative.is_absolute() or ".." in relative.parts or "\\" in entry["path"]:
@@ -222,7 +226,7 @@ class LocalModels:
         torch.set_num_threads(4)
         torch.set_num_interop_threads(1)
         directory = Path(directory).resolve()
-        self.manifest = verified_manifest(directory)
+        self.manifest = verified_manifest(directory, ("extractor", "embeddings", "syntax"))
         self.version = inference_version(self.manifest["models"])
         self.embedding_version = self.manifest["models"]["embeddings"]["revision"]
         self.extractor = AutoExtractor.from_pretrained(str(directory / "extractor"), local_files_only=True, map_location="cpu")

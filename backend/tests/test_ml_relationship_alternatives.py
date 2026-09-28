@@ -90,7 +90,7 @@ def relationship_source(make_client, inverse_pair):
             offset += len(sentence) + 1
         result = {'concepts': [], 'relations': relations, 'chunks': [], 'corroborated_definitions': [],
                   'conflict_definitions': [], 'conflict_coverage_revision': syntax.CONFLICT_REVISION}
-        result = current_synthetic_result(result)
+        result = current_synthetic_result(result, body)
         update(item, result)
         return item, lambda: update(item, result)
 

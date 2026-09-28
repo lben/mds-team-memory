@@ -82,7 +82,7 @@ def _apply(source_id, names=(), *, relation=False, cached=False, omitted_entity=
                 result["relations"] = [{"head": spans[0], "tail": spans[1], "predicate": "uses",
                                         "score": 0.9, "start": 0, "end": len(source.text),
                                         "polarity": "positive", "literal_support": True}]
-            result = current_synthetic_result(result)
+            result = current_synthetic_result(result, source.text)
         adapter.apply_source(db, kind, source_id, source, result, *metadata)
         db.commit()
 
@@ -352,7 +352,7 @@ def _apply_role_definition(item_id, name, alias, *, cached=False, entity_score=0
                           "syntax_rules": ["parenthetical_compact_name" if "(" in source.text else "denotes"],
                           "syntax_rule_revision": "fixture-r4",
                           "alias_model_revision": "fixture-extractor", "syntax_model_revision": "fixture-syntax"}]}
-            result = current_synthetic_result(result)
+            result = current_synthetic_result(result, source.text)
         adapter.apply_source(db, "item", item_id, source, result, *metadata)
         db.commit()
 
@@ -751,7 +751,7 @@ def _apply_current_definition(item_id, name, alias, *, field_score=0.995, entity
                           "syntax_rule_revision": revision or syntax.REVISION,
                           "alias_model_revision": models["extractor"]["revision"],
                           "syntax_model_revision": models["syntax"]["revision"]}]}
-            result = current_synthetic_result(result)
+            result = current_synthetic_result(result, source.text)
         adapter.apply_source(db, "item", item_id, source, result, *metadata)
         db.commit()
 

@@ -58,7 +58,7 @@ def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_cli
             extra.append((client,item))
             spans = [{'name':name, 'start':body.index(name), 'end':body.index(name)+len(name), 'score':0.95, 'label':'relation endpoint'} for name in (full_name,tail_name)]
             result = {'concepts':spans if include_entity_spans else [], 'relations':[{'head':spans[0], 'tail':spans[1], 'predicate':'uses', 'start':0, 'end':len(body), 'score':0.95, 'polarity':'positive', 'literal_support':True}], 'chunks':[], 'corroborated_definitions':[], 'conflict_definitions':[], 'conflict_coverage_revision':syntax.CONFLICT_REVISION}
-            result = current_synthetic_result(result)
+            result = current_synthetic_result(result, body)
             relation_items.append((item,result))
         def apply_relations():
             for item,result in relation_items:

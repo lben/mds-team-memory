@@ -49,7 +49,7 @@ def _records(item, entities=(), relations=()):
                             'polarity': polarity, 'literal_support': True})
         result = current_synthetic_result({'concepts': spans, 'relations': records, 'chunks': [],
                     'corroborated_definitions': [], 'conflict_definitions': [],
-                    'conflict_coverage_revision': syntax.CONFLICT_REVISION})
+                    'conflict_coverage_revision': syntax.CONFLICT_REVISION}, source.text)
         adapter.apply_source(db, 'item', item, source, result, *metadata)
         db.commit()
 

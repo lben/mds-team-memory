@@ -9,14 +9,37 @@ legacy/missing-marker behavior. Fixture JSON and original metadata stay intact.
 import copy
 
 
-def current_synthetic_result(result):
+def current_synthetic_result(result, text):
     from app.ml import relation_syntax
 
     current = copy.deepcopy(result)
     current['relation_guard_revision'] = relation_syntax.REVISION
     for relation in current['relations']:
         relation['relation_guard_revision'] = relation_syntax.REVISION
-    return current
+    return judged(keep_single_source_publication(current), text)
+
+
+def keep_single_source_publication(result):
+    """Keep a recorded scenario's one-source concept publication under policy v9.
+
+    Recorded spans at 0.985-0.995 published from one source under policy v8.
+    Mechanics tests replaying them need that publication, so the synthetic port
+    raises them to the v9 floor. The floor itself is tested in test_ml_eligibility.
+    """
+    for span in result['concepts']:
+        if 0.985 <= span['score'] < 0.995:
+            span['score'] = 0.995
+    return result
+
+
+def judged(result, text):
+    """Add a synthetic judgment that every name production would check is substantive."""
+    from app.ml import eligibility
+    from app.ml.runtime import normalize
+
+    result['eligibility'] = {'version': 'synthetic', 'margins': {
+        normalize(name): 10.0 for name, _ in eligibility.candidates(text, result['concepts'])}}
+    return result
 
 
 def current_synthetic_metadata(models=None):

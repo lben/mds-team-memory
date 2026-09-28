@@ -62,4 +62,7 @@ def analyze(text, entities=(), relations=None, *, full=False, guard=None, parsed
             else:
                 stack.enter_context(patch.object(relation_syntax, "serialize", side_effect=lambda doc: doc.row))
         result = model.analyze(text)
-    return result if full else result["relations"]
+    if not full:
+        return result["relations"]
+    from ml_synthetic_records import judged
+    return judged(result, text)

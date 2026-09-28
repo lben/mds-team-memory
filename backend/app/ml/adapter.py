@@ -442,6 +442,8 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                   "embedding_version": embedding_version, "dimensions": dimensions, "embedding_count": embedding_count}
         if "relation_guard_revision" in result:
             cached["relation_guard_revision"] = result["relation_guard_revision"]
+        if "eligibility" in result:
+            cached["eligibility"] = result["eligibility"]
         if covered:
             cached.update(conflict_definitions=result["conflict_definitions"],
                           conflict_coverage_revision=syntax.CONFLICT_REVISION)
@@ -456,6 +458,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
             authors.add(source.author_id)
         concepts = {}
         spans = list(result["concepts"])
+        eligibility = result.get("eligibility", {}).get("margins", {})
         scope = relation_syntax.SourceScope(source.text)
         definitions = [d for d in resolution.definitions(source.text, spans)
                        if scope.asserted(d["start"], d["end"])] if source.assertion_allowed else []
@@ -585,6 +588,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                                 "end": span["end"], "score": span["score"], "spelling_variant": True})
             _evidence(db, row, source, span["start"], span["end"], span["score"], model_version,
                       grounded=True, label=span["label"],
+                      **({"eligibility_margin": eligibility[spelling]} if spelling in eligibility else {}),
                       **({"term_routes": [term_dependency]} if term_dependency else {}),
                       **({"identity_routes": [certificate]} if certificate and certificate["direction"] == "forward" else {}))
             affected.add(row.key)
@@ -809,7 +813,7 @@ def _context_associations(db, source, concepts, embedding_version, model_version
                         return
 
 
-def cached_result(db, source, model_version):
+def cached_result(db, source, model_version, eligibility_version=None):
     from . import relationship_grounding
 
     stored = db.get(Source, (source.kind, source.id))
@@ -832,6 +836,10 @@ def cached_result(db, source, model_version):
     if data.get("conflict_coverage_revision") == syntax.CONFLICT_REVISION:
         result.update(conflict_definitions=data["conflict_definitions"],
                       conflict_coverage_revision=syntax.CONFLICT_REVISION)
+    # Judgments from another verifier or prompt are dropped; the sweep rechecks
+    # them. Without a configured verifier stored judgments are kept as they are.
+    if "eligibility" in data and eligibility_version in (None, data["eligibility"].get("version")):
+        result["eligibility"] = data["eligibility"]
     return (result,
             (model_version, data["embedding_version"], data["dimensions"]))
 

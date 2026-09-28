@@ -78,7 +78,7 @@ def apply_post(item_id, post, *, cached=False):
         result["conflict_coverage_revision"] = syntax.CONFLICT_REVISION
         # Port the fixed scores/identity spans into an explicit synthetic
         # current-contract input; the recorded model fixture remains unchanged.
-        result = current_synthetic_result(result)
+        result = current_synthetic_result(result, source.text)
         db.execute(text("UPDATE ml_state SET pipeline_version=:version WHERE id=1"),
                    {"version": version + ":" + policy.VERSION})
         adapter.apply_source(db, "item", item_id, source, result, version, models["embeddings"]["revision"], 1024)

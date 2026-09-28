@@ -1,12 +1,17 @@
 """Fixed conservative decisions; raw encoder scores are not probabilities."""
 
+import math
 import re
 
 from . import syntax
 from .runtime import inference_version, specific_name
 
 
-VERSION = "grounded-cold-start-v8"
+VERSION = "grounded-cold-start-v9"
+# Concept evidence counts only after the eligibility model judged that source's
+# name substantive. Selected with the thresholds below by leave-one-domain-out
+# development screening (ML_CURRENT_STATUS.md, September 27 batch 2).
+MIN_ELIGIBILITY_MARGIN = 4.0
 
 
 def acronym_definitions(text):
@@ -60,7 +65,18 @@ def decide(kind, evidence):
     score = max((row["raw_score"] for row in positive), default=0.0)
     if not positive:
         return "withdrawn", score
-    if kind in {"concept", "mention"}:
+    if kind == "concept":
+        grounded = [row for row in positive if row.get("grounded", False)]
+        # Unchecked or rejected names stay held; their extraction score is kept for review.
+        supported = [row for row in grounded if (row.get("eligibility_margin") or -math.inf) >= MIN_ELIGIBILITY_MARGIN]
+        groups, _ = independent_support(supported)
+        # Relation endpoints can corroborate presence, but cannot supply the
+        # entity-score requirement: their confidence belongs to the relation.
+        strong = max((row["raw_score"] for row in supported if row.get("label") != "relation endpoint"), default=0.0)
+        active = strong >= 0.995 or (groups >= 2 and strong >= 0.9)
+        score = max((row["raw_score"] for row in grounded if row.get("label") != "relation endpoint"), default=0.0)
+        return ("active" if active else "held"), score
+    if kind == "mention":
         supported = [row for row in positive if row.get("grounded", False)]
         groups, _ = independent_support(supported)
         # Relation endpoints can corroborate presence, but cannot supply the

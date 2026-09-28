@@ -5,11 +5,81 @@ Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
 
 ## Current position — September 27
 
-Batch 2 recorded a development GO for the concept-eligibility filter; nothing
-is integrated into the application yet. An open-weight "System One" decision
-model was screened next and rejected (below). Batch 3 (integration with staged
-model loading, then an application-level measurement on the expanded corpus)
-is proposed but not started. Release quality remains open for every category.
+The eligibility check is integrated (batch 3) and raises application-level
+precision, but misses the fixed concept target on the development corpus
+(97.52% vs 98%). Packaging for the offline x86 server and fresh validation are
+outstanding. Release quality remains open for every category.
+
+## Batch 3 integration — September 27
+
+Working-tree changes integrate the batch 2 eligibility check:
+`backend/app/ml/eligibility.py` (frozen Qwen3-4B Yes/No margin; sources longer
+than the 2,048-token context are judged in a window around each name), a
+`verifier` model role, policy v9 (concept evidence counts only at margin ≥ 4;
+publish at 0.995 from one source or two independent groups at 0.9; mentions
+unchanged), margins on concept evidence and in the source cache, and a worker
+eligibility sweep that runs only when no job is claimable and never keeps the
+extraction and verifier children alive together. No migration: judgments live
+in existing JSON, so older releases ignore them. The worker refuses to start
+without a verifier.
+
+**Engineering verification.** The production module reproduces the screened
+margins exactly on the development machine (90/90). A Linux ARM build differs
+by median 0.45 and maximum 3.8 logits, flipping 3/90 borderline decisions, so
+quality must be measured on the deployment build. Final backend suite in
+native Linux ARM after the review repairs: 784 passed, 0 failed
+(`tests/suite-r3.log`). Before test updates the
+suite reported 121 failures and 27 errors: synthetic inputs now carry an
+explicit synthetic judgment (`ml_synthetic_records.judged`), and recorded
+single-source definitions scored 0.985–0.995 keep their original publication
+via `keep_single_source_publication`; the new floor itself is tested in
+`test_ml_eligibility.py`. A production staging check (real worker entry point,
+real models, 5 GiB) drained six posts with at most one model child alive in all
+475 samples of the retained run (`staging-result.json`); cgroup memory peaked at
+the 5 GiB limit including file cache, with no process killed. Memory headroom
+remains tight. Native and Linux parity outputs are retained separately
+(`parity-native-result.txt`, `parity-linux-arm-result.txt`).
+
+One independent reviewer returned FAIL with two material sweep defects, both
+reproduced by new regressions before repair: a source that failed its check was
+skipped for the worker's lifetime even after an edit (the skip set now includes
+the content hash), and a storage refusal while saving a judgment stopped the
+worker (it now pauses the sweep for five minutes and leaves concepts held).
+The same reviewer re-checked both repairs and returned PASS; the budget-trigger
+branch of the storage refusal is covered by inspection, not by a test.
+
+**Application-level measurement** on the spent expanded corpus (development
+evidence), native Linux ARM, 291 cases completed by both runs:
+
+| Category | Control complete output | Eligibility complete output | Selected recall control → eligibility |
+| --- | ---: | ---: | ---: |
+| Concepts | 417/445 (93.71%) | 394/404 (97.52%) | 136/145 → 132/145 |
+| Aliases | 150/155 (96.77%) | 152/154 (98.70%) | 96/147 → 95/147 |
+| Relationships | 9/9 | 11/11 | 3/145 → 4/145 |
+| Expertise | none (corpus predates explicit feedback) | none | 0/146 → 0/146 |
+
+Selected-decision precision stayed 100% in every category. Disposition under
+the criterion fixed before either run: NO_GO. Concept precision is 97.52%
+against 98% (about two names short), and one selected alias was lost with its
+concept. The eligibility check removed 18 of 28 concept errors and 3 of 5 alias
+errors. Of the remaining ten concept errors, five are boundary variants that
+append a generic noun to a correct name ("Clover Shuttle service") and five
+are generic terms ("study", "granite"). The control lost nine cases when its
+inference child died near the 5 GiB ceiling, a pre-existing headroom risk; the
+treatment completed all 300 with both children resident in a larger harness.
+
+A synthetic smoke scenario shows both remaining limits: the verifier strongly
+accepted an incidental "elevator" (held only by its single-source score), and a
+tool named by three authors stayed held because the extractor scored it
+0.71–0.85, below the 0.9 corroboration floor. Extractor confidence, not the
+eligibility check, now limits most coverage.
+
+Not yet done: offline x86 packaging (a prebuilt llama-cpp-python wheel with the
+server's SIMD flags, a `verifier` role in the asset/bundle tooling and Linux
+lock), deployment-build quality and timing, and fresh independent validation.
+The branch cannot be deployed until packaging exists. Evidence:
+`data/ml-runs/with-opus55/` (`app-control/`, `app-treatment/`,
+`app-comparison.json`, `integration-checks/`, `tests/`).
 
 ## Open System One decision model screen — September 27
 

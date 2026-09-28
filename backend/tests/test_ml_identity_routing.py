@@ -86,7 +86,7 @@ def apply(item, record, *, cached=False, empty=False):
         if source and not cached:
             # Synthetic application replay of retained geometry/scores, not a
             # new parser/model observation or an upgrade of a stored cache.
-            result = current_synthetic_result(result)
+            result = current_synthetic_result(result, source.text)
         adapter.apply_source(db, 'item', item, source, result, *metadata)
         db.commit()
 

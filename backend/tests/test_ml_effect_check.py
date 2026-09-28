@@ -80,14 +80,15 @@ class SyntheticInference:
 
     def analyze(self, body, heartbeat):
         from app.ml import relation_syntax, syntax
+        from ml_synthetic_records import judged
 
         heartbeat()
         name = "Ember Cache"
         spans = [] if name not in body else [{"name": name, "start": body.index(name),
                     "end": body.index(name) + len(name), "score": 0.995, "label": "technology"}]
-        result = {"concepts": spans, "relations": [], "chunks": [], "conflict_definitions": [],
-                  "conflict_coverage_revision": syntax.CONFLICT_REVISION,
-                  "relation_guard_revision": relation_syntax.REVISION}
+        result = judged({"concepts": spans, "relations": [], "chunks": [], "conflict_definitions": [],
+                         "conflict_coverage_revision": syntax.CONFLICT_REVISION,
+                         "relation_guard_revision": relation_syntax.REVISION}, body)
         self.calls += 1
         with self.path.open("a") as stream:
             stream.write(json.dumps({"phase": self.phase, "body": body, "result": result, "metadata": self.metadata}) + "\n")

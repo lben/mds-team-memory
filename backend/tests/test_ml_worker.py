@@ -64,6 +64,23 @@ time.sleep(60)
     time.sleep(60)
 
 
+def eligibility_child(connection, assets):
+    """Stands in for the llama.cpp verifier: rejects names containing "Cell", fails on "Fragile"."""
+    from app.ml import eligibility
+    from app.ml.runtime import normalize
+
+    models = json.loads((Path(assets) / "models.json").read_text())["models"]
+    connection.send(("ready", eligibility.version(models), "", 0))
+    while True:
+        request = connection.recv()
+        with (Path(assets) / "verifier-requests.jsonl").open("a") as log:
+            log.write(json.dumps(request) + "\n")
+        if "Fragile" in request["text"]:
+            raise RuntimeError("Test verifier failure")
+        connection.send(("result", {normalize(name): -3.0 if "Cell" in name else 9.0
+                                    for name, _ in request["candidates"]}))
+
+
 def process_ended(pid):
     import psutil
 
@@ -603,13 +620,15 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
         iterations = 0
 
         def analyze(self, body, heartbeat):
+            from ml_synthetic_records import judged
+
             self.calls += 1
-            return {"concepts": [{"name": name, "start": body.index(name),
+            return judged({"concepts": [{"name": name, "start": body.index(name),
                     "end": body.index(name) + len(name), "score": 0.96, "label": "named entity"}
                     for name in names if name in body], "relations": [], "chunks": [],
                     "corroborated_definitions": [], "conflict_definitions": [],
                     "conflict_coverage_revision": syntax.CONFLICT_REVISION,
-                    "relation_guard_revision": relation_syntax.REVISION}, metadata
+                    "relation_guard_revision": relation_syntax.REVISION}, body), metadata
 
         def check_memory(self):
             self.iterations += 1
@@ -674,3 +693,188 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
     db.execute(text("UPDATE knowledge_items SET body=replace(body,' records',' (SRC) records') WHERE id IN ('alias-item-2','alias-item-3')"))
     drain()
     assert db.execute(text("SELECT concept_id FROM concept_terms WHERE term='src'")).scalar_one() == concepts[names[0]]
+
+
+def test_concepts_publish_only_after_eligibility_with_one_model_set_loaded(worker_store):
+    import threading
+    from sqlalchemy import text
+    from app.ml import adapter, eligibility, policy, queue, relation_syntax, syntax, worker
+    from app.ml.runtime import inference_version
+    from test_ml_embeddings import add_source
+    from ml_relation_helpers import analyze as _analyze, span as _span
+
+    db, path, assets = worker_store
+    manifest = json.loads((assets / "models.json").read_text())
+    manifest["models"]["verifier"] = {"revision": "verifier-a"}
+    (assets / "models.json").write_text(json.dumps(manifest))
+    version = inference_version(manifest["models"])
+
+    def extraction(body):
+        result = _analyze(body, [_span(body, name, score=.999) for name in ("Citrine Pump", "Emerald Cell")], {}, full=True)
+        result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION,
+                      relation_guard_revision=relation_syntax.REVISION)
+        del result["eligibility"]  # extraction alone carries no judgment
+        return result
+
+    cached_body, fresh_body = "Citrine Pump drives the Emerald Cell loop.", "Citrine Pump replaced the Emerald Cell valve."
+    adapter.bootstrap(db)
+    adapter.apply_source(db, "item", "cached", add_source(db, "cached", body=cached_body),
+                         extraction(cached_body), version, "old", 1024)
+    add_source(db, "fresh", body=fresh_body)
+    db.execute(text("DELETE FROM ml_jobs"))
+    queue.enqueue(db, "item", "fresh")
+    db.execute(text("UPDATE ml_state SET pipeline_version=:version WHERE id=1"), {"version": version + ":" + policy.VERSION})
+
+    def states():
+        db.expire_all()
+        return dict(db.execute(text("SELECT json_extract(payload,'$.name'),state FROM ml_findings WHERE kind='concept'")).all())
+
+    assert states() == {"Citrine Pump": "held", "Emerald Cell": "held"}
+    requests = assets / "verifier-requests.jsonl"
+    overlaps = []
+
+    class Extraction:
+        calls, loaded = 0, False
+
+        def analyze(self, body, heartbeat):
+            overlaps.append(supervisor.verifier.process is not None)
+            self.calls, self.loaded = self.calls + 1, True
+            return extraction(body), (version, "old", 1024)
+
+        def check_memory(self):
+            pass
+
+        def close(self):
+            self.loaded = False
+
+    extractor = Extraction()
+
+    def drain():
+        nonlocal supervisor
+        db.commit()
+        supervisor = worker.Supervisor(path, assets, threading.Event())
+        supervisor.inference = extractor
+        supervisor.verifier = InferenceProcess(assets, target=eligibility_child)
+        verify = supervisor.verifier.analyze
+
+        def checked(request, heartbeat):
+            overlaps.append(extractor.loaded)
+            return verify(request, heartbeat)
+
+        supervisor.verifier.analyze = checked
+        try:
+            assert supervisor.run("drain") == 0
+        finally:
+            supervisor.close()
+
+    supervisor = None
+    drain()
+    assert extractor.calls == 1 and not any(overlaps)
+    assert states() == {"Citrine Pump": "active", "Emerald Cell": "held"}
+    assert db.execute(text("SELECT count(*) FROM concept_terms WHERE term='citrine pump'")).scalar_one() == 1
+    assert db.execute(text("SELECT count(*) FROM concept_terms WHERE term='emerald cell'")).scalar_one() == 0
+    judged = sorted(json.loads(line)["text"] for line in requests.read_text().splitlines())
+    assert judged == sorted([cached_body, fresh_body])
+    assert set(db.execute(text("SELECT json_extract(result,'$.eligibility.version') FROM ml_sources WHERE kind='item'")).scalars()) == {
+        eligibility.version(manifest["models"])}
+
+    drain()
+    assert extractor.calls == 1 and len(requests.read_text().splitlines()) == 2
+
+    manifest["models"]["verifier"]["revision"] = "verifier-b"
+    (assets / "models.json").write_text(json.dumps(manifest))
+    drain()
+    assert extractor.calls == 1 and len(requests.read_text().splitlines()) == 4 and not any(overlaps)
+    assert states() == {"Citrine Pump": "active", "Emerald Cell": "held"}
+
+
+def eligibility_worker(worker_store, body, name):
+    """A verifier-enabled worker over one cached, unjudged source; extraction returns `name` spans."""
+    import threading
+    from sqlalchemy import text
+    from app.ml import adapter, policy, relation_syntax, syntax, worker
+    from app.ml.runtime import inference_version
+    from test_ml_embeddings import add_source
+    from ml_relation_helpers import analyze as _analyze, span as _span
+
+    db, path, assets = worker_store
+    manifest = json.loads((assets / "models.json").read_text())
+    manifest["models"]["verifier"] = {"revision": "verifier-a"}
+    (assets / "models.json").write_text(json.dumps(manifest))
+    version = inference_version(manifest["models"])
+
+    def extraction(text_body, span_name):
+        result = _analyze(text_body, [_span(text_body, span_name, score=.999)], {}, full=True)
+        result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION,
+                      relation_guard_revision=relation_syntax.REVISION)
+        del result["eligibility"]  # extraction alone carries no judgment
+        return result
+
+    class Extraction:
+        def analyze(self, text_body, heartbeat):
+            return extraction(text_body, text_body.split(" drives")[0]), (version, "old", 1024)
+
+        def check_memory(self):
+            pass
+
+        def close(self):
+            pass
+
+    adapter.bootstrap(db)
+    adapter.apply_source(db, "item", "source", add_source(db, "source", body=body), extraction(body, name),
+                         version, "old", 1024)
+    db.execute(text("DELETE FROM ml_jobs"))
+    # A current pipeline: the only pending work is the eligibility judgment.
+    db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy='{}',backfill_kind=NULL WHERE id=1"),
+               {"version": version + ":" + policy.VERSION})
+    db.commit()
+    supervisor = worker.Supervisor(path, assets, threading.Event())
+    supervisor.inference = Extraction()
+    supervisor.verifier = InferenceProcess(assets, target=eligibility_child)
+    return supervisor
+
+
+def concept_states(db):
+    from sqlalchemy import text
+
+    db.expire_all()
+    return dict(db.execute(text("SELECT json_extract(payload,'$.name'),state FROM ml_findings WHERE kind='concept'")).all())
+
+
+def test_failed_eligibility_is_checked_again_after_the_source_changes(worker_store):
+    from sqlalchemy import text
+    from app.ml import queue
+
+    db = worker_store[0]
+    supervisor = eligibility_worker(worker_store, "Fragile Pump drives the loop.", "Fragile Pump")
+    try:
+        assert supervisor.run("drain") == 0
+        assert concept_states(db) == {"Fragile Pump": "held"}
+        db.execute(text("UPDATE knowledge_items SET body='Sturdy Pump drives the loop.' WHERE id='source'"))
+        queue.enqueue(db, "item", "source")
+        db.commit()
+        # The same long-lived worker continues after the edit.
+        queue.release_worker(supervisor.connection, supervisor.token)
+        assert supervisor.run("drain") == 0
+    finally:
+        supervisor.close()
+    assert concept_states(db)["Sturdy Pump"] == "active"
+
+
+def test_refused_eligibility_storage_pauses_the_sweep_without_stopping_the_worker(worker_store, monkeypatch):
+    import time
+    from sqlalchemy import text
+    from app.ml import embeddings
+
+    db, path, assets = worker_store
+    supervisor = eligibility_worker(worker_store, "Citrine Pump drives the loop.", "Citrine Pump")
+    monkeypatch.setattr(embeddings, "_free_bytes", lambda db: embeddings.FREE_RESERVE - 1)
+    try:
+        assert supervisor.run("drain") == 0
+        assert supervisor.eligibility_paused_until > time.monotonic()
+        assert supervisor.verify_eligibility() == 0
+    finally:
+        supervisor.close()
+    assert concept_states(db) == {"Citrine Pump": "held"}
+    assert db.execute(text("SELECT json_extract(result,'$.eligibility') FROM ml_sources WHERE id='source'")).scalar_one() is None
+    assert len((assets / "verifier-requests.jsonl").read_text().splitlines()) == 1
