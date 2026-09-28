@@ -587,9 +587,12 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                     and resolution.spelling_key(span["name"]) == resolution.spelling_key(canonical_name)):
                 aliases.append({"name": canonical_name, "alias": span["name"], "start": span["start"],
                                 "end": span["end"], "score": span["score"], "spelling_variant": True})
+            # Eligibility judges the concept, not one spelling. A short form judged
+            # alone ("FCon") must not override the concept's name judged in this post.
+            judged = [eligibility[name] for name in (spelling, normalize(canonical_name)) if name in eligibility]
             _evidence(db, row, source, span["start"], span["end"], span["score"], model_version,
                       grounded=True, label=span["label"],
-                      **({"eligibility_margin": eligibility[spelling]} if spelling in eligibility else {}),
+                      **({"eligibility_margin": max(judged)} if judged else {}),
                       **({"term_routes": [term_dependency]} if term_dependency else {}),
                       **({"identity_routes": [certificate]} if certificate and certificate["direction"] == "forward" else {}))
             affected.add(row.key)

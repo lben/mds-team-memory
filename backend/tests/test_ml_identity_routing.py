@@ -54,7 +54,7 @@ def capture(make_client, case):
     return clients, items
 
 
-def apply(item, record, *, cached=False, empty=False):
+def apply(item, record, *, cached=False, empty=False, margins=None):
     from sqlalchemy import text
     from app.db import SessionLocal
     from app.ml import adapter, policy, runtime, syntax
@@ -87,6 +87,8 @@ def apply(item, record, *, cached=False, empty=False):
             # Synthetic application replay of retained geometry/scores, not a
             # new parser/model observation or an upgrade of a stored cache.
             result = current_synthetic_result(result, source.text)
+            if margins is not None:
+                result['eligibility']['margins'] = margins
         adapter.apply_source(db, 'item', item, source, result, *metadata)
         db.commit()
 
@@ -162,6 +164,25 @@ def test_exact_role_routes_reserved_entity_and_keeps_dependency_after_term_repla
         apply(items[1], records[1])
         replay(items, records)
         assert admin_client.get(f"/api/ml/findings/{finding_key('concept', 'tindex')}").status_code == 404
+    finally:
+        for item, post, record in reversed(list(zip(items, case['posts'], records))):
+            clients[post['actor']].delete(f'/api/items/{item}')
+            apply(item, record)
+
+
+def test_short_form_judged_alone_does_not_hold_back_its_concept_and_alias(make_client):
+    saved = CASES[0]
+    case, records = saved['case'], saved['records']
+    clients, items = capture(make_client, case)
+    client = clients['alice']
+    # Only the last post supports the concept: its strongest span is the short
+    # form, which the eligibility check rejects alone, beside the accepted name.
+    judged = {items[4]: {'tindex': -2.0, 'threaded index': 20.0}}
+    try:
+        for item, record in zip(items, records):
+            apply(item, record, margins=judged.get(item, {}))
+        replay(items, records)
+        assert set(names(client, 'TIndex')) == {'Threaded Index'}
     finally:
         for item, post, record in reversed(list(zip(items, case['posts'], records))):
             clients[post['actor']].delete(f'/api/items/{item}')

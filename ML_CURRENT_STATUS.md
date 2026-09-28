@@ -3,13 +3,63 @@
 Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
 `551e52a`. The sections below that branch point describe `astra-again-sep14`.
 
-## Current position — September 27
+## Current position — September 28
 
-The eligibility check (batch 3) and a descriptor naming rule (batch 4) bring
-development concept precision to 98.76%, but one fewer selected alias than
-batch 3 keeps the fixed "no other category worse" condition failing. Packaging
-for the offline x86 server and fresh validation are outstanding. Release
-quality remains open for every category.
+The eligibility check (batch 3), the descriptor naming rule (batch 4) and
+per-concept eligibility (batch 5) meet the fixed development criterion: concept
+precision 98.77% with 92% selected recall, and aliases, relationships and
+expertise no worse than the control. This is in-sample evidence on a spent
+corpus; it authorizes fresh validation only. Packaging for the offline x86
+server and fresh validation are outstanding. Release quality remains open for
+every category.
+
+## Batch 5 per-concept eligibility — September 28
+
+Batch 4 missed 53 development aliases, four of which the control had
+published. Diagnosis found one defect from batch 3: a concept keeps one evidence
+row per source, the highest-scoring span, and that row carried the span's own
+eligibility margin. A short form judged alone ("FCon", "RPT") often has the
+highest extraction score but is rejected by the check, so it discarded the
+support that the concept's accepted full name had in the same post, and the
+alias could not publish while its concept was held. In `adapter.apply_source`
+each span's evidence now carries the better of its own margin and the margin of
+its concept's name judged in the same source. Policy advances to v11 so stored
+sources are re-applied; thresholds are unchanged. A recorded-fixture regression
+test fails before and passes after the change. Backend suite: 786 passed.
+
+Before the run, a simulation over batch 4's final databases predicted three
+concepts to change from held to active, all labelled correct. The run matched:
+those three concepts and their aliases are the only decision changes.
+
+| 291 common cases | Control | Batch 4 | Batch 5 |
+| --- | ---: | ---: | ---: |
+| Concept complete-output precision | 417/445 (93.71%) | 397/402 (98.76%) | 400/405 (98.77%) |
+| Selected concept recall | 136/145 | 132/145 | 134/145 |
+| Alias complete-output precision | 150/155 (96.77%) | 151/153 (98.69%) | 153/156 (98.08%) |
+| Selected alias recall | 96/147 | 94/147 | 96/147 |
+| Relationship precision / selected recall | 9/9, 3/145 | 11/11, 3/145 | 11/11, 4/145 |
+
+Disposition under the unchanged batch 3 criterion: GO (development). Concept
+precision Wilson interval 97.1–99.5%. The one new incorrect alias, qa_b_120
+GES → gloss evaluation scale, is stated verbatim in that case's posts but is
+absent from its frozen allowed labels; it stays counted as incorrect and no
+label was changed. The corpus shaped this fix, so the result authorizes fresh
+validation only.
+
+Not addressed: qa_a_104 (OTrans) and qa_a_011 publish both names as separate
+concepts before a recognized definition links them, and published concepts are
+never merged automatically (an admin can delete the duplicate and add the
+alias); qa_b_018 has the same duplicate because its linking sentence is never
+recognized as a definition. qa_b_048 stays held: its only judged name in "BLM is our
+brocade loom model" is the short form, because neither the definition nor the
+full-name span was extracted there. Of the 53 remaining misses, 24 have
+definition wording that is not recognized, 16 have a definition too weak or
+contested to publish from one post, 10 have a held concept and 3 are duplicates. The corpus
+contains almost no acronym-only posts (5 of about 620 acronym judgements), so it
+cannot show how the check treats unexpanded acronyms; fresh validation needs
+them. One independent reviewer returned PASS. Evidence:
+`data/ml-runs/with-opus55/app-b5/`, `app-comparison-b5.json`,
+`tests/suite-b5-r1.log`.
 
 ## Batch 4 descriptor naming rule — September 28
 

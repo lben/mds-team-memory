@@ -184,6 +184,11 @@ SEPTEMBER 27 NEW BRANCH: with-opus55
         Batch 4: descriptor naming rule ("Clover Shuttle service" publishes as
         "Clover Shuttle"); development concept precision 98.76%, but one more
         selected alias lost, so the fixed criterion stays NO_GO. Reviewer PASS.
+        Batch 5: eligibility judged per concept, not per spelling (a short
+        form judged alone no longer discards its full name's support in the
+        same post); policy v11. Development GO on the fixed criterion: concept
+        precision 98.77%, aliases back to the control's 96/147. Reviewer PASS.
+        Fresh validation and offline x86 packaging remain.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 
