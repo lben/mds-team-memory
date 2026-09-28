@@ -181,6 +181,9 @@ SEPTEMBER 27 NEW BRANCH: with-opus55
         98% concept target. 784 backend tests pass; one reviewer PASS after
         two sweep repairs. Offline x86 packaging is still missing, so the
         branch is not deployable yet.
+        Batch 4: descriptor naming rule ("Clover Shuttle service" publishes as
+        "Clover Shuttle"); development concept precision 98.76%, but one more
+        selected alias lost, so the fixed criterion stays NO_GO. Reviewer PASS.
 
 STATE AT THE SEPTEMBER 14 HANDOFF
 

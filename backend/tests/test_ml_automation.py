@@ -762,7 +762,7 @@ def test_single_exact_definition_publishes_and_retracts_without_role_score_leak(
     from app.db import SessionLocal
 
     owner = make_client()
-    name, alias = "Prospective Trace " + removal, "PT" + removal
+    name, alias = "Prospective Trace " + removal.title(), "PT" + removal
     item = _capture(owner, f"{alias} denotes {name} in this instrument log.")
     _apply_current_definition(item, name, alias, field_score=0.85)
     cid = _tags(owner, item)[name]
@@ -904,3 +904,31 @@ def test_exact_definition_survives_higher_scoring_spelling_method(make_client, a
     finding = _finding(admin_client, "alias", alias=alias)
     assert finding["state"] == "active"
     assert [c["name"] for c in owner.get("/api/search", params={"q": alias}).json()["concepts"]] == [name]
+
+
+def test_descriptor_word_after_a_multiword_name_publishes_the_name(make_client, admin_client):
+    from app.db import SessionLocal
+    from app.ml import adapter
+    from app.ml.sources import snapshot
+    from ml_relation_helpers import DeclaredGuard, analyze, declaration, span
+    from ml_synthetic_records import current_synthetic_metadata, select_synthetic_pipeline
+
+    body = "Clover Shuttle service uses Vela spectrograph readings."
+    client = make_client()
+    item_id = _capture(client, body)
+    names = ("Clover Shuttle service", "Vela spectrograph")
+    guard = DeclaredGuard(body, [declaration(body, names[0], "uses", names[1])])
+    result = analyze(body, [span(body, name, score=.999) for name in names],
+                     {"uses": [{"head": span(body, names[0]), "tail": span(body, names[1])}]}, full=True, guard=guard)
+    result["chunks"] = []
+    metadata = current_synthetic_metadata()
+    with SessionLocal() as db:
+        select_synthetic_pipeline(db, metadata)
+        adapter.apply_source(db, "item", item_id, snapshot(db, "item", item_id), result, *metadata)
+        db.commit()
+
+    tags = _tags(client, item_id)
+    assert set(tags) == {"Clover Shuttle", "Vela spectrograph"}
+    relationship = _finding(admin_client, "relationship", predicate="uses")
+    assert (relationship["payload"]["src_id"], relationship["payload"]["dst_id"]) == (
+        tags["Clover Shuttle"], tags["Vela spectrograph"])

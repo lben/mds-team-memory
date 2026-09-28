@@ -7,7 +7,7 @@ from . import syntax
 from .runtime import inference_version, specific_name
 
 
-VERSION = "grounded-cold-start-v9"
+VERSION = "grounded-cold-start-v10"
 # Concept evidence counts only after the eligibility model judged that source's
 # name substantive. Selected with the thresholds below by leave-one-domain-out
 # development screening (ML_CURRENT_STATUS.md, September 27 batch 2).

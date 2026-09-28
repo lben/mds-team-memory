@@ -5,10 +5,51 @@ Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
 
 ## Current position — September 27
 
-The eligibility check is integrated (batch 3) and raises application-level
-precision, but misses the fixed concept target on the development corpus
-(97.52% vs 98%). Packaging for the offline x86 server and fresh validation are
-outstanding. Release quality remains open for every category.
+The eligibility check (batch 3) and a descriptor naming rule (batch 4) bring
+development concept precision to 98.76%, but one fewer selected alias than
+batch 3 keeps the fixed "no other category worse" condition failing. Packaging
+for the offline x86 server and fresh validation are outstanding. Release
+quality remains open for every category.
+
+## Batch 4 descriptor naming rule — September 28
+
+Batch 3 left ten concept errors; five were names extended by one generic word
+("Clover Shuttle service" beside the correct "Clover Shuttle"). The rule
+`runtime.named_part`: when a whole extracted name is a multi-word capitalized
+name followed by exactly one lowercase letters-only word, the capitalized name
+is the concept. Digit tokens ("v2", identifiers) are never trimmed. It applies
+to concept spans, relation endpoints, identity matching and eligibility
+candidates; caches are unchanged, policy advances to v10 and the eligibility
+fingerprint includes the rule so trimmed names are rechecked. The shape was
+chosen after inspecting batch 3's development errors: trimming after a single
+capitalized word would have broken 14 correct names ("Vela spectrograph").
+
+A first version also trimmed identifier tokens ("Archive Gauge bbe27ff4");
+four tests exposed it before the application run and the last word was
+restricted to letters. Backend suite: 785 passed.
+
+| 291 common cases | Control | Batch 3 | Batch 4 |
+| --- | ---: | ---: | ---: |
+| Concept complete-output precision | 417/445 (93.71%) | 394/404 (97.52%) | 397/402 (98.76%) |
+| Selected concept recall | 136/145 | 132/145 | 132/145 |
+| Alias complete-output precision | 150/155 (96.77%) | 152/154 (98.70%) | 151/153 (98.69%) |
+| Selected alias recall | 96/147 | 95/147 | 94/147 |
+
+Disposition under the unchanged batch 3 criterion: NO_GO. Concept precision
+passes 98% (Wilson 97.1–99.5%) with 91% selected recall, but aliases remain
+below the control. The only decision that changed from batch 3 is qa_a_104:
+trimming lets "Orchard Transfer" publish in its own right, and the forward alias
+OTrans → Orchard Transfer stays held after a deletion, where batch 3 had
+published the pair in the inverse direction. This is in-sample development
+evidence on a corpus whose errors shaped the rule; a pass would only authorize
+fresh validation.
+
+One independent reviewer returned PASS. It verified that all 6,571 real spans in
+the run stay grounded (97 trimmed) and recorded two limitations absent from this
+corpus: an alias whose role-record definition names a descriptor-shaped full
+name cannot publish, and pair definitions such as "X service, also known as Y"
+are no longer detected. Evidence: `data/ml-runs/with-opus55/app-b4/`,
+`app-comparison-b4.json`, `tests/suite-b4-r2.log`.
 
 ## Batch 3 integration — September 27
 

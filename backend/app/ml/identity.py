@@ -8,7 +8,7 @@ from sqlalchemy import and_, exists, func, literal_column, or_, select, text
 from ..models import Account, ConceptTerm, Profile
 from . import policy, syntax
 from .models import Evidence, Finding, Override, Source
-from .runtime import normalize
+from .runtime import named_part, normalize
 from .sources import digest, finding_key
 
 VERSION = "exact-scored-identity-v2"
@@ -332,7 +332,7 @@ def route(db, spelling):
                 if any(normalize(span["name"]) == spelling and span["label"] != "relation endpoint"
                        and (span["start"], span["end"], span["score"]) ==
                            (evidence["start"], evidence["end"], evidence["raw_score"])
-                       for span in json.loads(source.result).get("concepts", [])):
+                       for span in map(named_part, json.loads(source.result).get("concepts", []))):
                     native.append(evidence)
             if policy.decide("concept", native)[0] != "active":
                 continue

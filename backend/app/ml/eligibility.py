@@ -13,7 +13,7 @@ import json
 import math
 
 from . import resolution
-from .runtime import normalize, specific_name
+from .runtime import DESCRIPTOR_SUFFIX, named_part, normalize, specific_name
 
 DEFINITION = """You audit concept names that another model extracted from a team knowledge-base post.
 
@@ -30,7 +30,9 @@ QUESTION = ("Candidate: {name}\n\nIs this candidate an acceptable concept under 
 CONTEXT_TOKENS = 2048
 # System prompt and question use roughly 400 tokens of the 2,048-token context.
 POST_TOKENS = 1400
-FINGERPRINT = hashlib.sha256(json.dumps([DEFINITION, QUESTION, CONTEXT_TOKENS, POST_TOKENS]).encode()).hexdigest()[:16]
+# Candidate names depend on the descriptor rule, so a rule change is rechecked.
+FINGERPRINT = hashlib.sha256(json.dumps([DEFINITION, QUESTION, CONTEXT_TOKENS, POST_TOKENS,
+                                         DESCRIPTOR_SUFFIX.pattern]).encode()).hexdigest()[:16]
 
 
 def version(models):
@@ -44,6 +46,7 @@ def post(body):
 def candidates(text, spans):
     """Every name that can become concept evidence for this source, with one position each."""
     found = {}
+    spans = [named_part(span) for span in spans]
     for span in [*spans, *resolution.definitions(text, spans)]:
         name = span["name"]
         if specific_name(name):

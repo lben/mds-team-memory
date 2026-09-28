@@ -12,7 +12,8 @@ from test_ml_relationship_generation import _migrate
 def current_alias(make_client, admin_client):
     from app.ml.sources import finding_key
 
-    suffix = uuid.uuid4().hex[:8]
+    # A digit keeps the synthetic name an identifier, never a descriptor word.
+    suffix = '7' + uuid.uuid4().hex[:7]
     name, alias = 'Archive Gauge ' + suffix, 'AG' + suffix
     cid = admin_client.post('/api/admin/concepts', json={'name': name}).json()['id']
     owner, reader = make_client(), make_client()

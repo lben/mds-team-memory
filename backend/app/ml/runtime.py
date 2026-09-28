@@ -57,6 +57,20 @@ def normalize(value):
     return " ".join(value.casefold().split())
 
 
+# A complete multi-word proper name followed by one lowercase common noun
+# ("Clover Shuttle service") names the proper name; the noun describes it.
+# Tokens with digits ("v2", identifiers) distinguish a subject and are kept.
+DESCRIPTOR_SUFFIX = re.compile(r"((?:[A-Z][\w'’-]*)(?: [A-Z][\w'’-]*)+) [a-z]+")
+
+
+def named_part(span):
+    """Drop a trailing descriptor word from an extracted span; other spans are unchanged."""
+    match = DESCRIPTOR_SUFFIX.fullmatch(span["name"])
+    if not match:
+        return span
+    return {**span, "name": match.group(1), "end": span["start"] + len(match.group(1))}
+
+
 def specific_name(value):
     name = value.strip()
     return (2 <= len(name) <= 120 and normalize(name) not in GENERIC

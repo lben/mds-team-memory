@@ -15,7 +15,7 @@ from ..models import (RELATED_TO_ID, Account, Concept, ConceptTerm, ExpertiseMap
 from . import effective, embeddings, identity, policy, relation_syntax, resolution, syntax
 from .models import Embedding, Evidence, Finding, Override, Source
 from .queue import enqueue, request_backfill
-from .runtime import grounded_span, normalize, specific_name
+from .runtime import grounded_span, named_part, normalize, specific_name
 from .sources import digest, finding_key, snapshot
 
 
@@ -457,7 +457,8 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
         if source.author_id:
             authors.add(source.author_id)
         concepts = {}
-        spans = list(result["concepts"])
+        extracted = [named_part(span) for span in result["concepts"]]
+        spans = list(extracted)
         eligibility = result.get("eligibility", {}).get("margins", {})
         scope = relation_syntax.SourceScope(source.text)
         definitions = [d for d in resolution.definitions(source.text, spans)
@@ -558,7 +559,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                 conditional = (conditional and json.loads(conditional.payload).get("identity_routing")
                                and not (fixed and fixed.mode == "pinned"))
                 if reserved or conditional:
-                    if span not in result["concepts"] or span["label"] == "relation endpoint":
+                    if span not in extracted or span["label"] == "relation endpoint":
                         continue
                     certificate = identity.route(db, spelling)
                     if certificate is None:
@@ -660,6 +661,7 @@ def apply_source(db, source_kind, source_id, source, result, model_version, embe
                           **({"identity_routes": [certificate]} if inverse else {}))
                 affected.add(alias.key)
         for relation in result["relations"]:
+            relation = {**relation, "head": named_part(relation["head"]), "tail": named_part(relation["tail"])}
             # The relation extractor can identify a known endpoint that the
             # separate entity pass missed. Exact vocabulary identity is enough
             # to attach its grounded relationship evidence to that concept.
