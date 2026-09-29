@@ -1,17 +1,23 @@
 # Automatic maintenance: current status
 
-Branch: `with-opus55`, created 27 September 2026 from `astra-again-sep14` at
-`551e52a`. The sections below that branch point describe `astra-again-sep14`.
+Branch: `withgpt6.1solhigh`, created 29 September 2026 from `with-opus55` at
+`73e743d`. Earlier sections retain the development history of the parent branches.
 
-## Current position — September 28
+## Current position — September 29
 
 The eligibility check (batch 3), the descriptor naming rule (batch 4) and
 per-concept eligibility (batch 5) meet the fixed development criterion: concept
 precision 98.77% with 92% selected recall, and aliases, relationships and
 expertise no worse than the control. This is in-sample evidence on a spent
-corpus; it authorizes fresh validation only. Packaging for the offline x86
-server and fresh validation are outstanding. Release quality remains open for
-every category.
+corpus; it authorizes fresh validation only. The offline x86 deployment package
+now includes all four pinned model roles, Linux wheels, Python/uv and the built
+UI. A single `tools/deploy.toml` and `Update.cmd [UAT|PROD]` support one password
+prompt, verified transfers and daemon startup. First and repeat deployments,
+the real four-model inference check and 88 Linux deployment tests passed on an
+isolated RHEL 8.10-compatible server. See [deployment verification](deployment/VERIFICATION.md)
+for exact evidence and limits. Nothing has been pushed or deployed to actual
+UAT/PROD servers. Fresh validation remains outstanding; release quality is
+open for every category.
 
 ## Batch 5 per-concept eligibility — September 28
 

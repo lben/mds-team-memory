@@ -1,0 +1,93 @@
+Checking local model parts and deployment package...
+Updating UAT at mds@127.0.0.1:/home/mds/mds-uat
+Checking server utilities and bootstrap space...
+/usr/bin/tar
+/usr/bin/sha256sum
+Checking python and uv...
+3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ] SQLite 3.53.1
+Checking uv...
+uv 0.12.10 (x86_64-unknown-linux-musl)
+Deploying release 20260929-211932-895625 to uat (mds@127.0.0.1:/home/mds/mds-uat)
+Assembling release in /Users/bleon/ClaudeCodexWorkspace/WorkKnowledgeBase/mds-team-memory/build/release...
+Uploading to mds@127.0.0.1:/home/mds/mds-uat...
+unpacked 20260929-211932-895625
+Server already has this verified model generation; no model upload needed.
+Using CPython 3.12.14 interpreter at: /home/mds/mds-uat/ml/bootstrap/44d6873c714fd5b04083620fdff883c5be9800b647525df3b6f4c3816ffe06ea/python/bin/python3.12
+Creating virtual environment at: .venv
+Activate with: source .venv/bin/activate
+Resolved 28 packages in 95ms
+Prepared 28 packages in 213ms
+Installed 28 packages in 114ms
+ + alembic==1.19.1
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + click==8.5.0
+ + fastapi==0.141.1
+ + greenlet==3.5.5
+ + h11==0.16.0
+ + httptools==0.8.0
+ + idna==3.19
+ + lxml==6.1.3
+ + mako==1.4.1
+ + markupsafe==3.0.3
+ + pydantic==2.13.4
+ + pydantic-core==2.46.4
+ + pypdf==6.16.2
+ + python-docx==1.2.0
+ + python-dotenv==1.2.3
+ + python-multipart==0.0.32
+ + pyyaml==6.0.3
+ + sqlalchemy==2.0.52
+ + starlette==1.6.0
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + uvicorn==0.52.4
+ + uvloop==0.22.1
+ + watchfiles==1.2.0
+ + websockets==17.1
+Offline ML imports: OK
+Separate offline web and ML environments ready
+database is compatible with 20260929-211932-895625
+ML: stopped (pid 1644)
+stopped (pid 1612)
+ML: stopped
+database backed up to /home/mds/mds-uat/backups/20260929-211932-895625
+ML: stopped
+migrated to the schema of 20260929-211932-895625
+ML: stopped
+current -> 20260929-211932-895625
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [722]
+INFO:     Started server process [1612]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60514 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60526 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35892 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1612]
+INFO:     Started server process [2201]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 99] error while attempting to bind on address ('192.0.2.123', 8000): cannot assign requested address
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+mdsctl: server did not become healthy at http://192.0.2.123:8000/api/health; last log lines above
+
+Deploy failed while starting the server.
+ML: stopped
+not running
+ML: stopped
+current -> 20260929-211445-157950
+started 20260929-211445-157950 on 0.0.0.0:8000 (pid 2283)
+ML: started for 20260929-211445-157950 (pid 2309)
+The database may have been migrated; the copy taken beforehand is in /home/mds/mds-uat/backups/. Keep the current database: restoring that copy would discard later human writes. See SERVER_SETUP.md for recovery.
+Restored the previous release; it is serving again.
+
+Post-session independent readiness check: exit 0; web health and configured ML worker verified.
+Container inspection: OOMKilled=false; 4 CPUs; 5 GiB memory and memory+swap limits.

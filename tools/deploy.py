@@ -224,6 +224,7 @@ def deploy_release(target: Target, *, skip_build=False, assume_yes=False, fronte
             target.env_promoted = True
             target.pending_env = None
         run_step("starting the server", ctl(target, "start"))
+        run_step("verifying web and worker readiness", ctl(target, "ready"))
     except DeployError as error:
         print(f"\nDeploy failed while {error}.", file=sys.stderr)
         recover(target, reached)
@@ -236,7 +237,7 @@ def deploy_release(target: Target, *, skip_build=False, assume_yes=False, fronte
     run_step("checking final status", ctl(target, "status"))
     print(
         "\nIf this is the first deploy, create the first administrator:\n"
-        f"  ssh -t {target.host} bash {target.ctl_path} manage create-admin"
+        f"  ssh -p {target.ssh_port} -t {target.host} {target.bash} {target.ctl_path} manage create-admin"
     )
 
 

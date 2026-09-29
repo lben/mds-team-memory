@@ -34,7 +34,7 @@ keep_releases = 5
 
 # [prod.env]                              # optional application settings only
 # MDS_SECURE_COOKIES = "1"                 # enable only behind HTTPS
-# MDS_ML_LOAD_TIMEOUT_SECONDS = "600"      # optional longer model startup deadline
+# MDS_ML_LOAD_TIMEOUT_SECONDS = "1800"     # Update default; finite cold model-load deadline
 # Update manages data/model paths itself; do not set MDS_DATA_DIR,
 # MDS_ML_ROOT or MDS_ML_GENERATION here.
 

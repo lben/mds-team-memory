@@ -164,6 +164,9 @@ def main(argv=None):
         if any(key in target.env for key in reserved):
             raise ValueError("Update manages MDS_DATA_DIR, MDS_ML_ROOT and MDS_ML_GENERATION; remove these from [target.env]")
         target.env.update(reserved)
+        # The portable CPU wheel has a slower cold verifier initialization.
+        # Keep a finite deadline, with an operator override in the same TOML.
+        target.env.setdefault("MDS_ML_LOAD_TIMEOUT_SECONDS", "1800")
         print(f"Updating {target.name.upper()} at {target.host}:{target.root}")
         target.session = Session(target, known_hosts)
         bootstrap(target, directory, package)

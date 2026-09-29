@@ -48,7 +48,10 @@ After the first deployment, create the first admin on the server with
 whether the app or automatic worker can start. After a server reboot, run
 `bash <root>/mdsctl.sh start`; nohup survives logout but does not restart on boot.
 
-The sections below retain the detailed controller and recovery reference.
+The sections below retain the native SSH controller, manual installation and
+recovery reference. The manual prerequisites and model-transfer steps apply
+when using `tools/deploy.py` directly; `Update` bundles those prerequisites and
+performs those transfers automatically.
 
 ---
 
@@ -257,12 +260,11 @@ ML is configured once per server. Contributors then use the ordinary app.
 There is no per-finding admin activation step.
 
 The approved bundle targets RHEL 8.10, x86_64, glibc 2.28 and Python 3.12.
-The installed Python must include SQLite 3.51.3 or newer. The compatibility
-container uses uv-managed Python 3.12.14 with SQLite 3.53.1. Prepare or transfer
-the approved uv and Python installation through your company's permitted route
-before setup. The models and wheel bundle does not contain uv or Python.
-Setup fails if the interpreter is missing; it cannot bootstrap through a
-blocked download endpoint.
+The installed Python must include SQLite 3.51.3 or newer. The current Update
+bootstrap supplies Python 3.12.14 with SQLite 3.53.1 and uv separately from the
+model/wheel bundle. For manual installation without Update, prepare or transfer
+these binaries before setup; manual setup cannot bootstrap through a blocked
+download endpoint.
 
 Transfer the trusted parts and manifest into `<root>/ml/transfer/`. Use
 `tools/ml_assets.py assemble` and `tools/ml_bundle.py extract` with
@@ -304,9 +306,12 @@ the file used by backup and reset. The worker uses at most four CPUs from its
 allowed affinity, low scheduling priority and the existing 8 GiB process-tree
 RSS ceiling. RSS monitoring can briefly overshoot; it is not a hard kernel
 memory cap. Use an approved user-level cgroup if a hard quota is required.
-Offline inference validation uses four CPUs and a 4 GiB hard limit without swap.
-The combined load check allows eight CPUs for the web app, load driver and ML,
-while verifying that ML stays within four CPUs; its total memory limit is 4 GiB.
+The September 29 four-model compatibility check used four CPUs and a 5 GiB
+hard container limit without swap. Historical three-model checks also used
+4 GiB limits. The earlier combined load check allowed eight CPUs for the web
+app, load driver and ML, while verifying that ML stayed within four CPUs;
+its total memory limit was 4 GiB. The new verifier package has not repeated
+that capacity benchmark. See `deployment/VERIFICATION.md` for current evidence.
 These container measurements do not establish production
 Xeon throughput or host kernel and filesystem behavior.
 

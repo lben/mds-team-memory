@@ -371,6 +371,20 @@ cmd_health() {
   echo "ok"
 }
 
+cmd_ready() {
+  local release
+  release="$(current_release)"
+  running_pid >/dev/null || die "the web process is not running"
+  health_once || die "the web health check failed"
+  if [ -f "$release/ml-runtime.json" ]; then
+    running_ml_pid >/dev/null || die "the ML process is not running"
+    PYTHONPATH="$release/backend" "$release/.venv/bin/python" -m app.ml.worker --status \
+      | "$release/.venv/bin/python" -c 'import json,sys; s=json.load(sys.stdin); sys.exit(0 if s["worker_active"] else 1)' \
+      || die "the ML worker has no active queue lease"
+  fi
+  echo "release is ready: web health and configured ML worker verified"
+}
+
 cmd_logs() {
   [ -f "$LOG" ] || { echo "no log yet; the server has not been started here"; return 0; }
   tail -n "${1:-100}" "$LOG"
@@ -516,7 +530,7 @@ cmd_prune() {
 command="${1:-}"
 [ $# -gt 0 ] && shift
 case "$command" in
-  start|stop|restart|status|health|logs|releases|manage|unpack|setup|backup|migrate|activate|rollback|prune|ml-start|ml-stop|ml-status|ml-logs|preflight|compatible)
+  start|stop|restart|status|health|ready|logs|releases|manage|unpack|setup|backup|migrate|activate|rollback|prune|ml-start|ml-stop|ml-status|ml-logs|preflight|compatible)
     "cmd_${command//-/_}" "$@"
     ;;
   *)

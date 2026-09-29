@@ -190,6 +190,26 @@ SEPTEMBER 27 NEW BRANCH: with-opus55
         precision 98.77%, aliases back to the control's 96/147. Reviewer PASS.
         Fresh validation and offline x86 packaging remain.
 
+SEPTEMBER 29 NEW BRANCH: withgpt6.1solhigh
+
+  with-opus55 @ 73e743d
+  |
+  +-- withgpt6.1solhigh
+        Created at the user's request for tomorrow's deployment flow.
+        One ignored tools/deploy.toml configures UAT and PROD; Update.cmd
+        defaults to UAT and accepts PROD, prompts once for the SSH password,
+        transfers app/model parts, joins and decompresses offline assets,
+        and starts web/ML with nohup. Bundled UI, Python/uv, Linux wheels and
+        all four pinned model roles are ordinary Git files. Local asset
+        commits are split for eventual owner-approved publication.
+        Clean first/repeat SSH deployments and deliberate startup-failure
+        recovery passed on an isolated UBI 8.10 x86_64 server. The real
+        four-model inference check and 88 offline Linux deployment checks
+        passed. A fresh Windows-style Git checkout validates all parts.
+        No push or actual UAT/PROD deployment was performed. Fresh quality
+        validation and actual UAT throughput remain open; see
+        deployment/VERIFICATION.md and ML_CURRENT_STATUS.md.
+
 STATE AT THE SEPTEMBER 14 HANDOFF
 
 - The branches above form one continuous ancestry chain. No merge commit

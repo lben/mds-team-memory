@@ -19,6 +19,8 @@ The verifier wheel is built on the pinned RHEL/UBI 8.10 image with native CPU
 extensions disabled, making it portable to SSE2 x86_64 CPUs. This prioritizes
 compatibility; inference speed must be measured on the actual UAT machine.
 Package checks and daemon startup do not establish release-quality acceptance.
+Recorded deployment, compatibility and recovery results are in
+[VERIFICATION.md](VERIFICATION.md).
 
 For maintainers: build the UI, then use `tools/package_update.py` with verified
 four-role assets, pinned Linux wheels and a Linux-created bootstrap archive.

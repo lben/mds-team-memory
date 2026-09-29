@@ -11,7 +11,7 @@ SQLite 3.53.1, which contains the WAL-reset fix. Commands run as UID 10001.
 The compatibility image is about 351 MB before application or model dependencies.
 
 The current Docker Desktop engine has about 5.8 GiB RAM available. The complete
-three-model checks use a 5 GiB container limit without changing global Docker
+four-model checks use a 5 GiB container limit without changing global Docker
 settings. Run heavy inference checks sequentially to avoid host-memory pressure.
 The planned worker
 ceiling of 8 GiB needs a host with sufficient assigned memory.
