@@ -1,3 +1,57 @@
+# One-command update from a fresh pull
+
+Use `tools/deploy.toml` for both UAT and PROD. Copy the example once, enter
+`username@server`, SSH/app ports and distinct deployment directories, then run:
+
+```powershell
+.\Update.cmd       # UAT (default)
+.\Update.cmd PROD  # production
+```
+
+Enter the server password once. Models and Linux dependency wheels are
+included as verified parts in `deployment/offline/`; the command uploads,
+joins, decompresses and installs them. Python 3.12.14 and uv 0.12.10 are bundled,
+as is the built UI. Server installation is offline and runs as your SSH user.
+The web process and ML worker use nohup and keep running after logout.
+
+Your deploying PC needs Git, uv and internet access for uv's first installation
+of the pinned Paramiko client (or a pre-populated uv cache). No npm or Docker
+is needed for normal Update runs. Allow roughly 10 GiB free on the PC for the
+Git objects and checked-out assets. The Linux server needs RHEL 8.10 x86_64,
+SSH/SFTP, bash, tar, sha256sum, a writable local filesystem, and approximately
+14 GiB free for first-install staging, including the 2 GiB reserve. Permit the
+configured app port through the existing firewall; Update cannot change a
+firewall as an ordinary user. Four CPUs and the worker's configured memory
+allowance must be available. UAT and PROD on one host need distinct roots and
+application ports.
+
+Defaults `uv = "bundled"` and `python = "bundled"` avoid server-side prerequisite
+installation. To use IT-managed binaries, set absolute paths in the same TOML;
+Python must be 3.12 with SQLite >= 3.51.3. Extra MDS settings belong to
+`[uat.env]`/`[prod.env]`; Update owns the data/model path settings.
+
+`--check` validates the TOML, all local part hashes, the UI and its source
+fingerprint, and the dependency lock without connecting. Initial SSH host trust
+is recorded under `build/update-known-hosts`; a changed key is rejected.
+Alternatively configure `host_key_sha256` from IT to avoid the first trust prompt.
+Neither passwords nor private server configuration enter the Git repository.
+
+Updates finish preparation before stopping the old release. A failed startup
+attempts compatible recovery, preserving the shared database and its human
+feedback. Model generations and shared runtimes are pinned per release;
+unchanged models are verified and reused on the next update. Success means the
+web health check and ML worker lease passed. It does not establish extraction
+quality or server throughput; release-quality validation is still pending.
+
+After the first deployment, create the first admin on the server with
+`bash <root>/mdsctl.sh manage create-admin`. Admin creation does not affect
+whether the app or automatic worker can start. After a server reboot, run
+`bash <root>/mdsctl.sh start`; nohup survives logout but does not restart on boot.
+
+The sections below retain the detailed controller and recovery reference.
+
+---
+
 # MDS Team Knowledge — server setup
 
 The application server is a plain RedHat box (tested against RHEL 8.10) and an

@@ -128,7 +128,8 @@ def pack(archive_path, models, wheels, lock, budget):
     try:
         with tempfile.NamedTemporaryFile(mode="wb", dir=archive_path.parent, delete=False) as output:
             temporary = Path(output.name)
-            with tarfile.open(fileobj=output, mode="w|", format=tarfile.PAX_FORMAT) as archive:
+            options = {"compresslevel": 1} if archive_path.name.endswith(".gz") else {}
+            with tarfile.open(fileobj=output, mode="w|gz" if options else "w|", format=tarfile.PAX_FORMAT, **options) as archive:
                 archive.addfile(tar_info("bundle.json", len(data)), io.BytesIO(data))
                 for name, source, entry in files:
                     budget.check(entry["size"])
@@ -140,7 +141,7 @@ def pack(archive_path, models, wheels, lock, budget):
                         raise ValueError(f"Source changed during packing: {name}")
             output.flush()
             os.fsync(output.fileno())
-        if temporary.stat().st_size != required:
+        if not archive_path.name.endswith(".gz") and temporary.stat().st_size != required:
             raise ValueError("Unexpected packed archive length")
         budget.check()
         os.chmod(temporary, 0o644)
@@ -178,7 +179,7 @@ def validate_manifest(manifest):
 def scan(archive_path, destination=None, budget=None):
     """Verify the complete tar stream; optionally write only validated regular files."""
     regular_file(archive_path)
-    with tarfile.open(archive_path, mode="r|") as archive:
+    with tarfile.open(archive_path, mode="r|*") as archive:
         first = archive.next()
         if (not first or first.name != "bundle.json" or first.type not in (tarfile.REGTYPE, tarfile.AREGTYPE)
                 or first.sparse is not None or not 0 < first.size <= MANIFEST_LIMIT):

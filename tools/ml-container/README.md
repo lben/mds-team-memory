@@ -52,8 +52,8 @@ docker run --rm --platform linux/amd64 \
 Check the generated file before replacing `tools/ml-container/requirements-linux.lock`.
 
 Prepare a complete generation with `tools/ml_prepare.py` before testing. The
-worker requires extraction, embedding, and syntax assets; a historical
-two-model generation is incomplete. To exercise all three models with network
+worker requires extraction, embedding, syntax, and verifier assets; a historical
+two-model generation is incomplete. To exercise all four models with network
 access disabled, mount the repository so the check uses the actual application
 runtime:
 
@@ -85,3 +85,19 @@ docker run --rm --platform linux/amd64 --network none \
   --mount "type=bind,src=$PWD,dst=/src,readonly" --workdir /src \
   mds-ml-tests:ubi8.10 python -m pytest backend/tests -q -p no:cacheprovider
 ```
+
+## Portable verifier wheel for offline Update
+
+`Dockerfile.verifier` builds llama-cpp-python 0.3.35 on the pinned UBI 8.10
+compatibility image. It disables native/AVX extensions and links GCC 8's
+`stdc++fs` support explicitly. Its wheel hash is pinned in the Linux lock;
+normal Update runs install this wheel without compilers or network access.
+
+```sh
+docker build --platform linux/amd64 -t mds-update-wheel:ubi8.10 \
+  -f tools/ml-container/Dockerfile.verifier .
+```
+
+The four-model compatibility helper checks a finite verifier margin in a
+separate process before loading the extractor/embeddings/parser. Update also
+checks native-library imports before stopping an existing release.

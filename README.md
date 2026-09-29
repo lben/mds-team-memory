@@ -121,37 +121,56 @@ Playwright browsers install once with `./.venv/bin/playwright install chromium`.
 
 ## Deployment (UAT / PROD)
 
-The servers are RedHat boxes reached over SSH, running as an ordinary user: no
-root, no systemd, no Node. Configure them once — copy
-`tools/deploy.example.toml` to `tools/deploy.toml` (gitignored) and fill in the
-host, the directory to deploy into, and the port. Deploys are run from the
-Windows work machine in PowerShell, through the same uv-managed Python 3.12 you
-develop with; it also needs `ssh`, `scp` and `npm`.
+A fresh pull includes the built UI, numbered model/dependency parts and the
+Linux Python/uv bootstrap. Copy `tools/deploy.example.toml` to
+`tools/deploy.toml` once and fill in both server sections. That one TOML file
+holds SSH usernames/IPs, SSH and application ports, deployment directories,
+optional binary paths and application settings. Passwords are entered in the
+console and are never saved in the file.
+
+From the repository root on your Windows work machine (with uv installed):
 
 ```powershell
-uv run --python 3.12 tools\deploy.py         # UAT, the default
-uv run --python 3.12 tools\deploy.py prod    # asks you to type 'prod' first
+git pull
+Copy-Item tools/deploy.example.toml tools/deploy.toml # first time only; edit it
+.\Update.cmd --check                               # optional local validation
+.\Update.cmd                                       # UAT, default
+.\Update.cmd PROD                                  # PROD
 ```
 
-A deploy builds the frontend here, ships one archive, builds that release's
-Python 3.12 environment with `uv` on the server while the old release keeps
-serving, then migrates the database and swaps over. It waits for `/api/health`
-before reporting success, and restores a compatible previous release if the new
-one does not come up. Releases are kept side by side. Once the database has the
-explicit topic feedback schema (migration 0015), older releases that lack that
-contract cannot be activated or started. A refused rollback preserves the
-current processes, release links and shared database, including human feedback.
+The equivalent command is `uv run --python 3.12 tools/update.py [UAT|PROD]`.
+On macOS/Linux, `./Update [UAT|PROD]` is also available. uv installs the pinned
+SSH client on the deploying PC on its first run. The server needs RHEL 8.10
+x86_64, SSH/SFTP access, bash/tar/sha256sum and writable local storage; it needs
+neither Node nor internet access, sudo or systemd. The TOML template explains
+these requirements and optional binary overrides.
+
+Update prompts for your server password once and reuses that SSH connection.
+The first connection also asks you to trust the displayed SSH host fingerprint,
+unless you configured the fingerprint supplied by IT. It transfers the app and
+verified model parts, joins and decompresses them on the server, installs the
+bundled offline wheels, migrates the shared database, and starts both the web
+server and ML worker with `nohup`. It reports success only after the web health
+check and worker lease succeed. Unchanged, verified models are reused on later
+updates. Closing the deploying console leaves the processes running.
+
+Releases remain side by side, sharing the database and uploads. Preparation
+finishes while the old release serves; a failed activation attempts compatible
+rollback without restoring a database over human writes. Releases older than
+the explicit topic feedback contract (migration 0015) cannot be activated
+against a migrated database. Model quality acceptance is still pending; the
+deployment package is the current development candidate.
+
+For subsequent operations, the existing native SSH controller remains available:
 
 ```powershell
-uv run --python 3.12 tools\serverctl.py                # deployed release, process, health
-uv run --python 3.12 tools\serverctl.py start          # after a server reboot
-uv run --python 3.12 tools\serverctl.py restart prod
-uv run --python 3.12 tools\serverctl.py health         # exits non-zero if it is not serving
-uv run --python 3.12 tools\serverctl.py logs --lines 200
-uv run --python 3.12 tools\serverctl.py rollback       # back to the previous release
+uv run --python 3.12 tools/serverctl.py              # release, process, health
+uv run --python 3.12 tools/serverctl.py start        # after a server reboot
+uv run --python 3.12 tools/serverctl.py restart prod
+uv run --python 3.12 tools/serverctl.py logs --lines 200
+uv run --python 3.12 tools/serverctl.py rollback
 ```
 
-The same commands are available on the server itself as
-`bash <root>/mdsctl.sh <command>`, which is how you bring it back up without the
-dev machine. `SERVER_SETUP.md` covers the layout, the first administrator,
-resetting a UAT instance, and restarting after a reboot.
+These controller commands use ordinary SSH and may ask for passwords per
+command. On the server, run `bash <root>/mdsctl.sh <command>`.
+`SERVER_SETUP.md` covers the first administrator, backups and recovery.

@@ -1,6 +1,7 @@
 """Configuration and SSH plumbing shared by tools/deploy.py and tools/serverctl.py."""
 
 import shlex
+import re
 import subprocess
 import sys
 import tomllib
@@ -37,10 +38,15 @@ class Target:
         self.python = str(settings.get("python", "3.12"))
         self.keep_releases = _whole_number(name, "keep_releases", settings.get("keep_releases", 5))
         self.ssh_options = [str(o) for o in settings.get("ssh_options", [])]
+        self.ssh_port = _whole_number(name, "ssh_port", settings.get("ssh_port", 22))
+        self.bash = str(settings.get("bash", "bash"))
+        self.session = None
         self.env = {str(k): str(v) for k, v in dict(settings.get("env", {})).items()}
 
         if not self.host:
             fail(f"[{name}] in {CONFIG_PATH} needs a host, e.g. host = \"deployer@uat.example.com\"")
+        if not 1 <= self.port <= 65535 or not 1 <= self.ssh_port <= 65535:
+            fail(f"[{name}] port and ssh_port must be between 1 and 65535")
         if not self.root.startswith("/"):
             fail(f"[{name}] root must be an absolute path on the server, e.g. /home/deployer/apps/mds-uat")
         # Remote commands are sent as one shell string, and the deploy writes
@@ -49,7 +55,7 @@ class Target:
         if any(c.isspace() or c in "'\"$`\\" for c in self.root):
             fail(f"[{name}] root must not contain spaces or shell characters: {self.root}")
         for key, value in self.env.items():
-            if not key.replace("_", "").isalnum() or "\n" in value:
+            if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", key) or "\n" in value or "\r" in value:
                 fail(f"[{name}] env entry {key!r} is not a usable shell variable")
 
     @property
@@ -74,6 +80,7 @@ def add_target_argument(parser) -> None:
         "target",
         nargs="?",
         default=DEFAULT_TARGET,
+        type=str.lower,
         choices=TARGETS,
         help=f"which server to act on (default: {DEFAULT_TARGET})",
     )
@@ -82,19 +89,27 @@ def add_target_argument(parser) -> None:
 def ssh(target: Target, argv: list[str], capture: bool = False) -> subprocess.CompletedProcess:
     """Run one command on the server. argv is quoted for the remote shell."""
     remote = " ".join(shlex.quote(a) for a in argv)
-    return _run(["ssh", *target.ssh_options, target.host, remote], capture=capture)
+    if target.session is not None:
+        return target.session.run(remote, capture=capture)
+    return _run(["ssh", "-o", f"Port={target.ssh_port}", *target.ssh_options, target.host, remote], capture=capture)
 
 
 def ctl(target: Target, *argv: str, capture: bool = False) -> subprocess.CompletedProcess:
     """Run one mdsctl.sh command on the server."""
-    return ssh(target, ["bash", target.ctl_path, *argv], capture=capture)
+    command = [target.bash, target.ctl_path, *argv]
+    pending = getattr(target, "pending_env", None)
+    if pending and argv[0] in {"unpack", "setup", "compatible", "migrate", "activate"}:
+        command = ["env", f"MDS_ENV_FILE={pending}", *command]
+    return ssh(target, command, capture=capture)
 
 
 def scp(target: Target, local: Path, remote_path: str) -> subprocess.CompletedProcess:
+    if target.session is not None:
+        return target.session.put(local, remote_path)
     # Sent as a bare filename from its own directory: scp splits host:path on the
     # first colon, which a Windows drive letter would otherwise trip over.
     return _run(
-        ["scp", *target.ssh_options, local.name, f"{target.host}:{remote_path}"],
+        ["scp", "-o", f"Port={target.ssh_port}", *target.ssh_options, local.name, f"{target.host}:{remote_path}"],
         capture=True,
         cwd=str(local.parent),
     )
@@ -230,7 +245,8 @@ def ml_setup(root: Path, release: Path, generation: Path, managed_root: Path, uv
         temporary = managed_root / ".install-tmp"
         temporary.mkdir(exist_ok=True)
         env = {**os.environ, "UV_PYTHON_DOWNLOADS": "never", "UV_OFFLINE": "1", "UV_NO_CACHE": "1",
-               "UV_LINK_MODE": "copy", "TMPDIR": str(temporary), "PYTHONDONTWRITEBYTECODE": "1"}
+               "UV_LINK_MODE": "copy", "TMPDIR": str(temporary), "PYTHONDONTWRITEBYTECODE": "1",
+               "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1", "HF_HUB_DISABLE_TELEMETRY": "1"}
 
         def run(*args):
             subprocess.run([uv, *map(str, args)], check=True, env=env, cwd=release)
@@ -255,6 +271,13 @@ def ml_setup(root: Path, release: Path, generation: Path, managed_root: Path, uv
             run("venv", "--offline", "--no-python-downloads", "--python", sys.executable, release / ".venv")
             run("pip", "install", "--python", release / ".venv/bin/python", "--offline", "--no-index", "--no-cache",
                 "--find-links", wheels, "--only-binary", ":all:", "-r", release / "requirements.txt")
+            # A worker can acquire its lease before lazily loading models.
+            # Check native libraries before stopping the serving release.
+            subprocess.run([str(runtime / "bin/python"), "-c",
+                            "import torch, llama_cpp, spacy; from gliner2 import AutoExtractor; "
+                            "from sentence_transformers import SentenceTransformer; "
+                            "assert torch.version.cuda is None; print('Offline ML imports: OK')"],
+                           check=True, env=env, cwd=release)
             budget.check()
             link = release / ".ml-venv"
             link.unlink(missing_ok=True)

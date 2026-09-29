@@ -36,9 +36,10 @@ BIND=0.0.0.0
 UV=uv
 PYTHON_VERSION=3.12
 KEEP=5
-if [ -f "$ROOT/app.env" ]; then
+ENV_FILE="${MDS_ENV_FILE:-$ROOT/app.env}"
+if [ -f "$ENV_FILE" ]; then
   set -a
-  . "$ROOT/app.env"
+  . "$ENV_FILE"
   set +a
 fi
 export MDS_DATA_DIR="${MDS_DATA_DIR:-$ROOT/data}"

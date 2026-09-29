@@ -45,6 +45,8 @@ RELEASE_ITEMS = [
     ("tools/ml_storage.py", "tools/ml_storage.py"),
     ("tools/ml_assets.py", "tools/ml_assets.py"),
     ("tools/ml_bundle.py", "tools/ml_bundle.py"),
+    ("tools/update_remote.py", "tools/update_remote.py"),
+    ("deployment/licenses", "deployment/licenses"),
     ("tools/ml-container/requirements-linux.lock", "tools/ml-container/requirements-linux.lock"),
 ]
 
@@ -87,12 +89,14 @@ def build_frontend() -> None:
         fail("the frontend build failed; nothing was sent to the server")
 
 
-def assemble_release(target: Target, stamp: str) -> None:
+def assemble_release(target: Target, stamp: str, frontend: Path | None = None) -> None:
     print(f"Assembling release in {RELEASE_DIR}...")
     if RELEASE_DIR.exists():
         shutil.rmtree(RELEASE_DIR)
     for source, destination in RELEASE_ITEMS:
         src = ROOT / source
+        if source == "frontend/dist" and frontend is not None:
+            src = frontend
         dst = RELEASE_DIR / destination
         if not src.exists():
             fail(f"missing {src} (build the frontend first?)")
@@ -155,7 +159,11 @@ def upload(target: Target, archive: Path, env_file: Path, stamp: str) -> None:
         ssh(target, ["mkdir", "-p", f"{target.root}/releases", f"{target.root}/logs", f"{target.root}/run"]),
     )
     run_step("uploading mdsctl.sh", scp(target, normalised_ctl_script(), target.ctl_path))
-    run_step("uploading app.env", scp(target, env_file, f"{target.root}/app.env"))
+    target.pending_env = f"{target.root}/app.env.{stamp}"
+    target.previous_env = f"{target.root}/app.env.{stamp}.previous"
+    snapshot = 'set -eu; if test -f "$1"; then cp "$1" "$2"; else touch "$2.absent"; fi'
+    run_step("saving the current configuration", ssh(target, [target.bash, "-c", snapshot, "deploy", f"{target.root}/app.env", target.previous_env]))
+    run_step("uploading staged app.env", scp(target, env_file, target.pending_env))
     run_step("uploading the release", scp(target, archive, f"{target.root}/releases/{stamp}.tar.gz"))
 
 
@@ -171,14 +179,22 @@ def main() -> None:
     sys.stdout.reconfigure(line_buffering=True)
 
     target = load_target(args.target)
-    confirm_production(target, args.yes)
+    deploy_release(target, skip_build=args.skip_build, assume_yes=args.yes)
 
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+
+def deploy_release(target: Target, *, skip_build=False, assume_yes=False, frontend=None, prepare=None) -> None:
+    """Deploy using native SSH or an Update command's authenticated session."""
+    confirm_production(target, assume_yes)
+
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
     print(f"Deploying release {stamp} to {target.name} ({target.host}:{target.root})")
 
-    if not args.skip_build:
+    if not skip_build:
         build_frontend()
-    assemble_release(target, stamp)
+    if frontend is None:
+        assemble_release(target, stamp)
+    else:
+        assemble_release(target, stamp, frontend)
     archive = pack_release(stamp)
     env_file = write_env_file(target)
 
@@ -187,6 +203,8 @@ def main() -> None:
     try:
         upload(target, archive, env_file, stamp)
         run_step("unpacking the release", ctl(target, "unpack", stamp))
+        if prepare is not None:
+            prepare(target, stamp)
         # The environment is built while the old release keeps serving; only
         # the migration and the swap need the server down.
         run_step("installing dependencies with uv", ctl(target, "setup", stamp))
@@ -201,6 +219,10 @@ def main() -> None:
         run_step("running database migrations", ctl(target, "migrate", stamp))
         run_step("activating the release", ctl(target, "activate", stamp))
         reached = SWAPPED
+        if getattr(target, "pending_env", None):
+            run_step("activating server configuration", ssh(target, ["mv", target.pending_env, f"{target.root}/app.env"]))
+            target.env_promoted = True
+            target.pending_env = None
         run_step("starting the server", ctl(target, "start"))
     except DeployError as error:
         print(f"\nDeploy failed while {error}.", file=sys.stderr)
@@ -209,9 +231,9 @@ def main() -> None:
     finally:
         archive.unlink(missing_ok=True)
 
-    ctl(target, "prune")
+    run_step("pruning old releases", ctl(target, "prune"))
     print(f"\nDeployed {stamp} to {target.name}.")
-    ctl(target, "status")
+    run_step("checking final status", ctl(target, "status"))
     print(
         "\nIf this is the first deploy, create the first administrator:\n"
         f"  ssh -t {target.host} bash {target.ctl_path} manage create-admin"
@@ -223,6 +245,11 @@ def recover(target: Target, reached: str) -> None:
     if reached == UNTOUCHED:
         print("The running server was never touched; it is still serving.", file=sys.stderr)
         return
+    if getattr(target, "env_promoted", False):
+        restore = 'set -eu; if test -f "$1"; then cp "$1" "$2"; elif test -f "$1.absent"; then rm -f "$2"; else exit 1; fi'
+        if ssh(target, [target.bash, "-c", restore, "recover", target.previous_env, f"{target.root}/app.env"]).returncode != 0:
+            print("Could not restore the prior configuration; inspect the saved app.env before recovery.", file=sys.stderr)
+            return
     if reached == SWAPPED:
         restored = ctl(target, "rollback").returncode == 0
     else:

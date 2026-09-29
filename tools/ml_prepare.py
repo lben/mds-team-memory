@@ -20,6 +20,12 @@ from ml_storage import add_budget_arguments, allocation, publish_generation
 
 
 MODELS = {
+    "verifier": {
+        "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+        "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+        "license": "apache-2.0",
+        "files": ["Qwen3-4B-Instruct-2507-Q4_K_M.gguf"],
+    },
     "extractor": {
         "repository": "fastino/gliner2.5-base-v1",
         "revision": "72ac19b486cd4557424c8d61114e7530c243e9b0",

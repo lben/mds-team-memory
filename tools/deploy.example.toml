@@ -1,31 +1,42 @@
-# Copy this file to tools/deploy.toml (it is gitignored) and fill in your
-# servers. Only host and root are required; the rest have working defaults.
-#
-# The account you connect as needs nothing but SSH access and a writable home:
-# no root, no sudo, no systemd. Set up key-based login first, otherwise every
-# step of a deploy asks for your password.
-#
-# A non-default SSH port, a jump host, or a specific key is best kept in a Host
-# entry in ~/.ssh/config. ssh_options below is passed to both ssh and scp, so
-# every option must be valid for both: use "-o", "Port=2222" rather than "-p",
-# which means something else to scp.
+# Copy to tools/deploy.toml, then edit both server sections. This is the only
+# deployment configuration file; it is gitignored. Never put passwords here.
+# Run .\Update.cmd [UAT|PROD] in PowerShell, or ./Update [UAT|PROD] on macOS/Linux.
+# Default: UAT. Enter your server password once when prompted.
+# Linux server: RHEL 8.10 x86_64, SSH/SFTP, bash, tar, sha256sum, a writable
+# local filesystem, and >= 14 GiB free for the first install. No sudo or
+# internet is required; approved Python, uv, models and wheels are bundled.
 
 [uat]
-host = "deployer@uat-server.example.com"
-root = "/home/deployer/apps/mds-uat"     # absolute, no spaces; created on first deploy
-port = 8000
+host = "deployer@192.0.2.10"              # SSH username@IP or DNS name
+ssh_port = 22                            # SSH port (separate from app port)
+root = "/home/deployer/apps/mds-uat"      # absolute directory, no spaces
+port = 8000                              # application TCP port, reachable by your team
+bind = "0.0.0.0"
+uv = "bundled"                           # or absolute path to installed Linux uv
+python = "bundled"                       # or absolute Python 3.12 binary, SQLite >= 3.51.3
+bash = "bash"                            # or /bin/bash
+keep_releases = 5
+# host_key_sha256 = "SHA256:..."          # optional SSH host fingerprint supplied by IT
+# First connection without this asks you to trust the displayed fingerprint;
+# later connections reject changed keys automatically.
 
 [prod]
-host = "deployer@prod-server.example.com"
-root = "/home/deployer/apps/mds-prod"
+host = "deployer@192.0.2.20"
+ssh_port = 22
+root = "/home/deployer/apps/mds-prod"      # use a distinct directory for each environment
 port = 8000
+bind = "0.0.0.0"
+uv = "bundled"
+python = "bundled"
+bash = "bash"
+keep_releases = 5
+# host_key_sha256 = "SHA256:..."
 
-# bind = "0.0.0.0"        # interface uvicorn listens on
-# uv = "uv"               # full path if uv is not on the PATH of a non-login ssh shell,
-#                         # e.g. "/home/deployer/.local/bin/uv"
-# python = "3.12"         # Python version uv builds the release environment with
-# keep_releases = 5       # older releases are deleted after a successful deploy
-# ssh_options = ["-o", "ConnectTimeout=10"]
-#
-# [prod.env]              # extra MDS_* settings written into <root>/app.env
-# MDS_SECURE_COOKIES = "1"
+# [prod.env]                              # optional application settings only
+# MDS_SECURE_COOKIES = "1"                 # enable only behind HTTPS
+# MDS_ML_LOAD_TIMEOUT_SECONDS = "600"      # optional longer model startup deadline
+# Update manages data/model paths itself; do not set MDS_DATA_DIR,
+# MDS_ML_ROOT or MDS_ML_GENERATION here.
+
+# [local]
+# known_hosts = "build/update-known-hosts" # saved server keys on the deploying PC

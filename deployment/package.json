@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "target": "RHEL 8.10 x86_64 / Python 3.12 / CPU only",
+  "transfer_manifest": {
+    "size": 12490,
+    "sha256": "72b45a05c8472f1a1878154c06c84769eb7db8e39eee9da0fc5ca4f3f08b8c00"
+  },
+  "files": {
+    "ui/assets/AdminExpertiseView-Bb1hfHD8.css": {
+      "size": 597,
+      "sha256": "28b45545e72573b32d2ad820b654bfcc693ecf8ab0660388248179643ceb430c"
+    },
+    "ui/assets/AdminExpertiseView-DD48KHyN.js": {
+      "size": 32372,
+      "sha256": "c0118952aa8cb36246d24b2b11155ae92efd9e3a3d4487220c85809fe6fc85bd"
+    },
+    "ui/assets/DocumentsView-CcrsMBol.js": {
+      "size": 5417,
+      "sha256": "dadb41d4f8e6a30c193bf29a4b9eadf33aaff3ed7094819f6e73573d3ad36f1a"
+    },
+    "ui/assets/HomeView-Bzo6dBAC.css": {
+      "size": 1220,
+      "sha256": "33ded3d37971341e554e8bab053757e819721b3c834ad42949a7a07692e564d1"
+    },
+    "ui/assets/HomeView-CFm5xGMG.js": {
+      "size": 475804,
+      "sha256": "e0de5dffca53072e2e39dd0deb1cbb8e9d3ebc7e3285450c2ae476490cb3dcc3"
+    },
+    "ui/assets/LeaderboardView-8Dd4Q-G-.js": {
+      "size": 2827,
+      "sha256": "2876b9d8f6fca8f490fe49b0222312a024fd9e6d1cfce00fb43236f43b2e6010"
+    },
+    "ui/assets/ScratchpadView-CDeTVFdp.js": {
+      "size": 6654,
+      "sha256": "01760a9584d7a01f8314d83ea751b77a8eaede61d8e9c4c1d2a9cc43793f67ad"
+    },
+    "ui/assets/SuccessModal-DIvFZhNf.js": {
+      "size": 1813,
+      "sha256": "91e4942d110f2342d14bf92a4245e04650cae27385fe3e837872ad14934377e9"
+    },
+    "ui/assets/_plugin-vue_export-helper-FeVQaLM8.js": {
+      "size": 6461,
+      "sha256": "e17c3bc3641affb75cace90a7ae112171141eddf40edb323e897c7507ecac930"
+    },
+    "ui/assets/ask-DGEJgp7-.js": {
+      "size": 2406,
+      "sha256": "f854c88cb8b78a2a1b3b6dcb57f7bb6dc420f0b5715858a0a99acc98ec60f7d7"
+    },
+    "ui/assets/index-DQ6FyOL7.js": {
+      "size": 104434,
+      "sha256": "63e4cf995e50b99cbf186bd027c1c0b564bd2f5772087ca664c73a6c01649a38"
+    },
+    "ui/assets/index-i1XJ8c4S.css": {
+      "size": 19389,
+      "sha256": "89928bb4e17b4d877db9e95c76f9c81583f60a896a3557b0313761729887c68a"
+    },
+    "ui/favicon.svg": {
+      "size": 325,
+      "sha256": "639d3188dd22690766bf51335a3cfc83bf4fc20f869431c8fd95c226acbcd690"
+    },
+    "ui/icons.svg": {
+      "size": 5031,
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    "ui/index.html": {
+      "size": 1939,
+      "sha256": "67153b68eaaca270476a2d588b54c90d9796241d245b9fa8a298e512319f5883"
+    },
+    "bootstrap.tar.gz": {
+      "size": 55144880,
+      "sha256": "44d6873c714fd5b04083620fdff883c5be9800b647525df3b6f4c3816ffe06ea"
+    },
+    "licenses/APACHE-2.0.txt": {
+      "size": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    "licenses/Qwen-LICENSE.txt": {
+      "size": 11343,
+      "sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
+    },
+    "licenses/uv-LICENSE-MIT.txt": {
+      "size": 1077,
+      "sha256": "860e3d7a86b84e6a7012c7a635fc64df475cebc6cce34dfeb73a5982ec58176c"
+    },
+    "licenses/GCC-RUNTIME-LIBRARY-EXCEPTION.txt": {
+      "size": 3324,
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74"
+    },
+    "licenses/GPL-3.0.txt": {
+      "size": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    }
+  },
+  "frontend_sources": {
+    "frontend/.DS_Store": {
+      "size": 6148,
+      "sha256": "6c6bf9fe07718286da5a19e4f48a68f76666219e720fe71967d60717fc7086cc"
+    },
+    "frontend/.gitignore": {
+      "size": 253,
+      "sha256": "fe718e7babb14f3cbad2d97f08889b9ce5215ed3fe0e43b2b8cfbfb3b9b844e8"
+    },
+    "frontend/.vscode/extensions.json": {
+      "size": 39,
+      "sha256": "70d56b550e796e3ea92922763ae03037a1a94596fda9d737982c75f6a20e88dd"
+    },
+    "frontend/README.md": {
+      "size": 442,
+      "sha256": "7cdf486b009cc44709f0b33e45f2a2007f37e5f46ac98fe2aab46c8129318929"
+    },
+    "frontend/index.html": {
+      "size": 1840,
+      "sha256": "9649e7392035656a407b6eb4513be040beacaae60ae2b53e782586f9728e188a"
+    },
+    "frontend/package-lock.json": {
+      "size": 40326,
+      "sha256": "28846065c10e9d6baffe9860d0aeed5a55a5279bcf208505f4d2116726252ecd"
+    },
+    "frontend/package.json": {
+      "size": 499,
+      "sha256": "189cfa341731313bb467183195c069584503cc8aadd8f3bb1f91a5c4a57202d1"
+    },
+    "frontend/public/favicon.svg": {
+      "size": 325,
+      "sha256": "639d3188dd22690766bf51335a3cfc83bf4fc20f869431c8fd95c226acbcd690"
+    },
+    "frontend/public/icons.svg": {
+      "size": 5031,
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    "frontend/src/App.vue": {
+      "size": 9381,
+      "sha256": "b0abbf17e8e01a5a7d979d21d08cf8303712a4d2fa4fb8ccc37827d9026b4e90"
+    },
+    "frontend/src/api.ts": {
+      "size": 2949,
+      "sha256": "5f8bfe30cf58ce3ac32b52e795d36957ba7a37d6645d155a47e1231745be55d0"
+    },
+    "frontend/src/ask.ts": {
+      "size": 864,
+      "sha256": "c897301da14700d501c5963bf51c1c667e6c18541998e6b0bea3bfdadc6a59e6"
+    },
+    "frontend/src/components/AskModal.vue": {
+      "size": 2564,
+      "sha256": "71fe9be372585be93ed8408e12ee67858f9d4a4dda88c503b594d51739c4480d"
+    },
+    "frontend/src/components/EvidenceModal.vue": {
+      "size": 9242,
+      "sha256": "aaa7d395558c14d3d8e9d96752e5ad89a2533fa30925e178052940edd667b050"
+    },
+    "frontend/src/components/FindingsPanel.vue": {
+      "size": 11332,
+      "sha256": "9be6e163767b20e409044c43032bded5aa4d0b3edf1a105514823650495b8a69"
+    },
+    "frontend/src/components/HelpfulActions.vue": {
+      "size": 1605,
+      "sha256": "a8d28e36e8e71b889c45731767c00e1e6709a405072e40184a8a874322d18304"
+    },
+    "frontend/src/components/ItemDetailModal.vue": {
+      "size": 9932,
+      "sha256": "aa078a5fad847c25d0de6700d0075589593e50a0967d23f307fb4447295da2db"
+    },
+    "frontend/src/components/KnowledgeGraph.vue": {
+      "size": 14369,
+      "sha256": "6e258fe17eb83b2313e66890af9561545df397adfd05b7fbbf7338548a0f6f12"
+    },
+    "frontend/src/components/MapAdminPanel.vue": {
+      "size": 19460,
+      "sha256": "dbf95ac7237a172c6c18b2ba9ccc128be642d952913ee5142d3a1d23776e2450"
+    },
+    "frontend/src/components/QuestionCard.vue": {
+      "size": 8886,
+      "sha256": "1e5b90892a46bd2f7a560c2448d119b38bb4bc57aa397ae44acf94afc9cd882e"
+    },
+    "frontend/src/components/SuccessModal.vue": {
+      "size": 1858,
+      "sha256": "12be2651fbbb1d0c96f1a3fb22cb26132487c0c32defffb4585f9b660c03492b"
+    },
+    "frontend/src/components/TopicCreditPanel.vue": {
+      "size": 11179,
+      "sha256": "c26c3acc2366da2ef2a2ff717f837ac4f07fe0a879b8a6dff2b8a64ccee5e420"
+    },
+    "frontend/src/dialog.ts": {
+      "size": 1981,
+      "sha256": "83f987c2b03cb4a471e66068858132dcbdd0fe82bd49e6c16b6ff123da676508"
+    },
+    "frontend/src/main.ts": {
+      "size": 1624,
+      "sha256": "32c21f8269f88610b629792edab6eaa8399afd8afe1afc97d70d5d115876eaaf"
+    },
+    "frontend/src/profile.ts": {
+      "size": 1305,
+      "sha256": "c51555ff08a57b322ba6bff22af805a3eb4c98ee61091b741ca9284fb7916677"
+    },
+    "frontend/src/router.ts": {
+      "size": 1000,
+      "sha256": "6807c82d0b29fd83ad76f0b764f80480dfffb79bcbd3ff56d9ceb8bc3c5e4999"
+    },
+    "frontend/src/store.ts": {
+      "size": 5231,
+      "sha256": "35e04a6251f8bd18e5eba3b76cb031918502d4c16c4b6e5467fc6eae375722d5"
+    },
+    "frontend/src/style.css": {
+      "size": 20125,
+      "sha256": "82482dfcec599f6e99a8702aa6360ea795c07f0f98d4fe673304ca3f850cedad"
+    },
+    "frontend/src/views/AdminExpertiseView.vue": {
+      "size": 12095,
+      "sha256": "dabca0e71cfc5acec2b520e25f365d4b982c22bcb24b84278085252ce61c8c8f"
+    },
+    "frontend/src/views/DocumentsView.vue": {
+      "size": 7834,
+      "sha256": "748fefbd63b6c6e7b9096134cfe58468755184d3ec0e5673ecab398021d85e3e"
+    },
+    "frontend/src/views/HomeView.vue": {
+      "size": 15246,
+      "sha256": "88663065aa78dbc4160c19c699cfc5999c9ba65e13ebdb1907f3807a37646e98"
+    },
+    "frontend/src/views/LeaderboardView.vue": {
+      "size": 3649,
+      "sha256": "bddda7473d3131307c7095fa789a58823fd1f235b6f939462ece6940250e072e"
+    },
+    "frontend/src/views/ScratchpadView.vue": {
+      "size": 11687,
+      "sha256": "b29dc1275f856c046c6078293601e7c6e7752a96913f2551321ce85952db781d"
+    },
+    "frontend/tsconfig.app.json": {
+      "size": 430,
+      "sha256": "ca8e94740608e82b7e0e6e899153badb1faa05f5733d878e2b0370ec62c188c5"
+    },
+    "frontend/tsconfig.json": {
+      "size": 119,
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808"
+    },
+    "frontend/tsconfig.node.json": {
+      "size": 558,
+      "sha256": "d366cc0827139db39c61815f22491bbfda56c654354a42ad7795143d314e45e8"
+    },
+    "frontend/vite.config.ts": {
+      "size": 399,
+      "sha256": "4064e9ad25935a14fbe363de81ccd8fac5d6e440695b2e589360327bd659e701"
+    }
+  },
+  "dependency_lock": {
+    "size": 147250,
+    "sha256": "228d0f866613b7fea87822e8caa3d4003bf1b8241d832c2cf013640b8bb09008"
+  },
+  "bundle_total_size": 5509637871
+}

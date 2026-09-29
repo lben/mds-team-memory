@@ -1797,3 +1797,10 @@ websockets==17.1 \
     --hash=sha256:ff3e2ba7a9f0a110b0555452e9b5a03a34e11662544e01beea15f144b48ba7b7
 wrapt==2.4.0 \
     --hash=sha256:d7dbbdbfdacb85c2d962fa52db791c77943fd777d600d74c95af2d53b32f5a94
+
+diskcache==5.6.3 \
+    --hash=sha256:5e31b2d5fbad117cc363ebaf6b689474db18a1f6438bc82358b024abd4c2ca19
+
+# CPU-only portable SSE2 build on the pinned UBI 8.10 image.
+llama-cpp-python==0.3.35 \
+    --hash=sha256:ed3aac9053007d1599ce58073d680e2abc62f4c2e12df2fdeaffe8f69c382529
