@@ -1,0 +1,16 @@
+{
+  "method": "structural",
+  "sources": 1499,
+  "candidates": 3387,
+  "load_seconds": 3.3400283427909017e-07,
+  "scoring_seconds": 0.05705691700131865,
+  "source_median_seconds": 2.5792003725655377e-05,
+  "peak_process_rss_bytes": 24625152,
+  "threads": 4,
+  "device": "cpu",
+  "platform": "darwin",
+  "script_sha256": "a60425d071b30b295ff518480fdde7387afbebaeda74ae9e1e785e5b28eb643d",
+  "inputs_sha256": "3234a0d242926201f17a3c46997a408e3aa5b82bfe51568b63613f4743432f82",
+  "proposals_sha256": "a5da8f974ed7e77ede87a9e2c735a9b1334e2f82f76f262d1d0d9c3376b5adfe",
+  "scores_sha256": "883fba20bc1936ca779a9649f9e662d7360362aab89b0eb3fbe4ddf51bfe04df"
+}

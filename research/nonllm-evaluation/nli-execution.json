@@ -1,0 +1,20 @@
+{
+  "method": "nli",
+  "sources": 1499,
+  "candidates": 3387,
+  "load_seconds": 3.939747875003377,
+  "scoring_seconds": 49.69883591699909,
+  "source_median_seconds": 0.032625667001411784,
+  "peak_process_rss_bytes": 885637120,
+  "threads": 4,
+  "device": "cpu",
+  "platform": "darwin",
+  "script_sha256": "a60425d071b30b295ff518480fdde7387afbebaeda74ae9e1e785e5b28eb643d",
+  "inputs_sha256": "3234a0d242926201f17a3c46997a408e3aa5b82bfe51568b63613f4743432f82",
+  "proposals_sha256": "a5da8f974ed7e77ede87a9e2c735a9b1334e2f82f76f262d1d0d9c3376b5adfe",
+  "scores_sha256": "b73bd06496f229560f4e90a3d78c858fa4fb335f61be7f6034b38e90fa36c4c1",
+  "model": "cross-encoder/nli-MiniLM2-L6-H768",
+  "revision": "72873be33d4058aac21d3c9e86036a8901636537",
+  "parameters": 82120707,
+  "model_sha256": "768059960825f2365e301878e8cbe816620f04546769e38063e4d21f297dc48a"
+}

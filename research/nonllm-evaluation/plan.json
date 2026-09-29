@@ -1,0 +1,41 @@
+{
+  "question": "Non-LLM alternatives to concept eligibility; isolated screens, no production changes",
+  "date": "2026-09-29",
+  "branch": "withgpt6.1solhigh",
+  "base_commit": "e51318b",
+  "strategies": [
+    "confidence-only evidence thresholds",
+    "at least two independent sources",
+    "predefined structural predicate/incidental/measurement rules",
+    "BGE full-source/candidate cosine relevance",
+    "MiniLM NLI entailment hypothesis",
+    "retained GLiNER2.5-Decide plain and described scores"
+  ],
+  "controls": [
+    "original fixed evidence control",
+    "retained Qwen margins with original leave-one-domain-out selection"
+  ],
+  "corpus": "Previously spent 300-case/12-domain development corpus. Never open fresh validation fixtures.",
+  "selection": "Same one/two-source confidence grid and train precision 98.5% as original judge; leave one domain out. New continuous signals use -infinity + unlabeled margin deciles; structural uses fixed -2,-1,0,1,2. No prompt/rule change after results.",
+  "gates": {
+    "pooled_precision": 0.98,
+    "pooled_selected_precision": 0.98,
+    "pooled_selected_recall": 0.5
+  },
+  "promotion": "None. A pass only shortlists for full-app replay and fresh validation, including alias/relationship/expertise effects.",
+  "measurement": "CPU only, four PyTorch threads, models one at a time. Native macOS timings are not RHEL throughput. Record separate load/scoring and peak RSS.",
+  "nli": {
+    "repository": "cross-encoder/nli-MiniLM2-L6-H768",
+    "revision": "72873be33d4058aac21d3c9e86036a8901636537",
+    "hypothesis": "The post discusses {name} as a specific subject of knowledge, explaining its role, behavior or properties."
+  },
+  "hashes": {
+    "build/nonllm-evaluation/score.py": "a60425d071b30b295ff518480fdde7387afbebaeda74ae9e1e785e5b28eb643d",
+    "build/nonllm-evaluation/evaluate.py": "3a100a15ea109f7d2bb76766fce05bcda0810e6bbd070da89551fecd71eaaa5f",
+    "data/ml-runs/with-opus55/expanded-concepts/sources.json": "3234a0d242926201f17a3c46997a408e3aa5b82bfe51568b63613f4743432f82",
+    "data/ml-runs/with-opus55/expanded-concepts/extract-control/raw-sources.jsonl": "a5da8f974ed7e77ede87a9e2c735a9b1334e2f82f76f262d1d0d9c3376b5adfe",
+    "data/ml-runs/with-opus55/expanded-concepts/score-run-1/scores.jsonl": "8c02f91f109a497dbb5cf7a6a3a77c604c818c9d2fd0218a4cf7d619b74a014d",
+    "data/ml-runs/with-opus55/expanded-concepts/judge_expanded.py": "50aa05574d4cbe81e3f455147f5c9e5ead5cbc24bfbe8b71352e987a251ab427",
+    "backend/tests/fixtures/ml_heldout.json": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464"
+  }
+}

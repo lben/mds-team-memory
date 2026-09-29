@@ -1,0 +1,75 @@
+{
+  "status": "PASS",
+  "purpose": "native/RHEL output compatibility, not accuracy",
+  "max_margin_difference": 5.602836608886719e-06,
+  "native": {
+    "scope": "compatibility only; no gold accuracy claimed",
+    "pairs": [
+      [
+        "Prism Hopper routes queued requests and stores their delivery receipts.",
+        "Prism Hopper"
+      ],
+      [
+        "During lunch beside Prism Hopper, I reviewed receipt numbers.",
+        "Prism Hopper"
+      ],
+      [
+        "The timeout value is 30 seconds.",
+        "30 seconds"
+      ],
+      [
+        "Does Prism Hopper preserve a receipt after restart?",
+        "Prism Hopper"
+      ]
+    ],
+    "margins": [
+      -0.21369189023971558,
+      0.16740405559539795,
+      -1.3832114934921265,
+      0.785099446773529
+    ],
+    "seconds": 0.04943712500244146,
+    "torch": "2.8.0",
+    "cpu_only": true,
+    "threads": 4,
+    "peak_rss_platform_units": 762167296
+  },
+  "rhel_ubi_8_10": {
+    "scope": "compatibility only; no gold accuracy claimed",
+    "pairs": [
+      [
+        "Prism Hopper routes queued requests and stores their delivery receipts.",
+        "Prism Hopper"
+      ],
+      [
+        "During lunch beside Prism Hopper, I reviewed receipt numbers.",
+        "Prism Hopper"
+      ],
+      [
+        "The timeout value is 30 seconds.",
+        "30 seconds"
+      ],
+      [
+        "Does Prism Hopper preserve a receipt after restart?",
+        "Prism Hopper"
+      ]
+    ],
+    "margins": [
+      -0.2136904001235962,
+      0.1674003005027771,
+      -1.3832170963287354,
+      0.7850991487503052
+    ],
+    "seconds": 0.5045571250011562,
+    "torch": "2.8.0+cpu",
+    "cpu_only": true,
+    "threads": 4,
+    "peak_rss_platform_units": 709404
+  },
+  "linux_container_limits": {
+    "cpus": 4,
+    "memory_bytes": 2147483648,
+    "memory_and_swap_bytes": 2147483648,
+    "network": "none"
+  }
+}

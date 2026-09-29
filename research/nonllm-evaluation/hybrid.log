@@ -1,0 +1,36 @@
+{
+  "strategy": "hybrid",
+  "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+  "scores_sha256": "1d2b3549ec91d2f2ff29e7e073e0aab3a45fb54f7f1a11938771c04a3b4a8e2b",
+  "pooled_held_out": {
+    "published": 526,
+    "correct": 514,
+    "unsupported": 12,
+    "selected_hits": 117,
+    "selected_positives": 150,
+    "selected_negatives_published": 0,
+    "complete_output_precision": 0.9771863117870723,
+    "selected_decision_precision": 1.0,
+    "selected_recall": 0.78,
+    "wilson_complete_output_precision": [
+      0.9606,
+      0.9869
+    ],
+    "wilson_selected_decision_precision": [
+      0.9682,
+      1.0
+    ],
+    "wilson_selected_recall": [
+      0.7072,
+      0.8388
+    ]
+  },
+  "gates": {
+    "precision_98": false,
+    "selected_precision_98": true,
+    "recall_50": true
+  },
+  "status": "FAIL_SCREEN",
+  "release_quality_pass": false,
+  "scope": "concept-only proxy, spent development corpus; no application integration"
+}

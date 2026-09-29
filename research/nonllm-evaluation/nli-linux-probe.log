@@ -1,0 +1,32 @@
+{
+  "scope": "compatibility only; no gold accuracy claimed",
+  "pairs": [
+    [
+      "Prism Hopper routes queued requests and stores their delivery receipts.",
+      "Prism Hopper"
+    ],
+    [
+      "During lunch beside Prism Hopper, I reviewed receipt numbers.",
+      "Prism Hopper"
+    ],
+    [
+      "The timeout value is 30 seconds.",
+      "30 seconds"
+    ],
+    [
+      "Does Prism Hopper preserve a receipt after restart?",
+      "Prism Hopper"
+    ]
+  ],
+  "margins": [
+    -0.2136904001235962,
+    0.1674003005027771,
+    -1.3832170963287354,
+    0.7850991487503052
+  ],
+  "seconds": 0.5045571250011562,
+  "torch": "2.8.0+cpu",
+  "cpu_only": true,
+  "threads": 4,
+  "peak_rss_platform_units": 709404
+}

@@ -1,0 +1,38 @@
+{
+  "data/ml-runs/with-opus55/expanded-concepts/sources.json": {
+    "sha256": "3234a0d242926201f17a3c46997a408e3aa5b82bfe51568b63613f4743432f82",
+    "size": 385918
+  },
+  "data/ml-runs/with-opus55/expanded-concepts/extract-control/raw-sources.jsonl": {
+    "sha256": "a5da8f974ed7e77ede87a9e2c735a9b1334e2f82f76f262d1d0d9c3376b5adfe",
+    "size": 752857
+  },
+  "data/ml-runs/with-opus55/expanded-concepts/score-run-1/scores.jsonl": {
+    "sha256": "8c02f91f109a497dbb5cf7a6a3a77c604c818c9d2fd0218a4cf7d619b74a014d",
+    "size": 470235
+  },
+  "data/ml-runs/with-opus55/expanded-concepts/decision.json": {
+    "sha256": "09b9853e34ec8c0307713b9f38fb2b26245f06e3aa19a5216d1da6d6869e2ad0",
+    "size": 16198
+  },
+  "data/ml-runs/with-opus55/expanded-concepts/judge_expanded.py": {
+    "sha256": "50aa05574d4cbe81e3f455147f5c9e5ead5cbc24bfbe8b71352e987a251ab427",
+    "size": 8885
+  },
+  "data/ml-runs/with-opus55/decide-screen/scores-plain/scores.jsonl": {
+    "sha256": "37068d38a20853d4853ab1657c1386ba1cc0faafb7c01621cf2acd4d3025f92f",
+    "size": 363260
+  },
+  "data/ml-runs/with-opus55/decide-screen/decision-plain.json": {
+    "sha256": "8372e514f638c1b57b060a1d80aacf11eba4c4c63a542d831df3c124810fa828",
+    "size": 16268
+  },
+  "data/ml-runs/with-opus55/decide-screen/scores-described/scores.jsonl": {
+    "sha256": "a7b98bcb2861abc5d4ffae443c8a645a11f72f96bc94f35aae6c8fc3d693c107",
+    "size": 367389
+  },
+  "data/ml-runs/with-opus55/decide-screen/decision-described.json": {
+    "sha256": "4d8ff32704a2ff10450cf42bcc966cf20a2a065bf5d93c93b87bebd23feb0709",
+    "size": 16352
+  }
+}

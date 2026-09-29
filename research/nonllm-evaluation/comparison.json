@@ -1,0 +1,3613 @@
+{
+  "original_evidence_control": {
+    "pooled_held_out": {
+      "published": 605,
+      "correct": 579,
+      "unsupported": 26,
+      "selected_hits": 102,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9570247933884297,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.68,
+      "wilson_complete_output_precision": [
+        0.9378,
+        0.9705
+      ],
+      "wilson_selected_decision_precision": [
+        0.9637,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.6017,
+        0.7494
+      ]
+    },
+    "scope": "fixed original control, no classifier"
+  },
+  "qwen_control": {
+    "strategy": "qwen_control",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": "8c02f91f109a497dbb5cf7a6a3a77c604c818c9d2fd0218a4cf7d619b74a014d",
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          8,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 477,
+          "correct": 470,
+          "unsupported": 7,
+          "complete_output_precision": 0.9853249475890985,
+          "selected_hits": 98,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7153284671532847
+        },
+        "held_out": {
+          "published": 36,
+          "correct": 35,
+          "unsupported": 1,
+          "complete_output_precision": 0.9722222222222222,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          4,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 459,
+          "correct": 452,
+          "unsupported": 7,
+          "complete_output_precision": 0.9847494553376906,
+          "selected_hits": 87,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6304347826086957
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 28,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 5,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.4166666666666667
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          4,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 435,
+          "correct": 428,
+          "unsupported": 7,
+          "complete_output_precision": 0.9839080459770115,
+          "selected_hits": 82,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5899280575539568
+        },
+        "held_out": {
+          "published": 52,
+          "correct": 52,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 10,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9090909090909091
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          4,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 474,
+          "correct": 467,
+          "unsupported": 7,
+          "complete_output_precision": 0.9852320675105485,
+          "selected_hits": 96,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7007299270072993
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 62,
+          "unsupported": 1,
+          "complete_output_precision": 0.9841269841269841,
+          "selected_hits": 10,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7692307692307693
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          2,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 463,
+          "correct": 456,
+          "unsupported": 7,
+          "complete_output_precision": 0.9848812095032398,
+          "selected_hits": 86,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6231884057971014
+        },
+        "held_out": {
+          "published": 34,
+          "correct": 33,
+          "unsupported": 1,
+          "complete_output_precision": 0.9705882352941176,
+          "selected_hits": 7,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5833333333333334
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          8,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 485,
+          "correct": 478,
+          "unsupported": 7,
+          "complete_output_precision": 0.9855670103092784,
+          "selected_hits": 98,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7153284671532847
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 27,
+          "unsupported": 1,
+          "complete_output_precision": 0.9642857142857143,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          4,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 431,
+          "correct": 424,
+          "unsupported": 7,
+          "complete_output_precision": 0.9837587006960556,
+          "selected_hits": 82,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5985401459854015
+        },
+        "held_out": {
+          "published": 56,
+          "correct": 56,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 10,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7692307692307693
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          4,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 444,
+          "correct": 437,
+          "unsupported": 7,
+          "complete_output_precision": 0.9842342342342343,
+          "selected_hits": 85,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6159420289855072
+        },
+        "held_out": {
+          "published": 43,
+          "correct": 43,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 7,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5833333333333334
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          4,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 435,
+          "correct": 428,
+          "unsupported": 7,
+          "complete_output_precision": 0.9839080459770115,
+          "selected_hits": 79,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5808823529411765
+        },
+        "held_out": {
+          "published": 52,
+          "correct": 52,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 13,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9285714285714286
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          8,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 488,
+          "correct": 481,
+          "unsupported": 7,
+          "complete_output_precision": 0.985655737704918,
+          "selected_hits": 99,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7226277372262774
+        },
+        "held_out": {
+          "published": 25,
+          "correct": 24,
+          "unsupported": 1,
+          "complete_output_precision": 0.96,
+          "selected_hits": 7,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5384615384615384
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          8,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 485,
+          "correct": 478,
+          "unsupported": 7,
+          "complete_output_precision": 0.9855670103092784,
+          "selected_hits": 101,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7318840579710145
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 27,
+          "unsupported": 1,
+          "complete_output_precision": 0.9642857142857143,
+          "selected_hits": 5,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.4166666666666667
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          8,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 501,
+          "correct": 494,
+          "unsupported": 7,
+          "complete_output_precision": 0.9860279441117764,
+          "selected_hits": 109,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7898550724637681
+        },
+        "held_out": {
+          "published": 62,
+          "correct": 59,
+          "unsupported": 3,
+          "complete_output_precision": 0.9516129032258065,
+          "selected_hits": 9,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.75
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 507,
+      "correct": 498,
+      "unsupported": 9,
+      "selected_hits": 99,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9822485207100592,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.66,
+      "wilson_complete_output_precision": [
+        0.9666,
+        0.9906
+      ],
+      "wilson_selected_decision_precision": [
+        0.9626,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.581,
+        0.731
+      ]
+    },
+    "gates": {
+      "precision_98": true,
+      "selected_precision_98": true,
+      "recall_50": true
+    },
+    "status": "SHORTLIST_ONLY",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "confidence_only": {
+    "strategy": "confidence_only",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": null,
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 524,
+          "correct": 506,
+          "unsupported": 18,
+          "complete_output_precision": 0.9656488549618321,
+          "selected_hits": 91,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6642335766423357
+        },
+        "held_out": {
+          "published": 38,
+          "correct": 36,
+          "unsupported": 2,
+          "complete_output_precision": 0.9473684210526315,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 531,
+          "correct": 512,
+          "unsupported": 19,
+          "complete_output_precision": 0.9642184557438794,
+          "selected_hits": 93,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6739130434782609
+        },
+        "held_out": {
+          "published": 31,
+          "correct": 30,
+          "unsupported": 1,
+          "complete_output_precision": 0.967741935483871,
+          "selected_hits": 6,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 500,
+          "correct": 481,
+          "unsupported": 19,
+          "complete_output_precision": 0.962,
+          "selected_hits": 89,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6402877697841727
+        },
+        "held_out": {
+          "published": 62,
+          "correct": 61,
+          "unsupported": 1,
+          "complete_output_precision": 0.9838709677419355,
+          "selected_hits": 10,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9090909090909091
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 499,
+          "correct": 481,
+          "unsupported": 18,
+          "complete_output_precision": 0.9639278557114228,
+          "selected_hits": 88,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6423357664233577
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 61,
+          "unsupported": 2,
+          "complete_output_precision": 0.9682539682539683,
+          "selected_hits": 11,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8461538461538461
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 525,
+          "correct": 506,
+          "unsupported": 19,
+          "complete_output_precision": 0.9638095238095238,
+          "selected_hits": 91,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6594202898550725
+        },
+        "held_out": {
+          "published": 37,
+          "correct": 36,
+          "unsupported": 1,
+          "complete_output_precision": 0.972972972972973,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 535,
+          "correct": 517,
+          "unsupported": 18,
+          "complete_output_precision": 0.9663551401869159,
+          "selected_hits": 93,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6788321167883211
+        },
+        "held_out": {
+          "published": 27,
+          "correct": 25,
+          "unsupported": 2,
+          "complete_output_precision": 0.9259259259259259,
+          "selected_hits": 6,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.46153846153846156
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 499,
+          "correct": 481,
+          "unsupported": 18,
+          "complete_output_precision": 0.9639278557114228,
+          "selected_hits": 89,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6496350364963503
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 61,
+          "unsupported": 2,
+          "complete_output_precision": 0.9682539682539683,
+          "selected_hits": 10,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7692307692307693
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 507,
+          "correct": 488,
+          "unsupported": 19,
+          "complete_output_precision": 0.9625246548323472,
+          "selected_hits": 91,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6594202898550725
+        },
+        "held_out": {
+          "published": 55,
+          "correct": 54,
+          "unsupported": 1,
+          "complete_output_precision": 0.9818181818181818,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 499,
+          "correct": 480,
+          "unsupported": 19,
+          "complete_output_precision": 0.9619238476953907,
+          "selected_hits": 86,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6323529411764706
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 62,
+          "unsupported": 1,
+          "complete_output_precision": 0.9841269841269841,
+          "selected_hits": 13,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9285714285714286
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 530,
+          "correct": 512,
+          "unsupported": 18,
+          "complete_output_precision": 0.9660377358490566,
+          "selected_hits": 92,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6715328467153284
+        },
+        "held_out": {
+          "published": 32,
+          "correct": 30,
+          "unsupported": 2,
+          "complete_output_precision": 0.9375,
+          "selected_hits": 7,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5384615384615384
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 534,
+          "correct": 515,
+          "unsupported": 19,
+          "complete_output_precision": 0.9644194756554307,
+          "selected_hits": 97,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7028985507246377
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 27,
+          "unsupported": 1,
+          "complete_output_precision": 0.9642857142857143,
+          "selected_hits": 2,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.16666666666666666
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 499,
+          "correct": 483,
+          "unsupported": 16,
+          "complete_output_precision": 0.9679358717434869,
+          "selected_hits": 89,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.644927536231884
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 59,
+          "unsupported": 4,
+          "complete_output_precision": 0.9365079365079365,
+          "selected_hits": 10,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8333333333333334
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 562,
+      "correct": 542,
+      "unsupported": 20,
+      "selected_hits": 99,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9644128113879004,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.66,
+      "wilson_complete_output_precision": [
+        0.9457,
+        0.9768
+      ],
+      "wilson_selected_decision_precision": [
+        0.9626,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.581,
+        0.731
+      ]
+    },
+    "gates": {
+      "precision_98": false,
+      "selected_precision_98": true,
+      "recall_50": true
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "two_independent_sources": {
+    "strategy": "two_independent_sources",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": null,
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 492,
+          "correct": 477,
+          "unsupported": 15,
+          "complete_output_precision": 0.9695121951219512,
+          "selected_hits": 83,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6058394160583942
+        },
+        "held_out": {
+          "published": 38,
+          "correct": 36,
+          "unsupported": 2,
+          "complete_output_precision": 0.9473684210526315,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 499,
+          "correct": 483,
+          "unsupported": 16,
+          "complete_output_precision": 0.9679358717434869,
+          "selected_hits": 85,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6159420289855072
+        },
+        "held_out": {
+          "published": 31,
+          "correct": 30,
+          "unsupported": 1,
+          "complete_output_precision": 0.967741935483871,
+          "selected_hits": 6,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 470,
+          "correct": 454,
+          "unsupported": 16,
+          "complete_output_precision": 0.9659574468085106,
+          "selected_hits": 81,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5827338129496403
+        },
+        "held_out": {
+          "published": 60,
+          "correct": 59,
+          "unsupported": 1,
+          "complete_output_precision": 0.9833333333333333,
+          "selected_hits": 10,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9090909090909091
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 471,
+          "correct": 456,
+          "unsupported": 15,
+          "complete_output_precision": 0.9681528662420382,
+          "selected_hits": 83,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6058394160583942
+        },
+        "held_out": {
+          "published": 59,
+          "correct": 57,
+          "unsupported": 2,
+          "complete_output_precision": 0.9661016949152542,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 495,
+          "correct": 479,
+          "unsupported": 16,
+          "complete_output_precision": 0.9676767676767677,
+          "selected_hits": 83,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6014492753623188
+        },
+        "held_out": {
+          "published": 35,
+          "correct": 34,
+          "unsupported": 1,
+          "complete_output_precision": 0.9714285714285714,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 505,
+          "correct": 490,
+          "unsupported": 15,
+          "complete_output_precision": 0.9702970297029703,
+          "selected_hits": 85,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6204379562043796
+        },
+        "held_out": {
+          "published": 25,
+          "correct": 23,
+          "unsupported": 2,
+          "complete_output_precision": 0.92,
+          "selected_hits": 6,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.46153846153846156
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 469,
+          "correct": 454,
+          "unsupported": 15,
+          "complete_output_precision": 0.9680170575692963,
+          "selected_hits": 82,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5985401459854015
+        },
+        "held_out": {
+          "published": 61,
+          "correct": 59,
+          "unsupported": 2,
+          "complete_output_precision": 0.9672131147540983,
+          "selected_hits": 9,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6923076923076923
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 479,
+          "correct": 463,
+          "unsupported": 16,
+          "complete_output_precision": 0.9665970772442589,
+          "selected_hits": 84,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6086956521739131
+        },
+        "held_out": {
+          "published": 51,
+          "correct": 50,
+          "unsupported": 1,
+          "complete_output_precision": 0.9803921568627451,
+          "selected_hits": 7,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5833333333333334
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 467,
+          "correct": 451,
+          "unsupported": 16,
+          "complete_output_precision": 0.9657387580299786,
+          "selected_hits": 78,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5735294117647058
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 62,
+          "unsupported": 1,
+          "complete_output_precision": 0.9841269841269841,
+          "selected_hits": 13,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9285714285714286
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 502,
+          "correct": 487,
+          "unsupported": 15,
+          "complete_output_precision": 0.9701195219123506,
+          "selected_hits": 84,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6131386861313869
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 26,
+          "unsupported": 2,
+          "complete_output_precision": 0.9285714285714286,
+          "selected_hits": 7,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5384615384615384
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 506,
+          "correct": 489,
+          "unsupported": 17,
+          "complete_output_precision": 0.9664031620553359,
+          "selected_hits": 89,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.644927536231884
+        },
+        "held_out": {
+          "published": 24,
+          "correct": 24,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 2,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.16666666666666666
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 475,
+          "correct": 460,
+          "unsupported": 15,
+          "complete_output_precision": 0.968421052631579,
+          "selected_hits": 84,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6086956521739131
+        },
+        "held_out": {
+          "published": 55,
+          "correct": 53,
+          "unsupported": 2,
+          "complete_output_precision": 0.9636363636363636,
+          "selected_hits": 7,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5833333333333334
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 530,
+      "correct": 513,
+      "unsupported": 17,
+      "selected_hits": 91,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9679245283018868,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.6066666666666667,
+      "wilson_complete_output_precision": [
+        0.9492,
+        0.9799
+      ],
+      "wilson_selected_decision_precision": [
+        0.9595,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.5268,
+        0.6812
+      ]
+    },
+    "gates": {
+      "precision_98": false,
+      "selected_precision_98": true,
+      "recall_50": true
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "structural": {
+    "strategy": "structural",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": "883fba20bc1936ca779a9649f9e662d7360362aab89b0eb3fbe4ddf51bfe04df",
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 303,
+          "correct": 299,
+          "unsupported": 4,
+          "complete_output_precision": 0.9867986798679867,
+          "selected_hits": 31,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.22627737226277372
+        },
+        "held_out": {
+          "published": 14,
+          "correct": 14,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 303,
+          "correct": 300,
+          "unsupported": 3,
+          "complete_output_precision": 0.9900990099009901,
+          "selected_hits": 31,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2246376811594203
+        },
+        "held_out": {
+          "published": 14,
+          "correct": 13,
+          "unsupported": 1,
+          "complete_output_precision": 0.9285714285714286,
+          "selected_hits": 0,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 279,
+          "correct": 275,
+          "unsupported": 4,
+          "complete_output_precision": 0.985663082437276,
+          "selected_hits": 28,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2014388489208633
+        },
+        "held_out": {
+          "published": 38,
+          "correct": 38,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 3,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2727272727272727
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 273,
+          "correct": 269,
+          "unsupported": 4,
+          "complete_output_precision": 0.9853479853479854,
+          "selected_hits": 24,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.17518248175182483
+        },
+        "held_out": {
+          "published": 44,
+          "correct": 44,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 7,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5384615384615384
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 301,
+          "correct": 297,
+          "unsupported": 4,
+          "complete_output_precision": 0.9867109634551495,
+          "selected_hits": 31,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2246376811594203
+        },
+        "held_out": {
+          "published": 16,
+          "correct": 16,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 304,
+          "correct": 300,
+          "unsupported": 4,
+          "complete_output_precision": 0.9868421052631579,
+          "selected_hits": 31,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.22627737226277372
+        },
+        "held_out": {
+          "published": 13,
+          "correct": 13,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 282,
+          "correct": 279,
+          "unsupported": 3,
+          "complete_output_precision": 0.9893617021276596,
+          "selected_hits": 27,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.19708029197080293
+        },
+        "held_out": {
+          "published": 35,
+          "correct": 34,
+          "unsupported": 1,
+          "complete_output_precision": 0.9714285714285714,
+          "selected_hits": 4,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3076923076923077
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 284,
+          "correct": 281,
+          "unsupported": 3,
+          "complete_output_precision": 0.9894366197183099,
+          "selected_hits": 24,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.17391304347826086
+        },
+        "held_out": {
+          "published": 33,
+          "correct": 32,
+          "unsupported": 1,
+          "complete_output_precision": 0.9696969696969697,
+          "selected_hits": 7,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5833333333333334
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 279,
+          "correct": 275,
+          "unsupported": 4,
+          "complete_output_precision": 0.985663082437276,
+          "selected_hits": 28,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.20588235294117646
+        },
+        "held_out": {
+          "published": 38,
+          "correct": 38,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 3,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.21428571428571427
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 302,
+          "correct": 298,
+          "unsupported": 4,
+          "complete_output_precision": 0.9867549668874173,
+          "selected_hits": 31,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.22627737226277372
+        },
+        "held_out": {
+          "published": 15,
+          "correct": 15,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 304,
+          "correct": 300,
+          "unsupported": 4,
+          "complete_output_precision": 0.9868421052631579,
+          "selected_hits": 31,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2246376811594203
+        },
+        "held_out": {
+          "published": 13,
+          "correct": 13,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          1,
+          0.985,
+          0.94
+        ],
+        "training": {
+          "published": 273,
+          "correct": 270,
+          "unsupported": 3,
+          "complete_output_precision": 0.989010989010989,
+          "selected_hits": 24,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.17391304347826086
+        },
+        "held_out": {
+          "published": 44,
+          "correct": 43,
+          "unsupported": 1,
+          "complete_output_precision": 0.9772727272727273,
+          "selected_hits": 7,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5833333333333334
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 317,
+      "correct": 313,
+      "unsupported": 4,
+      "selected_hits": 31,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9873817034700315,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.20666666666666667,
+      "wilson_complete_output_precision": [
+        0.968,
+        0.9951
+      ],
+      "wilson_selected_decision_precision": [
+        0.8897,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.1496,
+        0.2784
+      ]
+    },
+    "gates": {
+      "precision_98": true,
+      "selected_precision_98": true,
+      "recall_50": false
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "decide_plain": {
+    "strategy": "decide_plain",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": "37068d38a20853d4853ab1657c1386ba1cc0faafb7c01621cf2acd4d3025f92f",
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 204,
+          "correct": 202,
+          "unsupported": 2,
+          "complete_output_precision": 0.9901960784313726,
+          "selected_hits": 43,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.31386861313868614
+        },
+        "held_out": {
+          "published": 19,
+          "correct": 19,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 2,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.15384615384615385
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 208,
+          "correct": 206,
+          "unsupported": 2,
+          "complete_output_precision": 0.9903846153846154,
+          "selected_hits": 42,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.30434782608695654
+        },
+        "held_out": {
+          "published": 15,
+          "correct": 15,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 3,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.25
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 200,
+          "correct": 198,
+          "unsupported": 2,
+          "complete_output_precision": 0.99,
+          "selected_hits": 41,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2949640287769784
+        },
+        "held_out": {
+          "published": 23,
+          "correct": 23,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 4,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.36363636363636365
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          0.6099864671724676,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 225,
+          "correct": 222,
+          "unsupported": 3,
+          "complete_output_precision": 0.9866666666666667,
+          "selected_hits": 44,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.32116788321167883
+        },
+        "held_out": {
+          "published": 31,
+          "correct": 29,
+          "unsupported": 2,
+          "complete_output_precision": 0.9354838709677419,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 211,
+          "correct": 209,
+          "unsupported": 2,
+          "complete_output_precision": 0.990521327014218,
+          "selected_hits": 41,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2971014492753623
+        },
+        "held_out": {
+          "published": 12,
+          "correct": 12,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 4,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3333333333333333
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 217,
+          "correct": 215,
+          "unsupported": 2,
+          "complete_output_precision": 0.9907834101382489,
+          "selected_hits": 45,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3284671532846715
+        },
+        "held_out": {
+          "published": 6,
+          "correct": 6,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 196,
+          "correct": 195,
+          "unsupported": 1,
+          "complete_output_precision": 0.9948979591836735,
+          "selected_hits": 41,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.29927007299270075
+        },
+        "held_out": {
+          "published": 27,
+          "correct": 26,
+          "unsupported": 1,
+          "complete_output_precision": 0.9629629629629629,
+          "selected_hits": 4,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3076923076923077
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 199,
+          "correct": 197,
+          "unsupported": 2,
+          "complete_output_precision": 0.9899497487437185,
+          "selected_hits": 40,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2898550724637681
+        },
+        "held_out": {
+          "published": 24,
+          "correct": 24,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 5,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.4166666666666667
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 201,
+          "correct": 200,
+          "unsupported": 1,
+          "complete_output_precision": 0.9950248756218906,
+          "selected_hits": 40,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.29411764705882354
+        },
+        "held_out": {
+          "published": 22,
+          "correct": 21,
+          "unsupported": 1,
+          "complete_output_precision": 0.9545454545454546,
+          "selected_hits": 5,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.35714285714285715
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 214,
+          "correct": 212,
+          "unsupported": 2,
+          "complete_output_precision": 0.9906542056074766,
+          "selected_hits": 45,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3284671532846715
+        },
+        "held_out": {
+          "published": 9,
+          "correct": 9,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 211,
+          "correct": 209,
+          "unsupported": 2,
+          "complete_output_precision": 0.990521327014218,
+          "selected_hits": 43,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3115942028985507
+        },
+        "held_out": {
+          "published": 12,
+          "correct": 12,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 2,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.16666666666666666
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          0.9925781443125136,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 196,
+          "correct": 194,
+          "unsupported": 2,
+          "complete_output_precision": 0.9897959183673469,
+          "selected_hits": 35,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2536231884057971
+        },
+        "held_out": {
+          "published": 27,
+          "correct": 27,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 10,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8333333333333334
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 227,
+      "correct": 223,
+      "unsupported": 4,
+      "selected_hits": 47,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9823788546255506,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.31333333333333335,
+      "wilson_complete_output_precision": [
+        0.9556,
+        0.9931
+      ],
+      "wilson_selected_decision_precision": [
+        0.9244,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.2445,
+        0.3914
+      ]
+    },
+    "gates": {
+      "precision_98": true,
+      "selected_precision_98": true,
+      "recall_50": false
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "decide_described": {
+    "strategy": "decide_described",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": "a7b98bcb2861abc5d4ffae443c8a645a11f72f96bc94f35aae6c8fc3d693c107",
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 240,
+          "correct": 238,
+          "unsupported": 2,
+          "complete_output_precision": 0.9916666666666667,
+          "selected_hits": 38,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2773722627737226
+        },
+        "held_out": {
+          "published": 13,
+          "correct": 13,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 3,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.23076923076923078
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 236,
+          "correct": 234,
+          "unsupported": 2,
+          "complete_output_precision": 0.9915254237288136,
+          "selected_hits": 38,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2753623188405797
+        },
+        "held_out": {
+          "published": 17,
+          "correct": 17,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 3,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.25
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          -0.09177660129270754,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 274,
+          "correct": 270,
+          "unsupported": 4,
+          "complete_output_precision": 0.9854014598540146,
+          "selected_hits": 45,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3237410071942446
+        },
+        "held_out": {
+          "published": 36,
+          "correct": 35,
+          "unsupported": 1,
+          "complete_output_precision": 0.9722222222222222,
+          "selected_hits": 4,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.36363636363636365
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 212,
+          "correct": 211,
+          "unsupported": 1,
+          "complete_output_precision": 0.9952830188679245,
+          "selected_hits": 35,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.25547445255474455
+        },
+        "held_out": {
+          "published": 41,
+          "correct": 40,
+          "unsupported": 1,
+          "complete_output_precision": 0.975609756097561,
+          "selected_hits": 6,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.46153846153846156
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 241,
+          "correct": 239,
+          "unsupported": 2,
+          "complete_output_precision": 0.991701244813278,
+          "selected_hits": 39,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2826086956521739
+        },
+        "held_out": {
+          "published": 12,
+          "correct": 12,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 2,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.16666666666666666
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 248,
+          "correct": 246,
+          "unsupported": 2,
+          "complete_output_precision": 0.9919354838709677,
+          "selected_hits": 41,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.29927007299270075
+        },
+        "held_out": {
+          "published": 5,
+          "correct": 5,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 0,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          -0.09177660129270754,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 279,
+          "correct": 275,
+          "unsupported": 4,
+          "complete_output_precision": 0.985663082437276,
+          "selected_hits": 45,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3284671532846715
+        },
+        "held_out": {
+          "published": 31,
+          "correct": 30,
+          "unsupported": 1,
+          "complete_output_precision": 0.967741935483871,
+          "selected_hits": 4,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3076923076923077
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 223,
+          "correct": 222,
+          "unsupported": 1,
+          "complete_output_precision": 0.9955156950672646,
+          "selected_hits": 39,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2826086956521739
+        },
+        "held_out": {
+          "published": 30,
+          "correct": 29,
+          "unsupported": 1,
+          "complete_output_precision": 0.9666666666666667,
+          "selected_hits": 2,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.16666666666666666
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          -0.09177660129270754,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 276,
+          "correct": 272,
+          "unsupported": 4,
+          "complete_output_precision": 0.9855072463768116,
+          "selected_hits": 41,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.3014705882352941
+        },
+        "held_out": {
+          "published": 34,
+          "correct": 33,
+          "unsupported": 1,
+          "complete_output_precision": 0.9705882352941176,
+          "selected_hits": 8,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5714285714285714
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 240,
+          "correct": 238,
+          "unsupported": 2,
+          "complete_output_precision": 0.9916666666666667,
+          "selected_hits": 38,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2773722627737226
+        },
+        "held_out": {
+          "published": 13,
+          "correct": 13,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 3,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.23076923076923078
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          -0.09177660129270754,
+          0.995,
+          0.7
+        ],
+        "training": {
+          "published": 238,
+          "correct": 236,
+          "unsupported": 2,
+          "complete_output_precision": 0.9915966386554622,
+          "selected_hits": 38,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2753623188405797
+        },
+        "held_out": {
+          "published": 15,
+          "correct": 15,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 3,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.25
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          -0.09177660129270754,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 267,
+          "correct": 263,
+          "unsupported": 4,
+          "complete_output_precision": 0.9850187265917603,
+          "selected_hits": 40,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.2898550724637681
+        },
+        "held_out": {
+          "published": 43,
+          "correct": 42,
+          "unsupported": 1,
+          "complete_output_precision": 0.9767441860465116,
+          "selected_hits": 9,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.75
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 290,
+      "correct": 284,
+      "unsupported": 6,
+      "selected_hits": 47,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9793103448275862,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.31333333333333335,
+      "wilson_complete_output_precision": [
+        0.9556,
+        0.9905
+      ],
+      "wilson_selected_decision_precision": [
+        0.9244,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.2445,
+        0.3914
+      ]
+    },
+    "gates": {
+      "precision_98": false,
+      "selected_precision_98": true,
+      "recall_50": false
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "bge": {
+    "strategy": "bge",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": "f3bc47dce1d7a238d875b034d1c625cbcd0f2ff2a535952e58f2c4abf5837353",
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          0.6685793995857239,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 468,
+          "correct": 461,
+          "unsupported": 7,
+          "complete_output_precision": 0.9850427350427351,
+          "selected_hits": 105,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7664233576642335
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 28,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          0.6685793995857239,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 470,
+          "correct": 463,
+          "unsupported": 7,
+          "complete_output_precision": 0.9851063829787234,
+          "selected_hits": 105,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7608695652173914
+        },
+        "held_out": {
+          "published": 26,
+          "correct": 26,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 442,
+          "correct": 436,
+          "unsupported": 6,
+          "complete_output_precision": 0.9864253393665159,
+          "selected_hits": 103,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7410071942446043
+        },
+        "held_out": {
+          "published": 57,
+          "correct": 57,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 10,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9090909090909091
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 480,
+          "correct": 473,
+          "unsupported": 7,
+          "complete_output_precision": 0.9854166666666667,
+          "selected_hits": 112,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8175182481751825
+        },
+        "held_out": {
+          "published": 64,
+          "correct": 63,
+          "unsupported": 1,
+          "complete_output_precision": 0.984375,
+          "selected_hits": 12,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9230769230769231
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 469,
+          "correct": 463,
+          "unsupported": 6,
+          "complete_output_precision": 0.9872068230277186,
+          "selected_hits": 102,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7391304347826086
+        },
+        "held_out": {
+          "published": 30,
+          "correct": 30,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 11,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9166666666666666
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          0.6685793995857239,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 467,
+          "correct": 460,
+          "unsupported": 7,
+          "complete_output_precision": 0.9850107066381156,
+          "selected_hits": 110,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8029197080291971
+        },
+        "held_out": {
+          "published": 16,
+          "correct": 16,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 483,
+          "correct": 476,
+          "unsupported": 7,
+          "complete_output_precision": 0.9855072463768116,
+          "selected_hits": 113,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8248175182481752
+        },
+        "held_out": {
+          "published": 61,
+          "correct": 60,
+          "unsupported": 1,
+          "complete_output_precision": 0.9836065573770492,
+          "selected_hits": 11,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8461538461538461
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 447,
+          "correct": 441,
+          "unsupported": 6,
+          "complete_output_precision": 0.9865771812080537,
+          "selected_hits": 105,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7608695652173914
+        },
+        "held_out": {
+          "published": 52,
+          "correct": 52,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 440,
+          "correct": 434,
+          "unsupported": 6,
+          "complete_output_precision": 0.9863636363636363,
+          "selected_hits": 99,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7279411764705882
+        },
+        "held_out": {
+          "published": 59,
+          "correct": 59,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 14,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 1.0
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 515,
+          "correct": 509,
+          "unsupported": 6,
+          "complete_output_precision": 0.9883495145631068,
+          "selected_hits": 114,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8321167883211679
+        },
+        "held_out": {
+          "published": 29,
+          "correct": 27,
+          "unsupported": 2,
+          "complete_output_precision": 0.9310344827586207,
+          "selected_hits": 10,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7692307692307693
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          0.6685793995857239,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 471,
+          "correct": 465,
+          "unsupported": 6,
+          "complete_output_precision": 0.9872611464968153,
+          "selected_hits": 108,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.782608695652174
+        },
+        "held_out": {
+          "published": 25,
+          "correct": 24,
+          "unsupported": 1,
+          "complete_output_precision": 0.96,
+          "selected_hits": 5,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.4166666666666667
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          0.6423084735870361,
+          0.985,
+          0.7
+        ],
+        "training": {
+          "published": 545,
+          "correct": 538,
+          "unsupported": 7,
+          "complete_output_precision": 0.9871559633027523,
+          "selected_hits": 118,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.855072463768116
+        },
+        "held_out": {
+          "published": 72,
+          "correct": 65,
+          "unsupported": 7,
+          "complete_output_precision": 0.9027777777777778,
+          "selected_hits": 12,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 1.0
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 519,
+      "correct": 507,
+      "unsupported": 12,
+      "selected_hits": 117,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.976878612716763,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.78,
+      "wilson_complete_output_precision": [
+        0.96,
+        0.9867
+      ],
+      "wilson_selected_decision_precision": [
+        0.9682,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.7072,
+        0.8388
+      ]
+    },
+    "gates": {
+      "precision_98": false,
+      "selected_precision_98": true,
+      "recall_50": true
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "nli": {
+    "strategy": "nli",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": "b73bd06496f229560f4e90a3d78c858fa4fb335f61be7f6034b38e90fa36c4c1",
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 524,
+          "correct": 506,
+          "unsupported": 18,
+          "complete_output_precision": 0.9656488549618321,
+          "selected_hits": 91,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6642335766423357
+        },
+        "held_out": {
+          "published": 38,
+          "correct": 36,
+          "unsupported": 2,
+          "complete_output_precision": 0.9473684210526315,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 531,
+          "correct": 512,
+          "unsupported": 19,
+          "complete_output_precision": 0.9642184557438794,
+          "selected_hits": 93,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6739130434782609
+        },
+        "held_out": {
+          "published": 31,
+          "correct": 30,
+          "unsupported": 1,
+          "complete_output_precision": 0.967741935483871,
+          "selected_hits": 6,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 500,
+          "correct": 481,
+          "unsupported": 19,
+          "complete_output_precision": 0.962,
+          "selected_hits": 89,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6402877697841727
+        },
+        "held_out": {
+          "published": 62,
+          "correct": 61,
+          "unsupported": 1,
+          "complete_output_precision": 0.9838709677419355,
+          "selected_hits": 10,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9090909090909091
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 499,
+          "correct": 481,
+          "unsupported": 18,
+          "complete_output_precision": 0.9639278557114228,
+          "selected_hits": 88,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6423357664233577
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 61,
+          "unsupported": 2,
+          "complete_output_precision": 0.9682539682539683,
+          "selected_hits": 11,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8461538461538461
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 525,
+          "correct": 506,
+          "unsupported": 19,
+          "complete_output_precision": 0.9638095238095238,
+          "selected_hits": 91,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6594202898550725
+        },
+        "held_out": {
+          "published": 37,
+          "correct": 36,
+          "unsupported": 1,
+          "complete_output_precision": 0.972972972972973,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 535,
+          "correct": 517,
+          "unsupported": 18,
+          "complete_output_precision": 0.9663551401869159,
+          "selected_hits": 93,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6788321167883211
+        },
+        "held_out": {
+          "published": 27,
+          "correct": 25,
+          "unsupported": 2,
+          "complete_output_precision": 0.9259259259259259,
+          "selected_hits": 6,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.46153846153846156
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          -1.770484209060669,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 155,
+          "correct": 150,
+          "unsupported": 5,
+          "complete_output_precision": 0.967741935483871,
+          "selected_hits": 28,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.20437956204379562
+        },
+        "held_out": {
+          "published": 7,
+          "correct": 5,
+          "unsupported": 2,
+          "complete_output_precision": 0.7142857142857143,
+          "selected_hits": 0,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 507,
+          "correct": 488,
+          "unsupported": 19,
+          "complete_output_precision": 0.9625246548323472,
+          "selected_hits": 91,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6594202898550725
+        },
+        "held_out": {
+          "published": 55,
+          "correct": 54,
+          "unsupported": 1,
+          "complete_output_precision": 0.9818181818181818,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 499,
+          "correct": 480,
+          "unsupported": 19,
+          "complete_output_precision": 0.9619238476953907,
+          "selected_hits": 86,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6323529411764706
+        },
+        "held_out": {
+          "published": 63,
+          "correct": 62,
+          "unsupported": 1,
+          "complete_output_precision": 0.9841269841269841,
+          "selected_hits": 13,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9285714285714286
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 530,
+          "correct": 512,
+          "unsupported": 18,
+          "complete_output_precision": 0.9660377358490566,
+          "selected_hits": 92,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6715328467153284
+        },
+        "held_out": {
+          "published": 32,
+          "correct": 30,
+          "unsupported": 2,
+          "complete_output_precision": 0.9375,
+          "selected_hits": 7,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.5384615384615384
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          -Infinity,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 534,
+          "correct": 515,
+          "unsupported": 19,
+          "complete_output_precision": 0.9644194756554307,
+          "selected_hits": 97,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7028985507246377
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 27,
+          "unsupported": 1,
+          "complete_output_precision": 0.9642857142857143,
+          "selected_hits": 2,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.16666666666666666
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          -1.371649980545044,
+          0.995,
+          0.94
+        ],
+        "training": {
+          "published": 95,
+          "correct": 92,
+          "unsupported": 3,
+          "complete_output_precision": 0.968421052631579,
+          "selected_hits": 19,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.13768115942028986
+        },
+        "held_out": {
+          "published": 7,
+          "correct": 5,
+          "unsupported": 2,
+          "complete_output_precision": 0.7142857142857143,
+          "selected_hits": 0,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": null,
+          "selected_recall": 0.0
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 450,
+      "correct": 432,
+      "unsupported": 18,
+      "selected_hits": 79,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.96,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.5266666666666666,
+      "wilson_complete_output_precision": [
+        0.9377,
+        0.9746
+      ],
+      "wilson_selected_decision_precision": [
+        0.9536,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.4471,
+        0.6049
+      ]
+    },
+    "gates": {
+      "precision_98": false,
+      "selected_precision_98": true,
+      "recall_50": true
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration"
+  },
+  "hybrid": {
+    "strategy": "hybrid",
+    "fixture_sha256": "823ed8b564ba6d8009b5b9b331a81cf10c5870faa329f15af37f267f059d3464",
+    "scores_sha256": "1d2b3549ec91d2f2ff29e7e073e0aab3a45fb54f7f1a11938771c04a3b4a8e2b",
+    "folds": [
+      {
+        "domain": "astronomy_earth",
+        "config": [
+          0.6685793995857239,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 467,
+          "correct": 460,
+          "unsupported": 7,
+          "complete_output_precision": 0.9850107066381156,
+          "selected_hits": 105,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7664233576642335
+        },
+        "held_out": {
+          "published": 28,
+          "correct": 28,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "buildings_water_energy",
+        "config": [
+          0.6685793995857239,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 469,
+          "correct": 462,
+          "unsupported": 7,
+          "complete_output_precision": 0.9850746268656716,
+          "selected_hits": 105,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7608695652173914
+        },
+        "held_out": {
+          "published": 26,
+          "correct": 26,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "computing/data systems",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 442,
+          "correct": 436,
+          "unsupported": 6,
+          "complete_output_precision": 0.9864253393665159,
+          "selected_hits": 103,
+          "selected_positives": 139,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7410071942446043
+        },
+        "held_out": {
+          "published": 56,
+          "correct": 56,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 10,
+          "selected_positives": 11,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9090909090909091
+        }
+      },
+      {
+        "domain": "cooking/food processing",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 478,
+          "correct": 471,
+          "unsupported": 7,
+          "complete_output_precision": 0.9853556485355649,
+          "selected_hits": 112,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8175182481751825
+        },
+        "held_out": {
+          "published": 64,
+          "correct": 63,
+          "unsupported": 1,
+          "complete_output_precision": 0.984375,
+          "selected_hits": 12,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9230769230769231
+        }
+      },
+      {
+        "domain": "ecology_agriculture",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 468,
+          "correct": 462,
+          "unsupported": 6,
+          "complete_output_precision": 0.9871794871794872,
+          "selected_hits": 102,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7391304347826086
+        },
+        "held_out": {
+          "published": 30,
+          "correct": 30,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 11,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.9166666666666666
+        }
+      },
+      {
+        "domain": "education_museums",
+        "config": [
+          0.6685793995857239,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 471,
+          "correct": 464,
+          "unsupported": 7,
+          "complete_output_precision": 0.9851380042462845,
+          "selected_hits": 105,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7664233576642335
+        },
+        "held_out": {
+          "published": 24,
+          "correct": 24,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6153846153846154
+        }
+      },
+      {
+        "domain": "libraries/archives",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 481,
+          "correct": 474,
+          "unsupported": 7,
+          "complete_output_precision": 0.9854469854469855,
+          "selected_hits": 113,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8248175182481752
+        },
+        "held_out": {
+          "published": 61,
+          "correct": 60,
+          "unsupported": 1,
+          "complete_output_precision": 0.9836065573770492,
+          "selected_hits": 11,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8461538461538461
+        }
+      },
+      {
+        "domain": "materials/manufacturing",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 446,
+          "correct": 440,
+          "unsupported": 6,
+          "complete_output_precision": 0.9865470852017937,
+          "selected_hits": 105,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7608695652173914
+        },
+        "held_out": {
+          "published": 52,
+          "correct": 52,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 8,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.6666666666666666
+        }
+      },
+      {
+        "domain": "music/audio",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.9
+        ],
+        "training": {
+          "published": 439,
+          "correct": 433,
+          "unsupported": 6,
+          "complete_output_precision": 0.9863325740318907,
+          "selected_hits": 99,
+          "selected_positives": 136,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7279411764705882
+        },
+        "held_out": {
+          "published": 59,
+          "correct": 59,
+          "unsupported": 0,
+          "complete_output_precision": 1.0,
+          "selected_hits": 14,
+          "selected_positives": 14,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 1.0
+        }
+      },
+      {
+        "domain": "sports_outdoor",
+        "config": [
+          0.6423084735870361,
+          0.995,
+          0.8
+        ],
+        "training": {
+          "published": 513,
+          "correct": 507,
+          "unsupported": 6,
+          "complete_output_precision": 0.9883040935672515,
+          "selected_hits": 114,
+          "selected_positives": 137,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.8321167883211679
+        },
+        "held_out": {
+          "published": 29,
+          "correct": 27,
+          "unsupported": 2,
+          "complete_output_precision": 0.9310344827586207,
+          "selected_hits": 10,
+          "selected_positives": 13,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.7692307692307693
+        }
+      },
+      {
+        "domain": "textiles_crafts_art",
+        "config": [
+          0.6685793995857239,
+          0.985,
+          0.9
+        ],
+        "training": {
+          "published": 470,
+          "correct": 464,
+          "unsupported": 6,
+          "complete_output_precision": 0.9872340425531915,
+          "selected_hits": 108,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.782608695652174
+        },
+        "held_out": {
+          "published": 25,
+          "correct": 24,
+          "unsupported": 1,
+          "complete_output_precision": 0.96,
+          "selected_hits": 5,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.4166666666666667
+        }
+      },
+      {
+        "domain": "transport/logistics",
+        "config": [
+          0.6423084735870361,
+          0.985,
+          0.7
+        ],
+        "training": {
+          "published": 543,
+          "correct": 536,
+          "unsupported": 7,
+          "complete_output_precision": 0.9871086556169429,
+          "selected_hits": 118,
+          "selected_positives": 138,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 0.855072463768116
+        },
+        "held_out": {
+          "published": 72,
+          "correct": 65,
+          "unsupported": 7,
+          "complete_output_precision": 0.9027777777777778,
+          "selected_hits": 12,
+          "selected_positives": 12,
+          "selected_negatives_published": 0,
+          "selected_decision_precision": 1.0,
+          "selected_recall": 1.0
+        }
+      }
+    ],
+    "pooled_held_out": {
+      "published": 526,
+      "correct": 514,
+      "unsupported": 12,
+      "selected_hits": 117,
+      "selected_positives": 150,
+      "selected_negatives_published": 0,
+      "complete_output_precision": 0.9771863117870723,
+      "selected_decision_precision": 1.0,
+      "selected_recall": 0.78,
+      "wilson_complete_output_precision": [
+        0.9606,
+        0.9869
+      ],
+      "wilson_selected_decision_precision": [
+        0.9682,
+        1.0
+      ],
+      "wilson_selected_recall": [
+        0.7072,
+        0.8388
+      ]
+    },
+    "gates": {
+      "precision_98": false,
+      "selected_precision_98": true,
+      "recall_50": true
+    },
+    "status": "FAIL_SCREEN",
+    "release_quality_pass": false,
+    "scope": "concept-only proxy, spent development corpus; no application integration",
+    "followup_after_bge_results": true,
+    "excluded_candidate_occurrences": 43,
+    "supplemental_plan_sha256": "763103a7e4d36625d8d82479f7917aad02235f8be3923c45d9030775bf16b227"
+  }
+}

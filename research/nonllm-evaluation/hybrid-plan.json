@@ -1,0 +1,13 @@
+{
+  "scope": "Supplemental isolated follow-up; development only, motivated by initial BGE result. No independent acceptance claim.",
+  "hypothesis": "BGE relevance plus a cheap incidental/measurement veto may reduce false positives without requiring an explicit foreground predicate.",
+  "gate": "Reject candidate occurrences whose frozen structural score is below zero. All other candidates retain their BGE cosine score.",
+  "selection": "Same twelve domain folds, confidence grid and precision gates. Cosine thresholds are zero plus raw BGE unlabeled deciles. No no-filter fallback; negative rule veto always applies.",
+  "changes_after_scoring": "None authorized; preserve failure if any.",
+  "script_sha256": "d518d4f50607714b7f6f51c95464213813b646892729f3a9a40b3a7b6606024b",
+  "inputs": {
+    "bge-scores.jsonl": "f3bc47dce1d7a238d875b034d1c625cbcd0f2ff2a535952e58f2c4abf5837353",
+    "structural-scores.jsonl": "883fba20bc1936ca779a9649f9e662d7360362aab89b0eb3fbe4ddf51bfe04df",
+    "bge-decision.json": "8399d2463ab3df0b17de140185b2fd65e22e4474eae1d4db96128cd7087af921"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "method": "bge",
+  "sources": 1499,
+  "candidates": 3387,
+  "load_seconds": 8.712531292003405,
+  "scoring_seconds": 269.39079866599786,
+  "source_median_seconds": 0.17409079200297128,
+  "peak_process_rss_bytes": 1819770880,
+  "threads": 4,
+  "device": "cpu",
+  "platform": "darwin",
+  "script_sha256": "a60425d071b30b295ff518480fdde7387afbebaeda74ae9e1e785e5b28eb643d",
+  "inputs_sha256": "3234a0d242926201f17a3c46997a408e3aa5b82bfe51568b63613f4743432f82",
+  "proposals_sha256": "a5da8f974ed7e77ede87a9e2c735a9b1334e2f82f76f262d1d0d9c3376b5adfe",
+  "scores_sha256": "f3bc47dce1d7a238d875b034d1c625cbcd0f2ff2a535952e58f2c4abf5837353"
+}

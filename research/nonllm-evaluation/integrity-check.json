@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "controls_exactly_reproduced": [
+    "Qwen",
+    "Decide plain",
+    "Decide described"
+  ],
+  "new_score_rows_per_strategy": 1499,
+  "candidate_occurrences_per_strategy": 3387,
+  "fold_count": 12,
+  "frozen_scripts_inputs_and_labels_unchanged": true,
+  "no_weights_fitted": true,
+  "production_base_commit": "e51318b",
+  "production_files_changed": false,
+  "quality_scope": "development proxy only"
+}

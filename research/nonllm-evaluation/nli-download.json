@@ -1,0 +1,39 @@
+{
+  "repo": "cross-encoder/nli-MiniLM2-L6-H768",
+  "revision": "72873be33d4058aac21d3c9e86036a8901636537",
+  "license": "apache-2.0",
+  "files": {
+    "README.md": {
+      "sha256": "3a01e1a432a54a01320731e3b74618d76812e4957935cb9055d8ff361b684626",
+      "size": 2567
+    },
+    "config.json": {
+      "sha256": "8b0e41caff7567c0f53e6983f35591c3dec59507c9173ab125c5823394fb57f3",
+      "size": 875
+    },
+    "merges.txt": {
+      "sha256": "fe36cab26d4f4421ed725e10a2e9ddb7f799449c603a96e7f29b5a3c82a95862",
+      "size": 456356
+    },
+    "pytorch_model.bin": {
+      "sha256": "768059960825f2365e301878e8cbe816620f04546769e38063e4d21f297dc48a",
+      "size": 328532073
+    },
+    "special_tokens_map.json": {
+      "sha256": "378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d",
+      "size": 239
+    },
+    "tokenizer.json": {
+      "sha256": "82139106e603ee4e1d5bc99d056ccbed5a92bc24848b1b5a7137c26e00d0dbf6",
+      "size": 1356048
+    },
+    "tokenizer_config.json": {
+      "sha256": "e06f5c3c435fc0255b08b5574cd574eec685390f60c85b27f83d785eb8ecaaa1",
+      "size": 330
+    },
+    "vocab.json": {
+      "sha256": "ed19656ea1707df69134c4af35c8ceda2cc9860bf2c3495026153a133670ab5e",
+      "size": 798293
+    }
+  }
+}
