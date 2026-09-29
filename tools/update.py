@@ -54,7 +54,7 @@ def checked_package():
             raise ValueError(f"Bundled UI is stale for {name}; regenerate the deployment package")
     source_names = {p.relative_to(ROOT).as_posix() for p in (ROOT / "frontend").rglob("*")
                     if p.is_file() and not any(x in p.relative_to(ROOT / "frontend").parts for x in ("node_modules", "dist"))
-                    and p.suffix != ".tsbuildinfo"}
+                    and p.suffix != ".tsbuildinfo" and p.name != ".DS_Store"}
     if source_names != set(release["frontend_sources"]):
         raise ValueError("Bundled UI is stale: frontend source files were added or removed")
     if record(ROOT / "tools/ml-container/requirements-linux.lock") != release["dependency_lock"]:

@@ -49,7 +49,7 @@ def main():
     files.update({p.relative_to(directory).as_posix(): record(p) for p in sorted((directory / "licenses").rglob("*")) if p.is_file()})
     sources = {p.relative_to(ROOT).as_posix(): record(p) for p in sorted((ROOT / "frontend").rglob("*"))
                if p.is_file() and not any(x in p.relative_to(ROOT / "frontend").parts for x in ("node_modules", "dist"))
-               and p.suffix != ".tsbuildinfo"}
+               and p.suffix != ".tsbuildinfo" and p.name != ".DS_Store"}
     (directory / "package.json").write_text(json.dumps({
         "version": 1, "target": "RHEL 8.10 x86_64 / Python 3.12 / CPU only",
         "transfer_manifest": record(manifest_path), "files": files,

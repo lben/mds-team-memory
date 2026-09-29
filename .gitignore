@@ -10,3 +10,5 @@ tools/deploy.toml
 test-results/
 .DS_Store
 e2e/adv/
+
+deployment/.ml-storage.lock

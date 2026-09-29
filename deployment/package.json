@@ -92,10 +92,6 @@
     }
   },
   "frontend_sources": {
-    "frontend/.DS_Store": {
-      "size": 6148,
-      "sha256": "6c6bf9fe07718286da5a19e4f48a68f76666219e720fe71967d60717fc7086cc"
-    },
     "frontend/.gitignore": {
       "size": 253,
       "sha256": "fe718e7babb14f3cbad2d97f08889b9ce5215ed3fe0e43b2b8cfbfb3b9b844e8"
