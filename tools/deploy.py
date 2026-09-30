@@ -37,10 +37,12 @@ RELEASE_ITEMS = [
     ("backend/app", "backend/app"),
     ("backend/alembic", "backend/alembic"),
     ("backend/alembic.ini", "backend/alembic.ini"),
+    ("backend/testdata", "backend/testdata"),
     ("frontend/dist", "frontend/dist"),
     ("manage.py", "manage.py"),
     ("requirements.txt", "requirements.txt"),
     ("SERVER_SETUP.md", "SERVER_SETUP.md"),
+    ("TESTDATA.md", "TESTDATA.md"),
     ("tools/deploylib.py", "tools/deploylib.py"),
     ("tools/ml_storage.py", "tools/ml_storage.py"),
     ("tools/ml_assets.py", "tools/ml_assets.py"),
@@ -124,6 +126,8 @@ def pack_release(stamp: str) -> Path:
 
 def write_env_file(target: Target) -> Path:
     """The settings mdsctl.sh reads on the server, as a sourceable shell file."""
+    if "MDS_ENVIRONMENT" in target.env:
+        raise ValueError("Deployment manages MDS_ENVIRONMENT; remove it from [target.env]")
     values = {
         "PORT": str(target.port),
         "BIND": target.bind,
@@ -134,6 +138,7 @@ def write_env_file(target: Target) -> Path:
         # them or a deploy would silently start on an empty database.
         "MDS_DATA_DIR": f"{target.root}/data",
         **target.env,
+        "MDS_ENVIRONMENT": target.name,
     }
     path = BUILD_DIR / "app.env"
     lines = [f"# Written by tools/deploy.py for {target.name}; replaced by the next deploy."]

@@ -187,11 +187,16 @@ def main() -> None:
         "reset-database", help="delete all data and rebuild the schema at the current version"
     )
     reset.add_argument("--yes", action="store_true", help="skip the confirmation prompt")
+    test = commands.add_parser("test-data", help="UAT-only tracked synthetic data; use TestData.cmd on your PC")
+    test.add_argument("options", nargs=argparse.REMAINDER)
     args = parser.parse_args()
 
     if args.command == "create-admin":
         create_admin(args.username)
     elif args.command == "reset-database":
         reset_database(args.yes)
+    elif args.command == "test-data":
+        from .testdata import main as testdata_main
+        raise SystemExit(testdata_main(args.options))
     else:
         list_admins()

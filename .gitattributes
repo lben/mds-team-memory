@@ -1,6 +1,8 @@
 # The server runs these; a CRLF checkout on Windows would break them on RHEL.
 *.sh text eol=lf
 Update text eol=lf
+TestData text eol=lf
+backend/testdata/** text eol=lf
 *.cmd text eol=crlf
 deployment/** text eol=lf
 deployment/offline/part-* -text -diff

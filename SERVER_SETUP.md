@@ -345,6 +345,12 @@ insufficient evidence, and admin silence is never a positive label.
 
 ## Resetting a UAT instance
 
+For selective synthetic-data imports and cleanup, use the UAT-only
+[TestData CLI](TESTDATA.md). It samples complete scenarios by topic/percentage,
+tracks batches, waits for the real ML queue, and preserves unrelated content.
+Update installs its datasets and writes the protected environment marker.
+The full reset below is unnecessary for deleting a TestData batch.
+
 To wipe a test instance and rebuild it at the current schema:
 
 ```powershell

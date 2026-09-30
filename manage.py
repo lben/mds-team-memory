@@ -11,7 +11,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "backend"))
 
-from app.cli import main  # noqa: E402
-
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["test-data"]:
+        from app.testdata import main
+        raise SystemExit(main(sys.argv[2:]))
+    from app.cli import main
     main()

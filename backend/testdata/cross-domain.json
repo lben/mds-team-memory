@@ -1,0 +1,536 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "solar_system_membership",
+      "domain": "astronomy",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Earth is part of the Solar System. The Sun is also part of the Solar System and lies at its center.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "Our astronomy chart identifies Earth as part of the Solar System. The Sun is part of the Solar System, along with its planets and smaller bodies.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "space_telescope_alias_and_instrument",
+      "domain": "astronomy",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "moon_negation",
+      "domain": "astronomy",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "The Moon does not produce sunlight. We see sunlight reflected from the lunar surface.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The Moon never produces sunlight of its own. Its bright appearance comes from reflected light.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "mars_hypothetical_questions",
+      "domain": "astronomy",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Should Mars exploration use nuclear power for a future crewed outpost?",
+          "kind": "question",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "If Mars exploration uses nuclear power, how would the equipment be transported?",
+          "kind": "question",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "web_validation_dependency",
+      "domain": "software",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "web_framework_runtime",
+      "domain": "software",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Django requires Python to execute our web application.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The installation guide records that Django depends on Python for its runtime.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "render_output",
+      "domain": "digital_media",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "In our render workflow, Blender produces OpenEXR for the compositing stage.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The animation export task confirms that Blender produces OpenEXR with the selected output settings.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "workshop_lighting_replacement",
+      "domain": "building_maintenance",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "passive_voice_worker_broker",
+      "domain": "software",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Redis is used by Celery as the broker in our background task deployment.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "unrelated_bench_equipment",
+      "domain": "electronics",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "The bench inventory lists a soldering iron beside a digital multimeter. Each has its own storage tray.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "I checked the serial numbers of the digital multimeter and the soldering iron during the equipment audit.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "one_author_repeats_dependency",
+      "domain": "software",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Docker uses Linux in the container host that I configured.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "alice",
+          "body": "The operating system check confirms that Docker uses Linux on this host.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "alice",
+          "body": "I recorded the host configuration in the runbook: Docker uses Linux for our container deployment.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "copied_definition_and_relationship",
+      "domain": "electronics",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "cara",
+          "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "independent_control_definitions",
+      "domain": "electronics",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "ambiguous_control_acronym",
+      "domain": "industrial_engineering",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "A Programmable Logic Controller (PLC) handles the conveyor interlocks in the assembly cell.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The maintenance checklist identifies the Programmable Logic Controller (PLC) that monitors the assembly cell inputs.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "cara",
+          "body": "Power Line Communication (PLC) carries data over the electrical wiring in our networking demonstration.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "drew",
+          "body": "The networking lesson explains Power Line Communication (PLC) with a pair of adapters on existing electrical wiring.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "hyphenated_material_spelling",
+      "domain": "workshop_maintenance",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "The cable repair kit contains heat-shrink tubing in several diameters.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "We added heat-shrink tubing to the workshop stock list for cable repairs.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "cara",
+          "body": "The packaging label calls the same repair material heat shrink tubing.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "drew",
+          "body": "The supplier lists heat shrink tubing by diameter in its cable repair section.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "meaningful_language_symbols",
+      "domain": "software",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "C++ and C# are distinct programming languages. Our training catalog gives each language its own course.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The code review checklist has separate sections for C# and C++. They name different languages.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "private_home_automation",
+      "domain": "home_automation",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "My private Home Assistant installation uses Mosquitto to exchange messages with the workshop devices.",
+          "kind": "note",
+          "visibility": "private"
+        },
+        {
+          "actor": "ben",
+          "body": "In my private setup notes, Home Assistant uses Mosquitto as the message broker for the garage sensors.",
+          "kind": "note",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "id": "conflicting_monitoring_evidence",
+      "domain": "software_operations",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Grafana uses Prometheus for the metrics displayed on our operations dashboard.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The dashboard configuration notes say Grafana uses Prometheus to retrieve operational metrics.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "cara",
+          "body": "Grafana does not use Prometheus in the operations dashboard configuration I inspected.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "edited_smart_home_sources",
+      "domain": "home_automation",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Home Assistant uses Zigbee for the workshop temperature sensors.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The sensor configuration confirms that Home Assistant uses Zigbee for workshop telemetry.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "deleted_backup_sources",
+      "domain": "software_operations",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Restic uses SFTP to reach the backup repository on our archive host.",
+          "kind": "note",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+          "kind": "note",
+          "visibility": "team"
+        }
+      ]
+    },
+    {
+      "id": "database_expertise_with_outcomes",
+      "domain": "software_operations",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "How can I investigate slow queries in PostgreSQL?",
+          "kind": "question",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "For PostgreSQL query diagnosis, I compared the execution plan with the table statistics and identified the missing index.",
+          "kind": "answer",
+          "visibility": "team",
+          "parent": 0,
+          "accepted": true,
+          "helped_by": [
+            "cara"
+          ]
+        },
+        {
+          "actor": "ben",
+          "body": "I documented the PostgreSQL backup verification process and tested restoration into an empty database.",
+          "kind": "note",
+          "visibility": "team",
+          "helped_by": [
+            "alice"
+          ]
+        },
+        {
+          "actor": "ben",
+          "body": "I traced a PostgreSQL lock wait to a long transaction and recorded the session information in the incident notes.",
+          "kind": "note",
+          "visibility": "team",
+          "helped_by": [
+            "cara"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "workshop_expertise_with_outcomes",
+      "domain": "electronics",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "How do we document soldering defects during the workshop inspection?",
+          "kind": "question",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "For the soldering inspection, I added photographs of the joint defects to the checklist and linked each photograph to its board location.",
+          "kind": "answer",
+          "visibility": "team",
+          "parent": 0,
+          "accepted": true,
+          "helped_by": [
+            "cara"
+          ]
+        },
+        {
+          "actor": "ben",
+          "body": "I prepared a soldering practice record that separates the inspection result from the operator's notes.",
+          "kind": "note",
+          "visibility": "team",
+          "helped_by": [
+            "alice"
+          ]
+        },
+        {
+          "actor": "ben",
+          "body": "I organized the soldering rework history by board identifier so the next inspection can trace previous repairs.",
+          "kind": "note",
+          "visibility": "team",
+          "helped_by": [
+            "cara"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "one_accepted_answer_is_sparse",
+      "domain": "digital_media",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "Where can I inspect the render output settings in Blender?",
+          "kind": "question",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "In Blender, I checked the output properties and recorded the selected file format in the render checklist.",
+          "kind": "answer",
+          "visibility": "team",
+          "parent": 0,
+          "accepted": true,
+          "helped_by": [
+            "cara"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "astronomy_questions_are_not_expertise",
+      "domain": "astronomy",
+      "posts": [
+        {
+          "actor": "alice",
+          "body": "How does orbital mechanics describe a spacecraft transfer between Earth and Mars?",
+          "kind": "question",
+          "visibility": "team"
+        },
+        {
+          "actor": "alice",
+          "body": "Which part of orbital mechanics explains the shape of an elliptical orbit?",
+          "kind": "question",
+          "visibility": "team"
+        },
+        {
+          "actor": "ben",
+          "body": "How is orbital mechanics used to compare two possible transfer orbits?",
+          "kind": "question",
+          "visibility": "team"
+        }
+      ]
+    }
+  ]
+}

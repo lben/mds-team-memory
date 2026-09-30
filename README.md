@@ -19,6 +19,11 @@ deployment evidence and the failed model-quality and capacity gates.
 
 ## Development
 
+To explore synthetic content on UAT, use `TestData.cmd datasets`, `preview`,
+`add`, `batches`, `status --wait` and `remove`. Select topics and a repeatable
+percentage, then remove only the tracked batch. See [TestData CLI](TESTDATA.md).
+Run `Update.cmd UAT` once after pulling to install this capability on the server.
+
 ```bash
 python3 -m venv .venv
 ./.venv/bin/pip install -r requirements.txt -r requirements-dev.txt

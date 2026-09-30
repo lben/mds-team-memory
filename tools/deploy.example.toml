@@ -37,6 +37,9 @@ keep_releases = 5
 # MDS_ML_LOAD_TIMEOUT_SECONDS = "300"      # Update default; finite cold model-load deadline
 # Update manages data/model paths itself; do not set MDS_DATA_DIR,
 # MDS_ML_ROOT or MDS_ML_GENERATION here.
+# Deployment also manages MDS_ENVIRONMENT (uat/prod); never set it in target.env.
+# After Update UAT: TestData.cmd [UAT] datasets|preview|add|batches|status|remove.
+# See TESTDATA.md. PROD is refused by both client and deployed server.
 
 # [local]
 # known_hosts = "build/update-known-hosts" # saved server keys on the deploying PC
