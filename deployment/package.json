@@ -2,8 +2,8 @@
   "version": 1,
   "target": "RHEL 8.10 x86_64 / Python 3.12 / CPU only",
   "transfer_manifest": {
-    "size": 12490,
-    "sha256": "72b45a05c8472f1a1878154c06c84769eb7db8e39eee9da0fc5ca4f3f08b8c00"
+    "size": 8828,
+    "sha256": "180e1ad1a5b9a66f8bffbac0b28934264ee6f8106ea1220a601c535a2f60c40e"
   },
   "files": {
     "ui/assets/AdminExpertiseView-Bb1hfHD8.css": {
@@ -74,14 +74,6 @@
       "size": 11357,
       "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
     },
-    "licenses/Qwen-LICENSE.txt": {
-      "size": 11343,
-      "sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
-    },
-    "licenses/uv-LICENSE-MIT.txt": {
-      "size": 1077,
-      "sha256": "860e3d7a86b84e6a7012c7a635fc64df475cebc6cce34dfeb73a5982ec58176c"
-    },
     "licenses/GCC-RUNTIME-LIBRARY-EXCEPTION.txt": {
       "size": 3324,
       "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74"
@@ -89,6 +81,10 @@
     "licenses/GPL-3.0.txt": {
       "size": 35147,
       "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    "licenses/uv-LICENSE-MIT.txt": {
+      "size": 1077,
+      "sha256": "860e3d7a86b84e6a7012c7a635fc64df475cebc6cce34dfeb73a5982ec58176c"
     }
   },
   "frontend_sources": {
@@ -238,8 +234,8 @@
     }
   },
   "dependency_lock": {
-    "size": 147250,
-    "sha256": "228d0f866613b7fea87822e8caa3d4003bf1b8241d832c2cf013640b8bb09008"
+    "size": 146975,
+    "sha256": "13d183ef20775ae51857d3a9b54857ff5ed8026fb0bcd0a3ce7d875583ec359a"
   },
-  "bundle_total_size": 5509637871
+  "bundle_total_size": 2993063074
 }
