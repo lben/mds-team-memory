@@ -1,0 +1,8 @@
+WARN `--no-project` was provided, but no project was found
+CLI final-batches-after-update PASS
+CLI final-add-workshop PASS
+CLI final-wait-workshop PASS
+Traceback (most recent call last):
+  File "/Users/bleon/ClaudeCodexWorkspace/WorkKnowledgeBase/mds-team-memory/build/testdata/final_live.py", line 84, in <module>
+    assert any(f["kind"]=="relationship" and f["state"]=="active" for f in done["findings"])
+AssertionError

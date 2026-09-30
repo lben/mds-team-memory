@@ -1,0 +1,207 @@
+{
+  "dataset": "expanded",
+  "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+  "percent": "1",
+  "seed": 42,
+  "topics": [
+    "astronomy_earth",
+    "buildings_water_energy",
+    "computing/data systems",
+    "cooking/food processing",
+    "ecology_agriculture",
+    "education_museums",
+    "libraries/archives",
+    "materials/manufacturing",
+    "music/audio",
+    "sports_outdoor",
+    "textiles_crafts_art",
+    "transport/logistics"
+  ],
+  "eligible_units": 300,
+  "selected_units": 3,
+  "unit": "scenarios",
+  "posts": 15,
+  "fingerprint": "619728e8a2331722714bfc48bb600ac3da048351cdb45ed26d62634e177c4a5e"
+}
+UAT: add on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-0be380db6953: importing 3 scenarios, 15 posts
+Batch test-20260930-0be380db6953: 1/15 posts imported
+Batch test-20260930-0be380db6953: 15/15 posts imported
+{
+  "id": "test-20260930-0be380db6953",
+  "fingerprint": "619728e8a2331722714bfc48bb600ac3da048351cdb45ed26d62634e177c4a5e",
+  "dataset": "expanded",
+  "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+  "selection": {
+    "dataset": "expanded",
+    "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+    "percent": "1",
+    "seed": 42,
+    "topics": [
+      "astronomy_earth",
+      "buildings_water_energy",
+      "computing/data systems",
+      "cooking/food processing",
+      "ecology_agriculture",
+      "education_museums",
+      "libraries/archives",
+      "materials/manufacturing",
+      "music/audio",
+      "sports_outdoor",
+      "textiles_crafts_art",
+      "transport/logistics"
+    ],
+    "eligible_units": 300,
+    "selected_units": 3,
+    "unit": "scenarios",
+    "posts": 15,
+    "fingerprint": "619728e8a2331722714bfc48bb600ac3da048351cdb45ed26d62634e177c4a5e"
+  },
+  "state": "active",
+  "created_at": 1790738762.894528,
+  "updated_at": 1790738764.0696728,
+  "error": null,
+  "objects_recorded": {
+    "account": 9,
+    "item": 15,
+    "profile": 9
+  },
+  "remaining_posts": 15,
+  "processed_posts": 0,
+  "pending_jobs": 24,
+  "jobs": [
+    {
+      "source_kind": "profile",
+      "source_id": "36fab776ca3b4d95b778fb949e530c65",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "9db3acab46f241cea596918b976c39b3",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "148153ffcc2c46118b16d66e73d70ee5",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "5bc9371151ce41069396de969ad85e3b",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "53b6f826a7cc4350b6b8438d2bbe5e89",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "054b33d63a3248fbac62416badbd8ca0",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "bdf00b4998824666a1b2021e66e914e1",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "fb51539fb62040b586168980f1aa34c7",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "bb64a07ae35640ae8a402170fcfe4647",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "43cdc385c2ed48eab45c71587e58ebaa",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "2f05ea5307ea400ea6e93d1f819b15d0",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "af824a107b4d43ad8622220ad3ce85c3",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "1a50e9d632d140bc866c75904518e60d",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "d106a7433dc64fedbdd55c033de63b4f",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "8402656347824f28bef4cfb50d67fa56",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "d57981834a0a4a1a98abfc504612c78c",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "595083915c6c47ca8f973f2c2c50d62d",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "4176c3de41174f63960ea3b7139998af",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "385dfcde463f48dbb07efd5ab02bd69e",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "b4053311319f47bb88b6e54f90c80d40",
+      "attempts": 0,
+      "error": null
+    }
+  ],
+  "global_jobs": 24,
+  "worker": {
+    "status": "running",
+    "worker_lease_until": 1790738883.2830613,
+    "backfill_kind": null
+  },
+  "worker_alive": true,
+  "findings": [],
+  "embeddings": 0,
+  "evidence_rows": 0,
+  "processing": "pending"
+}
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

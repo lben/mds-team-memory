@@ -1,0 +1,53 @@
+UAT: remove on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-75d2270cccec: 1/4 item removals checked
+Batch test-20260930-75d2270cccec: 4/4 item removals checked
+Batch test-20260930-75d2270cccec: imported content and identities removed; waiting for ML withdrawal
+Batch test-20260930-75d2270cccec: 0/0 posts processed; 8 batch jobs; 8 global jobs
+[
+  {
+    "id": "test-20260930-75d2270cccec",
+    "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d",
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "selection": {
+      "dataset": "cross-domain",
+      "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+      "percent": "100",
+      "seed": 42,
+      "topics": [
+        "workshop_maintenance"
+      ],
+      "eligible_units": 1,
+      "selected_units": 1,
+      "unit": "scenarios",
+      "posts": 4,
+      "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d"
+    },
+    "state": "removed",
+    "created_at": 1790739288.8218918,
+    "updated_at": 1790739616.2540376,
+    "error": null,
+    "objects_recorded": {
+      "account": 4,
+      "item": 4,
+      "profile": 4
+    },
+    "remaining_posts": 0,
+    "processed_posts": 0,
+    "pending_jobs": 0,
+    "jobs": [],
+    "global_jobs": 0,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790739744.8674908,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [],
+    "embeddings": 0,
+    "evidence_rows": 0,
+    "processing": "complete"
+  }
+]
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

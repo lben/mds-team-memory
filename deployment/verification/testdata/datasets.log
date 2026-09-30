@@ -1,0 +1,53 @@
+[
+  {
+    "dataset": "cross-domain",
+    "units": 24,
+    "unit": "scenarios",
+    "posts": 60,
+    "topics": [
+      "astronomy",
+      "building_maintenance",
+      "digital_media",
+      "electronics",
+      "home_automation",
+      "industrial_engineering",
+      "software",
+      "software_operations",
+      "workshop_maintenance"
+    ],
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd"
+  },
+  {
+    "dataset": "expanded",
+    "units": 300,
+    "unit": "scenarios",
+    "posts": 1475,
+    "topics": [
+      "astronomy_earth",
+      "buildings_water_energy",
+      "computing/data systems",
+      "cooking/food processing",
+      "ecology_agriculture",
+      "education_museums",
+      "libraries/archives",
+      "materials/manufacturing",
+      "music/audio",
+      "sports_outdoor",
+      "textiles_crafts_art",
+      "transport/logistics"
+    ],
+    "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74"
+  },
+  {
+    "dataset": "capacity",
+    "units": 50000,
+    "unit": "items",
+    "posts": 50000,
+    "topics": [
+      "software_operations"
+    ],
+    "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2"
+  }
+]
+PASSWORD_PROMPT_COUNT 0
+WARN `--no-project` was provided, but no project was found

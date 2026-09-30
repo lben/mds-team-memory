@@ -1,0 +1,19 @@
+{
+  "implementation_commit": "e68c3e9",
+  "branch": "gpt6.1solhigh_bge",
+  "final_backend_tests": 818,
+  "windows_host_tested": false,
+  "test_host": "localhost-only UBI 8.10 x86_64 under ARM emulation",
+  "source_sha256": {
+    "backend/app/testdata.py": "1a82ae4d66640b10bd444b3824a0d72d591394ea6a80aeb3464233d96bba4d87",
+    "backend/app/testdata_catalog.py": "89319ec8b98db344a7987c9554c04fdb23df43afae3aad7cc067105265c3ba0a",
+    "backend/tests/test_testdata.py": "0cdd4c0518dc1ee2824add36653d5471a5fc7c01d3048c472f406aee0a9e567f",
+    "tools/testdata.py": "a8d66dbbaa174c8a48864944f3062129d0483d38defac84d22f29e860232d204",
+    "tools/deploy.py": "7a86d0799fa7c37348336bc05f091ba33d37ad178c4397e51005208a64715fa1",
+    "manage.py": "ef303b8e0cc54d78cd655677ddbed14f3855436b527408af0d18aaba34cd6d32",
+    "backend/testdata/cross-domain.json": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "backend/testdata/expanded.json": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74"
+  },
+  "model_quality": "Existing BGE gates remain failed. Final workshop import processed but did not publish the fixture-expected relationship; retained separately.",
+  "actual_uat_or_prod_contacted": false
+}

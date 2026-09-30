@@ -245,3 +245,9 @@ withgpt6.1solhigh -> gpt6.1solhigh_bge (2026-09-29)
                     evidence: deployment/BGE_VERIFICATION.md. Quality acceptance
                     remains open; real-model expectations and the paired load
                     latency gate failed.
+
+  e68c3e9           Add UAT-only TestData CLI: deterministic topic/percentage
+                    sampling, tracked imports, queue status/wait, protected
+                    selective cleanup and persistent receipts. Final regression
+                    suite: 818 passed. Owner authorized GitHub publication;
+                    actual UAT/PROD remain untouched. Model gates remain open.

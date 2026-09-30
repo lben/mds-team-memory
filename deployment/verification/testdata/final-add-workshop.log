@@ -1,0 +1,113 @@
+{
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "percent": "100",
+  "seed": 42,
+  "topics": [
+    "workshop_maintenance"
+  ],
+  "eligible_units": 1,
+  "selected_units": 1,
+  "unit": "scenarios",
+  "posts": 4,
+  "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d"
+}
+UAT: add on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-75d2270cccec: importing 1 scenarios, 4 posts
+Batch test-20260930-75d2270cccec: 1/4 posts imported
+Batch test-20260930-75d2270cccec: 4/4 posts imported
+{
+  "id": "test-20260930-75d2270cccec",
+  "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d",
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "selection": {
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "percent": "100",
+    "seed": 42,
+    "topics": [
+      "workshop_maintenance"
+    ],
+    "eligible_units": 1,
+    "selected_units": 1,
+    "unit": "scenarios",
+    "posts": 4,
+    "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d"
+  },
+  "state": "active",
+  "created_at": 1790739288.8218918,
+  "updated_at": 1790739289.3320673,
+  "error": null,
+  "objects_recorded": {
+    "account": 4,
+    "item": 4,
+    "profile": 4
+  },
+  "remaining_posts": 4,
+  "processed_posts": 0,
+  "pending_jobs": 8,
+  "jobs": [
+    {
+      "source_kind": "profile",
+      "source_id": "a4b92d61dbf2465ca9f65bd28cedb93c",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "8674e361f4ef476faab04efcbd786e4e",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "57054fb97e854fb789b63eb95f516095",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "bb90fdea2f6846f8bc76411fb7d3c9c6",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "1b056be0ceba4bb6bc1445a7e0152a15",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "a91b9bb32f244fc0b0cabeacc7f1275e",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "d01b2dd71da3444bafef7b08f20304cb",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "26d754d501364809b2d6ffcb0b6d3cba",
+      "attempts": 0,
+      "error": null
+    }
+  ],
+  "global_jobs": 8,
+  "worker": {
+    "status": "idle",
+    "worker_lease_until": 1790739401.7524,
+    "backfill_kind": null
+  },
+  "worker_alive": true,
+  "findings": [],
+  "embeddings": 0,
+  "evidence_rows": 0,
+  "processing": "pending"
+}
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

@@ -12,7 +12,11 @@ source/name relevance; GLiNER extraction and spaCy syntax remain unchanged.
 The offline package now contains three models, 88 Linux wheels and 25 parts
 (2.19 GiB compressed; 2.79 GiB expanded). Update keeps the same single-TOML,
 one-password UAT/PROD flow. See [BGE verification](deployment/BGE_VERIFICATION.md)
-for operational checks. Nothing has been pushed or deployed to actual UAT/PROD.
+for operational checks. Actual UAT/PROD servers have not been contacted.
+The owner authorized publishing this branch with the UAT-only TestData CLI.
+Its final Linux regression suite passes 818 tests; tracked imports, status/wait,
+selective removal and Update persistence were verified on the isolated server.
+See [TestData verification](deployment/TESTDATA_VERIFICATION.md).
 
 Policy v12 uses cosine >= 0.6423084735870361, entity confidence >= 0.995 from
 one source, or >= 0.8 with two independent provenance groups. These values were

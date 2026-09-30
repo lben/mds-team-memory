@@ -1,0 +1,185 @@
+{
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "percent": "100",
+  "seed": 42,
+  "topics": [
+    "astronomy"
+  ],
+  "eligible_units": 5,
+  "selected_units": 5,
+  "unit": "scenarios",
+  "posts": 11,
+  "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac"
+}
+UAT: add on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-55656cc2de5a: importing 5 scenarios, 11 posts
+Batch test-20260930-55656cc2de5a: 1/11 posts imported
+Batch test-20260930-55656cc2de5a: 11/11 posts imported
+{
+  "id": "test-20260930-55656cc2de5a",
+  "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac",
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "selection": {
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "percent": "100",
+    "seed": 42,
+    "topics": [
+      "astronomy"
+    ],
+    "eligible_units": 5,
+    "selected_units": 5,
+    "unit": "scenarios",
+    "posts": 11,
+    "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac"
+  },
+  "state": "active",
+  "created_at": 1790738622.2081099,
+  "updated_at": 1790738623.3361073,
+  "error": null,
+  "objects_recorded": {
+    "account": 10,
+    "item": 11,
+    "profile": 10
+  },
+  "remaining_posts": 11,
+  "processed_posts": 0,
+  "pending_jobs": 21,
+  "jobs": [
+    {
+      "source_kind": "profile",
+      "source_id": "605bcc3593e244d6a926f26a5c7b3c77",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "b5198e23dd464214a52e414f85d7e213",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "531d9879a43c41d9af4abcffeb04f4a3",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "a0d6e87a198f41c5b01639f109ac66e5",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "821f4fa6469c42c8825fe398336d7068",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "d88c574a0f0d4ab39eacb7fa51b784ca",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "0c372ae37982456fa5846888ae4342e1",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "89607622a3174f21b5bafcfee03848db",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "4557945576a64d879a936764d1f2008a",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "fc70deb0e2504c5c8da2d9c0c42fcc9f",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "6184100827a04a6998267cb489b7bd02",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "3d701ee6428b40aca120f3b8074077e6",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "b55d97e4ad63409cb57a0b7189ee1311",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "3b9df7b002d748f294048e14448385d5",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "a7de6e67818d42b396ded1f9811778ab",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "3e1b1c85ce834a84a6d64dc62efd19a7",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "8ba3fbbb95f743b1bc9e6e6750811f36",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "dc672472bbbd412bb225472d271c7166",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "866124fd8a24484394c64305af708bf1",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "92732d5e0eaa46c983f4999b0a0d7b31",
+      "attempts": 0,
+      "error": null
+    }
+  ],
+  "global_jobs": 24,
+  "worker": {
+    "status": "running",
+    "worker_lease_until": 1790738739.5832405,
+    "backfill_kind": "item"
+  },
+  "worker_alive": true,
+  "findings": [],
+  "embeddings": 0,
+  "evidence_rows": 0,
+  "processing": "pending"
+}
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

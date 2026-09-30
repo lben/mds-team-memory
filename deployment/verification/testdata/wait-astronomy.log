@@ -1,0 +1,101 @@
+UAT: status on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-55656cc2de5a: 0/11 posts processed; 21 batch jobs; 24 global jobs
+Batch test-20260930-55656cc2de5a: 0/11 posts processed; 21 batch jobs; 24 global jobs
+Batch test-20260930-55656cc2de5a: 0/11 posts processed; 21 batch jobs; 24 global jobs
+Batch test-20260930-55656cc2de5a: 0/11 posts processed; 21 batch jobs; 24 global jobs
+Batch test-20260930-55656cc2de5a: 2/11 posts processed; 19 batch jobs; 21 global jobs
+Batch test-20260930-55656cc2de5a: 4/11 posts processed; 17 batch jobs; 19 global jobs
+Batch test-20260930-55656cc2de5a: 7/11 posts processed; 14 batch jobs; 16 global jobs
+Batch test-20260930-55656cc2de5a: 10/11 posts processed; 11 batch jobs; 13 global jobs
+{
+  "id": "test-20260930-55656cc2de5a",
+  "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac",
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "selection": {
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "percent": "100",
+    "seed": 42,
+    "topics": [
+      "astronomy"
+    ],
+    "eligible_units": 5,
+    "selected_units": 5,
+    "unit": "scenarios",
+    "posts": 11,
+    "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac"
+  },
+  "state": "active",
+  "created_at": 1790738622.2081099,
+  "updated_at": 1790738623.3361073,
+  "error": null,
+  "objects_recorded": {
+    "account": 10,
+    "item": 11,
+    "profile": 10
+  },
+  "remaining_posts": 11,
+  "processed_posts": 11,
+  "pending_jobs": 0,
+  "jobs": [],
+  "global_jobs": 0,
+  "worker": {
+    "status": "running",
+    "worker_lease_until": 1790738861.446188,
+    "backfill_kind": null
+  },
+  "worker_alive": true,
+  "findings": [
+    {
+      "kind": "alias",
+      "state": "active",
+      "count": 1
+    },
+    {
+      "kind": "alias_definition",
+      "state": "held",
+      "count": 1
+    },
+    {
+      "kind": "association",
+      "state": "weak",
+      "count": 1
+    },
+    {
+      "kind": "concept",
+      "state": "active",
+      "count": 5
+    },
+    {
+      "kind": "concept",
+      "state": "held",
+      "count": 18
+    },
+    {
+      "kind": "mention",
+      "state": "active",
+      "count": 6
+    },
+    {
+      "kind": "mention",
+      "state": "held",
+      "count": 5
+    },
+    {
+      "kind": "relationship",
+      "state": "active",
+      "count": 1
+    },
+    {
+      "kind": "relationship",
+      "state": "withdrawn",
+      "count": 1
+    }
+  ],
+  "embeddings": 11,
+  "evidence_rows": 56,
+  "processing": "complete"
+}
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

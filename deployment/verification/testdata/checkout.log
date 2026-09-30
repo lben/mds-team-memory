@@ -1,0 +1,30 @@
+Committed checkout e68c3e9: CMD CRLF; shell LF; dataset bytes match.
+Installed 7 packages in 13ms
+{
+  "dataset": "expanded",
+  "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+  "percent": "25",
+  "seed": 42,
+  "topics": [
+    "astronomy_earth",
+    "buildings_water_energy",
+    "computing/data systems",
+    "cooking/food processing",
+    "ecology_agriculture",
+    "education_museums",
+    "libraries/archives",
+    "materials/manufacturing",
+    "music/audio",
+    "sports_outdoor",
+    "textiles_crafts_art",
+    "transport/logistics"
+  ],
+  "eligible_units": 300,
+  "selected_units": 75,
+  "unit": "scenarios",
+  "posts": 378,
+  "fingerprint": "e614b2e066b4770f8b759eb8e532821b1810ae97aead50f334e7fece0cf9ef4d"
+}
+Installed 7 packages in 7ms
+Checking local model parts and deployment package...
+Ready locally for UAT: 25 parts; 2.19 GiB. No connection made.

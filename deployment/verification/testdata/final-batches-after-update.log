@@ -1,0 +1,45 @@
+UAT: batches on mds@127.0.0.1:/home/mds/mds-uat
+[
+  {
+    "id": "test-20260930-0f91cb07382d",
+    "dataset": "capacity",
+    "state": "removed",
+    "created_at": 1790738938.3772407,
+    "error": null,
+    "percent": "0.01",
+    "selected_units": 5,
+    "posts": 5
+  },
+  {
+    "id": "test-20260930-0be380db6953",
+    "dataset": "expanded",
+    "state": "removed",
+    "created_at": 1790738762.894528,
+    "error": null,
+    "percent": "1",
+    "selected_units": 3,
+    "posts": 15
+  },
+  {
+    "id": "test-20260930-ef4e06d5c53c",
+    "dataset": "cross-domain",
+    "state": "removed",
+    "created_at": 1790738757.114783,
+    "error": null,
+    "percent": "20",
+    "selected_units": 1,
+    "posts": 3
+  },
+  {
+    "id": "test-20260930-55656cc2de5a",
+    "dataset": "cross-domain",
+    "state": "removed",
+    "created_at": 1790738622.2081099,
+    "error": null,
+    "percent": "100",
+    "selected_units": 5,
+    "posts": 11
+  }
+]
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

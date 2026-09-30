@@ -1,0 +1,18 @@
+{
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "percent": "100",
+  "seed": 42,
+  "topics": [
+    "astronomy"
+  ],
+  "eligible_units": 5,
+  "selected_units": 5,
+  "unit": "scenarios",
+  "posts": 11,
+  "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac"
+}
+UAT: add on mds@127.0.0.1:/home/mds/mds-uat
+TestData failed: Selection overlaps existing batches: test-20260930-55656cc2de5a. Remove those batches first.
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

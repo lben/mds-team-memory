@@ -1,0 +1,112 @@
+UAT: remove on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-0f91cb07382d: 1/5 item removals checked
+Batch test-20260930-0f91cb07382d: 5/5 item removals checked
+Batch test-20260930-0f91cb07382d: imported content and identities removed; waiting for ML withdrawal
+Batch test-20260930-0f91cb07382d: 0/0 posts processed; 10 batch jobs; 10 global jobs
+Batch test-20260930-0be380db6953: 1/15 item removals checked
+Batch test-20260930-0be380db6953: 15/15 item removals checked
+Batch test-20260930-0be380db6953: imported content and identities removed; waiting for ML withdrawal
+Batch test-20260930-0be380db6953: 0/0 posts processed; 24 batch jobs; 25 global jobs
+[
+  {
+    "id": "test-20260930-0f91cb07382d",
+    "fingerprint": "6e8d16775390cdf565177e8866dccceb6aefd9a206841c44b226fbd8840cc26b",
+    "dataset": "capacity",
+    "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2",
+    "selection": {
+      "dataset": "capacity",
+      "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2",
+      "percent": "0.01",
+      "seed": 42,
+      "topics": [
+        "software_operations"
+      ],
+      "eligible_units": 50000,
+      "selected_units": 5,
+      "unit": "items",
+      "posts": 5,
+      "fingerprint": "6e8d16775390cdf565177e8866dccceb6aefd9a206841c44b226fbd8840cc26b"
+    },
+    "state": "removed",
+    "created_at": 1790738938.3772407,
+    "updated_at": 1790738942.125906,
+    "error": null,
+    "objects_recorded": {
+      "account": 5,
+      "item": 5,
+      "profile": 5
+    },
+    "remaining_posts": 0,
+    "processed_posts": 0,
+    "pending_jobs": 0,
+    "jobs": [],
+    "global_jobs": 0,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790739068.1894903,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [],
+    "embeddings": 0,
+    "evidence_rows": 0,
+    "processing": "complete"
+  },
+  {
+    "id": "test-20260930-0be380db6953",
+    "fingerprint": "619728e8a2331722714bfc48bb600ac3da048351cdb45ed26d62634e177c4a5e",
+    "dataset": "expanded",
+    "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+    "selection": {
+      "dataset": "expanded",
+      "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+      "percent": "1",
+      "seed": 42,
+      "topics": [
+        "astronomy_earth",
+        "buildings_water_energy",
+        "computing/data systems",
+        "cooking/food processing",
+        "ecology_agriculture",
+        "education_museums",
+        "libraries/archives",
+        "materials/manufacturing",
+        "music/audio",
+        "sports_outdoor",
+        "textiles_crafts_art",
+        "transport/logistics"
+      ],
+      "eligible_units": 300,
+      "selected_units": 3,
+      "unit": "scenarios",
+      "posts": 15,
+      "fingerprint": "619728e8a2331722714bfc48bb600ac3da048351cdb45ed26d62634e177c4a5e"
+    },
+    "state": "removed",
+    "created_at": 1790738762.894528,
+    "updated_at": 1790738948.2252848,
+    "error": null,
+    "objects_recorded": {
+      "account": 9,
+      "item": 15,
+      "profile": 9
+    },
+    "remaining_posts": 0,
+    "processed_posts": 0,
+    "pending_jobs": 0,
+    "jobs": [],
+    "global_jobs": 0,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790739068.1894903,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [],
+    "embeddings": 0,
+    "evidence_rows": 0,
+    "processing": "complete"
+  }
+]
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

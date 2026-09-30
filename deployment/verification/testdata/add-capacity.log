@@ -1,0 +1,125 @@
+{
+  "dataset": "capacity",
+  "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2",
+  "percent": "0.01",
+  "seed": 42,
+  "topics": [
+    "software_operations"
+  ],
+  "eligible_units": 50000,
+  "selected_units": 5,
+  "unit": "items",
+  "posts": 5,
+  "fingerprint": "6e8d16775390cdf565177e8866dccceb6aefd9a206841c44b226fbd8840cc26b"
+}
+UAT: add on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-0f91cb07382d: importing 5 items, 5 posts
+Batch test-20260930-0f91cb07382d: 1/5 posts imported
+Batch test-20260930-0f91cb07382d: 5/5 posts imported
+{
+  "id": "test-20260930-0f91cb07382d",
+  "fingerprint": "6e8d16775390cdf565177e8866dccceb6aefd9a206841c44b226fbd8840cc26b",
+  "dataset": "capacity",
+  "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2",
+  "selection": {
+    "dataset": "capacity",
+    "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2",
+    "percent": "0.01",
+    "seed": 42,
+    "topics": [
+      "software_operations"
+    ],
+    "eligible_units": 50000,
+    "selected_units": 5,
+    "unit": "items",
+    "posts": 5,
+    "fingerprint": "6e8d16775390cdf565177e8866dccceb6aefd9a206841c44b226fbd8840cc26b"
+  },
+  "state": "active",
+  "created_at": 1790738938.3772407,
+  "updated_at": 1790738939.0199769,
+  "error": null,
+  "objects_recorded": {
+    "account": 5,
+    "item": 5,
+    "profile": 5
+  },
+  "remaining_posts": 5,
+  "processed_posts": 0,
+  "pending_jobs": 10,
+  "jobs": [
+    {
+      "source_kind": "profile",
+      "source_id": "3838922e531048b191fdd99dc53bf5d6",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "ee0a99e3ffa1442ca5e780ad0fe82a33",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "3d3c9abeb10943acaa7ada0fff480c72",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "5cf08ed440fe4ef4bf8f9bb169fe290c",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "d2abafdefb52445ea1b645ea205b031a",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "6f3ed6b6a5d6419db27f5167b20cd883",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "5d99456bbb7e47b59a3b4da54d785663",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "7f9bc59b9c834577aa5c0bdf4707d8b2",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "80c6ba3d967f45a0b8c02e722ad0f0cb",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "d1c4aa77e2794b148ff82d063f222329",
+      "attempts": 0,
+      "error": null
+    }
+  ],
+  "global_jobs": 10,
+  "worker": {
+    "status": "running",
+    "worker_lease_until": 1790739057.7509034,
+    "backfill_kind": null
+  },
+  "worker_alive": true,
+  "findings": [],
+  "embeddings": 0,
+  "evidence_rows": 0,
+  "processing": "pending"
+}
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

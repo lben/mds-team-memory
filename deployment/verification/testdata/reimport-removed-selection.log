@@ -1,0 +1,95 @@
+{
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "percent": "20",
+  "seed": 42,
+  "topics": [
+    "astronomy"
+  ],
+  "eligible_units": 5,
+  "selected_units": 1,
+  "unit": "scenarios",
+  "posts": 3,
+  "fingerprint": "e3d2c835a61c28dd1795aa78d7fbccfb943a40450829d88b45042523d2dd9cd4"
+}
+UAT: add on mds@127.0.0.1:/home/mds/mds-uat
+Batch test-20260930-ef4e06d5c53c: importing 1 scenarios, 3 posts
+Batch test-20260930-ef4e06d5c53c: 1/3 posts imported
+Batch test-20260930-ef4e06d5c53c: 3/3 posts imported
+{
+  "id": "test-20260930-ef4e06d5c53c",
+  "fingerprint": "e3d2c835a61c28dd1795aa78d7fbccfb943a40450829d88b45042523d2dd9cd4",
+  "dataset": "cross-domain",
+  "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+  "selection": {
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "percent": "20",
+    "seed": 42,
+    "topics": [
+      "astronomy"
+    ],
+    "eligible_units": 5,
+    "selected_units": 1,
+    "unit": "scenarios",
+    "posts": 3,
+    "fingerprint": "e3d2c835a61c28dd1795aa78d7fbccfb943a40450829d88b45042523d2dd9cd4"
+  },
+  "state": "active",
+  "created_at": 1790738757.114783,
+  "updated_at": 1790738757.4163864,
+  "error": null,
+  "objects_recorded": {
+    "account": 2,
+    "item": 3,
+    "profile": 2
+  },
+  "remaining_posts": 3,
+  "processed_posts": 0,
+  "pending_jobs": 5,
+  "jobs": [
+    {
+      "source_kind": "profile",
+      "source_id": "6b1aa28261d847d0bdd9f807e272d2e6",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "profile",
+      "source_id": "8c6b0c6924074115806a20f243e7fac5",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "52b93891eba94f358a4bdabcd3587b45",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "0ff495bf93d94d4784d2a585dafb13b0",
+      "attempts": 0,
+      "error": null
+    },
+    {
+      "source_kind": "item",
+      "source_id": "da408d7f387d46e383a0f69b1709da01",
+      "attempts": 0,
+      "error": null
+    }
+  ],
+  "global_jobs": 5,
+  "worker": {
+    "status": "running",
+    "worker_lease_until": 1790738871.6893978,
+    "backfill_kind": null
+  },
+  "worker_alive": true,
+  "findings": [],
+  "embeddings": 0,
+  "evidence_rows": 0,
+  "processing": "pending"
+}
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

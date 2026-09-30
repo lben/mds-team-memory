@@ -2,7 +2,9 @@
 
 Branch: `gpt6.1solhigh_bge`, from `withgpt6.1solhigh` at `3aab705`.
 BGE implementation: `e06d70b`. Prior non-LLM evidence was committed before
-branch creation. All work remains local; no push or real UAT/PROD deployment.
+branch creation. At the time of this record, work was local with no push or
+real UAT/PROD deployment. Later TestData implementation and authorized GitHub
+publication are covered by [TestData verification](TESTDATA_VERIFICATION.md).
 
 **Deployment and functional checks pass; quality and capacity gates fail.**
 The real 24-case authored run completed its inference but failed expectations.

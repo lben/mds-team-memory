@@ -1,0 +1,190 @@
+{
+  "cli_status": "PASS",
+  "commands": [
+    {
+      "label": "final-workshop-current-status",
+      "arguments": [
+        "status",
+        "--batch",
+        "test-20260930-75d2270cccec"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 1.457991833005508
+    },
+    {
+      "label": "final-remove-workshop",
+      "arguments": [
+        "remove",
+        "--batch",
+        "test-20260930-75d2270cccec",
+        "--timeout",
+        "900"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 11.643534499999078
+    }
+  ],
+  "receipts_survived_update": [
+    {
+      "id": "test-20260930-0f91cb07382d",
+      "dataset": "capacity",
+      "state": "removed",
+      "created_at": 1790738938.3772407,
+      "error": null,
+      "percent": "0.01",
+      "selected_units": 5,
+      "posts": 5
+    },
+    {
+      "id": "test-20260930-0be380db6953",
+      "dataset": "expanded",
+      "state": "removed",
+      "created_at": 1790738762.894528,
+      "error": null,
+      "percent": "1",
+      "selected_units": 3,
+      "posts": 15
+    },
+    {
+      "id": "test-20260930-ef4e06d5c53c",
+      "dataset": "cross-domain",
+      "state": "removed",
+      "created_at": 1790738757.114783,
+      "error": null,
+      "percent": "20",
+      "selected_units": 1,
+      "posts": 3
+    },
+    {
+      "id": "test-20260930-55656cc2de5a",
+      "dataset": "cross-domain",
+      "state": "removed",
+      "created_at": 1790738622.2081099,
+      "error": null,
+      "percent": "100",
+      "selected_units": 5,
+      "posts": 11
+    }
+  ],
+  "workshop_processed": {
+    "id": "test-20260930-75d2270cccec",
+    "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d",
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "selection": {
+      "dataset": "cross-domain",
+      "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+      "percent": "100",
+      "seed": 42,
+      "topics": [
+        "workshop_maintenance"
+      ],
+      "eligible_units": 1,
+      "selected_units": 1,
+      "unit": "scenarios",
+      "posts": 4,
+      "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d"
+    },
+    "state": "active",
+    "created_at": 1790739288.8218918,
+    "updated_at": 1790739289.3320673,
+    "error": null,
+    "objects_recorded": {
+      "account": 4,
+      "item": 4,
+      "profile": 4
+    },
+    "remaining_posts": 4,
+    "processed_posts": 4,
+    "pending_jobs": 0,
+    "jobs": [],
+    "global_jobs": 0,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790739724.8374772,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [
+      {
+        "kind": "alias",
+        "state": "active",
+        "count": 1
+      },
+      {
+        "kind": "concept",
+        "state": "active",
+        "count": 1
+      },
+      {
+        "kind": "concept",
+        "state": "held",
+        "count": 6
+      },
+      {
+        "kind": "mention",
+        "state": "active",
+        "count": 1
+      },
+      {
+        "kind": "mention",
+        "state": "held",
+        "count": 3
+      }
+    ],
+    "embeddings": 4,
+    "evidence_rows": 16,
+    "processing": "complete"
+  },
+  "workshop_removed": {
+    "id": "test-20260930-75d2270cccec",
+    "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d",
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "selection": {
+      "dataset": "cross-domain",
+      "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+      "percent": "100",
+      "seed": 42,
+      "topics": [
+        "workshop_maintenance"
+      ],
+      "eligible_units": 1,
+      "selected_units": 1,
+      "unit": "scenarios",
+      "posts": 4,
+      "fingerprint": "d7611b901df2e70928ca86ef7db9f442d2c16f2e4c5fedc5ce56d1ecdf5cd56d"
+    },
+    "state": "removed",
+    "created_at": 1790739288.8218918,
+    "updated_at": 1790739616.2540376,
+    "error": null,
+    "objects_recorded": {
+      "account": 4,
+      "item": 4,
+      "profile": 4
+    },
+    "remaining_posts": 0,
+    "processed_posts": 0,
+    "pending_jobs": 0,
+    "jobs": [],
+    "global_jobs": 0,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790739744.8674908,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [],
+    "embeddings": 0,
+    "evidence_rows": 0,
+    "processing": "complete"
+  },
+  "model_expectation": {
+    "historical_fixture_expects_relationship": true,
+    "relationship_published": false,
+    "verdict": "FAIL"
+  }
+}

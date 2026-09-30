@@ -1,0 +1,20 @@
+WARN `--no-project` was provided, but no project was found
+CLI datasets PASS
+CLI preview PASS
+CLI preview-repeat PASS
+CLI prod-client-refusal PASS
+CLI prod-server-refusal PASS
+CLI add-astronomy PASS
+CLI duplicate-refusal PASS
+CLI wait-astronomy PASS
+CLI human-answer-refusal PASS
+CLI remove-astronomy PASS
+CLI remove-repeat PASS
+CLI reimport-removed-selection PASS
+CLI remove-reimport PASS
+CLI add-expanded PASS
+CLI wait-expanded PASS
+CLI add-capacity PASS
+CLI batches PASS
+CLI remove-all PASS
+TESTDATA_E2E_PASS

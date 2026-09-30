@@ -1,0 +1,4 @@
+UAT: batches on mds@127.0.0.1:/home/mds/mds-uat
+TestData failed: TestData requires a deployed UAT environment (MDS_ENVIRONMENT=uat). Run Update UAT first; PROD is refused.
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

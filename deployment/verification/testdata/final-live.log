@@ -1,0 +1,4 @@
+WARN `--no-project` was provided, but no project was found
+CLI final-workshop-current-status PASS
+CLI final-remove-workshop PASS
+FINAL_TESTDATA_CLI_PASS; WORKSHOP_MODEL_EXPECTATION=FAIL

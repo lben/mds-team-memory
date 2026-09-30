@@ -1,0 +1,4 @@
+UAT: remove on mds@127.0.0.1:/home/mds/mds-uat
+TestData failed: Preserving non-test contribution b9cd48400d574863b59c88747cc76195 attached to this batch; cleanup refused
+PASSWORD_PROMPT_COUNT 1
+WARN `--no-project` was provided, but no project was found

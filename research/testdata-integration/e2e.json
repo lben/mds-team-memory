@@ -1,0 +1,855 @@
+{
+  "status": "PASS",
+  "commands": [
+    {
+      "label": "datasets",
+      "arguments": [
+        "datasets"
+      ],
+      "exit": 0,
+      "password_prompts": 0,
+      "seconds": 0.102296707998903
+    },
+    {
+      "label": "preview",
+      "arguments": [
+        "UAT",
+        "preview",
+        "--dataset",
+        "expanded",
+        "--percent",
+        "25",
+        "--seed",
+        "42"
+      ],
+      "exit": 0,
+      "password_prompts": 0,
+      "seconds": 0.07580720900296001
+    },
+    {
+      "label": "preview-repeat",
+      "arguments": [
+        "preview",
+        "--dataset",
+        "expanded",
+        "--percent",
+        "25.0",
+        "--seed",
+        "42"
+      ],
+      "exit": 0,
+      "password_prompts": 0,
+      "seconds": 0.07578025000111666
+    },
+    {
+      "label": "prod-client-refusal",
+      "arguments": [
+        "PROD",
+        "batches"
+      ],
+      "exit": 1,
+      "password_prompts": 0,
+      "seconds": 0.07104770899604773
+    },
+    {
+      "label": "prod-server-refusal",
+      "arguments": [
+        "UAT",
+        "batches"
+      ],
+      "exit": 1,
+      "password_prompts": 1,
+      "seconds": 1.459428250003839
+    },
+    {
+      "label": "add-astronomy",
+      "arguments": [
+        "UAT",
+        "add",
+        "--dataset",
+        "cross-domain",
+        "--topics",
+        "astronomy",
+        "--percent",
+        "100",
+        "--seed",
+        "42"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 3.0786704999991343
+    },
+    {
+      "label": "duplicate-refusal",
+      "arguments": [
+        "add",
+        "--dataset",
+        "cross-domain",
+        "--topics",
+        "astronomy",
+        "--percent",
+        "100",
+        "--seed",
+        "42"
+      ],
+      "exit": 1,
+      "password_prompts": 1,
+      "seconds": 1.8684167090032133
+    },
+    {
+      "label": "wait-astronomy",
+      "arguments": [
+        "status",
+        "--batch",
+        "test-20260930-55656cc2de5a",
+        "--wait",
+        "--timeout",
+        "900"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 119.8068594159995
+    },
+    {
+      "label": "human-answer-refusal",
+      "arguments": [
+        "remove",
+        "--batch",
+        "test-20260930-55656cc2de5a",
+        "--timeout",
+        "900"
+      ],
+      "exit": 1,
+      "password_prompts": 1,
+      "seconds": 1.7637794999973266
+    },
+    {
+      "label": "remove-astronomy",
+      "arguments": [
+        "remove",
+        "--batch",
+        "test-20260930-55656cc2de5a",
+        "--timeout",
+        "900"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 5.845620625004813
+    },
+    {
+      "label": "remove-repeat",
+      "arguments": [
+        "remove",
+        "--batch",
+        "test-20260930-55656cc2de5a",
+        "--timeout",
+        "30"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 1.510246999998344
+    },
+    {
+      "label": "reimport-removed-selection",
+      "arguments": [
+        "add",
+        "--dataset",
+        "cross-domain",
+        "--topics",
+        "astronomy",
+        "--percent",
+        "20",
+        "--seed",
+        "42"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 2.1766435829995316
+    },
+    {
+      "label": "remove-reimport",
+      "arguments": [
+        "remove",
+        "--batch",
+        "test-20260930-ef4e06d5c53c",
+        "--timeout",
+        "900"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 3.657930209003098
+    },
+    {
+      "label": "add-expanded",
+      "arguments": [
+        "add",
+        "--dataset",
+        "expanded",
+        "--percent",
+        "1",
+        "--seed",
+        "42"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 2.994384584002546
+    },
+    {
+      "label": "wait-expanded",
+      "arguments": [
+        "status",
+        "--batch",
+        "test-20260930-0be380db6953",
+        "--wait",
+        "--timeout",
+        "900"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 171.95672170799662
+    },
+    {
+      "label": "add-capacity",
+      "arguments": [
+        "add",
+        "--dataset",
+        "capacity",
+        "--percent",
+        "0.01",
+        "--seed",
+        "42"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 2.9908760830003303
+    },
+    {
+      "label": "batches",
+      "arguments": [
+        "batches"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 1.4812993750019814
+    },
+    {
+      "label": "remove-all",
+      "arguments": [
+        "remove",
+        "--all-batches",
+        "--timeout",
+        "900"
+      ],
+      "exit": 0,
+      "password_prompts": 1,
+      "seconds": 11.772377084002073
+    }
+  ],
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "admin/concepts",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "search?q=HST",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "graph/global?show_weak=true",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "questions/a7de6e67818d42b396ded1f9811778ab/answers",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "items/b9cd48400d574863b59c88747cc76195",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "items/b9cd48400d574863b59c88747cc76195",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "search?q=HST",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "items/6e731384ebbb4d92bc1796d6fd9de0ea",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "admin/concepts",
+      "status": 200
+    }
+  ],
+  "astronomy_processed": {
+    "id": "test-20260930-55656cc2de5a",
+    "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac",
+    "dataset": "cross-domain",
+    "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+    "selection": {
+      "dataset": "cross-domain",
+      "dataset_sha256": "a8b8829f60b306bc4bd3cb4fb540ff2d5131881e782270de8c3feb5a3da6e6dd",
+      "percent": "100",
+      "seed": 42,
+      "topics": [
+        "astronomy"
+      ],
+      "eligible_units": 5,
+      "selected_units": 5,
+      "unit": "scenarios",
+      "posts": 11,
+      "fingerprint": "b8a9243886fe00d9239ba24dd788f8f346ee271c9dd2ae1a0cfb39627f0603ac"
+    },
+    "state": "active",
+    "created_at": 1790738622.2081099,
+    "updated_at": 1790738623.3361073,
+    "error": null,
+    "objects_recorded": {
+      "account": 10,
+      "item": 11,
+      "profile": 10
+    },
+    "remaining_posts": 11,
+    "processed_posts": 11,
+    "pending_jobs": 0,
+    "jobs": [],
+    "global_jobs": 0,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790738861.446188,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [
+      {
+        "kind": "alias",
+        "state": "active",
+        "count": 1
+      },
+      {
+        "kind": "alias_definition",
+        "state": "held",
+        "count": 1
+      },
+      {
+        "kind": "association",
+        "state": "weak",
+        "count": 1
+      },
+      {
+        "kind": "concept",
+        "state": "active",
+        "count": 5
+      },
+      {
+        "kind": "concept",
+        "state": "held",
+        "count": 18
+      },
+      {
+        "kind": "mention",
+        "state": "active",
+        "count": 6
+      },
+      {
+        "kind": "mention",
+        "state": "held",
+        "count": 5
+      },
+      {
+        "kind": "relationship",
+        "state": "active",
+        "count": 1
+      },
+      {
+        "kind": "relationship",
+        "state": "withdrawn",
+        "count": 1
+      }
+    ],
+    "embeddings": 11,
+    "evidence_rows": 56,
+    "processing": "complete"
+  },
+  "published_search": {
+    "query": "HST",
+    "terms": [
+      "hst"
+    ],
+    "concepts": [
+      {
+        "id": "6c13e446d8074b5c81073ac220427274",
+        "name": "Hubble Space Telescope"
+      }
+    ],
+    "items": [
+      {
+        "id": "0c372ae37982456fa5846888ae4342e1",
+        "kind": "note",
+        "question": null,
+        "body": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+        "visibility": "team",
+        "author": "TestData space_telescope_alias_and_instrument: alice",
+        "author_verified": true,
+        "author_id": "821f4fa6469c42c8825fe398336d7068",
+        "is_mine": false,
+        "parent_id": null,
+        "group_id": null,
+        "contributors": 1,
+        "group_size": 1,
+        "helped": 0,
+        "marked_helped": false,
+        "endorsements": 0,
+        "endorsed": false,
+        "endorsed_by_me": false,
+        "question_status": null,
+        "accepted_answer_id": null,
+        "evidence_revision": 1,
+        "acceptance_revision": 0,
+        "correction_state": null,
+        "source_document_id": null,
+        "source_passage_id": null,
+        "created_at": "2026-09-30T03:23:42.691565Z",
+        "updated_at": "2026-09-30T03:23:42.704887Z",
+        "type": "item",
+        "snippet": "The <mark>Hubble Space Telescope</mark> (<mark>HST</mark>) uses gyroscopes to measure changes in its orientation.",
+        "coverage": 1.0,
+        "score": 3.2634236406696484
+      },
+      {
+        "id": "89607622a3174f21b5bafcfee03848db",
+        "kind": "note",
+        "question": null,
+        "body": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+        "visibility": "team",
+        "author": "TestData space_telescope_alias_and_instrument: ben",
+        "author_verified": true,
+        "author_id": "d88c574a0f0d4ab39eacb7fa51b784ca",
+        "is_mine": false,
+        "parent_id": null,
+        "group_id": null,
+        "contributors": 1,
+        "group_size": 1,
+        "helped": 0,
+        "marked_helped": false,
+        "endorsements": 0,
+        "endorsed": false,
+        "endorsed_by_me": false,
+        "question_status": null,
+        "accepted_answer_id": null,
+        "evidence_revision": 1,
+        "acceptance_revision": 0,
+        "correction_state": null,
+        "source_document_id": null,
+        "source_passage_id": null,
+        "created_at": "2026-09-30T03:23:42.706594Z",
+        "updated_at": "2026-09-30T03:23:42.719322Z",
+        "type": "item",
+        "snippet": "For pointing control, the <mark>Hubble Space Telescope</mark> (<mark>HST</mark>) uses gyroscopes that detect its rotation.",
+        "coverage": 1.0,
+        "score": 3.1771336020629293
+      }
+    ],
+    "documents": [],
+    "scratchpad": []
+  },
+  "graph": {
+    "clusters": [
+      {
+        "id": "6c13e446d8074b5c81073ac220427274",
+        "label": "Hubble Space Telescope + 1 more",
+        "concepts": [
+          {
+            "id": "6c13e446d8074b5c81073ac220427274",
+            "name": "Hubble Space Telescope",
+            "size": 2
+          },
+          {
+            "id": "7407f18b15994556814860de7cbb7537",
+            "name": "gyroscopes",
+            "size": 2
+          }
+        ]
+      },
+      {
+        "id": "2e5ffe656dfb4e9f939064291e3670a2",
+        "label": "orbital mechanics",
+        "concepts": [
+          {
+            "id": "2e5ffe656dfb4e9f939064291e3670a2",
+            "name": "orbital mechanics",
+            "size": 3
+          }
+        ]
+      },
+      {
+        "id": "22deaecb104945179754a2be22571a4a",
+        "label": "Solar System",
+        "concepts": [
+          {
+            "id": "22deaecb104945179754a2be22571a4a",
+            "name": "Solar System",
+            "size": 2
+          }
+        ]
+      },
+      {
+        "id": "9a40580dfe394d34b5d83e54876b9abf",
+        "label": "Mars exploration",
+        "concepts": [
+          {
+            "id": "9a40580dfe394d34b5d83e54876b9abf",
+            "name": "Mars exploration",
+            "size": 2
+          }
+        ]
+      },
+      {
+        "id": "910781e8621e4b28bfbbe4deca3cfd26",
+        "label": "UAT Preservation Marker",
+        "concepts": [
+          {
+            "id": "910781e8621e4b28bfbbe4deca3cfd26",
+            "name": "UAT Preservation Marker",
+            "size": 1
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source": "6c13e446d8074b5c81073ac220427274",
+        "target": "7407f18b15994556814860de7cbb7537",
+        "label": "uses",
+        "style": "solid",
+        "state": "active",
+        "origin": "automatic",
+        "directed": true,
+        "count": 2,
+        "support_count": 2,
+        "policy_version": "grounded-cold-start-v12-bge",
+        "evidence": "2 independent supporting source groups. Automatic; active.",
+        "link_id": "50c22c1569b148e39a2c7ad5afdbf71a",
+        "finding_key": "f3d686186c9f34d5b314be261cb173eb3c4f0fc143227bbe4c750065f63afe9a",
+        "alternative_count": 2,
+        "conflicts": false
+      }
+    ],
+    "total_nodes": 6,
+    "total_edges": 1,
+    "omitted_nodes": 0,
+    "omitted_edges": 0
+  },
+  "expanded_import": {
+    "id": "test-20260930-0be380db6953",
+    "fingerprint": "619728e8a2331722714bfc48bb600ac3da048351cdb45ed26d62634e177c4a5e",
+    "dataset": "expanded",
+    "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+    "selection": {
+      "dataset": "expanded",
+      "dataset_sha256": "1db21c03d0dc0e74d69ac7dc3925054061a90b98e4d88c0b518ac3a8f7940d74",
+      "percent": "1",
+      "seed": 42,
+      "topics": [
+        "astronomy_earth",
+        "buildings_water_energy",
+        "computing/data systems",
+        "cooking/food processing",
+        "ecology_agriculture",
+        "education_museums",
+        "libraries/archives",
+        "materials/manufacturing",
+        "music/audio",
+        "sports_outdoor",
+        "textiles_crafts_art",
+        "transport/logistics"
+      ],
+      "eligible_units": 300,
+      "selected_units": 3,
+      "unit": "scenarios",
+      "posts": 15,
+      "fingerprint": "619728e8a2331722714bfc48bb600ac3da048351cdb45ed26d62634e177c4a5e"
+    },
+    "state": "active",
+    "created_at": 1790738762.894528,
+    "updated_at": 1790738764.0696728,
+    "error": null,
+    "objects_recorded": {
+      "account": 9,
+      "item": 15,
+      "profile": 9
+    },
+    "remaining_posts": 15,
+    "processed_posts": 0,
+    "pending_jobs": 24,
+    "jobs": [
+      {
+        "source_kind": "profile",
+        "source_id": "36fab776ca3b4d95b778fb949e530c65",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "9db3acab46f241cea596918b976c39b3",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "148153ffcc2c46118b16d66e73d70ee5",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "5bc9371151ce41069396de969ad85e3b",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "53b6f826a7cc4350b6b8438d2bbe5e89",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "054b33d63a3248fbac62416badbd8ca0",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "bdf00b4998824666a1b2021e66e914e1",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "fb51539fb62040b586168980f1aa34c7",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "bb64a07ae35640ae8a402170fcfe4647",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "43cdc385c2ed48eab45c71587e58ebaa",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "2f05ea5307ea400ea6e93d1f819b15d0",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "af824a107b4d43ad8622220ad3ce85c3",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "1a50e9d632d140bc866c75904518e60d",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "d106a7433dc64fedbdd55c033de63b4f",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "8402656347824f28bef4cfb50d67fa56",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "d57981834a0a4a1a98abfc504612c78c",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "595083915c6c47ca8f973f2c2c50d62d",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "4176c3de41174f63960ea3b7139998af",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "385dfcde463f48dbb07efd5ab02bd69e",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "b4053311319f47bb88b6e54f90c80d40",
+        "attempts": 0,
+        "error": null
+      }
+    ],
+    "global_jobs": 24,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790738883.2830613,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [],
+    "embeddings": 0,
+    "evidence_rows": 0,
+    "processing": "pending"
+  },
+  "capacity_import": {
+    "id": "test-20260930-0f91cb07382d",
+    "fingerprint": "6e8d16775390cdf565177e8866dccceb6aefd9a206841c44b226fbd8840cc26b",
+    "dataset": "capacity",
+    "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2",
+    "selection": {
+      "dataset": "capacity",
+      "dataset_sha256": "5299f74fb508c1077f763db7a1d0d53700f1b8167f77daa5ed92199f81f2b6c2",
+      "percent": "0.01",
+      "seed": 42,
+      "topics": [
+        "software_operations"
+      ],
+      "eligible_units": 50000,
+      "selected_units": 5,
+      "unit": "items",
+      "posts": 5,
+      "fingerprint": "6e8d16775390cdf565177e8866dccceb6aefd9a206841c44b226fbd8840cc26b"
+    },
+    "state": "active",
+    "created_at": 1790738938.3772407,
+    "updated_at": 1790738939.0199769,
+    "error": null,
+    "objects_recorded": {
+      "account": 5,
+      "item": 5,
+      "profile": 5
+    },
+    "remaining_posts": 5,
+    "processed_posts": 0,
+    "pending_jobs": 10,
+    "jobs": [
+      {
+        "source_kind": "profile",
+        "source_id": "3838922e531048b191fdd99dc53bf5d6",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "ee0a99e3ffa1442ca5e780ad0fe82a33",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "3d3c9abeb10943acaa7ada0fff480c72",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "5cf08ed440fe4ef4bf8f9bb169fe290c",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "d2abafdefb52445ea1b645ea205b031a",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "6f3ed6b6a5d6419db27f5167b20cd883",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "5d99456bbb7e47b59a3b4da54d785663",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "7f9bc59b9c834577aa5c0bdf4707d8b2",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "profile",
+        "source_id": "80c6ba3d967f45a0b8c02e722ad0f0cb",
+        "attempts": 0,
+        "error": null
+      },
+      {
+        "source_kind": "item",
+        "source_id": "d1c4aa77e2794b148ff82d063f222329",
+        "attempts": 0,
+        "error": null
+      }
+    ],
+    "global_jobs": 10,
+    "worker": {
+      "status": "running",
+      "worker_lease_until": 1790739057.7509034,
+      "backfill_kind": null
+    },
+    "worker_alive": true,
+    "findings": [],
+    "embeddings": 0,
+    "evidence_rows": 0,
+    "processing": "pending"
+  },
+  "integrity": {
+    "check": "ok",
+    "foreign_keys": [],
+    "test_objects_remaining": 0
+  },
+  "preserved": {
+    "post_id": "6e731384ebbb4d92bc1796d6fd9de0ea",
+    "concept_id": "910781e8621e4b28bfbbe4deca3cfd26",
+    "account": "testdata-admin"
+  }
+}
