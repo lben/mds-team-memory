@@ -49,7 +49,7 @@ def test_compressed_bundle_reassembles_and_verifies_all_models(tmp_path):
     wheels.mkdir()
     (wheels / "fixture-1-py3-none-any.whl").write_bytes(b"fixture")
     manifest = {"version": 1, "models": {}}
-    for role in ("extractor", "embeddings", "syntax", "verifier"):
+    for role in ("extractor", "embeddings", "syntax"):
         path = models / role / "weights"
         path.parent.mkdir(parents=True)
         path.write_bytes((role.encode() + b'\0') * 10000)
@@ -167,7 +167,7 @@ def test_native_ml_library_failure_blocks_setup_before_runtime_activation(tmp_pa
         calls.append(command)
         if command[1] == "venv":
             Path(command[-1]).mkdir(parents=True, exist_ok=True)
-        if "import torch, llama_cpp" in " ".join(command):
+        if "import torch, spacy" in " ".join(command):
             assert kwargs["env"]["UV_OFFLINE"] == "1"
             assert kwargs["env"]["HF_HUB_OFFLINE"] == "1"
             raise subprocess.CalledProcessError(1, command)
@@ -177,4 +177,4 @@ def test_native_ml_library_failure_blocks_setup_before_runtime_activation(tmp_pa
         deploylib.ml_setup(root, release, generation, managed, "/uv")
     assert not (release / "ml-runtime.json").exists()
     assert not (release / ".ml-venv").exists()
-    assert any("import torch, llama_cpp" in " ".join(command) for command in calls)
+    assert any("import torch, spacy" in " ".join(command) for command in calls)

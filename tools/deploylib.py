@@ -274,7 +274,7 @@ def ml_setup(root: Path, release: Path, generation: Path, managed_root: Path, uv
             # A worker can acquire its lease before lazily loading models.
             # Check native libraries before stopping the serving release.
             subprocess.run([str(runtime / "bin/python"), "-c",
-                            "import torch, llama_cpp, spacy; from gliner2 import AutoExtractor; "
+                            "import torch, spacy; from gliner2 import AutoExtractor; "
                             "from sentence_transformers import SentenceTransformer; "
                             "assert torch.version.cuda is None; print('Offline ML imports: OK')"],
                            check=True, env=env, cwd=release)

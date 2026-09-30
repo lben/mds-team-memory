@@ -40,6 +40,8 @@ def test_runtime_alias_and_conflict_records_retain_full_source_scope(monkeypatch
     if not with_roles:
         stages["alias_roles"]["raw"] = {"alias_definition": []}
     model = object.__new__(runtime.LocalModels)
+    # These tests isolate alias extraction, not BGE accuracy.
+    model.judge_eligibility = lambda *args: {"version": "synthetic", "margins": {}}
     model.entity_schema, model.relation_schema, model.alias_schema = "generic_entities", "relations", "alias_roles"
     model.manifest = {"models": MODELS}
     model.tokenizer = None

@@ -288,6 +288,8 @@ def test_actual_runtime_preserves_conflict_candidates_without_changing_raw_recor
 
     post = case["posts"][int(case["competing_phase"].split("_")[1]) - 1]
     model = object.__new__(runtime.LocalModels)
+    # Parser/extraction mechanics are independent of BGE accuracy.
+    model.judge_eligibility = lambda *args: {"version": "synthetic", "margins": {}}
     model.entity_schema, model.relation_schema, model.alias_schema = "generic_entities", "relations", "alias_roles"
     model.manifest = {"models": {"extractor": {"revision": "recorded-extractor"}, "syntax": {"revision": "recorded-syntax"}}}
     model.tokenizer = lambda body, **kwargs: {"offset_mapping": [m.span() for m in re.finditer(r"\S+", body)]}

@@ -124,14 +124,29 @@ def test_late_exact_definition_keeps_existing_id_and_score_ownership(make_client
         assert conflict.status_code == 400
         assert admin_client.get(f"/api/ml/findings/{full_key}").json()["canonical_id"] is None
         assert admin_client.put(f"/api/ml/findings/{alias_key}/decision", json={"mode": "suppressed"}).status_code == 200
-        assert full.casefold() not in terms()
         assert terms()[short.casefold()] == (original, True)
-        replay(items, records)
-        assert full.casefold() not in terms()
-        assert admin_client.put(f"/api/ml/findings/{alias_key}/decision", json={"mode": "automatic"}).status_code == 200
-        replay(items, records)
-        replay(items, records)
-        assert terms()[full.casefold()] == (original, False)
+        if case["id"] == "acronym_dev_002":
+            # Under BGE's frozen two-source 0.8 rule, the unchanged literal
+            # full-name scores independently qualify when its inverse alias is
+            # suppressed. That new canonical ID must never be silently merged.
+            assert full.casefold() not in terms()
+            replay(items, records)
+            separate = terms()[full.casefold()]
+            assert separate[1] and separate[0] != original
+            assert admin_client.get(f"/api/ml/findings/{alias_key}").json()["state"] == "suppressed"
+            assert admin_client.put(f"/api/ml/findings/{alias_key}/decision", json={"mode": "automatic"}).status_code == 200
+            replay(items, records)
+            assert terms()[full.casefold()] == separate
+            assert terms()[short.casefold()] == (original, True)
+            assert admin_client.get(f"/api/ml/findings/{alias_key}").json()["state"] == "held"
+        else:
+            assert full.casefold() not in terms()
+            replay(items, records)
+            assert full.casefold() not in terms()
+            assert admin_client.put(f"/api/ml/findings/{alias_key}/decision", json={"mode": "automatic"}).status_code == 200
+            replay(items, records)
+            replay(items, records)
+            assert terms()[full.casefold()] == (original, False)
     finally:
         cleanup(clients, items, case, records)
 

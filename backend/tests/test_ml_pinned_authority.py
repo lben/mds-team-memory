@@ -66,8 +66,8 @@ def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_cli
                     source = snapshot(db,'item',item)
                     adapter.apply_source(db,'item',item,source,copy.deepcopy(result),version,records[0]['original_metadata']['embedding_version'],1024)
                     db.commit()
-        def graph():
-            return [e for e in admin_client.get('/api/graph/global').json()['edges'] if {e['source'],e['target']} == {short,tail}]
+        def graph(source=None):
+            return [e for e in admin_client.get('/api/graph/global').json()['edges'] if {e['source'],e['target']} == {source or short,tail}]
         apply_relations()
         before = graph()
         assert len(before)==1 and before[0]['state']=='active', before
@@ -86,12 +86,27 @@ def test_pin_preserves_already_routed_graph_before_replay(make_client, admin_cli
         assert graph() == [], 'Releasing the pin must withdraw the now-unsupported identity immediately'
         apply_relations()
         assert graph() == []
-        assert admin_client.put(f'/api/ml/findings/{alias_key}/decision', json={'mode':'pinned'}).status_code == 200
-        apply_relations()
-        assert graph()[0]['state'] == 'active'
+        repin = admin_client.put(f'/api/ml/findings/{alias_key}/decision', json={'mode':'pinned'})
+        current_source = short
+        if include_entity_spans:
+            # Cached replay now independently qualifies the literal full name
+            # at the BGE two-source floor. Preserve that established ID rather
+            # than accepting a pin that silently fails to change its ownership.
+            current_source = terms()[full_key][0]
+            assert terms()[full_key][1] and current_source != short
+            assert repin.status_code == 400 and 'already used' in repin.json()['detail']
+            assert admin_client.get(f'/api/ml/findings/{alias_key}').json()['state'] != 'pinned'
+            assert graph() == []
+            # Settle the newly published concept's vocabulary backfill.
+            apply_relations()
+            assert graph(current_source)[0]['state'] == 'active'
+        else:
+            assert repin.status_code == 200
+            apply_relations()
+            assert graph()[0]['state'] == 'active'
         source_owner, source_id = extra[0]
         assert source_owner.put(f'/api/items/{source_id}', json={'body':'This relationship was removed.'}).status_code == 200
-        remaining = graph()
+        remaining = graph(current_source)
         assert not remaining or remaining[0]['state'] != 'active', 'An alias pin must not preserve deleted relationship evidence'
     finally:
         for client,item in extra:

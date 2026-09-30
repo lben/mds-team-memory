@@ -38,8 +38,8 @@ def checked_package():
     manifest = manifest_at(manifest_path)
     if record(manifest_path) != release["transfer_manifest"]:
         raise ValueError("The transfer manifest differs from the release package")
-    if set(manifest["metadata"].get("model_roles", [])) != {"extractor", "embeddings", "syntax", "verifier"}:
-        raise ValueError("The offline package must contain all four required model roles")
+    if set(manifest["metadata"].get("model_roles", [])) != {"extractor", "embeddings", "syntax"}:
+        raise ValueError("The offline package must contain the three required BGE model roles")
     print("Checking local model parts and deployment package...")
     stream_parts(manifest_path, manifest)
     for name, expected in release["files"].items():
@@ -164,9 +164,7 @@ def main(argv=None):
         if any(key in target.env for key in reserved):
             raise ValueError("Update manages MDS_DATA_DIR, MDS_ML_ROOT and MDS_ML_GENERATION; remove these from [target.env]")
         target.env.update(reserved)
-        # The portable CPU wheel has a slower cold verifier initialization.
-        # Keep a finite deadline, with an operator override in the same TOML.
-        target.env.setdefault("MDS_ML_LOAD_TIMEOUT_SECONDS", "1800")
+        target.env.setdefault("MDS_ML_LOAD_TIMEOUT_SECONDS", "300")
         print(f"Updating {target.name.upper()} at {target.host}:{target.root}")
         target.session = Session(target, known_hosts)
         bootstrap(target, directory, package)

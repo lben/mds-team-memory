@@ -1,6 +1,0 @@
-FROM mds-ml-compat:ubi8.10
-USER root
-RUN yum install -y gcc gcc-c++ make && yum clean all
-USER 10001:10001
-ENV CMAKE_ARGS="-DGGML_NATIVE=OFF -DGGML_AVX=OFF -DGGML_AVX2=OFF -DGGML_AVX512=OFF -DGGML_FMA=OFF -DGGML_F16C=OFF -DGGML_OPENMP=OFF -DGGML_LLAMAFILE=OFF -DCMAKE_CXX_STANDARD_LIBRARIES=-lstdc++fs" CMAKE_BUILD_PARALLEL_LEVEL=4
-RUN uv run --no-project --python 3.12.14 --with pip python -m pip wheel --no-deps --wheel-dir /home/mds/wheels llama-cpp-python==0.3.35

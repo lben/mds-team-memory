@@ -37,7 +37,7 @@ NEGATION = re.compile(r"\b(?:not|never|no longer|without|cannot|can['’]t|doesn
 UNCERTAIN = re.compile(r"\b(?:if|might|may|could|should|would|perhaps|propos\w*|plan|plans|planned|planning|consider\w*|hypothetical)\b", re.I)
 GENERIC = frozenset("system service component project application software technology database data process team user server client request response event events code issue problem solution example information documentation work".split())
 # Bump for extraction behavior changes outside the schema, such as grounding or windowing.
-EXTRACTION_VERSION = "grounded-spans-v11"
+EXTRACTION_VERSION = "grounded-spans-v12-bge"
 
 
 def inference_version(models):
@@ -247,6 +247,9 @@ class LocalModels:
         self.extractor.eval()
         self.embedding = SentenceTransformer(str(directory / "embeddings"), device="cpu", local_files_only=True, trust_remote_code=False)
         self.embedding.max_seq_length = 512
+        from .eligibility import Relevance
+
+        self.relevance = Relevance(self.embedding)
         self.entity_schema = self.extractor.create_schema().entities(ENTITIES)
         self.relation_schema = self.extractor.create_schema().relations(RELATIONS)
         self.syntax = None
@@ -266,6 +269,7 @@ class LocalModels:
 
     def analyze(self, text):
         concepts, endpoints, relations, chunks = {}, {}, {}, []
+        source_vectors = {}
         definitions, conflicts = [], []
         source_scope = relation_syntax.SourceScope(text) if self.syntax is not None else None
         parser_ran = False
@@ -338,6 +342,7 @@ class LocalModels:
                         "rule": candidate["rule"], "source_text_hash": digest(text)})
             vector = self.embedding.encode(body, normalize_embeddings=True, batch_size=1,
                                            show_progress_bar=False, convert_to_numpy=True)
+            source_vectors[body] = vector
             chunks.append({"start": start, "end": end, "vector": vector.astype("<f4").tobytes()})
         # Relation confidence is not entity confidence. Retain omitted names as
         # corroboration, preserving entity evidence wherever that pass found it.
@@ -356,4 +361,13 @@ class LocalModels:
             result.update(conflict_definitions=conflicts, conflict_coverage_revision=syntax.CONFLICT_REVISION)
         if parser_ran:
             result["relation_guard_revision"] = relation_syntax.REVISION
+        from .eligibility import candidates
+
+        result["eligibility"] = self.judge_eligibility(text, candidates(text, result["concepts"]), source_vectors)
         return result
+
+    def judge_eligibility(self, text, names, source_vectors=None):
+        from .eligibility import version
+
+        return {"version": version(self.manifest["models"]),
+                "margins": self.relevance.scores(text, names, source_vectors)}

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Maintainer-only: freeze the checked-in offline package for the Update CLI.
 
-Build frontend/dist first. Supply verified Linux wheels (including the portable
-llama-cpp-python build) and a Linux-created bootstrap archive with Python/uv.
+Build frontend/dist first. Supply verified Linux wheels and a Linux-created
+bootstrap archive with Python/uv. BGE shares the existing embedding checkpoint.
 Normal deployment needs only the completed package, not this preparation tool.
 """
 
@@ -24,13 +24,14 @@ def main():
     parser.add_argument("--models", type=Path, required=True)
     parser.add_argument("--wheels", type=Path, required=True)
     parser.add_argument("--bootstrap", type=Path, required=True)
+    parser.add_argument("--work-dir", type=Path, default=ROOT / "build/update-package")
     args = parser.parse_args()
     directory = ROOT / "deployment"
-    work = ROOT / "build/update-package"
+    work = args.work_dir
     archive = work / "offline-models.tar.gz"
     models, _ = model_files(args.models)
-    if set(models["models"]) != {"extractor", "embeddings", "syntax", "verifier"}:
-        raise ValueError("A complete four-model generation is required")
+    if set(models["models"]) != {"extractor", "embeddings", "syntax"}:
+        raise ValueError("A complete three-model BGE generation is required")
     directory.mkdir(exist_ok=True)
     if archive.exists() or (directory / "offline").exists():
         raise ValueError("Use a new clean output; do not overwrite an existing frozen package")

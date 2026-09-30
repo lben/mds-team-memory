@@ -11,7 +11,7 @@ SQLite 3.53.1, which contains the WAL-reset fix. Commands run as UID 10001.
 The compatibility image is about 351 MB before application or model dependencies.
 
 The current Docker Desktop engine has about 5.8 GiB RAM available. The complete
-four-model checks use a 5 GiB container limit without changing global Docker
+three-model BGE checks use a 5 GiB container limit without changing global Docker
 settings. Run heavy inference checks sequentially to avoid host-memory pressure.
 The planned worker
 ceiling of 8 GiB needs a host with sufficient assigned memory.
@@ -52,8 +52,8 @@ docker run --rm --platform linux/amd64 \
 Check the generated file before replacing `tools/ml-container/requirements-linux.lock`.
 
 Prepare a complete generation with `tools/ml_prepare.py` before testing. The
-worker requires extraction, embedding, syntax, and verifier assets; a historical
-two-model generation is incomplete. To exercise all four models with network
+worker requires extraction, embedding and syntax assets. A historical Qwen
+four-role generation must be replaced using Update. To exercise all three models with network
 access disabled, mount the repository so the check uses the actual application
 runtime:
 
@@ -67,7 +67,7 @@ docker run --rm --platform linux/amd64 --network none \
 
 This verifies the asset hashes, model loading, source span offsets, finite
 normalized 1,024-element embeddings, and an actual parser-corroborated alias
-record. It is a compatibility smoke check, not a quality evaluation. Rebuild
+record, plus finite BGE relevance scores from the same encoder. It is a compatibility smoke check, not a quality evaluation. Rebuild
 an older image if it lacks the pinned spaCy dependencies; passing unit tests
 alone does not prove the full inference environment is installed.
 
@@ -86,18 +86,9 @@ docker run --rm --platform linux/amd64 --network none \
   mds-ml-tests:ubi8.10 python -m pytest backend/tests -q -p no:cacheprovider
 ```
 
-## Portable verifier wheel for offline Update
+## BGE deployment
 
-`Dockerfile.verifier` builds llama-cpp-python 0.3.35 on the pinned UBI 8.10
-compatibility image. It disables native/AVX extensions and links GCC 8's
-`stdc++fs` support explicitly. Its wheel hash is pinned in the Linux lock;
-normal Update runs install this wheel without compilers or network access.
-
-```sh
-docker build --platform linux/amd64 -t mds-update-wheel:ubi8.10 \
-  -f tools/ml-container/Dockerfile.verifier .
-```
-
-The four-model compatibility helper checks a finite verifier margin in a
-separate process before loading the extractor/embeddings/parser. Update also
-checks native-library imports before stopping an existing release.
+The offline Update package uses the same pinned BGE weights for search embeddings
+and source/name cosine relevance. No llama.cpp build or LLM checkpoint is needed.
+Update checks native-library imports before stopping an existing release. See
+[deployment verification](../../deployment/BGE_VERIFICATION.md) for current results.

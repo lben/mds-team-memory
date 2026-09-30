@@ -80,6 +80,11 @@ def decide(key: str, decision: Decision, admin: Account = Depends(require_admin)
         if alias and json.loads(alias.payload).get("direction") == "inverse":
             owner = db.get(Concept, term.concept_id)
             raise HTTPException(400, f"'{term.display}' is already used by the concept '{owner.name if owner else '?'}'")
+    if decision.mode == "pinned" and row.kind == "alias":
+        term = db.query(ConceptTerm).filter_by(term=adapter.normalize(payload["alias"])).first()
+        if term and term.concept_id != payload["concept_id"]:
+            owner = db.get(Concept, term.concept_id)
+            raise HTTPException(400, f"'{term.display}' is already used by the concept '{owner.name if owner else '?'}'")
     fixed = db.get(Override, key)
     if decision.mode == "automatic":
         if fixed:

@@ -37,6 +37,8 @@ def test_alias_pass_uses_existing_windows_without_promoting_role_scores(monkeypa
 
     text = "preface " * 180 + "MP denotes Meridian photometer." + " notes" * 210
     model = object.__new__(runtime.LocalModels)
+    # These tests isolate alias extraction, not BGE accuracy.
+    model.judge_eligibility = lambda *args: {"version": "synthetic", "margins": {}}
     model.entity_schema, model.relation_schema, model.alias_schema = "entities", "relations", "aliases"
     model.manifest = {"models": {"extractor": {"revision": "extractor"}, "syntax": {"revision": "syntax"}}}
     model.tokenizer = lambda body, **kwargs: {"offset_mapping": [m.span() for m in re.finditer(r"\S+", body)]}

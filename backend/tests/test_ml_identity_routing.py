@@ -177,7 +177,7 @@ def test_short_form_judged_alone_does_not_hold_back_its_concept_and_alias(make_c
     client = clients['alice']
     # Only the last post supports the concept: its strongest span is the short
     # form, which the eligibility check rejects alone, beside the accepted name.
-    judged = {items[4]: {'tindex': -2.0, 'threaded index': 20.0}}
+    judged = {items[4]: {'tindex': 0.2, 'threaded index': 0.99}}
     try:
         for item, record in zip(items, records):
             apply(item, record, margins=judged.get(item, {}))

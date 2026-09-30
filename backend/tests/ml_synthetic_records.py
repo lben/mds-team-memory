@@ -38,7 +38,7 @@ def judged(result, text):
     from app.ml.runtime import normalize
 
     result['eligibility'] = {'version': 'synthetic', 'margins': {
-        normalize(name): 10.0 for name, _ in eligibility.candidates(text, result['concepts'])}}
+        normalize(name): 1.0 for name, _ in eligibility.candidates(text, result['concepts'])}}
     return result
 
 

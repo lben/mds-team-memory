@@ -44,6 +44,8 @@ def analyze(post, monkeypatch, control=None):
         for pair in stages['alias_roles']['raw'].get('alias_definition', []):
             pair['short_name']['start'] += 1
     model = object.__new__(runtime.LocalModels)
+    # Parser/extraction mechanics are independent of BGE accuracy.
+    model.judge_eligibility = lambda *args: {"version": "synthetic", "margins": {}}
     model.entity_schema, model.relation_schema, model.alias_schema = 'generic_entities', 'relations', 'alias_roles'
     model.manifest = {'models': MODELS}
     model.tokenizer = lambda body, **kwargs: {'offset_mapping': [m.span() for m in re.finditer(r'\S+', body)]}

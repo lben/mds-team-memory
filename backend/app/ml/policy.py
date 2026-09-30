@@ -1,17 +1,21 @@
 """Fixed conservative decisions; raw encoder scores are not probabilities."""
 
-import math
 import re
 
 from . import syntax
 from .runtime import inference_version, specific_name
 
 
-VERSION = "grounded-cold-start-v11"
-# Concept evidence counts only after the eligibility model judged that source's
-# name substantive. Selected with the thresholds below by leave-one-domain-out
-# development screening (ML_CURRENT_STATUS.md, September 27 batch 2).
-MIN_ELIGIBILITY_MARGIN = 4.0
+VERSION = "grounded-cold-start-v12-bge"
+# Cosine is relevance, not proof of substantiveness. Selected once on the
+# spent development corpus before application tests; quality targets unchanged.
+# eligibility_margin remains the JSON field name for storage compatibility.
+MIN_ELIGIBILITY_MARGIN = 0.6423084735870361
+
+
+def relevant(evidence):
+    score = evidence.get("eligibility_margin")
+    return type(score) in (int, float) and MIN_ELIGIBILITY_MARGIN <= score <= 1.0
 
 
 def acronym_definitions(text):
@@ -68,12 +72,12 @@ def decide(kind, evidence):
     if kind == "concept":
         grounded = [row for row in positive if row.get("grounded", False)]
         # Unchecked or rejected names stay held; their extraction score is kept for review.
-        supported = [row for row in grounded if (row.get("eligibility_margin") or -math.inf) >= MIN_ELIGIBILITY_MARGIN]
+        supported = [row for row in grounded if relevant(row)]
         groups, _ = independent_support(supported)
         # Relation endpoints can corroborate presence, but cannot supply the
         # entity-score requirement: their confidence belongs to the relation.
         strong = max((row["raw_score"] for row in supported if row.get("label") != "relation endpoint"), default=0.0)
-        active = strong >= 0.995 or (groups >= 2 and strong >= 0.9)
+        active = strong >= 0.995 or (groups >= 2 and strong >= 0.8)
         score = max((row["raw_score"] for row in grounded if row.get("label") != "relation endpoint"), default=0.0)
         return ("active" if active else "held"), score
     if kind == "mention":

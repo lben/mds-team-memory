@@ -1,50 +1,32 @@
-"""Concept eligibility: is an extracted name a substantive subject of its source?
+"""Concept relevance from the existing BGE encoder; no generative model.
 
-An entity extractor finds names; it cannot judge whether the text treats a name
-as a reusable subject of knowledge or mentions it in passing. A local
-instruction model answers one fixed Yes/No question per candidate. Nothing is
-generated: the decision signal is the next-token logit margin of "Yes" over
-"No". The llama.cpp runtime is imported only by the separately limited
-verification process.
+The signal is cosine similarity between a source and a candidate's name. It is
+semantic relevance, not a probability or proof that the name is substantive.
+Quality acceptance remains separate from this inference contract.
 """
 
 import hashlib
 import json
-import math
+import re
 
-from . import resolution
-from .runtime import DESCRIPTOR_SUFFIX, named_part, normalize, specific_name
+from .runtime import DESCRIPTOR_SUFFIX, named_part, normalize, specific_name, windows
 
-DEFINITION = """You audit concept names that another model extracted from a team knowledge-base post.
-
-A concept is a distinct, reusable subject of knowledge: a named entity, a domain topic, a method or process, a tool or artifact, a phenomenon, or a material or substance. It does not need to be a proper noun or be familiar outside its domain.
-
-Accept a candidate only when BOTH conditions hold:
-1. The candidate, exactly as written, names a specific identifiable subject whose meaning is clear from the post alone. Reject generic words without an identifiable domain sense, arbitrary descriptive fragments, measurements, quantities and values, formatting or configuration values, and names missing words needed to identify the subject.
-2. The post treats that subject substantively: it explains the subject's behavior or role, asks about it, compares it, reports an outcome about it, or uses it as a meaningful participant in a domain claim. Mere occurrence is not enough: a subject that only appears as an incidental circumstance, setting, occasion or background detail does not qualify.
-
-A question, denial, quotation or hypothetical can still discuss a substantive subject."""
-SYSTEM_PREFIX = f"<|im_start|>system\n{DEFINITION}<|im_end|>\n<|im_start|>user\n"
-QUESTION = ("Candidate: {name}\n\nIs this candidate an acceptable concept under both conditions? "
-            "Answer Yes or No.<|im_end|>\n<|im_start|>assistant\n")
-CONTEXT_TOKENS = 2048
-# System prompt and question use roughly 400 tokens of the 2,048-token context.
-POST_TOKENS = 1400
-# Candidate names depend on the descriptor rule, so a rule change is rechecked.
-FINGERPRINT = hashlib.sha256(json.dumps([DEFINITION, QUESTION, CONTEXT_TOKENS, POST_TOKENS,
-                                         DESCRIPTOR_SUFFIX.pattern]).encode()).hexdigest()[:16]
+CONTEXT_TOKENS = 512
+WINDOW_OVERLAP = 64
+FINGERPRINT = hashlib.sha256(json.dumps([
+    "bge-source-name-cosine-v1", CONTEXT_TOKENS, WINDOW_OVERLAP,
+    "candidate-containing-windows-max", DESCRIPTOR_SUFFIX.pattern,
+]).encode()).hexdigest()[:16]
 
 
 def version(models):
-    return f"{models['verifier']['revision']}:{FINGERPRINT}"
-
-
-def post(body):
-    return f"Post:\n<<<\n{body}\n>>>\n\n"
+    return f"bge:{models['embeddings']['revision']}:{FINGERPRINT}"
 
 
 def candidates(text, spans):
-    """Every name that can become concept evidence for this source, with one position each."""
+    """Every name that can become concept evidence, with its source position."""
+    from . import resolution
+
     found = {}
     spans = [named_part(span) for span in spans]
     for span in [*spans, *resolution.definitions(text, spans)]:
@@ -54,55 +36,54 @@ def candidates(text, spans):
     return [[name, start] for name, start in found.values()]
 
 
-class Verifier:
-    def __init__(self, path):
-        from llama_cpp import Llama
+class Relevance:
+    """Share LocalModels.embedding rather than loading a second checkpoint."""
 
-        self.llm = Llama(model_path=str(path), n_ctx=CONTEXT_TOKENS, n_threads=4, n_threads_batch=4,
-                         n_gpu_layers=0, seed=0, verbose=False)
-        self.system = self._tokens(SYSTEM_PREFIX)
-        yes, no = self._tokens("Yes"), self._tokens("No")
-        if len(yes) != 1 or len(no) != 1:
-            raise ValueError("The verifier vocabulary must encode Yes and No as single tokens")
-        self.yes, self.no = yes[0], no[0]
-        self.llm.reset()
-        self.llm.eval(self.system)
+    def __init__(self, embedding):
+        self.embedding = embedding
 
-    def _tokens(self, text):
-        return self.llm.tokenize(text.encode(), add_bos=False, special=True)
-
-    def _margin(self, prefix_length, question):
+    def scores(self, text, names, source_vectors=None):
         import numpy as np
 
-        self.llm.n_tokens = prefix_length
-        self.llm.eval(self._tokens(question))
-        # llama-cpp-python keeps only the final position's logits unless every
-        # position is retained; read them directly from the context.
-        logits = np.ctypeslib.as_array(self.llm._ctx.get_logits(), shape=(self.llm.n_vocab(),))
-        margin = float(logits[self.yes]) - float(logits[self.no])
-        if not math.isfinite(margin):
-            raise ValueError("Non-finite eligibility margin")
-        return margin
-
-    def _prefix(self, body):
-        self.llm.n_tokens = len(self.system)
-        self.llm.eval(self._tokens(post(body)))
-        return self.llm.n_tokens
-
-    def margins(self, text, names):
-        """Map normalized candidate names to margins; long sources use a window around each name."""
+        if not names:
+            return {}
+        source_vectors = source_vectors or {}
+        specials = self.embedding.tokenizer.num_special_tokens_to_add(pair=False)
+        budget = min(CONTEXT_TOKENS, self.embedding.max_seq_length) - specials
+        if budget <= WINDOW_OVERLAP:
+            raise ValueError("BGE context is too small for eligibility windows")
+        pieces = list(windows(text, self.embedding.tokenizer, budget, overlap=WINDOW_OVERLAP))
+        if not pieces:
+            raise ValueError("Eligibility names require a nonempty source")
+        selections = {}
+        for name, position in names:
+            if not isinstance(name, str) or not isinstance(position, int):
+                raise ValueError("Invalid eligibility candidate")
+            occurrences = [(m.start(), m.end()) for m in re.finditer(re.escape(name), text, re.I)]
+            matching = [i for i, (start, end, _) in enumerate(pieces)
+                        if any(start <= left and right <= end for left, right in occurrences)]
+            if not matching:
+                raise ValueError(f"Eligibility candidate is not contained in its source: {name}")
+            selections[normalize(name)] = matching
+        needed = sorted({i for indices in selections.values() for i in indices})
+        vectors = {}
+        missing = []
+        for i in needed:
+            body = pieces[i][2]
+            if body in source_vectors:
+                vectors[i] = np.asarray(source_vectors[body], dtype=np.float32)
+            else:
+                missing.append(i)
+        if missing:
+            encoded = self.embedding.encode([pieces[i][2] for i in missing], normalize_embeddings=True,
+                                            batch_size=16, show_progress_bar=False, convert_to_numpy=True)
+            vectors.update(zip(missing, encoded))
+        candidate_vectors = self.embedding.encode([name for name, _ in names], normalize_embeddings=True,
+                                                 batch_size=16, show_progress_bar=False, convert_to_numpy=True)
         result = {}
-        if len(self._tokens(post(text))) <= POST_TOKENS:
-            shared = self._prefix(text)
-            for name, _ in names:
-                result[normalize(name)] = self._margin(shared, QUESTION.format(name=name))
-            return result
-        for name, start in names:
-            radius = 4000
-            while True:
-                window = text[max(0, start - radius):start + len(name) + radius]
-                if len(self._tokens(post(window))) <= POST_TOKENS or radius <= 200:
-                    break
-                radius //= 2
-            result[normalize(name)] = self._margin(self._prefix(window), QUESTION.format(name=name))
+        for (name, _), vector in zip(names, candidate_vectors):
+            score = max(float(vectors[i] @ vector) for i in selections[normalize(name)])
+            if not np.isfinite(score) or not -1.00001 <= score <= 1.00001:
+                raise ValueError("Invalid BGE eligibility cosine")
+            result[normalize(name)] = min(1.0, max(-1.0, score))
         return result

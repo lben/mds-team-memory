@@ -64,21 +64,32 @@ time.sleep(60)
     time.sleep(60)
 
 
-def eligibility_child(connection, assets):
-    """Stands in for the llama.cpp verifier: rejects names containing "Cell", fails on "Fragile"."""
-    from app.ml import eligibility
-    from app.ml.runtime import normalize
+def shared_bge_child(connection, assets):
+    """Synthetic extraction + relevance in one actual supervised process."""
+    from app.ml import eligibility, relation_syntax, syntax
+    from app.ml.runtime import inference_version, normalize
+    from ml_relation_helpers import analyze as _analyze, span as _span
 
     models = json.loads((Path(assets) / "models.json").read_text())["models"]
-    connection.send(("ready", eligibility.version(models), "", 0))
+    connection.send(("ready", inference_version(models), models["embeddings"]["revision"], 1024))
     while True:
         request = connection.recv()
-        with (Path(assets) / "verifier-requests.jsonl").open("a") as log:
-            log.write(json.dumps(request) + "\n")
-        if "Fragile" in request["text"]:
-            raise RuntimeError("Test verifier failure")
-        connection.send(("result", {normalize(name): -3.0 if "Cell" in name else 9.0
-                                    for name, _ in request["candidates"]}))
+        body = request["text"] if isinstance(request, dict) else request
+        with (Path(assets) / "bge-requests.jsonl").open("a") as log:
+            log.write(json.dumps({"text": body, "pid": os.getpid(), "eligibility_only": isinstance(request, dict)}) + "\n")
+        if "Fragile" in body:
+            raise RuntimeError("Test relevance failure")
+        names = request["candidates"] if isinstance(request, dict) else [
+            [name, body.index(name)] for name in ("Citrine Pump", "Emerald Cell", "Sturdy Pump") if name in body]
+        judgment = {"version": eligibility.version(models), "margins": {
+            normalize(name): .3 if "Cell" in name else .99 for name, _ in names}}
+        if isinstance(request, dict):
+            result = judgment
+        else:
+            result = _analyze(body, [_span(body, name, score=.999) for name, _ in names], {}, full=True)
+            result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION,
+                          relation_guard_revision=relation_syntax.REVISION, eligibility=judgment)
+        connection.send(("result", result))
 
 
 def process_ended(pid):
@@ -338,7 +349,10 @@ def test_policy_upgrade_reselects_literal_evidence_from_cache(worker_store, monk
                       guard=DeclaredGuard(body, [declaration(body, names[0], "uses", names[1],
                                                             end=body.index(".") + 1)]))
     result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION)
-    version = inference_version(json.loads((assets / "models.json").read_text())["models"])
+    models = json.loads((assets / "models.json").read_text())["models"]
+    version = inference_version(models)
+    from app.ml import eligibility
+    result["eligibility"]["version"] = eligibility.version(models)
     adapter.bootstrap(db)
     adapter.apply_source(db, "item", source.id, source, result, version, "old", 1024)
     stored = (db.query(Evidence).join(Finding, Finding.key == Evidence.finding_key)
@@ -606,14 +620,15 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
     """Run the real queue and supervisor with supplied extraction, not quality evidence."""
     import threading
     from sqlalchemy import text
-    from app.ml import api, queue, relation_syntax, syntax, worker
+    from app.ml import api, eligibility, queue, relation_syntax, syntax, worker
     from app.ml.models import Finding
     from app.ml.runtime import inference_version
     from app.models import Account
 
     db, path, assets = worker_store
     names = ("Signal Routing Controller", "Storage Recovery Catalog")
-    metadata = (inference_version(json.loads((assets / "models.json").read_text())["models"]), "old", 1024)
+    models = json.loads((assets / "models.json").read_text())["models"]
+    metadata = (inference_version(models), "old", 1024)
 
     class FixedExtraction:
         calls = 0
@@ -623,12 +638,14 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
             from ml_synthetic_records import judged
 
             self.calls += 1
-            return judged({"concepts": [{"name": name, "start": body.index(name),
+            result = judged({"concepts": [{"name": name, "start": body.index(name),
                     "end": body.index(name) + len(name), "score": 0.96, "label": "named entity"}
                     for name in names if name in body], "relations": [], "chunks": [],
                     "corroborated_definitions": [], "conflict_definitions": [],
                     "conflict_coverage_revision": syntax.CONFLICT_REVISION,
-                    "relation_guard_revision": relation_syntax.REVISION}, body), metadata
+                    "relation_guard_revision": relation_syntax.REVISION}, body)
+            result["eligibility"]["version"] = eligibility.version(models)
+            return result, metadata
 
         def check_memory(self):
             self.iterations += 1
@@ -695,7 +712,7 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
     assert db.execute(text("SELECT concept_id FROM concept_terms WHERE term='src'")).scalar_one() == concepts[names[0]]
 
 
-def test_concepts_publish_only_after_eligibility_with_one_model_set_loaded(worker_store):
+def test_bge_extraction_and_cached_relevance_share_one_process_and_recheck_model_changes(worker_store):
     import threading
     from sqlalchemy import text
     from app.ml import adapter, eligibility, policy, queue, relation_syntax, syntax, worker
@@ -705,91 +722,48 @@ def test_concepts_publish_only_after_eligibility_with_one_model_set_loaded(worke
 
     db, path, assets = worker_store
     manifest = json.loads((assets / "models.json").read_text())
-    manifest["models"]["verifier"] = {"revision": "verifier-a"}
-    (assets / "models.json").write_text(json.dumps(manifest))
     version = inference_version(manifest["models"])
-
-    def extraction(body):
-        result = _analyze(body, [_span(body, name, score=.999) for name in ("Citrine Pump", "Emerald Cell")], {}, full=True)
-        result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION,
-                      relation_guard_revision=relation_syntax.REVISION)
-        del result["eligibility"]  # extraction alone carries no judgment
-        return result
-
-    cached_body, fresh_body = "Citrine Pump drives the Emerald Cell loop.", "Citrine Pump replaced the Emerald Cell valve."
+    cached_body = "Citrine Pump drives the Emerald Cell loop."
+    result = _analyze(cached_body, [_span(cached_body, name, score=.999) for name in ("Citrine Pump", "Emerald Cell")], {}, full=True)
+    result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION,
+                  relation_guard_revision=relation_syntax.REVISION)
+    # A historical Qwen identity must not be reused as BGE judgment.
+    result["eligibility"] = {"version": "qwen:historical", "margins": {"citrine pump": 9.0, "emerald cell": 9.0}}
     adapter.bootstrap(db)
-    adapter.apply_source(db, "item", "cached", add_source(db, "cached", body=cached_body),
-                         extraction(cached_body), version, "old", 1024)
-    add_source(db, "fresh", body=fresh_body)
+    adapter.apply_source(db, "item", "cached", add_source(db, "cached", body=cached_body), result, version, "old", 1024)
+    add_source(db, "fresh", body="Citrine Pump replaced the Emerald Cell valve.")
     db.execute(text("DELETE FROM ml_jobs"))
     queue.enqueue(db, "item", "fresh")
     db.execute(text("UPDATE ml_state SET pipeline_version=:version WHERE id=1"), {"version": version + ":" + policy.VERSION})
 
-    def states():
-        db.expire_all()
-        return dict(db.execute(text("SELECT json_extract(payload,'$.name'),state FROM ml_findings WHERE kind='concept'")).all())
-
-    assert states() == {"Citrine Pump": "held", "Emerald Cell": "held"}
-    requests = assets / "verifier-requests.jsonl"
-    overlaps = []
-
-    class Extraction:
-        calls, loaded = 0, False
-
-        def analyze(self, body, heartbeat):
-            overlaps.append(supervisor.verifier.process is not None)
-            self.calls, self.loaded = self.calls + 1, True
-            return extraction(body), (version, "old", 1024)
-
-        def check_memory(self):
-            pass
-
-        def close(self):
-            self.loaded = False
-
-    extractor = Extraction()
-
     def drain():
-        nonlocal supervisor
         db.commit()
         supervisor = worker.Supervisor(path, assets, threading.Event())
-        supervisor.inference = extractor
-        supervisor.verifier = InferenceProcess(assets, target=eligibility_child)
-        verify = supervisor.verifier.analyze
-
-        def checked(request, heartbeat):
-            overlaps.append(extractor.loaded)
-            return verify(request, heartbeat)
-
-        supervisor.verifier.analyze = checked
+        supervisor.inference = InferenceProcess(assets, target=shared_bge_child)
         try:
             assert supervisor.run("drain") == 0
         finally:
             supervisor.close()
 
-    supervisor = None
     drain()
-    assert extractor.calls == 1 and not any(overlaps)
-    assert states() == {"Citrine Pump": "active", "Emerald Cell": "held"}
-    assert db.execute(text("SELECT count(*) FROM concept_terms WHERE term='citrine pump'")).scalar_one() == 1
-    assert db.execute(text("SELECT count(*) FROM concept_terms WHERE term='emerald cell'")).scalar_one() == 0
-    judged = sorted(json.loads(line)["text"] for line in requests.read_text().splitlines())
-    assert judged == sorted([cached_body, fresh_body])
+    assert concept_states(db) == {"Citrine Pump": "active", "Emerald Cell": "held"}
+    requests = assets / "bge-requests.jsonl"
+    first = list(map(json.loads, requests.read_text().splitlines()))
+    assert len(first) == 2 and len({r["pid"] for r in first}) == 1
+    assert {r["eligibility_only"] for r in first} == {False, True}
     assert set(db.execute(text("SELECT json_extract(result,'$.eligibility.version') FROM ml_sources WHERE kind='item'")).scalars()) == {
         eligibility.version(manifest["models"])}
-
     drain()
-    assert extractor.calls == 1 and len(requests.read_text().splitlines()) == 2
-
-    manifest["models"]["verifier"]["revision"] = "verifier-b"
+    assert len(requests.read_text().splitlines()) == 2  # complete cache hit, no models
+    manifest["models"]["embeddings"]["revision"] = "new"
     (assets / "models.json").write_text(json.dumps(manifest))
     drain()
-    assert extractor.calls == 1 and len(requests.read_text().splitlines()) == 4 and not any(overlaps)
-    assert states() == {"Citrine Pump": "active", "Emerald Cell": "held"}
+    assert len(requests.read_text().splitlines()) == 4
+    assert concept_states(db) == {"Citrine Pump": "active", "Emerald Cell": "held"}
 
 
 def eligibility_worker(worker_store, body, name):
-    """A verifier-enabled worker over one cached, unjudged source; extraction returns `name` spans."""
+    """One BGE process over a cached, unjudged source."""
     import threading
     from sqlalchemy import text
     from app.ml import adapter, policy, relation_syntax, syntax, worker
@@ -799,8 +773,6 @@ def eligibility_worker(worker_store, body, name):
 
     db, path, assets = worker_store
     manifest = json.loads((assets / "models.json").read_text())
-    manifest["models"]["verifier"] = {"revision": "verifier-a"}
-    (assets / "models.json").write_text(json.dumps(manifest))
     version = inference_version(manifest["models"])
 
     def extraction(text_body, span_name):
@@ -809,16 +781,6 @@ def eligibility_worker(worker_store, body, name):
                       relation_guard_revision=relation_syntax.REVISION)
         del result["eligibility"]  # extraction alone carries no judgment
         return result
-
-    class Extraction:
-        def analyze(self, text_body, heartbeat):
-            return extraction(text_body, text_body.split(" drives")[0]), (version, "old", 1024)
-
-        def check_memory(self):
-            pass
-
-        def close(self):
-            pass
 
     adapter.bootstrap(db)
     adapter.apply_source(db, "item", "source", add_source(db, "source", body=body), extraction(body, name),
@@ -829,8 +791,7 @@ def eligibility_worker(worker_store, body, name):
                {"version": version + ":" + policy.VERSION})
     db.commit()
     supervisor = worker.Supervisor(path, assets, threading.Event())
-    supervisor.inference = Extraction()
-    supervisor.verifier = InferenceProcess(assets, target=eligibility_child)
+    supervisor.inference = InferenceProcess(assets, target=shared_bge_child)
     return supervisor
 
 
@@ -877,4 +838,4 @@ def test_refused_eligibility_storage_pauses_the_sweep_without_stopping_the_worke
         supervisor.close()
     assert concept_states(db) == {"Citrine Pump": "held"}
     assert db.execute(text("SELECT json_extract(result,'$.eligibility') FROM ml_sources WHERE id='source'")).scalar_one() is None
-    assert len((assets / "verifier-requests.jsonl").read_text().splitlines()) == 1
+    assert len((assets / "bge-requests.jsonl").read_text().splitlines()) == 1

@@ -125,26 +125,11 @@ def _model_loop(connection, assets):
         body = connection.recv()
         if body is None:
             return
-        connection.send(("result", models.analyze(body)))
-
-
-def _verifier_loop(connection, assets):
-    from . import eligibility
-    from .runtime import configure_cpu, verified_manifest
-
-    configure_cpu()
-    directory = Path(assets).resolve()
-    manifest = verified_manifest(directory, ("verifier",))
-    files = manifest["models"]["verifier"]["files"]
-    if len(files) != 1:
-        raise ValueError("The verifier role must contain exactly one model file")
-    verifier = eligibility.Verifier(directory / "verifier" / files[0]["path"])
-    connection.send(("ready", eligibility.version(manifest["models"]), "", 0))
-    while True:
-        request = connection.recv()
-        if request is None:
-            return
-        connection.send(("result", verifier.margins(request["text"], request["candidates"])))
+        if isinstance(body, dict) and body.get("eligibility") is True:
+            result = models.judge_eligibility(body["text"], body["candidates"])
+        else:
+            result = models.analyze(body)
+        connection.send(("result", result))
 
 
 def _child_entry(connection, assets, target, parent_pid):
@@ -302,10 +287,6 @@ class Supervisor:
         self.connection = queue.connect_worker(path)
         self.engine = create_engine("sqlite://", creator=lambda: queue.connect_worker(path), poolclass=NullPool)
         self.inference = InferenceProcess(assets, load_timeout=load_timeout, job_timeout=job_timeout)
-        # The verifier cannot share the memory budget with the extraction
-        # models, so at most one of the two children is alive (see stage()).
-        self.verifier = InferenceProcess(assets, target=_verifier_loop, load_timeout=load_timeout,
-                                         job_timeout=job_timeout)
         self.model_version = self.eligibility_version = None
         self.eligibility_cursor = ("", "")
         self.eligibility_paused_until = 0.0
@@ -382,11 +363,6 @@ class Supervisor:
                     raise LeaseLost("Job changed before commit")
             db.commit()
 
-    def stage(self, active):
-        """Free the other model child before `active` loads or runs."""
-        other = self.verifier if active is self.inference else self.inference
-        other.close()
-
     def process_claim(self):
         from . import adapter
         from .sources import snapshot
@@ -403,17 +379,16 @@ class Supervisor:
                         result, metadata = cached
             if previous is not None:
                 if result is None:
-                    self.stage(self.inference)
                     result, metadata = self.inference.analyze(previous.text, self.heartbeat)
         self.heartbeat()
         self.apply(previous, result, metadata)
 
     def verify_eligibility(self, limit=8):
-        """Judge concept names of current cached sources that lack this verifier's judgment.
+        """Judge concept names of current cached sources that lack the current BGE judgment.
 
-        Runs only when no job is claimable, so a backlog swaps models once. A
-        source with a queued job is left to that job; its replay keeps any
-        current judgment and the next sweep checks the rest.
+        Runs only when no job is claimable, sharing the same inference process
+        and BGE instance. New extraction already includes eligibility; the sweep
+        handles older cached sources without re-running their extraction.
         """
         from . import adapter, eligibility, embeddings
         from .sources import snapshot
@@ -454,17 +429,18 @@ class Supervisor:
             names = eligibility.candidates(source.text, result["concepts"])
             margins = {}
             if names:
-                self.stage(self.verifier)
                 try:
-                    margins, verified = self.verifier.analyze({"text": source.text, "candidates": names}, self.heartbeat)
+                    judgment, verified = self.inference.analyze(
+                        {"eligibility": True, "text": source.text, "candidates": names}, self.heartbeat)
+                    margins = judgment["margins"]
                 except (RuntimeError, TimeoutError, MemoryError) as error:
                     # Leave its concepts held; retry after the worker restarts.
                     print(f"ML eligibility retained for {kind}:{source_id}: {type(error).__name__}: {error}",
                           file=sys.stderr, flush=True)
                     self.unverifiable.add((kind, source_id, content_hash))
                     continue
-                if verified[0] != self.eligibility_version:
-                    raise AssetsChanged("Verifier assets changed during eligibility checks")
+                if verified[0] != self.model_version or judgment["version"] != self.eligibility_version:
+                    raise AssetsChanged("BGE assets changed during eligibility checks")
             result["eligibility"] = {"version": self.eligibility_version, "margins": margins}
             self.heartbeat()
             try:
@@ -507,10 +483,9 @@ class Supervisor:
         models = json.loads((self.assets / "models.json").read_text())["models"]
         version = inference_version(models) + ":" + policy.VERSION
         self.model_version = inference_version(models)
-        if "verifier" in models:
-            from . import eligibility
+        from . import eligibility
 
-            self.eligibility_version = eligibility.version(models)
+        self.eligibility_version = eligibility.version(models)
         while True:
             self.heartbeat()
             try:
@@ -593,7 +568,6 @@ class Supervisor:
 
     def close(self):
         self.inference.close()
-        self.verifier.close()
         try:
             if self.claim:
                 self.retry(Stopped("Worker stopped"))
@@ -643,9 +617,9 @@ def main(argv=None):
         if "syntax" not in manifest.get("models", {}):
             raise ValueError("models.json must include the syntax model; "
                              "alias and definition extraction is disabled without it")
-        if "verifier" not in manifest["models"]:
-            raise ValueError("models.json must include the verifier model; "
-                             "concepts cannot be published without eligibility checks")
+        if set(manifest["models"]) != {"extractor", "embeddings", "syntax"}:
+            raise ValueError("This worker requires the three-model BGE generation; "
+                             "run Update to replace a historical Qwen generation")
         for signum in (signal.SIGINT, signal.SIGTERM):
             previous[signum] = signal.signal(signum, lambda *_: stop.set())
         supervisor = Supervisor(path, args.assets, stop,

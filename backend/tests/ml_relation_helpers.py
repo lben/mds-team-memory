@@ -44,6 +44,8 @@ def declaration(text, head, predicate, tail, polarity="positive", *, start=0, en
 def analyze(text, entities=(), relations=None, *, full=False, guard=None, parsed=None, parser=True):
     from app.ml import relation_syntax, runtime
     model = object.__new__(runtime.LocalModels)
+    # Parser/extraction mechanics are independent of BGE accuracy.
+    model.judge_eligibility = lambda *args: {"version": "synthetic", "margins": {}}
     model.entity_schema, model.relation_schema, model.alias_schema = "entities", "relations", "aliases"
     model.manifest = {"models": {"extractor": {"revision": "fixture"}, "syntax": {"revision": "fixture"}}}
     model.tokenizer = lambda body, **kwargs: {"offset_mapping": [m.span() for m in re.finditer(r"\S+", body)]}

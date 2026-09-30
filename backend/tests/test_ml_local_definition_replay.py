@@ -69,13 +69,16 @@ def _capture(db, identity, author, body):
 
 
 def _recorded_result(recorded):
-    from app.ml import syntax
+    from app.ml import eligibility, syntax
     from ml_synthetic_records import current_synthetic_result
 
     # The immutable record keeps its actual embedding. This application test
     # needs only the retained scores/spans and does not exercise vector search.
     result = current_synthetic_result(recorded["result"], recorded["text"])
     result["chunks"] = []
+    models = {role: {"revision": revision} for role, revision in zip(
+        ("extractor", "embeddings", "syntax"), recorded["metadata"]["model_version"].split(":")[:3])}
+    result["eligibility"]["version"] = eligibility.version(models)
     for definition in result["corroborated_definitions"]:
         assert definition["syntax_rule_revision"] == syntax.REVISION
     return result
