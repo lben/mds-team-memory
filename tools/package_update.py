@@ -17,6 +17,7 @@ from deploylib import ROOT
 from ml_assets import split, stream_parts, manifest_at
 from ml_bundle import pack, record, model_files
 from ml_storage import allocation
+from ui_sources import POLICY as UI_SOURCE_POLICY, frontend_sources
 
 
 def main():
@@ -48,13 +49,12 @@ def main():
     files = {p.relative_to(directory).as_posix(): record(p) for p in sorted((directory / "ui").rglob("*")) if p.is_file()}
     files["bootstrap.tar.gz"] = record(directory / "bootstrap.tar.gz")
     files.update({p.relative_to(directory).as_posix(): record(p) for p in sorted((directory / "licenses").rglob("*")) if p.is_file()})
-    sources = {p.relative_to(ROOT).as_posix(): record(p) for p in sorted((ROOT / "frontend").rglob("*"))
-               if p.is_file() and not any(x in p.relative_to(ROOT / "frontend").parts for x in ("node_modules", "dist"))
-               and p.suffix != ".tsbuildinfo" and p.name != ".DS_Store"}
+    sources = frontend_sources(ROOT)
     (directory / "package.json").write_text(json.dumps({
         "version": 1, "target": "RHEL 8.10 x86_64 / Python 3.12 / CPU only",
         "transfer_manifest": record(manifest_path), "files": files,
-        "frontend_sources": sources, "dependency_lock": record(ROOT / "tools/ml-container/requirements-linux.lock"),
+        "frontend_source_policy": UI_SOURCE_POLICY, "frontend_sources": sources,
+        "dependency_lock": record(ROOT / "tools/ml-container/requirements-linux.lock"),
         "bundle_total_size": sum(p.stat().st_size for p in args.models.rglob("*") if p.is_file())
                              + sum(p.stat().st_size for p in args.wheels.glob("*.whl"))
                              + (ROOT / "tools/ml-container/requirements-linux.lock").stat().st_size,

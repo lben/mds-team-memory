@@ -88,18 +88,6 @@
     }
   },
   "frontend_sources": {
-    "frontend/.gitignore": {
-      "size": 253,
-      "sha256": "fe718e7babb14f3cbad2d97f08889b9ce5215ed3fe0e43b2b8cfbfb3b9b844e8"
-    },
-    "frontend/.vscode/extensions.json": {
-      "size": 39,
-      "sha256": "70d56b550e796e3ea92922763ae03037a1a94596fda9d737982c75f6a20e88dd"
-    },
-    "frontend/README.md": {
-      "size": 442,
-      "sha256": "7cdf486b009cc44709f0b33e45f2a2007f37e5f46ac98fe2aab46c8129318929"
-    },
     "frontend/index.html": {
       "size": 1840,
       "sha256": "9649e7392035656a407b6eb4513be040beacaae60ae2b53e782586f9728e188a"
@@ -237,5 +225,6 @@
     "size": 146975,
     "sha256": "13d183ef20775ae51857d3a9b54857ff5ed8026fb0bcd0a3ce7d875583ec359a"
   },
-  "bundle_total_size": 2993063074
+  "bundle_total_size": 2993063074,
+  "frontend_source_policy": "frontend-build-inputs-lf-v1"
 }

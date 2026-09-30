@@ -161,9 +161,15 @@ proxy whose CA is installed in Windows. If downloads still fail with
 `UnknownIssuer`, ask IT to install the company root/intermediate certificates,
 or point `SSL_CERT_FILE` at an IT-provided PEM CA bundle before running the
 command. These HTTPS certificates are separate from the server's SSH host key.
-The launchers set `UV_SYSTEM_CERTS=true` and the older `UV_NATIVE_TLS=true`
-equivalent for compatibility with older uv installations. For a direct command
-using older uv, replace `--system-certs` with `--native-tls`.
+The launchers use `--system-certs` and require uv 0.11 or newer. For a direct
+command using older uv, replace `--system-certs` with `--native-tls`.
+
+Normal Update runs use the included UI and never need npm or a frontend build
+on the deploying PC. Source freshness checks exclude Git/editor metadata and
+the root README, and treat LF/CRLF text checkouts equivalently. They still reject
+actual changed/added/deleted build inputs. For custom frontend changes, the
+maintainer must build and publish matching UI assets and the package manifest;
+Update does not silently rebuild them using the work PC's toolchain or network.
 
 Update prompts for your server password once and reuses that SSH connection.
 The first connection also asks you to trust the displayed SSH host fingerprint,

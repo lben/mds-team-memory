@@ -16,7 +16,98 @@ import ml_assets
 import ml_bundle
 import update
 import update_remote
+import ui_sources
 from ml_storage import allocation
+
+
+def _frontend_fixture(root):
+    for name, data in {
+        "src/App.vue": b"<template>Working UI</template>\n",
+        "package.json": b'{"scripts":{"build":"vite build"}}\n',
+        "public/logo.png": b"\x89PNG\r\n\x1a\n\x00payload",
+        ".gitignore": b"node_modules\ndist\n",
+        "README.md": b"Instructions\n",
+        ".vscode/extensions.json": b'{"recommendations":[]}\n',
+    }.items():
+        path = root / "frontend" / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+
+def test_ui_fingerprint_accepts_windows_line_endings_and_local_editor_files(tmp_path):
+    _frontend_fixture(tmp_path)
+    expected = ui_sources.frontend_sources(tmp_path)
+    for name in ("src/App.vue", "package.json", ".gitignore"):
+        path = tmp_path / "frontend" / name
+        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+    for name in ("README.md", ".gitignore", ".vscode/extensions.json", ".idea/local.xml",
+                 "node_modules/local.js", "dist/index.html", "dist-ssr/server.js", "tsconfig.tsbuildinfo"):
+        path = tmp_path / "frontend" / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("local metadata/build output\n")
+    ui_sources.check_frontend(tmp_path, expected)
+    assert set(expected) == {"frontend/src/App.vue", "frontend/package.json", "frontend/public/logo.png"}
+
+
+@pytest.mark.parametrize("name", ["src/App.vue", "package.json", "public/logo.png"])
+def test_ui_fingerprint_rejects_real_source_or_binary_changes(tmp_path, name):
+    _frontend_fixture(tmp_path)
+    expected = ui_sources.frontend_sources(tmp_path)
+    path = tmp_path / "frontend" / name
+    path.write_bytes(path.read_bytes() + b"changed")
+    with pytest.raises(ValueError, match="Bundled UI is stale"):
+        ui_sources.check_frontend(tmp_path, expected)
+
+
+@pytest.mark.parametrize("change", ["added", "removed"])
+def test_ui_fingerprint_rejects_added_or_removed_build_inputs(tmp_path, change):
+    _frontend_fixture(tmp_path)
+    expected = ui_sources.frontend_sources(tmp_path)
+    if change == "added":
+        (tmp_path / "frontend/src/new.ts").write_text("export const changed = true\n")
+    else:
+        (tmp_path / "frontend/src/App.vue").unlink()
+    with pytest.raises(ValueError, match=f"{change}="):
+        ui_sources.check_frontend(tmp_path, expected)
+
+
+def test_ui_fingerprint_keeps_non_text_assets_byte_exact(tmp_path):
+    _frontend_fixture(tmp_path)
+    expected = ui_sources.frontend_sources(tmp_path)
+    path = tmp_path / "frontend/public/logo.png"
+    path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n"))
+    with pytest.raises(ValueError, match="public/logo.png"):
+        ui_sources.check_frontend(tmp_path, expected)
+
+
+def test_update_accepts_crlf_sources_but_still_refuses_corrupted_shipped_ui(tmp_path, monkeypatch):
+    _frontend_fixture(tmp_path)
+    directory = tmp_path / "deployment"
+    manifest_path = directory / "offline/manifest.json"
+    manifest_path.parent.mkdir(parents=True)
+    manifest_path.write_text("{}\n")
+    ui = directory / "ui/index.html"
+    ui.parent.mkdir()
+    ui.write_bytes(b"<html>verified built UI</html>\n")
+    lock = tmp_path / "tools/ml-container/requirements-linux.lock"
+    lock.parent.mkdir(parents=True)
+    lock.write_text("fixture==1\n")
+    package = {"version": 1, "transfer_manifest": ml_bundle.record(manifest_path),
+               "files": {"ui/index.html": ml_bundle.record(ui)},
+               "frontend_source_policy": ui_sources.POLICY,
+               "frontend_sources": ui_sources.frontend_sources(tmp_path),
+               "dependency_lock": ml_bundle.record(lock)}
+    (directory / "package.json").write_text(json.dumps(package))
+    monkeypatch.setattr(update, "ROOT", tmp_path)
+    monkeypatch.setattr(update, "manifest_at", lambda _: {"metadata": {"model_roles": ["extractor", "embeddings", "syntax"]}})
+    monkeypatch.setattr(update, "stream_parts", lambda *a: None)
+    for path in (tmp_path / "frontend").rglob("*"):
+        if path.is_file() and path.suffix != ".png":
+            path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+    update.checked_package()
+    ui.write_bytes(ui.read_bytes().replace(b"\n", b"\r\n"))
+    with pytest.raises(ValueError, match="checksum mismatch: ui/index.html"):
+        update.checked_package()
 
 
 def test_cli_target_is_case_insensitive_and_defaults_to_uat():

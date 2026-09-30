@@ -14,7 +14,7 @@ joins, decompresses and installs them. Python 3.12.14 and uv 0.12.10 are bundled
 as is the built UI. Server installation is offline and runs as your SSH user.
 The web process and ML worker use nohup and keep running after logout.
 
-Your deploying PC needs Git, uv and internet access for uv's first installation
+Your deploying PC needs Git, uv 0.11 or newer and internet access for uv's first installation
 of the pinned Paramiko client (or a pre-populated uv cache). No npm or Docker
 is needed for normal Update runs. Allow roughly 14 GiB free on the PC for the
 Git objects and checked-out assets. The Linux server needs RHEL 8.10 x86_64,
@@ -26,8 +26,8 @@ allowance must be available. UAT and PROD on one host need distinct roots and
 application ports.
 
 Update and TestData enable the PC's system TLS certificates for client downloads,
-including company Artifactory/proxy CAs installed in Windows. The launchers
-support both current and older uv versions. If downloads report `UnknownIssuer`,
+including company Artifactory/proxy CAs installed in Windows. The launchers use
+`--system-certs`, without the deprecated native-TLS option. If downloads report `UnknownIssuer`,
 ask IT to install the company CA chain, or set `SSL_CERT_FILE` to an IT-provided
 PEM CA bundle. This happens before SSH and is separate from SSH host trust.
 

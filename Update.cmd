@@ -1,6 +1,4 @@
 @echo off
 setlocal
-set "UV_SYSTEM_CERTS=true"
-set "UV_NATIVE_TLS=true"
-uv run --python 3.12 "%~dp0tools\update.py" %*
+uv run --system-certs --python 3.12 "%~dp0tools\update.py" %*
 exit /b %ERRORLEVEL%

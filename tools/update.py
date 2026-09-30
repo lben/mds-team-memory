@@ -27,6 +27,7 @@ from deploylib import CONFIG_PATH, ROOT, Target, add_target_argument, fail, scp,
 from ml_assets import manifest_at, stream_parts
 from ml_bundle import record
 from update_session import Session
+from ui_sources import POLICY as UI_SOURCE_POLICY, check_frontend
 
 
 def checked_package():
@@ -49,14 +50,9 @@ def checked_package():
     ui_files = {f"ui/{p.relative_to(directory / 'ui').as_posix()}" for p in (directory / "ui").rglob("*") if p.is_file()}
     if ui_files != {name for name in release["files"] if name.startswith("ui/")}:
         raise ValueError("Bundled UI contains missing or unexpected files")
-    for name, expected in release["frontend_sources"].items():
-        if record(ROOT / name) != expected:
-            raise ValueError(f"Bundled UI is stale for {name}; regenerate the deployment package")
-    source_names = {p.relative_to(ROOT).as_posix() for p in (ROOT / "frontend").rglob("*")
-                    if p.is_file() and not any(x in p.relative_to(ROOT / "frontend").parts for x in ("node_modules", "dist"))
-                    and p.suffix != ".tsbuildinfo" and p.name != ".DS_Store"}
-    if source_names != set(release["frontend_sources"]):
-        raise ValueError("Bundled UI is stale: frontend source files were added or removed")
+    if release.get("frontend_source_policy") != UI_SOURCE_POLICY:
+        raise ValueError("Deployment package needs the portable UI source manifest; pull the updated deployment branch")
+    check_frontend(ROOT, release["frontend_sources"])
     if record(ROOT / "tools/ml-container/requirements-linux.lock") != release["dependency_lock"]:
         raise ValueError("The offline dependency lock differs from this checkout")
     return directory, release, manifest

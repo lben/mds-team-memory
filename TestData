@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-UV_SYSTEM_CERTS=true UV_NATIVE_TLS=true exec uv run --python 3.12 "$(dirname "$0")/tools/testdata.py" "$@"
+exec uv run --system-certs --python 3.12 "$(dirname "$0")/tools/testdata.py" "$@"
