@@ -148,12 +148,22 @@ Copy-Item tools/deploy.example.toml tools/deploy.toml # first time only; edit it
 .\Update.cmd PROD                                  # PROD
 ```
 
-The equivalent command is `uv run --python 3.12 tools/update.py [UAT|PROD]`.
+The equivalent command is `uv run --system-certs --python 3.12 tools/update.py [UAT|PROD]`.
 On macOS/Linux, `./Update [UAT|PROD]` is also available. uv installs the pinned
 SSH client on the deploying PC on its first run. The server needs RHEL 8.10
 x86_64, SSH/SFTP access, bash/tar/sha256sum and writable local storage; it needs
 neither Node nor internet access, sudo or systemd. The TOML template explains
 these requirements and optional binary overrides.
+
+Update and TestData use the deploying PC's system TLS certificate store when
+uv downloads their client dependencies. This supports a company Artifactory or
+proxy whose CA is installed in Windows. If downloads still fail with
+`UnknownIssuer`, ask IT to install the company root/intermediate certificates,
+or point `SSL_CERT_FILE` at an IT-provided PEM CA bundle before running the
+command. These HTTPS certificates are separate from the server's SSH host key.
+The launchers set `UV_SYSTEM_CERTS=true` and the older `UV_NATIVE_TLS=true`
+equivalent for compatibility with older uv installations. For a direct command
+using older uv, replace `--system-certs` with `--native-tls`.
 
 Update prompts for your server password once and reuses that SSH connection.
 The first connection also asks you to trust the displayed SSH host fingerprint,

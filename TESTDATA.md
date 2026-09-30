@@ -34,7 +34,9 @@ or connection. uv's first client/Python setup can still require internet/cache.
 
 macOS/Linux: `./TestData [UAT] <command> ...`. PowerShell also supports
 `TestData.ps1`. The equivalent Python entry point is
-`uv run --python 3.12 tools/testdata.py [UAT] <command> ...`.
+`uv run --system-certs --python 3.12 tools/testdata.py [UAT] <command> ...`.
+The launchers use system TLS certificates for uv's client downloads; see
+[deployment certificate setup](README.md#deployment-uat--prod) for company CAs.
 
 ## Datasets and selection
 

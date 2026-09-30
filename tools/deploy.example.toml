@@ -2,6 +2,9 @@
 # deployment configuration file; it is gitignored. Never put passwords here.
 # Run .\Update.cmd [UAT|PROD] in PowerShell, or ./Update [UAT|PROD] on macOS/Linux.
 # Default: UAT. Enter your server password once when prompted.
+# Local Update/TestData launchers use system TLS certificates for uv downloads.
+# Company Artifactory/proxy CA certificates must be installed on your PC;
+# alternatively set SSL_CERT_FILE to an IT-provided PEM CA bundle.
 # Linux server: RHEL 8.10 x86_64, SSH/SFTP, bash, tar, sha256sum, a writable
 # local filesystem, and >= 14 GiB free for the first install. No sudo or
 # internet is required; approved Python, uv, models and wheels are bundled.

@@ -25,6 +25,12 @@ firewall as an ordinary user. Four CPUs and the worker's configured memory
 allowance must be available. UAT and PROD on one host need distinct roots and
 application ports.
 
+Update and TestData enable the PC's system TLS certificates for client downloads,
+including company Artifactory/proxy CAs installed in Windows. The launchers
+support both current and older uv versions. If downloads report `UnknownIssuer`,
+ask IT to install the company CA chain, or set `SSL_CERT_FILE` to an IT-provided
+PEM CA bundle. This happens before SSH and is separate from SSH host trust.
+
 Defaults `uv = "bundled"` and `python = "bundled"` avoid server-side prerequisite
 installation. To use IT-managed binaries, set absolute paths in the same TOML;
 Python must be 3.12 with SQLite >= 3.51.3. Extra MDS settings belong to
