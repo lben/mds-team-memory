@@ -148,6 +148,33 @@ Copy-Item tools/deploy.example.toml tools/deploy.toml # first time only; edit it
 .\Update.cmd PROD                                  # PROD
 ```
 
+For a repeatable build-and-deploy workflow, use:
+
+```powershell
+git pull --ff-only
+.\Build.cmd
+.\Update.cmd UAT                                    # or PROD; UAT is the default
+```
+
+`Build.cmd` reuses a verified matching UI. If the frontend changed, it runs
+`npm ci` and `npm run build`, then writes the UI and checksums to the ignored
+`build/` directory. Update automatically selects that verified local build.
+The shipped model parts, wheels, bootstrap and deployment manifest are preserved,
+and local generated files do not interfere with the next `git pull`.
+`Build.cmd --force` reinstalls locked npm dependencies and rebuilds every time.
+PowerShell also supports `Build.ps1`; macOS/Linux uses `./Build.sh`.
+
+Rebuilding needs Node.js 22.19+ or 24.6+ and npm on the PC's PATH, plus access
+to the configured npm registry (or a populated npm cache). Build enables Node's
+system certificate store for company Artifactory/proxy CAs, retains npm's existing
+registry/proxy configuration, and also respects `NODE_EXTRA_CA_CERTS` for an
+IT-provided PEM CA file. It never disables TLS verification. Build has no server
+configuration or password prompt and does not contact UAT/PROD. On failure, the
+last published local build remains intact, but Update still requires matching
+source and valid hashes. If a pull changes the shipped package, an old local
+build is ignored; rerun Build to prepare the current checkout. Python/ML dependency
+lock changes need a full offline package and cannot be repaired by a UI build.
+
 The equivalent command is `uv run --system-certs --python 3.12 tools/update.py [UAT|PROD]`.
 On macOS/Linux, `./Update [UAT|PROD]` is also available. uv installs the pinned
 SSH client on the deploying PC on its first run. The server needs RHEL 8.10
@@ -167,9 +194,9 @@ command using older uv, replace `--system-certs` with `--native-tls`.
 Normal Update runs use the included UI and never need npm or a frontend build
 on the deploying PC. Source freshness checks exclude Git/editor metadata and
 the root README, and treat LF/CRLF text checkouts equivalently. They still reject
-actual changed/added/deleted build inputs. For custom frontend changes, the
-maintainer must build and publish matching UI assets and the package manifest;
-Update does not silently rebuild them using the work PC's toolchain or network.
+actual changed/added/deleted build inputs. Run Build for custom frontend changes;
+Update then validates and uploads the matching local build. Building on the
+work PC is optional when the included UI already matches the checkout.
 
 Update prompts for your server password once and reuses that SSH connection.
 The first connection also asks you to trust the displayed SSH host fingerprint,

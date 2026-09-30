@@ -23,10 +23,15 @@ Package checks and daemon startup do not establish release-quality acceptance.
 Recorded deployment, compatibility and recovery results are in
 [BGE_VERIFICATION.md](BGE_VERIFICATION.md).
 
-For maintainers: build the UI, then use `tools/package_update.py` with verified
+For frontend-only updates, run `Build.cmd` (or `./Build.sh`) at the repository
+root, then Update. It prepares an ignored local UI package and matching source
+fingerprints/checksums that Update selects automatically. The shared artifacts
+in this directory stay unchanged. A matching UI needs no npm/build; use
+`Build.cmd --force` for a full frontend rebuild. See the repository README.
+
+For full model/dependency package changes: build the UI, then use `tools/package_update.py` with verified
 three-role assets, pinned Linux wheels and a Linux-created bootstrap archive.
-Do not edit numbered parts or hashes. Frontend source changes require a new UI
-package. The dependency lock must match exactly.
+Do not edit numbered parts or hashes. The dependency lock must match exactly.
 
 The initial publication uses asset batch commits because GitHub enforces a
 2 GB push limit. After the owner approves publication, `python tools/push_update.py`

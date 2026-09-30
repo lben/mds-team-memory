@@ -45,8 +45,7 @@ def check_frontend(root: Path, expected):
         added = sorted(actual.keys() - expected.keys())
         removed = sorted(expected.keys() - actual.keys())
         raise ValueError(f"Frontend build inputs differ from the packaged UI: added={added}, removed={removed}. "
-                         "Pull a matching source and deployment package; custom UI changes require a maintainer build.")
+                         "Run Build.cmd (or ./Build.sh), then retry Update.")
     for name, fingerprint in actual.items():
         if fingerprint != expected[name]:
-            raise ValueError(f"Bundled UI is stale for {name}. Pull a matching source and deployment package; "
-                             "custom UI changes require a maintainer build.")
+            raise ValueError(f"Bundled UI is stale for {name}. Run Build.cmd (or ./Build.sh), then retry Update.")

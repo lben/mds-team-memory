@@ -14,8 +14,6 @@ contains the built UI, split models, offline Linux wheels, Python and uv.
 """
 
 import argparse
-import hashlib
-import json
 from pathlib import Path
 import shlex
 import sys
@@ -24,38 +22,12 @@ import tomllib
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import deploy
 from deploylib import CONFIG_PATH, ROOT, Target, add_target_argument, fail, scp, ssh
-from ml_assets import manifest_at, stream_parts
-from ml_bundle import record
 from update_session import Session
-from ui_sources import POLICY as UI_SOURCE_POLICY, check_frontend
+from deployment_package import checked_package as check_package
 
 
 def checked_package():
-    directory = ROOT / "deployment"
-    release = json.loads((directory / "package.json").read_text(encoding="utf-8"))
-    if release.get("version") != 1:
-        raise ValueError("Unsupported deployment package version")
-    manifest_path = directory / "offline" / "manifest.json"
-    manifest = manifest_at(manifest_path)
-    if record(manifest_path) != release["transfer_manifest"]:
-        raise ValueError("The transfer manifest differs from the release package")
-    if set(manifest["metadata"].get("model_roles", [])) != {"extractor", "embeddings", "syntax"}:
-        raise ValueError("The offline package must contain the three required BGE model roles")
-    print("Checking local model parts and deployment package...")
-    stream_parts(manifest_path, manifest)
-    for name, expected in release["files"].items():
-        path = directory / name
-        if not path.resolve().is_relative_to(directory.resolve()) or record(path) != expected:
-            raise ValueError(f"Deployment package checksum mismatch: {name}")
-    ui_files = {f"ui/{p.relative_to(directory / 'ui').as_posix()}" for p in (directory / "ui").rglob("*") if p.is_file()}
-    if ui_files != {name for name in release["files"] if name.startswith("ui/")}:
-        raise ValueError("Bundled UI contains missing or unexpected files")
-    if release.get("frontend_source_policy") != UI_SOURCE_POLICY:
-        raise ValueError("Deployment package needs the portable UI source manifest; pull the updated deployment branch")
-    check_frontend(ROOT, release["frontend_sources"])
-    if record(ROOT / "tools/ml-container/requirements-linux.lock") != release["dependency_lock"]:
-        raise ValueError("The offline dependency lock differs from this checkout")
-    return directory, release, manifest
+    return check_package(ROOT)
 
 
 def configured_target(name, config_path):
@@ -150,7 +122,7 @@ def main(argv=None):
     target = None
     try:
         target, known_hosts = configured_target(args.target, args.config)
-        directory, package, manifest = checked_package()
+        directory, package, manifest, ui = checked_package()
         if args.check:
             print(f"Ready locally for {target.name.upper()}: {len(manifest['parts'])} parts; {manifest['archive']['size'] / 1024**3:.2f} GiB. No connection made.")
             return 0
@@ -164,7 +136,7 @@ def main(argv=None):
         print(f"Updating {target.name.upper()} at {target.host}:{target.root}")
         target.session = Session(target, known_hosts)
         bootstrap(target, directory, package)
-        deploy.deploy_release(target, skip_build=True, assume_yes=True, frontend=directory / "ui",
+        deploy.deploy_release(target, skip_build=True, assume_yes=True, frontend=ui,
                               prepare=model_preparer(directory, package, manifest))
         print(f"Web server and ML worker are running. Open http://{target.host.rsplit('@',1)[1]}:{target.port}")
         return 0

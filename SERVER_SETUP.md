@@ -8,6 +8,17 @@ Use `tools/deploy.toml` for both UAT and PROD. Copy the example once, enter
 .\Update.cmd PROD  # production
 ```
 
+For each update, `git pull --ff-only`, `Build.cmd`, then `Update.cmd UAT` (or
+`PROD`) is sufficient. Build reuses the included UI when current. To rebuild
+changed UI it installs the locked frontend dependencies, builds and prepares a
+local UI package automatically; `Build.cmd --force` always rebuilds. Rebuilding
+needs Node.js 22.19+ or 24.6+ and npm on the deploying PC, with access to the
+configured npm registry/cache. It enables system CA certificates for npm, keeps
+your registry/proxy settings and supports `NODE_EXTRA_CA_CERTS` from IT.
+Local UI output is gitignored and selected automatically by Update; it never
+repackages the models or overwrites the shared deployment package. Build never
+connects to a server. On macOS/Linux use `./Build.sh` followed by `./Update UAT`.
+
 Enter the server password once. Models and Linux dependency wheels are
 included as verified parts in `deployment/offline/`; the command uploads,
 joins, decompresses and installs them. Python 3.12.14 and uv 0.12.10 are bundled,

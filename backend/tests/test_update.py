@@ -17,6 +17,7 @@ import ml_bundle
 import update
 import update_remote
 import ui_sources
+import deployment_package
 from ml_storage import allocation
 
 
@@ -99,8 +100,8 @@ def test_update_accepts_crlf_sources_but_still_refuses_corrupted_shipped_ui(tmp_
                "dependency_lock": ml_bundle.record(lock)}
     (directory / "package.json").write_text(json.dumps(package))
     monkeypatch.setattr(update, "ROOT", tmp_path)
-    monkeypatch.setattr(update, "manifest_at", lambda _: {"metadata": {"model_roles": ["extractor", "embeddings", "syntax"]}})
-    monkeypatch.setattr(update, "stream_parts", lambda *a: None)
+    monkeypatch.setattr(deployment_package, "manifest_at", lambda _: {"metadata": {"model_roles": ["extractor", "embeddings", "syntax"]}})
+    monkeypatch.setattr(deployment_package, "stream_parts", lambda *a: None)
     for path in (tmp_path / "frontend").rglob("*"):
         if path.is_file() and path.suffix != ".png":
             path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
