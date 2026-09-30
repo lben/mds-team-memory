@@ -232,7 +232,8 @@ def test_ssh_session_prompts_once_and_never_puts_password_in_commands(tmp_path, 
     session.run("second step")
     session.close()
     assert len(passwords) == len(connections) == 1
-    assert connections[0]["password"] == "test-secret"
+    assert "password" not in connections[0]
+    assert connections[0]["auth_strategy"].password is None
     assert all("test-secret" not in command for command in commands)
     assert not hasattr(session, "password")
 

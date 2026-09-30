@@ -4,6 +4,7 @@ import base64
 import getpass
 import hashlib
 from pathlib import Path
+import re
 import subprocess
 import sys
 import time
@@ -11,6 +12,56 @@ import time
 
 def fingerprint(key):
     return "SHA256:" + base64.b64encode(hashlib.sha256(key.asbytes()).digest()).decode().rstrip("=")
+
+
+def console_authentication(username, password):
+    """Use explicit SSH methods so PAM challenges are not flattened to a password."""
+    import paramiko
+
+    class ConsoleAuthentication(paramiko.AuthStrategy):
+        def __init__(self, username, password):
+            super().__init__(ssh_config=None)
+            self.username = username
+            self.password = password
+            self.reuse_password = False
+
+        def clear(self):
+            self.password = None
+
+        def challenge(self, title, instructions, prompts):
+            for message in (title, instructions):
+                if message:
+                    print(message, flush=True)
+            answers = []
+            for prompt, echo in prompts:
+                # Reuse the initial password once, only for an identifiable
+                # password prompt. Never send it as an OTP or a new password.
+                is_password = bool(re.search(r"\bpassword\b", prompt, re.I))
+                different_secret = bool(re.search(r"\b(new|confirm|repeat|otp|token|code|verification)\b|one[- ]time", prompt, re.I))
+                if self.reuse_password and is_password and not different_secret:
+                    answers.append(self.password)
+                    self.reuse_password = False
+                else:
+                    label = prompt or "SSH challenge response: "
+                    answers.append(input(label) if echo and not is_password else getpass.getpass(label))
+            return answers
+
+        def authenticate(self, transport):
+            try:
+                remaining = transport.auth_password(self.username, self.password, fallback=False)
+            except paramiko.BadAuthenticationType as error:
+                if "keyboard-interactive" not in error.allowed_types:
+                    raise
+                remaining = error.allowed_types
+                self.reuse_password = True
+            if not transport.is_authenticated() and "keyboard-interactive" in remaining:
+                transport.auth_interactive(self.username, self.challenge)
+            if not transport.is_authenticated():
+                raise paramiko.AuthenticationException(
+                    "SSH authentication is incomplete; the server requires another method "
+                    "(for example a public key) in addition to the password/challenge")
+
+    return ConsoleAuthentication(username, password)
 
 
 class Session:
@@ -44,9 +95,10 @@ class Session:
         self.client.set_missing_host_key_policy(TrustHost())
         username, hostname = target.host.rsplit("@", 1)
         password = getpass.getpass(f"Server password for {target.host}: ")
+        authentication = console_authentication(username, password)
         try:
             self.client.connect(hostname=hostname, username=username, port=target.ssh_port,
-                                password=password, allow_agent=False, look_for_keys=False,
+                                auth_strategy=authentication,
                                 timeout=20, banner_timeout=30, auth_timeout=60)
             if expected and fingerprint(self.client.get_transport().get_remote_server_key()) != expected:
                 raise paramiko.SSHException("Server host key does not match host_key_sha256")
@@ -56,6 +108,7 @@ class Session:
             self.close()
             raise
         finally:
+            authentication.clear()
             password = None
 
     def run(self, command, capture=False):

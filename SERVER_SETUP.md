@@ -25,6 +25,12 @@ joins, decompresses and installs them. Python 3.12.14 and uv 0.12.10 are bundled
 as is the built UI. Server installation is offline and runs as your SSH user.
 The web process and ML worker use nohup and keep running after logout.
 
+You can type or paste the server password; no characters are displayed. Update
+and TestData support both SSH password and keyboard-interactive/PAM methods.
+If the server requests MFA or another challenge, answer its additional console
+prompt. Passwords and challenge responses are not written to TOML, logs or
+command arguments. A public-key requirement cannot be satisfied by a password.
+
 Your deploying PC needs Git, uv 0.11 or newer and internet access for uv's first installation
 of the pinned Paramiko client (or a pre-populated uv cache). No npm or Docker
 is needed for normal Update runs. Allow roughly 14 GiB free on the PC for the

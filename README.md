@@ -199,6 +199,12 @@ Update then validates and uploads the matching local build. Building on the
 work PC is optional when the included UI already matches the checkout.
 
 Update prompts for your server password once and reuses that SSH connection.
+Typing and pasting both work; the password remains hidden while you enter it.
+Password authentication and keyboard-interactive/PAM authentication are supported.
+For a server password challenge, the initial password is reused once. Additional
+server challenges (such as an MFA code) prompt in the console, with hidden input
+when requested by the server. These responses are never saved in configuration
+or command arguments. Server policies requiring a public key are still enforced.
 The first connection also asks you to trust the displayed SSH host fingerprint,
 unless you configured the fingerprint supplied by IT. It transfers the app and
 verified model parts, joins and decompresses them on the server, installs the
