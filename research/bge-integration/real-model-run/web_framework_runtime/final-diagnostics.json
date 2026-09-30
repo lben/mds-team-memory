@@ -1,0 +1,299 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "50832c395d274c79a6502ecf0b90fe5c",
+      "content_hash": "0640634139d6bd54f519039771213ed71d9298a26592e423411f3778bdaccf65",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":6,\"label\":\"named entity\",\"name\":\"Django\",\"score\":0.9958779811859131,\"start\":0},{\"end\":53,\"label\":\"topic or process\",\"name\":\"web application\",\"score\":0.9704341888427734,\"start\":38},{\"end\":22,\"label\":\"object or substance\",\"name\":\"Python\",\"score\":0.975837230682373,\"start\":16}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"django\":0.7072997689247131,\"python\":0.6604392528533936,\"web application\":0.6279640793800354},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":22,\"head\":{\"end\":6,\"name\":\"Django\",\"score\":0.9126515984535217,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9126515984535217,\"start\":0,\"tail\":{\"end\":22,\"name\":\"Python\",\"score\":0.9126515984535217,\"start\":16}},{\"end\":54,\"head\":{\"end\":6,\"name\":\"Django\",\"score\":0.9753261804580688,\"start\":0},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9753261804580688,\"start\":0,\"tail\":{\"end\":22,\"name\":\"Python\",\"score\":0.9753261804580688,\"start\":16}},{\"end\":22,\"head\":{\"end\":6,\"name\":\"Django\",\"score\":0.870735764503479,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"replaces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.870735764503479,\"start\":0,\"tail\":{\"end\":22,\"name\":\"Python\",\"score\":0.870735764503479,\"start\":16}}],\"text_hash\":\"47cd1a561e1af00308a98668299cf44c58e00bed149d36e1b11db33438b6c711\"}",
+      "updated_at": "2026-09-30 00:20:22.486990"
+    },
+    {
+      "kind": "profile",
+      "id": "8c0f044374814de1a111bef812b35576",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:20:28.522634"
+    },
+    {
+      "kind": "profile",
+      "id": "69d8db91958f4584ac3cc7361e2b82fe",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:20:22.715004"
+    },
+    {
+      "kind": "item",
+      "id": "9932499ea39848e99699c82f78c6a0f6",
+      "content_hash": "cac26978f128ab12e809d56daea9176b0e5ed971059abcce6530c42e76845888",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":42,\"label\":\"named entity\",\"name\":\"Django\",\"score\":0.9974340796470642,\"start\":36},{\"end\":60,\"label\":\"named entity\",\"name\":\"Python\",\"score\":0.8539732098579407,\"start\":54},{\"end\":76,\"label\":\"topic or process\",\"name\":\"runtime\",\"score\":0.9812572002410889,\"start\":69}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"django\":0.6491279602050781,\"python\":0.5813734531402588,\"runtime\":0.5873016715049744},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":60,\"head\":{\"end\":42,\"name\":\"Django\",\"score\":0.9921379685401917,\"start\":36},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9921379685401917,\"start\":36,\"tail\":{\"end\":60,\"name\":\"Python\",\"score\":0.9921379685401917,\"start\":54}},{\"end\":60,\"head\":{\"end\":42,\"name\":\"Django\",\"score\":0.9952056407928467,\"start\":36},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9952056407928467,\"start\":36,\"tail\":{\"end\":60,\"name\":\"Python\",\"score\":0.9952056407928467,\"start\":54}},{\"end\":60,\"head\":{\"end\":42,\"name\":\"Django\",\"score\":0.8658981323242188,\"start\":36},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"replaces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8658981323242188,\"start\":36,\"tail\":{\"end\":60,\"name\":\"Python\",\"score\":0.8658981323242188,\"start\":54}}],\"text_hash\":\"12f52666d084d43ab32e1a99665a3ab1e2e68f24a5428679f293afe5b27f075d\"}",
+      "updated_at": "2026-09-30 00:20:28.298883"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "af41f1a1289cc68aaf7d2a1dd8781a23c1cd63cf002556142d225d96bb0e5254",
+      "kind": "concept",
+      "payload": "{\"name\":\"Django\"}",
+      "state": "active",
+      "score": 0.9974340796470642,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "5f883bb9fc5943e69dfc6245a6abd599",
+      "created_at": "2026-09-30 00:20:22.122254",
+      "updated_at": "2026-09-30 00:20:28.378985"
+    },
+    {
+      "key": "1db8c848a43e2ec9a3d0e449681e4cc46cab4fc2a1312b8b948a0012c78aeac6",
+      "kind": "concept",
+      "payload": "{\"name\":\"web application\"}",
+      "state": "held",
+      "score": 0.9704341888427734,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:22.130542",
+      "updated_at": "2026-09-30 00:20:22.542976"
+    },
+    {
+      "key": "c4ca1059a45003400019a361eed4c75128f0e45158824189a242b1ba38b43fac",
+      "kind": "concept",
+      "payload": "{\"name\":\"Python\"}",
+      "state": "held",
+      "score": 0.975837230682373,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:22.134631",
+      "updated_at": "2026-09-30 00:20:28.377358"
+    },
+    {
+      "key": "ce08e1caa14e424ccdfb6fa704291734af4936b58c29dd124454dc8bf93e05ce",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"5f883bb9fc5943e69dfc6245a6abd599\",\"source_id\":\"50832c395d274c79a6502ecf0b90fe5c\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9958779811859131,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "5f883bb9fc5943e69dfc6245a6abd599",
+      "created_at": "2026-09-30 00:20:22.166766",
+      "updated_at": "2026-09-30 00:20:22.545193"
+    },
+    {
+      "key": "610b2354d02fb593d956932de575c4c9beb4f606bd7d1ebc68ed6573e5c4377f",
+      "kind": "concept",
+      "payload": "{\"name\":\"runtime\"}",
+      "state": "held",
+      "score": 0.9812572002410889,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:28.325340",
+      "updated_at": "2026-09-30 00:20:28.375489"
+    },
+    {
+      "key": "28cd79bec79a58b5b073ea37bef12708fcdc3c82817d16b8ce1898c219a0cb17",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"5f883bb9fc5943e69dfc6245a6abd599\",\"source_id\":\"9932499ea39848e99699c82f78c6a0f6\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9974340796470642,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "5f883bb9fc5943e69dfc6245a6abd599",
+      "created_at": "2026-09-30 00:20:28.349638",
+      "updated_at": "2026-09-30 00:20:28.383045"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "91551df61af890e6e70391af5cdc5f08c2668e3f09a3860e229f498963f0a92d",
+      "finding_key": "af41f1a1289cc68aaf7d2a1dd8781a23c1cd63cf002556142d225d96bb0e5254",
+      "source_kind": "item",
+      "source_id": "50832c395d274c79a6502ecf0b90fe5c",
+      "source_hash": "0640634139d6bd54f519039771213ed71d9298a26592e423411f3778bdaccf65",
+      "group_key": "item:50832c395d274c79a6502ecf0b90fe5c",
+      "author_id": "69d8db91958f4584ac3cc7361e2b82fe",
+      "start": 0,
+      "end": 6,
+      "raw_score": 0.9958779811859131,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7072997689247131,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"d179b2b69d989b92719691384088f2726ac9b273fc4860b049bbeb567baee3c5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "2365785a9a110e7d6d80218c1c60f564ca2b743e4bba6863c8e46e00ac23c7b8",
+      "finding_key": "1db8c848a43e2ec9a3d0e449681e4cc46cab4fc2a1312b8b948a0012c78aeac6",
+      "source_kind": "item",
+      "source_id": "50832c395d274c79a6502ecf0b90fe5c",
+      "source_hash": "0640634139d6bd54f519039771213ed71d9298a26592e423411f3778bdaccf65",
+      "group_key": "item:50832c395d274c79a6502ecf0b90fe5c",
+      "author_id": "69d8db91958f4584ac3cc7361e2b82fe",
+      "start": 38,
+      "end": 53,
+      "raw_score": 0.9704341888427734,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6279640793800354,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"d179b2b69d989b92719691384088f2726ac9b273fc4860b049bbeb567baee3c5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "e597bfb56e794014b974242f72ff3133914a061b818a4a0123e220c76115852b",
+      "finding_key": "c4ca1059a45003400019a361eed4c75128f0e45158824189a242b1ba38b43fac",
+      "source_kind": "item",
+      "source_id": "50832c395d274c79a6502ecf0b90fe5c",
+      "source_hash": "0640634139d6bd54f519039771213ed71d9298a26592e423411f3778bdaccf65",
+      "group_key": "item:50832c395d274c79a6502ecf0b90fe5c",
+      "author_id": "69d8db91958f4584ac3cc7361e2b82fe",
+      "start": 16,
+      "end": 22,
+      "raw_score": 0.975837230682373,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6604392528533936,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"d179b2b69d989b92719691384088f2726ac9b273fc4860b049bbeb567baee3c5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "6be02841ca8d62af7d6b40d5d918f7d0053290942131f9b498cbd0805758d850",
+      "finding_key": "ce08e1caa14e424ccdfb6fa704291734af4936b58c29dd124454dc8bf93e05ce",
+      "source_kind": "item",
+      "source_id": "50832c395d274c79a6502ecf0b90fe5c",
+      "source_hash": "0640634139d6bd54f519039771213ed71d9298a26592e423411f3778bdaccf65",
+      "group_key": "item:50832c395d274c79a6502ecf0b90fe5c",
+      "author_id": "69d8db91958f4584ac3cc7361e2b82fe",
+      "start": 0,
+      "end": 6,
+      "raw_score": 0.9958779811859131,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"d179b2b69d989b92719691384088f2726ac9b273fc4860b049bbeb567baee3c5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "4fccc731e87f3a1ae454c8bdc5bfa4431da61459cc53bde1de5fe469e71256bb",
+      "finding_key": "af41f1a1289cc68aaf7d2a1dd8781a23c1cd63cf002556142d225d96bb0e5254",
+      "source_kind": "item",
+      "source_id": "9932499ea39848e99699c82f78c6a0f6",
+      "source_hash": "cac26978f128ab12e809d56daea9176b0e5ed971059abcce6530c42e76845888",
+      "group_key": "item:9932499ea39848e99699c82f78c6a0f6",
+      "author_id": "8c0f044374814de1a111bef812b35576",
+      "start": 36,
+      "end": 42,
+      "raw_score": 0.9974340796470642,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6491279602050781,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9060fb12d1b202e0d6567c6014454ae70cafe2308c0bfea10b2cfe20d84baf23\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "3cf03d9cc8a5aa5d73f4fa25aca3f0254c70b6de47bb5fb0a5b2d25b0c82dd37",
+      "finding_key": "c4ca1059a45003400019a361eed4c75128f0e45158824189a242b1ba38b43fac",
+      "source_kind": "item",
+      "source_id": "9932499ea39848e99699c82f78c6a0f6",
+      "source_hash": "cac26978f128ab12e809d56daea9176b0e5ed971059abcce6530c42e76845888",
+      "group_key": "item:9932499ea39848e99699c82f78c6a0f6",
+      "author_id": "8c0f044374814de1a111bef812b35576",
+      "start": 54,
+      "end": 60,
+      "raw_score": 0.8539732098579407,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5813734531402588,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9060fb12d1b202e0d6567c6014454ae70cafe2308c0bfea10b2cfe20d84baf23\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8c309f9c707f8a3d1cc0f369a37e8d9457396f7230e3803c45d73fb8b8e72a40",
+      "finding_key": "610b2354d02fb593d956932de575c4c9beb4f606bd7d1ebc68ed6573e5c4377f",
+      "source_kind": "item",
+      "source_id": "9932499ea39848e99699c82f78c6a0f6",
+      "source_hash": "cac26978f128ab12e809d56daea9176b0e5ed971059abcce6530c42e76845888",
+      "group_key": "item:9932499ea39848e99699c82f78c6a0f6",
+      "author_id": "8c0f044374814de1a111bef812b35576",
+      "start": 69,
+      "end": 76,
+      "raw_score": 0.9812572002410889,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5873016715049744,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9060fb12d1b202e0d6567c6014454ae70cafe2308c0bfea10b2cfe20d84baf23\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ff917255ae17c9b548d0ebe177ddafe19d629f39420471f33005c2e144607453",
+      "finding_key": "28cd79bec79a58b5b073ea37bef12708fcdc3c82817d16b8ce1898c219a0cb17",
+      "source_kind": "item",
+      "source_id": "9932499ea39848e99699c82f78c6a0f6",
+      "source_hash": "cac26978f128ab12e809d56daea9176b0e5ed971059abcce6530c42e76845888",
+      "group_key": "item:9932499ea39848e99699c82f78c6a0f6",
+      "author_id": "8c0f044374814de1a111bef812b35576",
+      "start": 36,
+      "end": 42,
+      "raw_score": 0.9974340796470642,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9060fb12d1b202e0d6567c6014454ae70cafe2308c0bfea10b2cfe20d84baf23\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:20:17.031278"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 16,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 25721,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "fbf63b7b754f50e65d4a2524d17712e340c396c186dcf4f2f475e6754d6ce9a6",
+      "source_kind": "item",
+      "source_id": "50832c395d274c79a6502ecf0b90fe5c",
+      "source_hash": "0640634139d6bd54f519039771213ed71d9298a26592e423411f3778bdaccf65",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 54,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "9ad02f9ebe1cd77fe14192cdfdcba7baf9ad42ecf7bb8b22c12c7011f5f18c10",
+      "source_kind": "item",
+      "source_id": "9932499ea39848e99699c82f78c6a0f6",
+      "source_hash": "cac26978f128ab12e809d56daea9176b0e5ed971059abcce6530c42e76845888",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 77,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

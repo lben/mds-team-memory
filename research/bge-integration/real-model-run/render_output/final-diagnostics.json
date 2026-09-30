@@ -1,0 +1,326 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "content_hash": "3dece825e66b600cb7f2a8ed779773dedce46439dcdf0919e6f911be49930378",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":31,\"label\":\"named entity\",\"name\":\"Blender\",\"score\":0.9963269829750061,\"start\":24},{\"end\":48,\"label\":\"named entity\",\"name\":\"OpenEXR\",\"score\":0.9818397164344788,\"start\":41},{\"end\":22,\"label\":\"topic or process\",\"name\":\"render workflow\",\"score\":0.9530596733093262,\"start\":7},{\"end\":74,\"label\":\"topic or process\",\"name\":\"compositing stage\",\"score\":0.9245619773864746,\"start\":57}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"blender\":0.6387233734130859,\"compositing stage\":0.7383849620819092,\"openexr\":0.6760122776031494,\"render workflow\":0.7173022031784058},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":74,\"head\":{\"end\":31,\"name\":\"Blender\",\"score\":0.66155606508255,\"start\":24},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.66155606508255,\"start\":24,\"tail\":{\"end\":74,\"name\":\"compositing stage\",\"score\":0.66155606508255,\"start\":57}},{\"end\":74,\"head\":{\"end\":31,\"name\":\"Blender\",\"score\":0.5147608518600464,\"start\":24},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5147608518600464,\"start\":24,\"tail\":{\"end\":74,\"name\":\"compositing stage\",\"score\":0.5147608518600464,\"start\":57}},{\"end\":75,\"head\":{\"end\":31,\"name\":\"Blender\",\"score\":0.9608650207519531,\"start\":24},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9608650207519531,\"start\":0,\"tail\":{\"end\":48,\"name\":\"OpenEXR\",\"score\":0.9608650207519531,\"start\":41}}],\"text_hash\":\"db6ab95a596e1a5065f46aa501f79d47cbf993e0c3dbffe33e3dd0719a146ea9\"}",
+      "updated_at": "2026-09-30 00:20:40.711895"
+    },
+    {
+      "kind": "profile",
+      "id": "c467af8007f14b33a8b0d284b48bfe4a",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:20:41.243941"
+    },
+    {
+      "kind": "profile",
+      "id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:20:41.164837"
+    },
+    {
+      "kind": "item",
+      "id": "f887f41031a74535bee7c32d1ab216cc",
+      "content_hash": "51756e1f2beab1439258aa3aafafb8d04a08b8d19e55934f686f45e7c69077eb",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":47,\"label\":\"named entity\",\"name\":\"Blender\",\"score\":0.9963705539703369,\"start\":40},{\"end\":13,\"label\":\"topic or process\",\"name\":\"animation\",\"score\":0.5860756039619446,\"start\":4},{\"end\":64,\"label\":\"relation endpoint\",\"name\":\"OpenEXR\",\"score\":0.9690403342247009,\"start\":57}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"animation\":0.5868812799453735,\"blender\":0.6152021884918213,\"openexr\":0.6908173561096191},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":64,\"head\":{\"end\":47,\"name\":\"Blender\",\"score\":0.6275630593299866,\"start\":40},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.6275630593299866,\"start\":40,\"tail\":{\"end\":64,\"name\":\"OpenEXR\",\"score\":0.6275630593299866,\"start\":57}},{\"end\":64,\"head\":{\"end\":47,\"name\":\"Blender\",\"score\":0.9690403342247009,\"start\":40},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9690403342247009,\"start\":40,\"tail\":{\"end\":64,\"name\":\"OpenEXR\",\"score\":0.9690403342247009,\"start\":57}}],\"text_hash\":\"10baa761e19803717745553a03f501976c4873d24901fbeca6fadf38669d7303\"}",
+      "updated_at": "2026-09-30 00:20:40.957313"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "6730869eea3cfa4bd10cd72fe562d01d26dedce9d609432ab4f5dbabb66c16c3",
+      "kind": "concept",
+      "payload": "{\"name\":\"Blender\"}",
+      "state": "held",
+      "score": 0.9963705539703369,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:35.974449",
+      "updated_at": "2026-09-30 00:20:41.000901"
+    },
+    {
+      "key": "b8c19ebc508645c94c94886b7fd276ec80706583ebbb6ec9acd9f5c30c406ecf",
+      "kind": "concept",
+      "payload": "{\"name\":\"OpenEXR\"}",
+      "state": "active",
+      "score": 0.9818397164344788,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "28557e7587c34e05b4d1d96a4ccafcae",
+      "created_at": "2026-09-30 00:20:35.982787",
+      "updated_at": "2026-09-30 00:20:41.005041"
+    },
+    {
+      "key": "d4a9fe1e172ee81230230175a7ce35014ab68a0fe2f70fc9b79cb0f65530f04c",
+      "kind": "concept",
+      "payload": "{\"name\":\"render workflow\"}",
+      "state": "held",
+      "score": 0.9530596733093262,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:35.986789",
+      "updated_at": "2026-09-30 00:20:40.765674"
+    },
+    {
+      "key": "705a54f294ee1f5a2392f0a6e72072c905a96611ae55c8ac8d4ffd275efba211",
+      "kind": "concept",
+      "payload": "{\"name\":\"compositing stage\"}",
+      "state": "held",
+      "score": 0.9245619773864746,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:35.990731",
+      "updated_at": "2026-09-30 00:20:40.764204"
+    },
+    {
+      "key": "a408e8b124d3b3a1928ec781429e71fcc67558e512246a41f40e16487b62aec9",
+      "kind": "concept",
+      "payload": "{\"name\":\"animation\"}",
+      "state": "held",
+      "score": 0.5860756039619446,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:40.464261",
+      "updated_at": "2026-09-30 00:20:40.998793"
+    },
+    {
+      "key": "47e44f0f4d6c30a18d2ddcc248d8a58a93d2e99d720764e56bf9fd7ea752ac94",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"28557e7587c34e05b4d1d96a4ccafcae\",\"source_id\":\"f887f41031a74535bee7c32d1ab216cc\",\"source_kind\":\"item\"}",
+      "state": "held",
+      "score": 0.9690403342247009,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "28557e7587c34e05b4d1d96a4ccafcae",
+      "created_at": "2026-09-30 00:20:40.496205",
+      "updated_at": "2026-09-30 00:20:41.002736"
+    },
+    {
+      "key": "412cbaf385031c16c8925705d7139963ad2cecd741eab04d988224c16801fc07",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"28557e7587c34e05b4d1d96a4ccafcae\",\"source_id\":\"3d3bc9a1845c4baa966796b9175f5ab1\",\"source_kind\":\"item\"}",
+      "state": "held",
+      "score": 0.9818397164344788,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "28557e7587c34e05b4d1d96a4ccafcae",
+      "created_at": "2026-09-30 00:20:40.747143",
+      "updated_at": "2026-09-30 00:20:40.762696"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "5943219fdfb5749a5a7525a2129083707e1ba24dc1e6f98f87a8d5c60fafa7fc",
+      "finding_key": "6730869eea3cfa4bd10cd72fe562d01d26dedce9d609432ab4f5dbabb66c16c3",
+      "source_kind": "item",
+      "source_id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "source_hash": "3dece825e66b600cb7f2a8ed779773dedce46439dcdf0919e6f911be49930378",
+      "group_key": "item:3d3bc9a1845c4baa966796b9175f5ab1",
+      "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+      "start": 24,
+      "end": 31,
+      "raw_score": 0.9963269829750061,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6387233734130859,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"8db62b1247b764cb08b983fe813cbc5c3fb73100f1c069c491a693a4373634b5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8b80be52ab1db00a7d4783370db4b37b37048503dfa13e3bc6b489c9b1ca7a58",
+      "finding_key": "b8c19ebc508645c94c94886b7fd276ec80706583ebbb6ec9acd9f5c30c406ecf",
+      "source_kind": "item",
+      "source_id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "source_hash": "3dece825e66b600cb7f2a8ed779773dedce46439dcdf0919e6f911be49930378",
+      "group_key": "item:3d3bc9a1845c4baa966796b9175f5ab1",
+      "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+      "start": 41,
+      "end": 48,
+      "raw_score": 0.9818397164344788,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6760122776031494,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"8db62b1247b764cb08b983fe813cbc5c3fb73100f1c069c491a693a4373634b5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "66d5b7807aae17ef290f91d6e2dbeaaef8ccd401ff9b3f254fb664f436bf1be4",
+      "finding_key": "d4a9fe1e172ee81230230175a7ce35014ab68a0fe2f70fc9b79cb0f65530f04c",
+      "source_kind": "item",
+      "source_id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "source_hash": "3dece825e66b600cb7f2a8ed779773dedce46439dcdf0919e6f911be49930378",
+      "group_key": "item:3d3bc9a1845c4baa966796b9175f5ab1",
+      "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+      "start": 7,
+      "end": 22,
+      "raw_score": 0.9530596733093262,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7173022031784058,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"8db62b1247b764cb08b983fe813cbc5c3fb73100f1c069c491a693a4373634b5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "42d7ff91804ddd9aa55345abbef97cc9a6767348487964207e71d59b83a710e0",
+      "finding_key": "705a54f294ee1f5a2392f0a6e72072c905a96611ae55c8ac8d4ffd275efba211",
+      "source_kind": "item",
+      "source_id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "source_hash": "3dece825e66b600cb7f2a8ed779773dedce46439dcdf0919e6f911be49930378",
+      "group_key": "item:3d3bc9a1845c4baa966796b9175f5ab1",
+      "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+      "start": 57,
+      "end": 74,
+      "raw_score": 0.9245619773864746,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7383849620819092,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"8db62b1247b764cb08b983fe813cbc5c3fb73100f1c069c491a693a4373634b5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "c067efd07749b2d8afe76dc8309cd0220088a4bd1d078025a2b6ebe4c9dfbbfb",
+      "finding_key": "412cbaf385031c16c8925705d7139963ad2cecd741eab04d988224c16801fc07",
+      "source_kind": "item",
+      "source_id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "source_hash": "3dece825e66b600cb7f2a8ed779773dedce46439dcdf0919e6f911be49930378",
+      "group_key": "item:3d3bc9a1845c4baa966796b9175f5ab1",
+      "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+      "start": 41,
+      "end": 48,
+      "raw_score": 0.9818397164344788,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"8db62b1247b764cb08b983fe813cbc5c3fb73100f1c069c491a693a4373634b5\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "6e9173bf8b213c1f528ef74b3f92ffd58231a66f55f71669befb5213d9c79fcc",
+      "finding_key": "6730869eea3cfa4bd10cd72fe562d01d26dedce9d609432ab4f5dbabb66c16c3",
+      "source_kind": "item",
+      "source_id": "f887f41031a74535bee7c32d1ab216cc",
+      "source_hash": "51756e1f2beab1439258aa3aafafb8d04a08b8d19e55934f686f45e7c69077eb",
+      "group_key": "item:f887f41031a74535bee7c32d1ab216cc",
+      "author_id": "c467af8007f14b33a8b0d284b48bfe4a",
+      "start": 40,
+      "end": 47,
+      "raw_score": 0.9963705539703369,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6152021884918213,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"cb190ea9df16608dc659848d5bd5b28608cb609d0676dad73457f6e5ce9d75a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "f74a25bf44fb3666c29bcb4a688ad7978202938d2e6c64c9ba8c38ddc262aac1",
+      "finding_key": "a408e8b124d3b3a1928ec781429e71fcc67558e512246a41f40e16487b62aec9",
+      "source_kind": "item",
+      "source_id": "f887f41031a74535bee7c32d1ab216cc",
+      "source_hash": "51756e1f2beab1439258aa3aafafb8d04a08b8d19e55934f686f45e7c69077eb",
+      "group_key": "item:f887f41031a74535bee7c32d1ab216cc",
+      "author_id": "c467af8007f14b33a8b0d284b48bfe4a",
+      "start": 4,
+      "end": 13,
+      "raw_score": 0.5860756039619446,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5868812799453735,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"cb190ea9df16608dc659848d5bd5b28608cb609d0676dad73457f6e5ce9d75a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "5261d980e16733859af71580c632262a53a8f86a735c7ac102360bf39a45ce59",
+      "finding_key": "b8c19ebc508645c94c94886b7fd276ec80706583ebbb6ec9acd9f5c30c406ecf",
+      "source_kind": "item",
+      "source_id": "f887f41031a74535bee7c32d1ab216cc",
+      "source_hash": "51756e1f2beab1439258aa3aafafb8d04a08b8d19e55934f686f45e7c69077eb",
+      "group_key": "item:f887f41031a74535bee7c32d1ab216cc",
+      "author_id": "c467af8007f14b33a8b0d284b48bfe4a",
+      "start": 57,
+      "end": 64,
+      "raw_score": 0.9690403342247009,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6908173561096191,\"grounded\":true,\"label\":\"relation endpoint\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"cb190ea9df16608dc659848d5bd5b28608cb609d0676dad73457f6e5ce9d75a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "760e959689d6aa248cff31841ca391ea7ab94649c369f2c60924c0e60021c319",
+      "finding_key": "47e44f0f4d6c30a18d2ddcc248d8a58a93d2e99d720764e56bf9fd7ea752ac94",
+      "source_kind": "item",
+      "source_id": "f887f41031a74535bee7c32d1ab216cc",
+      "source_hash": "51756e1f2beab1439258aa3aafafb8d04a08b8d19e55934f686f45e7c69077eb",
+      "group_key": "item:f887f41031a74535bee7c32d1ab216cc",
+      "author_id": "c467af8007f14b33a8b0d284b48bfe4a",
+      "start": 57,
+      "end": 64,
+      "raw_score": 0.9690403342247009,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"cb190ea9df16608dc659848d5bd5b28608cb609d0676dad73457f6e5ce9d75a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:20:29.874490"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 22,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 28368,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "8ac20378dc871eb8635a935588c0193d3a4d656284f1032b3931b01a2f6b85ed",
+      "source_kind": "item",
+      "source_id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "source_hash": "3dece825e66b600cb7f2a8ed779773dedce46439dcdf0919e6f911be49930378",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 75,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "2e640307373397e8fd806179ee7e2444aeca0805166caa37bba821b8fb5af06d",
+      "source_kind": "item",
+      "source_id": "f887f41031a74535bee7c32d1ab216cc",
+      "source_hash": "51756e1f2beab1439258aa3aafafb8d04a08b8d19e55934f686f45e7c69077eb",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 99,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

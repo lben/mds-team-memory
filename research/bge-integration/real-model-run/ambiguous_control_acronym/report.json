@@ -1,0 +1,773 @@
+{
+  "id": "ambiguous_control_acronym",
+  "domain": "industrial_engineering",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/22a87267cb7246b9bddbfb5fa48e7b98",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/55514d5695da49a7896cedb2a48a47e6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/dd1945d8daf344b49607e9c2ec3cfcbc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/44d576bb54d64c398463185728be61a6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/ambiguous_control_acronym/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Programmable Logic Controller",
+      "Power Line Communication"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [
+      {
+        "canonical": "Programmable Logic Controller",
+        "alias": "PLC"
+      },
+      {
+        "canonical": "Power Line Communication",
+        "alias": "PLC"
+      }
+    ],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Programmable Logic Controller",
+        "predicate": "uses",
+        "tail": "Power Line Communication"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 7.928908044999844,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 7.633170087001417,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 2,
+          "seconds": 6.62304862900055,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 3,
+          "seconds": 8.09117741999944,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 30.27630418100125,
+      "inference_calls": 4,
+      "observed": {
+        "concepts": [
+          {
+            "id": "050cae4ef96946cd9b0a25e9592c7288",
+            "name": "Power Line Communication",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Power Line Communication",
+            "concept_id": "050cae4ef96946cd9b0a25e9592c7288",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "050cae4ef96946cd9b0a25e9592c7288",
+              "label": "Power Line Communication",
+              "concepts": [
+                {
+                  "id": "050cae4ef96946cd9b0a25e9592c7288",
+                  "name": "Power Line Communication",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "22a87267cb7246b9bddbfb5fa48e7b98",
+              "kind": "note",
+              "question": null,
+              "body": "A Programmable Logic Controller (PLC) handles the conveyor interlocks in the assembly cell.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "6cd2776abae64c3b972e776e872f3321",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:22:42.102457Z",
+              "updated_at": "2026-09-30T00:22:42.145286Z",
+              "concepts": [],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "55514d5695da49a7896cedb2a48a47e6",
+              "kind": "note",
+              "question": null,
+              "body": "The maintenance checklist identifies the Programmable Logic Controller (PLC) that monitors the assembly cell inputs.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "75cf4020ffe3459a9aa1f3cc88aac5c2",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:22:50.095364Z",
+              "updated_at": "2026-09-30T00:22:50.109958Z",
+              "concepts": [],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 2,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "dd1945d8daf344b49607e9c2ec3cfcbc",
+              "kind": "note",
+              "question": null,
+              "body": "Power Line Communication (PLC) carries data over the electrical wiring in our networking demonstration.",
+              "visibility": "team",
+              "author": "cara",
+              "author_verified": true,
+              "author_id": "4f878b3a05ff4623b6c98a9e01d2e706",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:22:57.758615Z",
+              "updated_at": "2026-09-30T00:22:57.774124Z",
+              "concepts": [
+                {
+                  "id": "050cae4ef96946cd9b0a25e9592c7288",
+                  "name": "Power Line Communication"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 3,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "44d576bb54d64c398463185728be61a6",
+              "kind": "note",
+              "question": null,
+              "body": "The networking lesson explains Power Line Communication (PLC) with a pair of adapters on existing electrical wiring.",
+              "visibility": "team",
+              "author": "drew",
+              "author_verified": true,
+              "author_id": "7ee089ebdccb4296a80b460fe28a565d",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:23:04.411223Z",
+              "updated_at": "2026-09-30T00:23:04.424068Z",
+              "concepts": [
+                {
+                  "id": "050cae4ef96946cd9b0a25e9592c7288",
+                  "name": "Power Line Communication"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "PLC": {
+            "query": "PLC",
+            "terms": [
+              "plc"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "22a87267cb7246b9bddbfb5fa48e7b98",
+                "kind": "note",
+                "question": null,
+                "body": "A Programmable Logic Controller (PLC) handles the conveyor interlocks in the assembly cell.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "6cd2776abae64c3b972e776e872f3321",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:42.102457Z",
+                "updated_at": "2026-09-30T00:22:42.145286Z",
+                "type": "item",
+                "snippet": "A Programmable Logic Controller (<mark>PLC</mark>) handles the conveyor interlocks in the assembly cell.",
+                "coverage": 1.0,
+                "score": 0.30000105101214575
+              },
+              {
+                "id": "dd1945d8daf344b49607e9c2ec3cfcbc",
+                "kind": "note",
+                "question": null,
+                "body": "Power Line Communication (PLC) carries data over the electrical wiring in our networking demonstration.",
+                "visibility": "team",
+                "author": "cara",
+                "author_verified": true,
+                "author_id": "4f878b3a05ff4623b6c98a9e01d2e706",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:57.758615Z",
+                "updated_at": "2026-09-30T00:22:57.774124Z",
+                "type": "item",
+                "snippet": "Power Line Communication (<mark>PLC</mark>) carries data over the electrical wiring in our networking demonstration.",
+                "coverage": 1.0,
+                "score": 0.3000010212431157
+              },
+              {
+                "id": "55514d5695da49a7896cedb2a48a47e6",
+                "kind": "note",
+                "question": null,
+                "body": "The maintenance checklist identifies the Programmable Logic Controller (PLC) that monitors the assembly cell inputs.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "75cf4020ffe3459a9aa1f3cc88aac5c2",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:50.095364Z",
+                "updated_at": "2026-09-30T00:22:50.109958Z",
+                "type": "item",
+                "snippet": "The maintenance checklist identifies the Programmable Logic Controller (<mark>PLC</mark>) that monitors the assembly cell inputs.",
+                "coverage": 1.0,
+                "score": 0.3000009931140015
+              },
+              {
+                "id": "44d576bb54d64c398463185728be61a6",
+                "kind": "note",
+                "question": null,
+                "body": "The networking lesson explains Power Line Communication (PLC) with a pair of adapters on existing electrical wiring.",
+                "visibility": "team",
+                "author": "drew",
+                "author_verified": true,
+                "author_id": "7ee089ebdccb4296a80b460fe28a565d",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:04.411223Z",
+                "updated_at": "2026-09-30T00:23:04.424068Z",
+                "type": "item",
+                "snippet": "The networking lesson explains Power Line Communication (<mark>PLC</mark>) with a pair of adapters on existing electrical wiring.",
+                "coverage": 1.0,
+                "score": 0.3000009412617839
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Power Line Communication": {
+            "query": "Power Line Communication",
+            "terms": [
+              "power",
+              "line",
+              "communication"
+            ],
+            "concepts": [
+              {
+                "id": "050cae4ef96946cd9b0a25e9592c7288",
+                "name": "Power Line Communication"
+              }
+            ],
+            "items": [
+              {
+                "id": "dd1945d8daf344b49607e9c2ec3cfcbc",
+                "kind": "note",
+                "question": null,
+                "body": "Power Line Communication (PLC) carries data over the electrical wiring in our networking demonstration.",
+                "visibility": "team",
+                "author": "cara",
+                "author_verified": true,
+                "author_id": "4f878b3a05ff4623b6c98a9e01d2e706",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:57.758615Z",
+                "updated_at": "2026-09-30T00:22:57.774124Z",
+                "type": "item",
+                "snippet": "<mark>Power Line Communication</mark> (PLC) carries data over the electrical wiring in our networking demonstration.",
+                "coverage": 1.0,
+                "score": 0.3000010212431157
+              },
+              {
+                "id": "44d576bb54d64c398463185728be61a6",
+                "kind": "note",
+                "question": null,
+                "body": "The networking lesson explains Power Line Communication (PLC) with a pair of adapters on existing electrical wiring.",
+                "visibility": "team",
+                "author": "drew",
+                "author_verified": true,
+                "author_id": "7ee089ebdccb4296a80b460fe28a565d",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:04.411223Z",
+                "updated_at": "2026-09-30T00:23:04.424068Z",
+                "type": "item",
+                "snippet": "The networking lesson explains <mark>Power Line Communication</mark> (PLC) with a pair of adapters on existing electrical wiring.",
+                "coverage": 1.0,
+                "score": 0.3000009412617839
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Programmable Logic Controller": {
+            "query": "Programmable Logic Controller",
+            "terms": [
+              "programmable",
+              "logic",
+              "controller"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "22a87267cb7246b9bddbfb5fa48e7b98",
+                "kind": "note",
+                "question": null,
+                "body": "A Programmable Logic Controller (PLC) handles the conveyor interlocks in the assembly cell.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "6cd2776abae64c3b972e776e872f3321",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:42.102457Z",
+                "updated_at": "2026-09-30T00:22:42.145286Z",
+                "type": "item",
+                "snippet": "A <mark>Programmable</mark> <mark>Logic</mark> <mark>Controller</mark> (PLC) handles the conveyor interlocks in the assembly cell.",
+                "coverage": 1.0,
+                "score": 0.3000031530364372
+              },
+              {
+                "id": "55514d5695da49a7896cedb2a48a47e6",
+                "kind": "note",
+                "question": null,
+                "body": "The maintenance checklist identifies the Programmable Logic Controller (PLC) that monitors the assembly cell inputs.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "75cf4020ffe3459a9aa1f3cc88aac5c2",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:50.095364Z",
+                "updated_at": "2026-09-30T00:22:50.109958Z",
+                "type": "item",
+                "snippet": "The maintenance checklist identifies the <mark>Programmable</mark> <mark>Logic</mark> <mark>Controller</mark> (PLC) that monitors the assembly cell inputs.",
+                "coverage": 1.0,
+                "score": 0.3000029793420046
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben",
+          "cara": "cara",
+          "drew": "drew"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 41,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "22a87267cb7246b9bddbfb5fa48e7b98",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "55514d5695da49a7896cedb2a48a47e6",
+      "storage_kind": "item",
+      "actor": "ben"
+    },
+    {
+      "id": "dd1945d8daf344b49607e9c2ec3cfcbc",
+      "storage_kind": "item",
+      "actor": "cara"
+    },
+    {
+      "id": "44d576bb54d64c398463185728be61a6",
+      "storage_kind": "item",
+      "actor": "drew"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Programmable Logic Controller",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "concepts",
+      "assertion": "Power Line Communication",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "050cae4ef96946cd9b0a25e9592c7288",
+          "name": "Power Line Communication",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "Programmable Logic Controller",
+        "alias": "PLC"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "Power Line Communication",
+        "alias": "PLC"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Programmable Logic Controller",
+        "predicate": "uses",
+        "tail": "Power Line Communication"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 32.204854555000566,
+  "inference_calls": 4,
+  "sampled_peak_tree_rss_bytes": 3880181760,
+  "sampled_cpu_seconds": 63.410000000000025
+}

@@ -1,0 +1,2 @@
+FROM mds-ml-tests:ubi8.10
+RUN uv pip install --python /home/mds/.venv/bin/python --no-cache paramiko==4.0.0

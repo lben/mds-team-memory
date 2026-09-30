@@ -1,0 +1,491 @@
+{
+  "id": "mars_hypothetical_questions",
+  "domain": "astronomy",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/questions/00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/questions/dba76186d30647f1aa84519e2e075163",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/mars_hypothetical_questions/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Mars exploration",
+      "nuclear power"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Mars exploration",
+        "predicate": "uses",
+        "tail": "nuclear power"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "nuclear power"
+      },
+      {
+        "actor": "ben",
+        "concept": "Mars exploration"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.713401920000251,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.046690461000253,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 12.760092381000504,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "e43f5a1ead84402b9540eac2ca76e66d",
+            "name": "Mars exploration",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Mars exploration",
+            "concept_id": "e43f5a1ead84402b9540eac2ca76e66d",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "e43f5a1ead84402b9540eac2ca76e66d",
+              "label": "Mars exploration",
+              "concepts": [
+                {
+                  "id": "e43f5a1ead84402b9540eac2ca76e66d",
+                  "name": "Mars exploration",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+              "kind": "question",
+              "question": null,
+              "body": "Should Mars exploration use nuclear power for a future crewed outpost?",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "3c44f73246c140998831133d376d6f8b",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": "open",
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:19:49.140199Z",
+              "updated_at": "2026-09-30T00:19:49.186136Z",
+              "answers": [],
+              "concepts": [
+                {
+                  "id": "e43f5a1ead84402b9540eac2ca76e66d",
+                  "name": "Mars exploration"
+                }
+              ],
+              "suggested_experts": []
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "dba76186d30647f1aa84519e2e075163",
+              "kind": "question",
+              "question": null,
+              "body": "If Mars exploration uses nuclear power, how would the equipment be transported?",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "1bc1e61ec7c448b486f3c8d173b65c65",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": "open",
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:19:55.917684Z",
+              "updated_at": "2026-09-30T00:19:55.989307Z",
+              "answers": [],
+              "concepts": [
+                {
+                  "id": "e43f5a1ead84402b9540eac2ca76e66d",
+                  "name": "Mars exploration"
+                }
+              ],
+              "suggested_experts": []
+            }
+          }
+        ],
+        "searches": {
+          "Mars exploration": {
+            "query": "Mars exploration",
+            "terms": [
+              "mars",
+              "exploration"
+            ],
+            "concepts": [
+              {
+                "id": "e43f5a1ead84402b9540eac2ca76e66d",
+                "name": "Mars exploration"
+              }
+            ],
+            "items": [
+              {
+                "id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+                "kind": "question",
+                "question": null,
+                "body": "Should Mars exploration use nuclear power for a future crewed outpost?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "3c44f73246c140998831133d376d6f8b",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:49.140199Z",
+                "updated_at": "2026-09-30T00:19:49.186136Z",
+                "type": "item",
+                "snippet": "Should <mark>Mars exploration</mark> use nuclear power for a future crewed outpost?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.3000010181086519
+              },
+              {
+                "id": "dba76186d30647f1aa84519e2e075163",
+                "kind": "question",
+                "question": null,
+                "body": "If Mars exploration uses nuclear power, how would the equipment be transported?",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "1bc1e61ec7c448b486f3c8d173b65c65",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:55.917684Z",
+                "updated_at": "2026-09-30T00:19:55.989307Z",
+                "type": "item",
+                "snippet": "If <mark>Mars exploration</mark> uses nuclear power, how would the equipment be transported?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.3000009825242718
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "nuclear power": {
+            "query": "nuclear power",
+            "terms": [
+              "nuclear",
+              "power"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+                "kind": "question",
+                "question": null,
+                "body": "Should Mars exploration use nuclear power for a future crewed outpost?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "3c44f73246c140998831133d376d6f8b",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:49.140199Z",
+                "updated_at": "2026-09-30T00:19:49.186136Z",
+                "type": "item",
+                "snippet": "Should Mars exploration use <mark>nuclear</mark> <mark>power</mark> for a future crewed outpost?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.3000020362173038
+              },
+              {
+                "id": "dba76186d30647f1aa84519e2e075163",
+                "kind": "question",
+                "question": null,
+                "body": "If Mars exploration uses nuclear power, how would the equipment be transported?",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "1bc1e61ec7c448b486f3c8d173b65c65",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:55.917684Z",
+                "updated_at": "2026-09-30T00:19:55.989307Z",
+                "type": "item",
+                "snippet": "If Mars exploration uses <mark>nuclear</mark> <mark>power</mark>, how would the equipment be transported?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.30000196504854365
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 16,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "dba76186d30647f1aa84519e2e075163",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Mars exploration",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "e43f5a1ead84402b9540eac2ca76e66d",
+          "name": "Mars exploration",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "nuclear power",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Mars exploration",
+        "predicate": "uses",
+        "tail": "nuclear power"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "nuclear power"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "ben",
+        "concept": "Mars exploration"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 14.254820715999813,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3948044288,
+  "sampled_cpu_seconds": 29.370000000000005
+}

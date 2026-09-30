@@ -1,0 +1,359 @@
+{
+  "snapshot_utc": "2026-09-30T00:32:36.632569+00:00",
+  "backend_sha256": "dab095e20d94015987380d5399a14aaca8ca1f4ea76ebdc4697032aa7d1c305c",
+  "file_sha256": {
+    "backend/alembic/README": "31595cf53626af9ed16e15c44fa43183209cc163fbc3ebcb904b22ac436a8884",
+    "backend/alembic/env.py": "71281c73401d2134ce2122c75862caa68165f9f933bedc5dbc87c6b7e7f47902",
+    "backend/alembic/script.py.mako": "d38920781b4d31ae1c0a71bc09f41c2ade8feab9e5a087e3f30cb4bbf0c1c9d3",
+    "backend/alembic/versions/0001_initial.py": "1a3506d1d6e2cd7141acd64700272d1bd6c52c176d78bc55161bdc92edff68d2",
+    "backend/alembic/versions/0002_relationship_review.py": "2483231906f9758cffa526a2da23b9b062b0e0082c2f7303c0df006800865335",
+    "backend/alembic/versions/0003_concept_vocabulary.py": "bb022e368cd861e463a49cb7e2b3335aba9cea4e46e1503d0e2300b4ba54b4ad",
+    "backend/alembic/versions/0004_stemmed_search.py": "b68760c0fb2b00ea7bd9c28d17bd53ee4601a3b80509452fcefc392598422b57",
+    "backend/alembic/versions/0005_accounts.py": "45efcbd3fd92d11895cf75deb2014363f96215ba834eb9a09a4c791df83786f5",
+    "backend/alembic/versions/0006_drop_dead_columns.py": "aa21836ecd75c62ea34a6db5241253929c1ae01e87467a28c64f8f8ca89842f5",
+    "backend/alembic/versions/0007_ml_automation.py": "287a3bde91e0df924b2846f68fbb3bc0926a8327b40efe6472897c794bcca275",
+    "backend/alembic/versions/0008_alias_definition_coverage.py": "4c0b918d44363c44bd674322aec85d723b7e28b4bd47a184785dfd278581efb9",
+    "backend/alembic/versions/0009_alias_identity_routes.py": "1386b86c8c7cc4ebed602b83095929fc2743b73132c40f63efc5e58c43bb30b0",
+    "backend/alembic/versions/0010_inverse_alias_dependencies.py": "bddd4741e8010cfc196df7576d8b83195207f99533fe7480d678b93345ad41cb",
+    "backend/alembic/versions/0011_identity_policy_replay.py": "bd9d77e085443b3200d8ea69f8fc6b2299cc84c0b5012bc7a6bef2963c404657",
+    "backend/alembic/versions/0012_definition_coverage_revision.py": "31bcb0207574536ddad06a6f2dcfffb0170b1d5be317fe484183160a6bc4b66c",
+    "backend/alembic/versions/0013_expertise_projection_generation.py": "0f02bbb22d101c4d6d26d3e39f6a87e54fdb8457aa9afa8d188aab7a92ac3dd3",
+    "backend/alembic/versions/0014_relationship_assertion_scope.py": "9d8300cd376e72b8374565f8155fb28b682ad073e24542cb6af7fcf985021967",
+    "backend/alembic/versions/0015_explicit_topic_feedback.py": "38f89b7cb1d6ff34b3462908c376dfa8f782fd20e5ed3f90337e0793dcbd001f",
+    "backend/alembic.ini": "1de444e5202747246718c3f80264c8fe64eabc697267869670771edb140050fd",
+    "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/auth.py": "6dd8295de9526c3652573e552cd7ce0ab499df2650e71de6d81cee33a2489d50",
+    "backend/app/cli.py": "e595f0972dbcfacb16bada941e902eb151a990b9c8b912da2ec1dc6eba20024b",
+    "backend/app/concepts.py": "c6c0f73bf4c3ce037f1e101f9faf6201d5b90a1d0d55836e7beb22a79fd67e82",
+    "backend/app/config.py": "e24eb1a6fd1f7e8f58bdaa52f26bdbf84b8faeec0f116e8f4487c94eedf657c7",
+    "backend/app/db.py": "37d95f1505ca857e663b4ec58fb3740e16416a1e9eb4f46592eb61b7e758b9b1",
+    "backend/app/docstore.py": "a87bab0863dc7be4a0d80bb9880f236f960575cecbf2ddf5f21ff91c294c8cfd",
+    "backend/app/extraction.py": "4fc89880f38b639fb876080e538647f99c292c3aa72696c1e4e9fb9c6329153d",
+    "backend/app/impact.py": "80e36d9df9b7f751d04fc9b53b56d2f9be2e718c97760546710a4a7fca24afac",
+    "backend/app/knowledge.py": "8b89fb437ed885fc301dfccc12c256b4c30a9ed8b6c866b1bf8ca1c885b7f196",
+    "backend/app/live.py": "e2a32e92157fae91335eacce6149eff871c81dc503e6426f429e36d267889a25",
+    "backend/app/main.py": "33d099af482c324d637ce23a0989ab5c23ab2a30923e40ee6e8554635a28e1ed",
+    "backend/app/ml/adapter.py": "43c686cc34fc7166fd505f07a993af555cc9bd3ea9845fe90711ce7262d2f6f4",
+    "backend/app/ml/api.py": "afc0d3a0ec66e3b5b0c02b94137d8ab9d9e2aac93f7c3f7a67a3ad298568011e",
+    "backend/app/ml/effective.py": "c2c954183b775623f8b58935f8ac675833d93f0fe2f5bbc1fd06f98d116477b6",
+    "backend/app/ml/eligibility.py": "5b4291dc5360f5324fa20dacb13a44cbcb73fe369dab421d04370df8968f27ec",
+    "backend/app/ml/embeddings.py": "3a9e80f656689cfc9867a870468514214edaa090d04f08c265483754b98cb072",
+    "backend/app/ml/evaluation.py": "7faaa50ab46cc3e1facc36b6a400ec1be6c909e742eb4ec61203269ba1a3716f",
+    "backend/app/ml/identity.py": "ce57abec7f40c3da751f434af7cb2ec18b289211e4f2a81e8d94f6607a7e7196",
+    "backend/app/ml/models.py": "30ad4a769de976e87b5b377de5738dfcdd25070fa4c95a14b20ee78796c9e334",
+    "backend/app/ml/policy.py": "ca7231789db4cd677712a61544ca54a7e82e61fa84fd3cd5131819239fc528b2",
+    "backend/app/ml/projection.py": "f95a64c658976cd38067ce4b6eefeeabb4e0763d3d6bd6e7a9c6eb741fe916dd",
+    "backend/app/ml/queue.py": "ae5fc185ee3b6f0271084e966e07c30dac226c30e913b43e5b9d95de8fd4b326",
+    "backend/app/ml/relation_syntax.py": "bc399c3df5046b89c4aa5f0f92bd7a37c36dd3b7447c914e89c4da106e9fb23f",
+    "backend/app/ml/relationship_grounding.py": "c4a970e46faaaa939382e047b877316829b3c0787416c80e618354bde169da01",
+    "backend/app/ml/resolution.py": "d9446613a8df350d91d26012390f30d00100f77bb9185b3541f97bf6b95746c0",
+    "backend/app/ml/runtime.py": "819fb5839671a4e295c1b4b07935524660e1f6df51f1a34f40e934d94bdd0bef",
+    "backend/app/ml/sources.py": "add346a26ec2f0238b561511586fe3191fd79b1d86d10d846bea4b3156c22e07",
+    "backend/app/ml/syntax.py": "647558ed01842204120b737895cf688844e950c435b2de474b8e39e2c696ef0a",
+    "backend/app/ml/worker.py": "990e847b866edb07c96713c619258606da22ea30fdc52cc0c04e3b25257dcc23",
+    "backend/app/models.py": "e55e8afff912223d2a928174ef50cf26a0f318a57b0ba39220c12b940577e805",
+    "backend/app/relationships.py": "025ab2788be7488ec97af66ed5f626fb8897534764d516420c2af2354edbd809",
+    "backend/app/routers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/routers/admin.py": "a111d07f6876517ab7754f8e324619e0eb8357e0de73d07369cdfae08012a227",
+    "backend/app/routers/auth.py": "a230280e0c921153ee8b3591ebb42b01b1128523ca6177a17ae633fa0389fd0e",
+    "backend/app/routers/documents.py": "40f7d24fc28ba0dd27487b85f9b0ee9a2cf3d41d8a3075d1945ec78e680bd500",
+    "backend/app/routers/expertise.py": "3cdb9a1ddd39a35deb2e4eb00589342c40cb9276099a6c49f6b3b4e1721600a1",
+    "backend/app/routers/feed.py": "1fa289c78a39d3eace22803a50f51edc2a10d8d1ab41bb094c7917c5c12dab60",
+    "backend/app/routers/graph.py": "cdfbc4a798596241d716bf076a42884764688908f1c94b1a648662bef4ccd058",
+    "backend/app/routers/impact.py": "1d352fc4367e5181373659234fce24d37107803c7e13786014dd10c45ef8d31c",
+    "backend/app/routers/items.py": "d41a19679eb88894560f8b3127a390c5b0106a8b0d86a12371c2f7ad43c2c5df",
+    "backend/app/routers/notifications.py": "fb54bf56f359ebc4e1036da65f2417ea9e4c0c8cf3fb8594af2f656f123b2e63",
+    "backend/app/routers/profile.py": "315714d3e70f8351b87fc8462110a5a9b552f9ac52a14a0410176c78323bb425",
+    "backend/app/routers/questions.py": "2e5c32c3e776a6d346818032f854df971e5df7aea188197cb3ab6b2077cb3027",
+    "backend/app/routers/scratchpad.py": "f04aa9c7a93a74544aafe155596a802b4aa9a850af1122f4d0ef844fda9f3e22",
+    "backend/app/routers/search.py": "41e07c7c640601c9492a03f2134e9b4534a0ef8643d7734c5669fb2b4842e917",
+    "backend/app/searchsvc.py": "5c6b226fdbfc6c63ee6937bfdc25f2214bc79d41b939e5f420585cf7296abf36",
+    "backend/app/text.py": "c0861d15b11a4b5553d2ed14551de7c815888f68e5b7116640d9b1fa88feee56",
+    "backend/app/topic_feedback.py": "9fb33fa54b0dbcb7b0d631ae189d7b911dd17351138e28f46fcc1398208183e5"
+  },
+  "driver_sha256": "c0b1c02bf28d8038b85e683ace9264d9291a1cc1c80a515239aad55ce364c361",
+  "source_git_head": null,
+  "source_root": "/home/mds/mds-uat/releases/20260930-003028-945282",
+  "models": "/home/mds/mds-uat/ml/generations/25354fabc6c2612567b9a1fa4f49b853529b082dcfa3908a8021f8556d04f1f3/models",
+  "sqlite_filesystem": "overlay",
+  "models_manifest_sha256": "d1ad90d5c67ea92e0a36779a06d310ca4286e4ace35f5a17cfc73118989974f1",
+  "model_pins": {
+    "models": {
+      "embeddings": {
+        "files": [
+          {
+            "path": "README.md",
+            "sha256": "9ffeb4467f293416c1f7642e64ae0bd44778fa182ce1165196e8a0329a34fd80",
+            "size": 94607
+          },
+          {
+            "path": "1_Pooling/config.json",
+            "sha256": "e54c164a07274f2eb45bb724f54a79d1efcc90c41573887cd9a29aeee0597352",
+            "size": 191
+          },
+          {
+            "path": "config.json",
+            "sha256": "446712fac367857b4b1302762fe1cd7bfa8b3c4b77b4dc5d77c4025407660896",
+            "size": 779
+          },
+          {
+            "path": "config_sentence_transformers.json",
+            "sha256": "940d5f50db195fa6e5e6a4f122c095f77880de259d74b14a65779ed48bdd7c56",
+            "size": 124
+          },
+          {
+            "path": "model.safetensors",
+            "sha256": "45e1954914e29bd74080e6c1510165274ff5279421c89f76c418878732f64ae7",
+            "size": 1340616616
+          },
+          {
+            "path": "modules.json",
+            "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+            "size": 349
+          },
+          {
+            "path": "sentence_bert_config.json",
+            "sha256": "84e39fda68ccbff05bfa723ae9c0e70e23e2ec373b76e0f8c6e71af72a693cbf",
+            "size": 52
+          },
+          {
+            "path": "special_tokens_map.json",
+            "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+            "size": 125
+          },
+          {
+            "path": "tokenizer.json",
+            "sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+            "size": 711396
+          },
+          {
+            "path": "tokenizer_config.json",
+            "sha256": "9261e7d79b44c8195c1cada2b453e55b00aeb81e907a6664974b4d7776172ab3",
+            "size": 366
+          },
+          {
+            "path": "vocab.txt",
+            "sha256": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+            "size": 231508
+          }
+        ],
+        "license": "mit",
+        "repository": "BAAI/bge-large-en-v1.5",
+        "revision": "d4aa6901d3a41ba39fb536a557fa166f842b0e09"
+      },
+      "extractor": {
+        "files": [
+          {
+            "path": "README.md",
+            "sha256": "598538ab53edfa3e8a744eb90f3d05fdb4e6a61c85fe67466605a97cc09618c8",
+            "size": 21557
+          },
+          {
+            "path": "config.json",
+            "sha256": "0eb92d00584d613aab32b2178f84a85176b62c87ae3689ce9084e83f6eba64d1",
+            "size": 3150
+          },
+          {
+            "path": "encoder_config/config.json",
+            "sha256": "d36a845b9f25dcaf1ec45a1c4bdf65ea4ac20596537e14530ec9f660a63aeca4",
+            "size": 857
+          },
+          {
+            "path": "model.safetensors",
+            "sha256": "7274094de2e0c2a37a386f55fc4e23061a954da5bd7a335e7dfe56f2743c277a",
+            "size": 774366564
+          },
+          {
+            "path": "tokenizer.json",
+            "sha256": "cbc8ae6037812709c9c26f2a160f8dc48b0440bcb79c8141804259ae2d6adac3",
+            "size": 8341713
+          },
+          {
+            "path": "tokenizer_config.json",
+            "sha256": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1",
+            "size": 645
+          }
+        ],
+        "license": "apache-2.0",
+        "repository": "fastino/gliner2.5-base-v1",
+        "revision": "72ac19b486cd4557424c8d61114e7530c243e9b0"
+      },
+      "syntax": {
+        "files": [
+          {
+            "path": "LICENSE",
+            "sha256": "3933c176979b68bc6d0bcc902c7d6c130f1d127f476f17ba5cdba8d99cfd0012",
+            "size": 1056
+          },
+          {
+            "path": "LICENSES_SOURCES",
+            "sha256": "e94b3033acaecc8b3515a9b8d59917ef0d0ded835a281dbe7185afaf2953122a",
+            "size": 2627
+          },
+          {
+            "path": "README.md",
+            "sha256": "81f5fad856ee95bc7c408bb475d3a8c9221700920756f670680385e575c63e38",
+            "size": 2945
+          },
+          {
+            "path": "accuracy.json",
+            "sha256": "bb710b7b01ad90644956f02850ec07ab5fc9a4f5f63edc8ed63c85c8c8458d95",
+            "size": 6333
+          },
+          {
+            "path": "attribute_ruler/patterns",
+            "sha256": "f8b97f7ebef9b8536bba5f0fc1e73af6183563e96e2325bcbb021b8c6dbc6683",
+            "size": 14735
+          },
+          {
+            "path": "config.cfg",
+            "sha256": "ec6d73663a9a137377402267eaff233e24aa06ed5079af80caf01566e56e858e",
+            "size": 5683
+          },
+          {
+            "path": "lemmatizer/lookups/lookups.bin",
+            "sha256": "eb64f40c0f8396d1762730c0ddf4dad2a52d138f5a389f71a1a1d088173b7737",
+            "size": 972893
+          },
+          {
+            "path": "meta.json",
+            "sha256": "8f77a2124b659dc1285516a6400c50dfb159d0b93242d3945eecaedf5429c9a0",
+            "size": 10554
+          },
+          {
+            "path": "ner/cfg",
+            "sha256": "a7172edadafba9f472e9ac0f2660eec04b6405e471be9e20267b79c67288d22d",
+            "size": 221
+          },
+          {
+            "path": "ner/model",
+            "sha256": "3ba4661fd057a26bd1c765ab778a318a7f3a9141062cc49663a487447e12bb30",
+            "size": 313857
+          },
+          {
+            "path": "ner/moves",
+            "sha256": "0517fdd4073fb9077de11a1fb003b1020e38994051a22e0857825218cc1cb01e",
+            "size": 1064
+          },
+          {
+            "path": "parser/cfg",
+            "sha256": "e2a240ef01f95e58f5dd4c9d6e90d61f597b8d998966570d3009dd81e8879780",
+            "size": 222
+          },
+          {
+            "path": "parser/model",
+            "sha256": "aab8d7722a0c422d3a1452a2e6c3d6b8f9166f9d6844f6d5b2bfbd495b1f7cf9",
+            "size": 639633
+          },
+          {
+            "path": "parser/moves",
+            "sha256": "aef3064f71b0a0166b629301548ceb80dcde38db1a3917114602bea01dfbf878",
+            "size": 1570
+          },
+          {
+            "path": "tagger/cfg",
+            "sha256": "e19ed3035f1b1d645b7ddd338120ec88c88d9f9c37bb33fd5ccd67deb044ed25",
+            "size": 604
+          },
+          {
+            "path": "tagger/model",
+            "sha256": "a489a41d998a6c042eaa279b6b823cd24b40854faf602e696d280788ed62f84c",
+            "size": 151450
+          },
+          {
+            "path": "tokenizer",
+            "sha256": "b014e8bba4958b120af2d0c1c63eabb7c00379f2bacaf10df7c5325efd2ea467",
+            "size": 77066
+          },
+          {
+            "path": "transformer/cfg",
+            "sha256": "f8a5a26e3056eb6fb06deeb3dbccfd88ae74900200c98c70b5966bbb7ec9d4de",
+            "size": 4
+          },
+          {
+            "path": "transformer/model",
+            "sha256": "2b7061c623f424486e5dddcff79276927127cee339cc6a9d26d87837c3e6074a",
+            "size": 497343046
+          },
+          {
+            "path": "vocab/key2row",
+            "sha256": "76be8b528d0075f7aae98d6fa57a6d3c83ae480a8469e668d7b0af968995ac71",
+            "size": 1
+          },
+          {
+            "path": "vocab/lookups.bin",
+            "sha256": "fce9c883c56165f29573cc938c2a1c9d417ac61bd8f56b671dd5f7996de70682",
+            "size": 70040
+          },
+          {
+            "path": "vocab/strings.json",
+            "sha256": "c7728f12b29cdb3908bd5d2b5ef0efac558033e58c30246e0d2ce86fd781ed67",
+            "size": 1091498
+          },
+          {
+            "path": "vocab/vectors",
+            "sha256": "14772b683e726436d5948ad3fff2b43d036ef2ebbe3458aafed6004e05a40706",
+            "size": 128
+          },
+          {
+            "path": "vocab/vectors.cfg",
+            "sha256": "ff4359091952c8cd16f1f0482f5770fb82d1707368d5cca3c46aa501f552e3c5",
+            "size": 22
+          }
+        ],
+        "license": "mit",
+        "repository": "explosion/spacy-models",
+        "revision": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5",
+        "source": {
+          "sha256": "272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5",
+          "size": 457421864,
+          "url": "https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl"
+        }
+      }
+    },
+    "version": 1
+  },
+  "web_environment": {
+    "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+    "executable": "/home/mds/mds-uat/current/.venv/bin/python",
+    "sqlite": "3.53.1",
+    "platform": "Linux-7.0.12-linuxkit-x86_64-with-glibc2.28",
+    "packages": {
+      "fastapi": "0.141.1",
+      "uvicorn": "0.52.4",
+      "sqlalchemy": "2.0.52",
+      "alembic": "1.19.1",
+      "psutil": null,
+      "torch": null,
+      "gliner2": null,
+      "sentence-transformers": null,
+      "transformers": null
+    }
+  },
+  "worker_environment": {
+    "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+    "executable": "/home/mds/mds-uat/current/.ml-venv/bin/python",
+    "sqlite": "3.53.1",
+    "platform": "Linux-7.0.12-linuxkit-x86_64-with-glibc2.28",
+    "packages": {
+      "fastapi": "0.141.1",
+      "uvicorn": "0.52.4",
+      "sqlalchemy": "2.0.52",
+      "alembic": "1.19.1",
+      "psutil": "7.2.2",
+      "torch": "2.8.0+cpu",
+      "gliner2": "2.0.0",
+      "sentence-transformers": "5.1.2",
+      "transformers": "4.57.6"
+    }
+  },
+  "phase_seconds": 60,
+  "protocol": "steady-state-v2",
+  "startup_measurement_limit_seconds": 180,
+  "drain_observation_seconds": 30,
+  "limitations": [
+    "Synthetic content does not establish model quality.",
+    "Startup timeout bounds this check, not the product response time.",
+    "A bounded drain observation does not establish full-backlog drain time."
+  ]
+}

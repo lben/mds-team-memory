@@ -1,0 +1,368 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "86344cb7341c43b39a1252a1e3e07547",
+      "content_hash": "4ab1d8b13b34e199d7f8dc74a6d24680e292d10a30f9307ca7ea0c13c3947ea1",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":5,\"label\":\"named entity\",\"name\":\"Earth\",\"score\":0.9975619316101074,\"start\":0},{\"end\":42,\"label\":\"named entity\",\"name\":\"Sun\",\"score\":0.9939345717430115,\"start\":39},{\"end\":75,\"label\":\"named entity\",\"name\":\"Solar System\",\"score\":0.9356499314308167,\"start\":63},{\"end\":33,\"label\":\"named entity\",\"name\":\"Solar System\",\"score\":0.8843986392021179,\"start\":21}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"earth\":0.6362488269805908,\"solar system\":0.716770350933075,\"sun\":0.5746001601219177},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":34,\"head\":{\"end\":5,\"name\":\"Earth\",\"score\":0.8506075143814087,\"start\":0},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"part_of\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8506075143814087,\"start\":0,\"tail\":{\"end\":33,\"name\":\"Solar System\",\"score\":0.8506075143814087,\"start\":21}},{\"end\":42,\"head\":{\"end\":42,\"name\":\"Sun\",\"score\":0.7315430045127869,\"start\":39},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"part_of\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7315430045127869,\"start\":21,\"tail\":{\"end\":33,\"name\":\"Solar System\",\"score\":0.7315430045127869,\"start\":21}}],\"text_hash\":\"2e64e8c3748f960b0314f8371cf31a1e98138f503fe6910138f938a0f6252c62\"}",
+      "updated_at": "2026-09-30 00:19:16.973087"
+    },
+    {
+      "kind": "profile",
+      "id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:19:17.394386"
+    },
+    {
+      "kind": "profile",
+      "id": "bd53b12723fc4c3d841d085105f1827f",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:19:17.471009"
+    },
+    {
+      "kind": "item",
+      "id": "9000b29e768b4f3489a3a2a13f462217",
+      "content_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":36,\"label\":\"named entity\",\"name\":\"Earth\",\"score\":0.9951019287109375,\"start\":31},{\"end\":73,\"label\":\"named entity\",\"name\":\"Sun\",\"score\":0.9878720045089722,\"start\":70},{\"end\":101,\"label\":\"named entity\",\"name\":\"Solar System\",\"score\":0.9443696737289429,\"start\":89},{\"end\":64,\"label\":\"named entity\",\"name\":\"Solar System\",\"score\":0.9353331923484802,\"start\":52},{\"end\":125,\"label\":\"named entity\",\"name\":\"planets\",\"score\":0.8602632880210876,\"start\":118},{\"end\":144,\"label\":\"named entity\",\"name\":\"smaller bodies\",\"score\":0.6340423822402954,\"start\":130},{\"end\":13,\"label\":\"topic or process\",\"name\":\"astronomy\",\"score\":0.6477305293083191,\"start\":4}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"astronomy\":0.6193982362747192,\"earth\":0.607782244682312,\"planets\":0.6832366585731506,\"smaller bodies\":0.5501078367233276,\"solar system\":0.7242593765258789,\"sun\":0.5696794986724854},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":64,\"head\":{\"end\":36,\"name\":\"Earth\",\"score\":0.7972987294197083,\"start\":31},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"part_of\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7972987294197083,\"start\":31,\"tail\":{\"end\":64,\"name\":\"Solar System\",\"score\":0.7972987294197083,\"start\":52}},{\"end\":145,\"head\":{\"end\":73,\"name\":\"Sun\",\"score\":0.7322156429290771,\"start\":70},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"part_of\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7322156429290771,\"start\":66,\"tail\":{\"end\":101,\"name\":\"Solar System\",\"score\":0.7322156429290771,\"start\":89}}],\"text_hash\":\"4b8003f93ced7eb930b479ea48797387432808fcd5a4ebd12dff07237d782880\"}",
+      "updated_at": "2026-09-30 00:19:17.147105"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "7fd4a4f0e07d5863bd50a117cebec7bc5b1f38309c74706a7ff9929f10c7b320",
+      "kind": "concept",
+      "payload": "{\"name\":\"Earth\"}",
+      "state": "held",
+      "score": 0.9975619316101074,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:09.308600",
+      "updated_at": "2026-09-30 00:19:17.220523"
+    },
+    {
+      "key": "bb0b63d7f390851f798f4d91e2db087b120b4330ecf2c622bf70a6ff652c02e1",
+      "kind": "concept",
+      "payload": "{\"name\":\"Sun\"}",
+      "state": "held",
+      "score": 0.9939345717430115,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:09.322553",
+      "updated_at": "2026-09-30 00:19:17.222598"
+    },
+    {
+      "key": "e939342577d501910a0cb83845f60823e219756ba07a4e2b39cace2046e13c2d",
+      "kind": "concept",
+      "payload": "{\"name\":\"Solar System\"}",
+      "state": "active",
+      "score": 0.9443696737289429,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "d8e5ead003b94e69833fcd3e8583e9b5",
+      "created_at": "2026-09-30 00:19:09.327145",
+      "updated_at": "2026-09-30 00:19:17.229616"
+    },
+    {
+      "key": "a5bc1a27a613d13a3cebd51767e2f5a725e1816abd8b6d31a25ae076c1154d18",
+      "kind": "concept",
+      "payload": "{\"name\":\"planets\"}",
+      "state": "held",
+      "score": 0.8602632880210876,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:16.686508",
+      "updated_at": "2026-09-30 00:19:17.218549"
+    },
+    {
+      "key": "6b2adc60a5817d4e9b76a58a4ebbabed1469156da3c1eb20138850f17912ab84",
+      "kind": "concept",
+      "payload": "{\"name\":\"smaller bodies\"}",
+      "state": "held",
+      "score": 0.6340423822402954,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:16.693817",
+      "updated_at": "2026-09-30 00:19:17.226497"
+    },
+    {
+      "key": "bf2df2505fe84b708424e25cd3bf8ba94ab536bc9474c125dcd3f2ebca66d371",
+      "kind": "concept",
+      "payload": "{\"name\":\"astronomy\"}",
+      "state": "held",
+      "score": 0.6477305293083191,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:16.698917",
+      "updated_at": "2026-09-30 00:19:17.228069"
+    },
+    {
+      "key": "aef885ac5b81bb9da3fa4b0e0283e2077b07b5fa40af5faefc6a2537a94a7f8c",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"d8e5ead003b94e69833fcd3e8583e9b5\",\"source_id\":\"9000b29e768b4f3489a3a2a13f462217\",\"source_kind\":\"item\"}",
+      "state": "held",
+      "score": 0.9443696737289429,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "d8e5ead003b94e69833fcd3e8583e9b5",
+      "created_at": "2026-09-30 00:19:16.740406",
+      "updated_at": "2026-09-30 00:19:17.224831"
+    },
+    {
+      "key": "1ccdd08ae2bcdc205d0d611369bf92bdd63e79e2051495ff1f1b72326a82ecb4",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"d8e5ead003b94e69833fcd3e8583e9b5\",\"source_id\":\"86344cb7341c43b39a1252a1e3e07547\",\"source_kind\":\"item\"}",
+      "state": "held",
+      "score": 0.9356499314308167,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "d8e5ead003b94e69833fcd3e8583e9b5",
+      "created_at": "2026-09-30 00:19:17.005687",
+      "updated_at": "2026-09-30 00:19:17.018946"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "7945d79abafb63dfd7fbe310222956eacf6132e9823ffd468881592b1970478b",
+      "finding_key": "7fd4a4f0e07d5863bd50a117cebec7bc5b1f38309c74706a7ff9929f10c7b320",
+      "source_kind": "item",
+      "source_id": "86344cb7341c43b39a1252a1e3e07547",
+      "source_hash": "4ab1d8b13b34e199d7f8dc74a6d24680e292d10a30f9307ca7ea0c13c3947ea1",
+      "group_key": "item:86344cb7341c43b39a1252a1e3e07547",
+      "author_id": "bd53b12723fc4c3d841d085105f1827f",
+      "start": 0,
+      "end": 5,
+      "raw_score": 0.9975619316101074,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6362488269805908,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"852c0606912ac5361fc9283c04e2bf4d289ab0748901fe4eb8efe35eabb0a39e\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "32d344109cb6e75c1b76582b7b52c31ad0e50b2dd2bb7876d38ef6a1e11c0d59",
+      "finding_key": "bb0b63d7f390851f798f4d91e2db087b120b4330ecf2c622bf70a6ff652c02e1",
+      "source_kind": "item",
+      "source_id": "86344cb7341c43b39a1252a1e3e07547",
+      "source_hash": "4ab1d8b13b34e199d7f8dc74a6d24680e292d10a30f9307ca7ea0c13c3947ea1",
+      "group_key": "item:86344cb7341c43b39a1252a1e3e07547",
+      "author_id": "bd53b12723fc4c3d841d085105f1827f",
+      "start": 39,
+      "end": 42,
+      "raw_score": 0.9939345717430115,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5746001601219177,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"852c0606912ac5361fc9283c04e2bf4d289ab0748901fe4eb8efe35eabb0a39e\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ec5a9d9d4b733a4c9f2eaded71b19775cb3062c2140f1a8b95aa2170f9a532dd",
+      "finding_key": "e939342577d501910a0cb83845f60823e219756ba07a4e2b39cace2046e13c2d",
+      "source_kind": "item",
+      "source_id": "86344cb7341c43b39a1252a1e3e07547",
+      "source_hash": "4ab1d8b13b34e199d7f8dc74a6d24680e292d10a30f9307ca7ea0c13c3947ea1",
+      "group_key": "item:86344cb7341c43b39a1252a1e3e07547",
+      "author_id": "bd53b12723fc4c3d841d085105f1827f",
+      "start": 63,
+      "end": 75,
+      "raw_score": 0.9356499314308167,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.716770350933075,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"852c0606912ac5361fc9283c04e2bf4d289ab0748901fe4eb8efe35eabb0a39e\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "55e11a8ab40ec81ef1f62762fe29e7d8bda01ac9cd45f3f7d28243c1838c8f0c",
+      "finding_key": "1ccdd08ae2bcdc205d0d611369bf92bdd63e79e2051495ff1f1b72326a82ecb4",
+      "source_kind": "item",
+      "source_id": "86344cb7341c43b39a1252a1e3e07547",
+      "source_hash": "4ab1d8b13b34e199d7f8dc74a6d24680e292d10a30f9307ca7ea0c13c3947ea1",
+      "group_key": "item:86344cb7341c43b39a1252a1e3e07547",
+      "author_id": "bd53b12723fc4c3d841d085105f1827f",
+      "start": 63,
+      "end": 75,
+      "raw_score": 0.9356499314308167,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"852c0606912ac5361fc9283c04e2bf4d289ab0748901fe4eb8efe35eabb0a39e\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "e63c39ef84a1581361ab429646acbb3bb785296e1083340ac1fe97fc48fdad1b",
+      "finding_key": "7fd4a4f0e07d5863bd50a117cebec7bc5b1f38309c74706a7ff9929f10c7b320",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "group_key": "item:9000b29e768b4f3489a3a2a13f462217",
+      "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "start": 31,
+      "end": 36,
+      "raw_score": 0.9951019287109375,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.607782244682312,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"0a65c30fd967d0bb7ee757cbc2241ad1db32a77289bd5cabe075428991d86b88\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8e5fb7360faad6b00c7c99eeb3fd734230a85e7e7270fe4eefd54a8cc9dfc2d0",
+      "finding_key": "bb0b63d7f390851f798f4d91e2db087b120b4330ecf2c622bf70a6ff652c02e1",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "group_key": "item:9000b29e768b4f3489a3a2a13f462217",
+      "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "start": 70,
+      "end": 73,
+      "raw_score": 0.9878720045089722,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5696794986724854,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"0a65c30fd967d0bb7ee757cbc2241ad1db32a77289bd5cabe075428991d86b88\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "7e29d2b263b82d532b67baea2dc3d172fc0d8b10776518e98d10bb3650683457",
+      "finding_key": "e939342577d501910a0cb83845f60823e219756ba07a4e2b39cace2046e13c2d",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "group_key": "item:9000b29e768b4f3489a3a2a13f462217",
+      "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "start": 89,
+      "end": 101,
+      "raw_score": 0.9443696737289429,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7242593765258789,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"0a65c30fd967d0bb7ee757cbc2241ad1db32a77289bd5cabe075428991d86b88\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "152a58518458661f70e2129a565ce41d9d167f268c1340791bf7ddaf198c427f",
+      "finding_key": "a5bc1a27a613d13a3cebd51767e2f5a725e1816abd8b6d31a25ae076c1154d18",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "group_key": "item:9000b29e768b4f3489a3a2a13f462217",
+      "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "start": 118,
+      "end": 125,
+      "raw_score": 0.8602632880210876,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6832366585731506,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"0a65c30fd967d0bb7ee757cbc2241ad1db32a77289bd5cabe075428991d86b88\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "924d69afdd30626cfd97473f0b66b4976df7785a3a6c74bab5fd04d4c0ab9a3e",
+      "finding_key": "6b2adc60a5817d4e9b76a58a4ebbabed1469156da3c1eb20138850f17912ab84",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "group_key": "item:9000b29e768b4f3489a3a2a13f462217",
+      "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "start": 130,
+      "end": 144,
+      "raw_score": 0.6340423822402954,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5501078367233276,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"0a65c30fd967d0bb7ee757cbc2241ad1db32a77289bd5cabe075428991d86b88\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "55f69cdf0a77f8b33b663d19a7222829543a90a6a4392e766a14ba452064eb81",
+      "finding_key": "bf2df2505fe84b708424e25cd3bf8ba94ab536bc9474c125dcd3f2ebca66d371",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "group_key": "item:9000b29e768b4f3489a3a2a13f462217",
+      "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "start": 4,
+      "end": 13,
+      "raw_score": 0.6477305293083191,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6193982362747192,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"0a65c30fd967d0bb7ee757cbc2241ad1db32a77289bd5cabe075428991d86b88\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "d37e0df29a004b3b5578bd16331394106f047738698242145349330b92df0384",
+      "finding_key": "aef885ac5b81bb9da3fa4b0e0283e2077b07b5fa40af5faefc6a2537a94a7f8c",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "group_key": "item:9000b29e768b4f3489a3a2a13f462217",
+      "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+      "start": 89,
+      "end": 101,
+      "raw_score": 0.9443696737289429,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"0a65c30fd967d0bb7ee757cbc2241ad1db32a77289bd5cabe075428991d86b88\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:18:10.484807"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 22,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 32377,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "c2da3cedeae1799b4da7b16a48377b95708388118e75caa03637dff283d543be",
+      "source_kind": "item",
+      "source_id": "86344cb7341c43b39a1252a1e3e07547",
+      "source_hash": "4ab1d8b13b34e199d7f8dc74a6d24680e292d10a30f9307ca7ea0c13c3947ea1",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 99,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "8f6201e4a412ff7d3f40d6e8c734694c0f0f5e48b11e8dd51fd3a02530a9c708",
+      "source_kind": "item",
+      "source_id": "9000b29e768b4f3489a3a2a13f462217",
+      "source_hash": "45fe879e51bf72ef4390b5627e6a4ff8986e4bc51d81ae6e41e4b888904ea133",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 145,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

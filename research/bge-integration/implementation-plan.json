@@ -1,0 +1,27 @@
+{
+  "branch": "gpt6.1solhigh_bge",
+  "date": "2026-09-29",
+  "control_commit": "3aab705",
+  "choice": "Existing BGE-large-en-v1.5 cosine relevance, not the structural hybrid",
+  "deployment_rule": {
+    "cosine_min": 0.6423084735870361,
+    "one_source_extractor_min": 0.995,
+    "two_independent_source_extractor_min": 0.8
+  },
+  "selection": "One all-development choice using the previously frozen BGE unlabeled decile/confidence grid and original 98.5% selection objective. Freeze before application tests. No weight fitting.",
+  "optimistic_development_proxy": {
+    "correct": 536,
+    "published": 544,
+    "selected_hits": 124,
+    "selected_positives": 150
+  },
+  "previous_domain_fold_proxy": {
+    "precision": 0.976878612716763,
+    "recall": 0.78,
+    "screen_pass": false
+  },
+  "acceptance_targets": "Unchanged. Operational success is not quality acceptance; do not retune after app results.",
+  "architecture": "Three checkpoints only. Eligibility shares the existing embedding instance and inference process; no Qwen/llama.cpp or additional loaded model. Version caches and reapply sources after upgrade.",
+  "long_sources": "Candidate-containing BGE-token windows, bounded by encoder context; short sources match full-source scoring.",
+  "scope": "Local commits and isolated Red Hat Docker verification. No push or real UAT/PROD deployment."
+}

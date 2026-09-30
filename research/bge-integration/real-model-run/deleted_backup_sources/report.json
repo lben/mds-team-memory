@@ -1,0 +1,873 @@
+{
+  "id": "deleted_backup_sources",
+  "domain": "software_operations",
+  "status": "INCOMPLETE",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/links/a0713620f6104bbf8b00fce4a6eec38e/evidence",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/09045fd2deb74fce9ac8f9f313a9b446",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/c2b435a3d94844189629a331f6535017",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/items/09045fd2deb74fce9ac8f9f313a9b446",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/items/c2b435a3d94844189629a331f6535017",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/09045fd2deb74fce9ac8f9f313a9b446",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/c2b435a3d94844189629a331f6535017",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/deleted_backup_sources/mds.sqlite3",
+  "expect": {
+    "concepts": [],
+    "absent_concepts": [
+      "Restic",
+      "SFTP"
+    ],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Restic",
+        "predicate": "uses",
+        "tail": "SFTP"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.402632252998956,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.75042175300041,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 13.153054005999365,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "98464c39b6fb4aacb59c5905d8b41443",
+            "name": "Restic",
+            "mentions": 2
+          },
+          {
+            "id": "bec5fc75e854494dade11384c1e08b8f",
+            "name": "SFTP",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Restic",
+            "concept_id": "98464c39b6fb4aacb59c5905d8b41443",
+            "is_canonical": true
+          },
+          {
+            "name": "SFTP",
+            "concept_id": "bec5fc75e854494dade11384c1e08b8f",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "98464c39b6fb4aacb59c5905d8b41443",
+              "label": "Restic",
+              "concepts": [
+                {
+                  "id": "98464c39b6fb4aacb59c5905d8b41443",
+                  "name": "Restic",
+                  "size": 2
+                }
+              ]
+            },
+            {
+              "id": "bec5fc75e854494dade11384c1e08b8f",
+              "label": "SFTP",
+              "concepts": [
+                {
+                  "id": "bec5fc75e854494dade11384c1e08b8f",
+                  "name": "SFTP",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "source": "98464c39b6fb4aacb59c5905d8b41443",
+              "target": "bec5fc75e854494dade11384c1e08b8f",
+              "label": "uses",
+              "style": "dashed",
+              "state": "held",
+              "origin": "automatic",
+              "directed": true,
+              "count": 1,
+              "support_count": 1,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "1 independent supporting source groups. Automatic; held.",
+              "link_id": "a0713620f6104bbf8b00fce4a6eec38e",
+              "finding_key": "edfb8a2da21a16ebfc42ab07b54a9c3a08ee1bfc4e1ad7de5d3dc66e63a2ea92",
+              "alternative_count": 2,
+              "conflicts": false
+            }
+          ],
+          "total_nodes": 2,
+          "total_edges": 1,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [
+          {
+            "link_id": "a0713620f6104bbf8b00fce4a6eec38e",
+            "src_name": "Restic",
+            "dst_name": "SFTP",
+            "occurrence_count": 2,
+            "items": [
+              {
+                "id": "09045fd2deb74fce9ac8f9f313a9b446",
+                "kind": "note",
+                "body": "Restic uses SFTP to reach the backup repository on our archive host.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:24:50.697853Z"
+              },
+              {
+                "id": "c2b435a3d94844189629a331f6535017",
+                "kind": "note",
+                "body": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:24:57.162313Z"
+              }
+            ],
+            "passages": [],
+            "summary": {
+              "source": "98464c39b6fb4aacb59c5905d8b41443",
+              "target": "bec5fc75e854494dade11384c1e08b8f",
+              "label": "uses",
+              "style": "dashed",
+              "state": "held",
+              "origin": "automatic",
+              "directed": true,
+              "count": 1,
+              "support_count": 1,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "1 independent supporting source groups. Automatic; held.",
+              "link_id": "a0713620f6104bbf8b00fce4a6eec38e",
+              "finding_key": "edfb8a2da21a16ebfc42ab07b54a9c3a08ee1bfc4e1ad7de5d3dc66e63a2ea92",
+              "alternative_count": 2,
+              "conflicts": false
+            },
+            "claims": [
+              {
+                "finding_key": "edfb8a2da21a16ebfc42ab07b54a9c3a08ee1bfc4e1ad7de5d3dc66e63a2ea92",
+                "kind": "relationship",
+                "src_id": "98464c39b6fb4aacb59c5905d8b41443",
+                "dst_id": "bec5fc75e854494dade11384c1e08b8f",
+                "predicate": "uses",
+                "state": "held",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 1,
+                "conflicts": false,
+                "src_name": "Restic",
+                "dst_name": "SFTP",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "09045fd2deb74fce9ac8f9f313a9b446",
+                    "source_hash": "4294a96183c265c67223cada2c2e78f07fb4d0df7c5d15de0305b2d80a6347df",
+                    "start": 0,
+                    "end": 68,
+                    "quote": "Restic uses SFTP to reach the backup repository on our archive host.",
+                    "text": "Restic uses SFTP to reach the backup repository on our archive host.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "c2b435a3d94844189629a331f6535017",
+                    "source_hash": "e2957117dc94e121eff960b42583a68bcb987b117c0649f7237de8112b62c227",
+                    "start": 40,
+                    "end": 56,
+                    "quote": "Restic uses SFTP",
+                    "text": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "f08f893609e8ff8641cc681129bd02c009a589b0cd1dbb4580c23509ac8cd6b4",
+                "kind": "association",
+                "src_id": "98464c39b6fb4aacb59c5905d8b41443",
+                "dst_id": "bec5fc75e854494dade11384c1e08b8f",
+                "predicate": "related to",
+                "state": "weak",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "Restic",
+                "dst_name": "SFTP",
+                "directed": false,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "09045fd2deb74fce9ac8f9f313a9b446",
+                    "source_hash": "4294a96183c265c67223cada2c2e78f07fb4d0df7c5d15de0305b2d80a6347df",
+                    "start": 0,
+                    "end": 68,
+                    "quote": "Restic uses SFTP to reach the backup repository on our archive host.",
+                    "text": "Restic uses SFTP to reach the backup repository on our archive host.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "c2b435a3d94844189629a331f6535017",
+                    "source_hash": "e2957117dc94e121eff960b42583a68bcb987b117c0649f7237de8112b62c227",
+                    "start": 0,
+                    "end": 79,
+                    "quote": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+                    "text": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "287da64d76f044dfb9e7010f77148f63e3a049f87515d5f29efbe4e2ff2acafa",
+                "kind": "relationship",
+                "src_id": "98464c39b6fb4aacb59c5905d8b41443",
+                "dst_id": "bec5fc75e854494dade11384c1e08b8f",
+                "predicate": "depends on",
+                "state": "withdrawn",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 0,
+                "conflicts": false,
+                "src_name": "Restic",
+                "dst_name": "SFTP",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "09045fd2deb74fce9ac8f9f313a9b446",
+                    "source_hash": "4294a96183c265c67223cada2c2e78f07fb4d0df7c5d15de0305b2d80a6347df",
+                    "start": 0,
+                    "end": 16,
+                    "quote": "Restic uses SFTP",
+                    "text": "Restic uses SFTP to reach the backup repository on our archive host.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "c2b435a3d94844189629a331f6535017",
+                    "source_hash": "e2957117dc94e121eff960b42583a68bcb987b117c0649f7237de8112b62c227",
+                    "start": 40,
+                    "end": 56,
+                    "quote": "Restic uses SFTP",
+                    "text": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              }
+            ],
+            "review_note": null,
+            "reviewed_by": null
+          }
+        ],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "09045fd2deb74fce9ac8f9f313a9b446",
+              "kind": "note",
+              "question": null,
+              "body": "Restic uses SFTP to reach the backup repository on our archive host.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "a4643adcb08a432aa2c038d7ed794088",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:24:50.697853Z",
+              "updated_at": "2026-09-30T00:24:50.738914Z",
+              "concepts": [
+                {
+                  "id": "98464c39b6fb4aacb59c5905d8b41443",
+                  "name": "Restic"
+                },
+                {
+                  "id": "bec5fc75e854494dade11384c1e08b8f",
+                  "name": "SFTP"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "c2b435a3d94844189629a331f6535017",
+              "kind": "note",
+              "question": null,
+              "body": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "d4b97408fe484f09bd99a397c647a792",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:24:57.162313Z",
+              "updated_at": "2026-09-30T00:24:57.195510Z",
+              "concepts": [
+                {
+                  "id": "98464c39b6fb4aacb59c5905d8b41443",
+                  "name": "Restic"
+                },
+                {
+                  "id": "bec5fc75e854494dade11384c1e08b8f",
+                  "name": "SFTP"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Restic": {
+            "query": "Restic",
+            "terms": [
+              "restic"
+            ],
+            "concepts": [
+              {
+                "id": "98464c39b6fb4aacb59c5905d8b41443",
+                "name": "Restic"
+              }
+            ],
+            "items": [
+              {
+                "id": "09045fd2deb74fce9ac8f9f313a9b446",
+                "kind": "note",
+                "question": null,
+                "body": "Restic uses SFTP to reach the backup repository on our archive host.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "a4643adcb08a432aa2c038d7ed794088",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:50.697853Z",
+                "updated_at": "2026-09-30T00:24:50.738914Z",
+                "type": "item",
+                "snippet": "<mark>Restic</mark> uses SFTP to reach the backup repository on our archive host.",
+                "coverage": 1.0,
+                "score": 0.30000099999999996
+              },
+              {
+                "id": "c2b435a3d94844189629a331f6535017",
+                "kind": "note",
+                "question": null,
+                "body": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "d4b97408fe484f09bd99a397c647a792",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:57.162313Z",
+                "updated_at": "2026-09-30T00:24:57.195510Z",
+                "type": "item",
+                "snippet": "The backup job configuration shows that <mark>Restic</mark> uses SFTP for archive transfers.",
+                "coverage": 1.0,
+                "score": 0.30000099999999996
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "SFTP": {
+            "query": "SFTP",
+            "terms": [
+              "sftp"
+            ],
+            "concepts": [
+              {
+                "id": "bec5fc75e854494dade11384c1e08b8f",
+                "name": "SFTP"
+              }
+            ],
+            "items": [
+              {
+                "id": "09045fd2deb74fce9ac8f9f313a9b446",
+                "kind": "note",
+                "question": null,
+                "body": "Restic uses SFTP to reach the backup repository on our archive host.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "a4643adcb08a432aa2c038d7ed794088",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:50.697853Z",
+                "updated_at": "2026-09-30T00:24:50.738914Z",
+                "type": "item",
+                "snippet": "Restic uses <mark>SFTP</mark> to reach the backup repository on our archive host.",
+                "coverage": 1.0,
+                "score": 0.30000099999999996
+              },
+              {
+                "id": "c2b435a3d94844189629a331f6535017",
+                "kind": "note",
+                "question": null,
+                "body": "The backup job configuration shows that Restic uses SFTP for archive transfers.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "d4b97408fe484f09bd99a397c647a792",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:57.162313Z",
+                "updated_at": "2026-09-30T00:24:57.195510Z",
+                "type": "item",
+                "snippet": "The backup job configuration shows that Restic uses <mark>SFTP</mark> for archive transfers.",
+                "coverage": 1.0,
+                "score": 0.30000099999999996
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 23,
+          "enabled": true,
+          "running": false
+        }
+      }
+    },
+    "after_actions": {
+      "seconds": 0.5994212919995334,
+      "inference_calls": 0,
+      "lock_retries": {},
+      "observed": {
+        "concepts": [],
+        "terms": [],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [],
+          "edges": [],
+          "total_nodes": 0,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 404,
+            "response": {
+              "detail": "Item not found"
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 404,
+            "response": {
+              "detail": "Item not found"
+            }
+          }
+        ],
+        "searches": {
+          "Restic": {
+            "query": "Restic",
+            "terms": [
+              "restic"
+            ],
+            "concepts": [],
+            "items": [],
+            "documents": [],
+            "scratchpad": []
+          },
+          "SFTP": {
+            "query": "SFTP",
+            "terms": [
+              "sftp"
+            ],
+            "concepts": [],
+            "items": [],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 31,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "09045fd2deb74fce9ac8f9f313a9b446",
+      "storage_kind": "item",
+      "actor": "alice",
+      "deleted": true
+    },
+    {
+      "id": "c2b435a3d94844189629a331f6535017",
+      "storage_kind": "item",
+      "actor": "ben",
+      "deleted": true
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "retractions": [
+    {
+      "category": "concepts",
+      "assertion": "Restic",
+      "initially_present": true,
+      "absent_after_actions": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "SFTP",
+      "initially_present": true,
+      "absent_after_actions": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Restic",
+        "predicate": "uses",
+        "tail": "SFTP"
+      },
+      "initially_present": false,
+      "absent_after_actions": true
+    }
+  ],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Restic",
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "SFTP",
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Restic",
+        "predicate": "uses",
+        "tail": "SFTP"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "retraction_status": "NOT_DEMONSTRATED",
+  "seconds": 15.347241424000458,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3896074240,
+  "sampled_cpu_seconds": 30.42999999999995
+}

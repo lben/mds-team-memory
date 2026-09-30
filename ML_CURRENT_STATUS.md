@@ -1,23 +1,43 @@
 # Automatic maintenance: current status
 
-Branch: `withgpt6.1solhigh`, created 29 September 2026 from `with-opus55` at
-`73e743d`. Earlier sections retain the development history of the parent branches.
+Branch: `gpt6.1solhigh_bge`, created 29 September 2026 from
+`withgpt6.1solhigh` after committing the non-LLM evaluation (`d46ef86`, `3aab705`).
+Earlier sections retain the parent branches' development history.
 
-## Current position — September 29
+## Current position — BGE replacement
 
-The eligibility check (batch 3), the descriptor naming rule (batch 4) and
-per-concept eligibility (batch 5) meet the fixed development criterion: concept
-precision 98.77% with 92% selected recall, and aliases, relationships and
-expertise no worse than the control. This is in-sample evidence on a spent
-corpus; it authorizes fresh validation only. The offline x86 deployment package
-now includes all four pinned model roles, Linux wheels, Python/uv and the built
-UI. A single `tools/deploy.toml` and `Update.cmd [UAT|PROD]` support one password
-prompt, verified transfers and daemon startup. First and repeat deployments,
-the real four-model inference check and 88 Linux deployment tests passed on an
-isolated RHEL 8.10-compatible server. See [deployment verification](deployment/VERIFICATION.md)
-for exact evidence and limits. Nothing has been pushed or deployed to actual
-UAT/PROD servers. Fresh validation remains outstanding; release quality is
-open for every category.
+At the owner's request, Qwen has been replaced by the existing pinned
+BGE-large-en-v1.5 encoder. One inference child shares BGE between embeddings and
+source/name relevance; GLiNER extraction and spaCy syntax remain unchanged.
+The offline package now contains three models, 88 Linux wheels and 25 parts
+(2.19 GiB compressed; 2.79 GiB expanded). Update keeps the same single-TOML,
+one-password UAT/PROD flow. See [BGE verification](deployment/BGE_VERIFICATION.md)
+for operational checks. Nothing has been pushed or deployed to actual UAT/PROD.
+
+Policy v12 uses cosine >= 0.6423084735870361, entity confidence >= 0.995 from
+one source, or >= 0.8 with two independent provenance groups. These values were
+selected once on the already-spent development corpus before integration tests;
+they were not adjusted to make application checks pass. Changed extraction and
+policy identities invalidate old caches; Qwen-scale scores do not satisfy BGE's
+bounded cosine contract. Manual pins and suppressions retain their authority.
+
+**Operational verification does not establish quality acceptance.** The prior
+leave-one-domain-out BGE screen measured 97.69% complete-output concept precision
+and 78% selected recall, below the unchanged 98% precision gate. Selecting on all
+spent data gave an optimistic 98.53% / 82.67%; this is not independent validation.
+No new model weights were trained. Fresh release validation remains open for all
+categories. The committed [research record](research/nonllm-evaluation/README.md)
+preserves comparisons and raw evidence.
+
+The real integrated 24-case check completed all 60 inference calls but yielded
+7 PASS, 15 FAIL and 2 INCOMPLETE. All 48 selected negative expectations passed;
+positive coverage remained limited, especially relationships and expertise.
+The 50,000-item/50-client capacity test also failed: active-worker write p95
+10.305 seconds exceeded its 8.569-second paired gate (baseline 6.855 seconds).
+All 277 writes survived with no corruption, duplicates or API errors. The final
+Linux regression suite passed all 803 tests and isolated Update/HTTP workflows
+passed, but these do not override model-quality or latency failures. See the
+[BGE integration evidence](research/bge-integration/README.md).
 
 ## Batch 5 per-concept eligibility — September 28
 

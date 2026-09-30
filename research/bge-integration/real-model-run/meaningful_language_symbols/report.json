@@ -1,0 +1,653 @@
+{
+  "id": "meaningful_language_symbols",
+  "domain": "software",
+  "status": "PASS",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/links/f82b51c6a09349528e8a92bde82ee8ff/evidence",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/5ac73c8bf73c40c1a270233909c314d6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/66d8dc30643d4ffbaf0f55eb51bc9a94",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/meaningful_language_symbols/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "C++",
+      "C#"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [
+      {
+        "canonical": "C++",
+        "alias": "C#"
+      },
+      {
+        "canonical": "C#",
+        "alias": "C++"
+      }
+    ],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "C#",
+        "predicate": "replaces",
+        "tail": "C++"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.682222670000556,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.505545836000238,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 13.187768506000793,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "16a3c52607b943b2bba7c0f8e353ac41",
+            "name": "C#",
+            "mentions": 2
+          },
+          {
+            "id": "dfc9efb7568b47eca06788bd43abe97a",
+            "name": "C++",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "C#",
+            "concept_id": "16a3c52607b943b2bba7c0f8e353ac41",
+            "is_canonical": true
+          },
+          {
+            "name": "C++",
+            "concept_id": "dfc9efb7568b47eca06788bd43abe97a",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "16a3c52607b943b2bba7c0f8e353ac41",
+              "label": "C#",
+              "concepts": [
+                {
+                  "id": "16a3c52607b943b2bba7c0f8e353ac41",
+                  "name": "C#",
+                  "size": 2
+                }
+              ]
+            },
+            {
+              "id": "dfc9efb7568b47eca06788bd43abe97a",
+              "label": "C++",
+              "concepts": [
+                {
+                  "id": "dfc9efb7568b47eca06788bd43abe97a",
+                  "name": "C++",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "source": "16a3c52607b943b2bba7c0f8e353ac41",
+              "target": "dfc9efb7568b47eca06788bd43abe97a",
+              "label": "related to",
+              "style": "dotted",
+              "state": "weak",
+              "origin": "automatic",
+              "directed": false,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; weak.",
+              "link_id": "f82b51c6a09349528e8a92bde82ee8ff",
+              "finding_key": null,
+              "alternative_count": 1,
+              "conflicts": false
+            }
+          ],
+          "total_nodes": 2,
+          "total_edges": 1,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [
+          {
+            "link_id": "f82b51c6a09349528e8a92bde82ee8ff",
+            "src_name": "C#",
+            "dst_name": "C++",
+            "occurrence_count": 2,
+            "items": [
+              {
+                "id": "5ac73c8bf73c40c1a270233909c314d6",
+                "kind": "note",
+                "body": "C++ and C# are distinct programming languages. Our training catalog gives each language its own course.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:23:45.901780Z"
+              },
+              {
+                "id": "66d8dc30643d4ffbaf0f55eb51bc9a94",
+                "kind": "note",
+                "body": "The code review checklist has separate sections for C# and C++. They name different languages.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:23:52.645141Z"
+              }
+            ],
+            "passages": [],
+            "summary": {
+              "source": "16a3c52607b943b2bba7c0f8e353ac41",
+              "target": "dfc9efb7568b47eca06788bd43abe97a",
+              "label": "related to",
+              "style": "dotted",
+              "state": "weak",
+              "origin": "automatic",
+              "directed": false,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; weak.",
+              "link_id": "f82b51c6a09349528e8a92bde82ee8ff",
+              "finding_key": null,
+              "alternative_count": 1,
+              "conflicts": false
+            },
+            "claims": [
+              {
+                "finding_key": "f6fc0dc8045d46c1c631aebb3803a1e7dc619160171e14c5fd85a45c76b49d25",
+                "kind": "association",
+                "src_id": "16a3c52607b943b2bba7c0f8e353ac41",
+                "dst_id": "dfc9efb7568b47eca06788bd43abe97a",
+                "predicate": "related to",
+                "state": "weak",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "C#",
+                "dst_name": "C++",
+                "directed": false,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "5ac73c8bf73c40c1a270233909c314d6",
+                    "source_hash": "a3384d34737d71bd71db0e43cdbecc732e808e96e2c134de906b4b63a824e117",
+                    "start": 0,
+                    "end": 103,
+                    "quote": "C++ and C# are distinct programming languages. Our training catalog gives each language its own course.",
+                    "text": "C++ and C# are distinct programming languages. Our training catalog gives each language its own course.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "66d8dc30643d4ffbaf0f55eb51bc9a94",
+                    "source_hash": "860357a02ed5212345f37635ac74bb3cbfc09dbf1a444e34bca9d6701d5922d6",
+                    "start": 0,
+                    "end": 94,
+                    "quote": "The code review checklist has separate sections for C# and C++. They name different languages.",
+                    "text": "The code review checklist has separate sections for C# and C++. They name different languages.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              }
+            ],
+            "review_note": null,
+            "reviewed_by": null
+          }
+        ],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "5ac73c8bf73c40c1a270233909c314d6",
+              "kind": "note",
+              "question": null,
+              "body": "C++ and C# are distinct programming languages. Our training catalog gives each language its own course.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "6e5e066a7bff4012a461e00de2858219",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:23:45.901780Z",
+              "updated_at": "2026-09-30T00:23:45.941812Z",
+              "concepts": [
+                {
+                  "id": "16a3c52607b943b2bba7c0f8e353ac41",
+                  "name": "C#"
+                },
+                {
+                  "id": "dfc9efb7568b47eca06788bd43abe97a",
+                  "name": "C++"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "66d8dc30643d4ffbaf0f55eb51bc9a94",
+              "kind": "note",
+              "question": null,
+              "body": "The code review checklist has separate sections for C# and C++. They name different languages.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "972fa19321bd4b4ea17a43cbac73e901",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:23:52.645141Z",
+              "updated_at": "2026-09-30T00:23:52.677050Z",
+              "concepts": [
+                {
+                  "id": "16a3c52607b943b2bba7c0f8e353ac41",
+                  "name": "C#"
+                },
+                {
+                  "id": "dfc9efb7568b47eca06788bd43abe97a",
+                  "name": "C++"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "C#": {
+            "query": "C#",
+            "terms": [
+              "c"
+            ],
+            "concepts": [
+              {
+                "id": "16a3c52607b943b2bba7c0f8e353ac41",
+                "name": "C#"
+              }
+            ],
+            "items": [
+              {
+                "id": "66d8dc30643d4ffbaf0f55eb51bc9a94",
+                "kind": "note",
+                "question": null,
+                "body": "The code review checklist has separate sections for C# and C++. They name different languages.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "972fa19321bd4b4ea17a43cbac73e901",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:52.645141Z",
+                "updated_at": "2026-09-30T00:23:52.677050Z",
+                "type": "item",
+                "snippet": "The code review checklist has separate sections for <mark>C</mark># and <mark>C</mark>++. They name different languages.",
+                "coverage": 1.0,
+                "score": 0.30000138758901324
+              },
+              {
+                "id": "5ac73c8bf73c40c1a270233909c314d6",
+                "kind": "note",
+                "question": null,
+                "body": "C++ and C# are distinct programming languages. Our training catalog gives each language its own course.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "6e5e066a7bff4012a461e00de2858219",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:45.901780Z",
+                "updated_at": "2026-09-30T00:23:45.941812Z",
+                "type": "item",
+                "snippet": "<mark>C</mark>++ and <mark>C</mark># are distinct programming languages. Our training catalog gives each language its own course.",
+                "coverage": 1.0,
+                "score": 0.3000013626373626
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "C++": {
+            "query": "C++",
+            "terms": [
+              "c"
+            ],
+            "concepts": [
+              {
+                "id": "dfc9efb7568b47eca06788bd43abe97a",
+                "name": "C++"
+              }
+            ],
+            "items": [
+              {
+                "id": "66d8dc30643d4ffbaf0f55eb51bc9a94",
+                "kind": "note",
+                "question": null,
+                "body": "The code review checklist has separate sections for C# and C++. They name different languages.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "972fa19321bd4b4ea17a43cbac73e901",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:52.645141Z",
+                "updated_at": "2026-09-30T00:23:52.677050Z",
+                "type": "item",
+                "snippet": "The code review checklist has separate sections for <mark>C</mark># and <mark>C</mark>++. They name different languages.",
+                "coverage": 1.0,
+                "score": 0.30000138758901324
+              },
+              {
+                "id": "5ac73c8bf73c40c1a270233909c314d6",
+                "kind": "note",
+                "question": null,
+                "body": "C++ and C# are distinct programming languages. Our training catalog gives each language its own course.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "6e5e066a7bff4012a461e00de2858219",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:45.901780Z",
+                "updated_at": "2026-09-30T00:23:45.941812Z",
+                "type": "item",
+                "snippet": "<mark>C</mark>++ and <mark>C</mark># are distinct programming languages. Our training catalog gives each language its own course.",
+                "coverage": 1.0,
+                "score": 0.3000013626373626
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 17,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "5ac73c8bf73c40c1a270233909c314d6",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "66d8dc30643d4ffbaf0f55eb51bc9a94",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "C++",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "dfc9efb7568b47eca06788bd43abe97a",
+          "name": "C++",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "C#",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "16a3c52607b943b2bba7c0f8e353ac41",
+          "name": "C#",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "C++",
+        "alias": "C#"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "C#",
+        "alias": "C++"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "C#",
+        "predicate": "replaces",
+        "tail": "C++"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 14.573690089999218,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3889029120,
+  "sampled_cpu_seconds": 30.760000000000105
+}

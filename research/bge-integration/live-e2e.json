@@ -1,0 +1,233 @@
+{
+  "status": "PASS",
+  "trace": [
+    {
+      "method": "POST",
+      "path": "auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "items/f9c2e892a6a54b48abe97bc9ce1bedfd",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "admin/concepts",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "search?q=Cryogenic%20Valve%20Map",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "search?q=CVM",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "items/8f9b3b74e7e64cf39137adc5deb9b5c8",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "items/8f9b3b74e7e64cf39137adc5deb9b5c8",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "items/8f9b3b74e7e64cf39137adc5deb9b5c8",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "items/f263cda5dac14fa88df050bc1a6da550",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "items/b9543480ee3b451199063bd2fcf038ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "search?q=CVM",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "admin/concepts",
+      "status": 200
+    }
+  ],
+  "sources": [
+    [
+      "8f9b3b74e7e64cf39137adc5deb9b5c8",
+      "{\"margins\":{\"cold return\":0.5226380825042725,\"cvm\":0.6378257274627686,\"isolation valves\":0.6911317110061646,\"separator\":0.5405247211456299},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"}",
+      "[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.9287901520729065,\"end\":24,\"start\":5,\"text\":\"Cryogenic Valve Map\"},\"short_name\":{\"confidence\":0.992159903049469,\"end\":3,\"start\":0,\"text\":\"CVM\"},\"source_text_hash\":\"0dbc1426b2be380c009c6f4d901afc71c2f2e0b57d5c53a05249cbed4882c448\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_full_name\"]}]",
+      1
+    ],
+    [
+      "b9543480ee3b451199063bd2fcf038ce",
+      "{\"margins\":{\"cryogenic valve map\":0.8247835040092468,\"inspection results\":0.5835767984390259,\"isolation settings\":0.5296512246131897,\"valve identifiers\":0.6791285872459412},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"}",
+      "[]",
+      1
+    ],
+    [
+      "f263cda5dac14fa88df050bc1a6da550",
+      "{\"margins\":{\"cryogenic valve map\":0.8261746764183044,\"cvm\":0.6699228286743164,\"isolation valves\":0.7102658748626709},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"}",
+      "[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.6497364044189453,\"end\":23,\"start\":4,\"text\":\"Cryogenic Valve Map\"},\"short_name\":{\"confidence\":0.9937912821769714,\"end\":28,\"start\":25,\"text\":\"CVM\"},\"source_text_hash\":\"65b812e431b24d1da885729d63f65c1a719ffb56ab7a4622c37f48f3ad967b91\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_compact_name\"]}]",
+      1
+    ]
+  ],
+  "search": {
+    "query": "Cryogenic Valve Map",
+    "terms": [
+      "cryogenic",
+      "valve",
+      "map"
+    ],
+    "concepts": [
+      {
+        "id": "cb23ac0fa6ef42bdae9598d1c51b0041",
+        "name": "Cryogenic Valve Map"
+      }
+    ],
+    "items": [
+      {
+        "id": "f263cda5dac14fa88df050bc1a6da550",
+        "kind": "note",
+        "question": null,
+        "body": "The Cryogenic Valve Map (CVM) identifies isolation valves on the cold return circuit.",
+        "visibility": "team",
+        "author": "Browser profile 0B22",
+        "author_verified": false,
+        "author_id": "0b22c47969c54c93bd70f47545682cc5",
+        "is_mine": false,
+        "parent_id": null,
+        "group_id": null,
+        "contributors": 1,
+        "group_size": 1,
+        "helped": 0,
+        "marked_helped": false,
+        "endorsements": 0,
+        "endorsed": false,
+        "endorsed_by_me": false,
+        "question_status": null,
+        "accepted_answer_id": null,
+        "evidence_revision": 1,
+        "acceptance_revision": 0,
+        "correction_state": null,
+        "source_document_id": null,
+        "source_passage_id": null,
+        "created_at": "2026-09-30T00:10:40.170587Z",
+        "updated_at": "2026-09-30T00:10:40.182335Z",
+        "type": "item",
+        "snippet": "The <mark>Cryogenic Valve Map</mark> (<mark>CVM</mark>) identifies isolation valves on the cold return circuit.",
+        "coverage": 1.0,
+        "score": 0.30000193406593406
+      },
+      {
+        "id": "8f9b3b74e7e64cf39137adc5deb9b5c8",
+        "kind": "note",
+        "question": null,
+        "body": "CVM (Cryogenic Valve Map) shows the isolation valves between the separator and the cold return.",
+        "visibility": "team",
+        "author": "Browser profile 4A88",
+        "author_verified": false,
+        "author_id": "4a88490b4a9c455a9bbee7b44d8f58a2",
+        "is_mine": true,
+        "parent_id": null,
+        "group_id": null,
+        "contributors": 1,
+        "group_size": 1,
+        "helped": 0,
+        "marked_helped": false,
+        "endorsements": 0,
+        "endorsed": false,
+        "endorsed_by_me": false,
+        "question_status": null,
+        "accepted_answer_id": null,
+        "evidence_revision": 1,
+        "acceptance_revision": 0,
+        "correction_state": null,
+        "source_document_id": null,
+        "source_passage_id": null,
+        "created_at": "2026-09-30T00:10:40.149033Z",
+        "updated_at": "2026-09-30T00:10:40.161388Z",
+        "type": "item",
+        "snippet": "<mark>CVM</mark> (<mark>Cryogenic Valve Map</mark>) shows the isolation valves between the separator and the cold return.",
+        "coverage": 1.0,
+        "score": 0.3000018144329897
+      },
+      {
+        "id": "b9543480ee3b451199063bd2fcf038ce",
+        "kind": "note",
+        "question": null,
+        "body": "The Cryogenic Valve Map records valve identifiers, isolation settings and inspection results.",
+        "visibility": "team",
+        "author": "Browser profile C930",
+        "author_verified": false,
+        "author_id": "c930f153c02e4a24a116c579bea235e3",
+        "is_mine": false,
+        "parent_id": null,
+        "group_id": null,
+        "contributors": 1,
+        "group_size": 1,
+        "helped": 0,
+        "marked_helped": false,
+        "endorsements": 0,
+        "endorsed": false,
+        "endorsed_by_me": false,
+        "question_status": null,
+        "accepted_answer_id": null,
+        "evidence_revision": 1,
+        "acceptance_revision": 0,
+        "correction_state": null,
+        "source_document_id": null,
+        "source_passage_id": null,
+        "created_at": "2026-09-30T00:10:40.191370Z",
+        "updated_at": "2026-09-30T00:10:40.203276Z",
+        "type": "item",
+        "snippet": "The <mark>Cryogenic Valve Map</mark> records valve identifiers, isolation settings and inspection results.",
+        "coverage": 1.0,
+        "score": 0.30000099999999996
+      }
+    ],
+    "documents": [],
+    "scratchpad": []
+  },
+  "preserved": {
+    "account": "bge-admin",
+    "post_id": "f9c2e892a6a54b48abe97bc9ce1bedfd",
+    "concept_id": "fd502df6668d463f9df7b48c97be316f"
+  },
+  "queue": [
+    [
+      0
+    ]
+  ],
+  "integrity": [
+    [
+      "ok"
+    ]
+  ],
+  "foreign_keys": []
+}

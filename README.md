@@ -12,6 +12,11 @@ with concept-alias expansion; recognition is outcome-based.
 - Frontend: Vue 3, TypeScript, Vite, Cytoscape.js
 - One FastAPI process serves both the API and the compiled UI
 
+Current deployment branch: `gpt6.1solhigh_bge`. The offline package contains
+GLiNER2.5-base, BGE-large-en-v1.5 and spaCy; BGE supplies both embeddings and
+concept relevance. See [BGE verification](deployment/BGE_VERIFICATION.md) for
+deployment evidence and the failed model-quality and capacity gates.
+
 ## Development
 
 ```bash

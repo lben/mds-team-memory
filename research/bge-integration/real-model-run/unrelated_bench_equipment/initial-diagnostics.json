@@ -1,0 +1,299 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "be52b17f12884df194422e7f235c12a3",
+      "content_hash": "cceb97f2d8708a27d29b9baa1625781952878de55d3e83c712db5fed431efee5",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":19,\"label\":\"named entity\",\"name\":\"bench inventory\",\"score\":0.816800594329834,\"start\":4},{\"end\":42,\"label\":\"object or substance\",\"name\":\"soldering iron\",\"score\":0.8074856400489807,\"start\":28},{\"end\":70,\"label\":\"object or substance\",\"name\":\"digital multimeter\",\"score\":0.7164492607116699,\"start\":52}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"bench inventory\":0.7013645172119141,\"digital multimeter\":0.6053787469863892,\"soldering iron\":0.7023792862892151},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"f461ba5271a10180597fbad30a5ddf5ac2d03886552006c768e1cd65a3142004\"}",
+      "updated_at": "2026-09-30 00:21:33.620309"
+    },
+    {
+      "kind": "profile",
+      "id": "dcdf256395ef475583b0ba3f461e748a",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:21:33.938906"
+    },
+    {
+      "kind": "profile",
+      "id": "72a3354ee320499a88e48670aef1c133",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:21:33.855597"
+    },
+    {
+      "kind": "item",
+      "id": "9f5d02055aea4df98d891cb5b59f504b",
+      "content_hash": "b1e1def89ea22471886b8995346e67bb449dd1d2ad6c0c88fdd334fe17fee6de",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":54,\"label\":\"named entity\",\"name\":\"digital multimeter\",\"score\":0.9598307609558105,\"start\":36},{\"end\":77,\"label\":\"named entity\",\"name\":\"soldering iron\",\"score\":0.8746268153190613,\"start\":63},{\"end\":104,\"label\":\"topic or process\",\"name\":\"equipment audit\",\"score\":0.995763897895813,\"start\":89},{\"end\":28,\"label\":\"relation endpoint\",\"name\":\"serial numbers\",\"score\":0.5010761618614197,\"start\":14}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"digital multimeter\":0.6327018141746521,\"equipment audit\":0.7391362190246582,\"serial numbers\":0.6254453659057617,\"soldering iron\":0.5825259685516357},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":54,\"head\":{\"end\":54,\"name\":\"digital multimeter\",\"score\":0.5010761618614197,\"start\":36},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5010761618614197,\"start\":14,\"tail\":{\"end\":28,\"name\":\"serial numbers\",\"score\":0.5010761618614197,\"start\":14}}],\"text_hash\":\"46aa3ced9c4d5dfed7aff29bd5b5c9eb250ee2ce4fc4be0e796a51e73dfacd77\"}",
+      "updated_at": "2026-09-30 00:21:33.422875"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "30345d0c49d695c43d33441804148dbc50beb3ec53bf55dc428e2d816e3e5a12",
+      "kind": "concept",
+      "payload": "{\"name\":\"bench inventory\"}",
+      "state": "held",
+      "score": 0.816800594329834,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:21:24.467063",
+      "updated_at": "2026-09-30 00:21:33.680054"
+    },
+    {
+      "key": "67b2e21397ed149c2528499887226bab3d0b3163f1cad613c0abd7d0baf6d2b2",
+      "kind": "concept",
+      "payload": "{\"name\":\"soldering iron\"}",
+      "state": "held",
+      "score": 0.8746268153190613,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:21:24.478793",
+      "updated_at": "2026-09-30 00:21:33.682748"
+    },
+    {
+      "key": "2ac46325923a8f8f5b8445e9f54531b32e096d18ddad379990fd3c19351aee9b",
+      "kind": "concept",
+      "payload": "{\"name\":\"digital multimeter\"}",
+      "state": "held",
+      "score": 0.9598307609558105,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:21:24.483100",
+      "updated_at": "2026-09-30 00:21:33.677956"
+    },
+    {
+      "key": "b2392f621ef2c717c7e5b017e5e79610dcc24ee49ba5053ba25b6224d2ff9672",
+      "kind": "concept",
+      "payload": "{\"name\":\"equipment audit\"}",
+      "state": "active",
+      "score": 0.995763897895813,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "1cec38130279414a8fe5e32630ff8ee4",
+      "created_at": "2026-09-30 00:21:33.099342",
+      "updated_at": "2026-09-30 00:21:33.481195"
+    },
+    {
+      "key": "ffc56bb42778a7261e0f3188157f662293755f6cc3d94a2c4c79a3d600db35b4",
+      "kind": "concept",
+      "payload": "{\"name\":\"serial numbers\"}",
+      "state": "held",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:21:33.106689",
+      "updated_at": "2026-09-30 00:21:33.487643"
+    },
+    {
+      "key": "abe112645d0789cfb40d6b6c217879903c8fd7eac26c5c077b914fbd861c49fc",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"1cec38130279414a8fe5e32630ff8ee4\",\"source_id\":\"9f5d02055aea4df98d891cb5b59f504b\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.995763897895813,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "1cec38130279414a8fe5e32630ff8ee4",
+      "created_at": "2026-09-30 00:21:33.149857",
+      "updated_at": "2026-09-30 00:21:33.490470"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "01e9ef25acaf1787160be193f0104bdf0fd028e8b60c250a49cd4a0c50dcb676",
+      "finding_key": "2ac46325923a8f8f5b8445e9f54531b32e096d18ddad379990fd3c19351aee9b",
+      "source_kind": "item",
+      "source_id": "9f5d02055aea4df98d891cb5b59f504b",
+      "source_hash": "b1e1def89ea22471886b8995346e67bb449dd1d2ad6c0c88fdd334fe17fee6de",
+      "group_key": "item:9f5d02055aea4df98d891cb5b59f504b",
+      "author_id": "dcdf256395ef475583b0ba3f461e748a",
+      "start": 36,
+      "end": 54,
+      "raw_score": 0.9598307609558105,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6327018141746521,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9155e4d08d1167f9092e44930dd0df795b7582869f91723489efe196bff98eb0\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "090e34a94e6fe10b136fd1e8a7877bc0ce72a2b0b461d5d21706c537bfcbea89",
+      "finding_key": "67b2e21397ed149c2528499887226bab3d0b3163f1cad613c0abd7d0baf6d2b2",
+      "source_kind": "item",
+      "source_id": "9f5d02055aea4df98d891cb5b59f504b",
+      "source_hash": "b1e1def89ea22471886b8995346e67bb449dd1d2ad6c0c88fdd334fe17fee6de",
+      "group_key": "item:9f5d02055aea4df98d891cb5b59f504b",
+      "author_id": "dcdf256395ef475583b0ba3f461e748a",
+      "start": 63,
+      "end": 77,
+      "raw_score": 0.8746268153190613,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5825259685516357,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9155e4d08d1167f9092e44930dd0df795b7582869f91723489efe196bff98eb0\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "b1adda10fd5f9d4ee8508a55091f5191a128d5a4d3dde7f253a11c61bc0f1047",
+      "finding_key": "b2392f621ef2c717c7e5b017e5e79610dcc24ee49ba5053ba25b6224d2ff9672",
+      "source_kind": "item",
+      "source_id": "9f5d02055aea4df98d891cb5b59f504b",
+      "source_hash": "b1e1def89ea22471886b8995346e67bb449dd1d2ad6c0c88fdd334fe17fee6de",
+      "group_key": "item:9f5d02055aea4df98d891cb5b59f504b",
+      "author_id": "dcdf256395ef475583b0ba3f461e748a",
+      "start": 89,
+      "end": 104,
+      "raw_score": 0.995763897895813,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7391362190246582,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9155e4d08d1167f9092e44930dd0df795b7582869f91723489efe196bff98eb0\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "51138e563aea941115dd96ff7b2902eda2084c7deec648ca64c9a1b121fee19b",
+      "finding_key": "ffc56bb42778a7261e0f3188157f662293755f6cc3d94a2c4c79a3d600db35b4",
+      "source_kind": "item",
+      "source_id": "9f5d02055aea4df98d891cb5b59f504b",
+      "source_hash": "b1e1def89ea22471886b8995346e67bb449dd1d2ad6c0c88fdd334fe17fee6de",
+      "group_key": "item:9f5d02055aea4df98d891cb5b59f504b",
+      "author_id": "dcdf256395ef475583b0ba3f461e748a",
+      "start": 14,
+      "end": 28,
+      "raw_score": 0.5010761618614197,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6254453659057617,\"grounded\":true,\"label\":\"relation endpoint\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9155e4d08d1167f9092e44930dd0df795b7582869f91723489efe196bff98eb0\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "491121c58ec6b32b2dea922c9340b06bd0b1a6c258e8bca3bac2d7ca9f034de1",
+      "finding_key": "abe112645d0789cfb40d6b6c217879903c8fd7eac26c5c077b914fbd861c49fc",
+      "source_kind": "item",
+      "source_id": "9f5d02055aea4df98d891cb5b59f504b",
+      "source_hash": "b1e1def89ea22471886b8995346e67bb449dd1d2ad6c0c88fdd334fe17fee6de",
+      "group_key": "item:9f5d02055aea4df98d891cb5b59f504b",
+      "author_id": "dcdf256395ef475583b0ba3f461e748a",
+      "start": 89,
+      "end": 104,
+      "raw_score": 0.995763897895813,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"9155e4d08d1167f9092e44930dd0df795b7582869f91723489efe196bff98eb0\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "e15e22c26c6f81d9d7ddd4020ad541cf62e7b57f15d2dcf348916f33db8b1a20",
+      "finding_key": "30345d0c49d695c43d33441804148dbc50beb3ec53bf55dc428e2d816e3e5a12",
+      "source_kind": "item",
+      "source_id": "be52b17f12884df194422e7f235c12a3",
+      "source_hash": "cceb97f2d8708a27d29b9baa1625781952878de55d3e83c712db5fed431efee5",
+      "group_key": "item:be52b17f12884df194422e7f235c12a3",
+      "author_id": "72a3354ee320499a88e48670aef1c133",
+      "start": 4,
+      "end": 19,
+      "raw_score": 0.816800594329834,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7013645172119141,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"fb9414342ecd505eaca741b8375fcef92ad8d6189b6b45ab6f74d035219e96ba\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "e8f06007a4afc7ae1eb90f7513b754fef2b6b7755515900d4564a58e3506dcc4",
+      "finding_key": "67b2e21397ed149c2528499887226bab3d0b3163f1cad613c0abd7d0baf6d2b2",
+      "source_kind": "item",
+      "source_id": "be52b17f12884df194422e7f235c12a3",
+      "source_hash": "cceb97f2d8708a27d29b9baa1625781952878de55d3e83c712db5fed431efee5",
+      "group_key": "item:be52b17f12884df194422e7f235c12a3",
+      "author_id": "72a3354ee320499a88e48670aef1c133",
+      "start": 28,
+      "end": 42,
+      "raw_score": 0.8074856400489807,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7023792862892151,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"fb9414342ecd505eaca741b8375fcef92ad8d6189b6b45ab6f74d035219e96ba\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8a09c3c38fe838ea061d5eee8b36c2c95caab9d56bdfea88ae0ea22695b8fed5",
+      "finding_key": "2ac46325923a8f8f5b8445e9f54531b32e096d18ddad379990fd3c19351aee9b",
+      "source_kind": "item",
+      "source_id": "be52b17f12884df194422e7f235c12a3",
+      "source_hash": "cceb97f2d8708a27d29b9baa1625781952878de55d3e83c712db5fed431efee5",
+      "group_key": "item:be52b17f12884df194422e7f235c12a3",
+      "author_id": "72a3354ee320499a88e48670aef1c133",
+      "start": 52,
+      "end": 70,
+      "raw_score": 0.7164492607116699,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6053787469863892,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"fb9414342ecd505eaca741b8375fcef92ad8d6189b6b45ab6f74d035219e96ba\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:21:16.641475"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 22,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 24399,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "080a5af7198d107a8c5145feed02b952a792a2d24745288522d740baa177e112",
+      "source_kind": "item",
+      "source_id": "be52b17f12884df194422e7f235c12a3",
+      "source_hash": "cceb97f2d8708a27d29b9baa1625781952878de55d3e83c712db5fed431efee5",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 102,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "aed85b1fc05a305e6e1c6411701c88395da736739ba87d2ebd847282f46b0b08",
+      "source_kind": "item",
+      "source_id": "9f5d02055aea4df98d891cb5b59f504b",
+      "source_hash": "b1e1def89ea22471886b8995346e67bb449dd1d2ad6c0c88fdd334fe17fee6de",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 105,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

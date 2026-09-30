@@ -1,0 +1,453 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "b50220971ae749abbb770eafecea80a3",
+      "content_hash": "9d0a844d5beb4d4011c677b73f31b53d1003429c0f1c31dc2adcabd184135858",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":56,\"label\":\"named entity\",\"name\":\"workshop\",\"score\":0.7789328694343567,\"start\":48},{\"end\":67,\"label\":\"topic or process\",\"name\":\"workshop inspection\",\"score\":0.6887834072113037,\"start\":48}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"workshop\":0.6055741310119629,\"workshop inspection\":0.7810532450675964},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"c4224c1ce02f01999c4712385fc87b636036055336d6d592659cd076ed9b54ab\"}",
+      "updated_at": "2026-09-30 00:25:52.345496"
+    },
+    {
+      "kind": "profile",
+      "id": "9294eb9457094a4ca88c60dff5a07aad",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:26:07.390817"
+    },
+    {
+      "kind": "profile",
+      "id": "b7307e687f3a423cae099902728b66bb",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:25:52.695361"
+    },
+    {
+      "kind": "profile",
+      "id": "41d32a23ee754af9af1c9b7260fc74dd",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:25:52.528584"
+    },
+    {
+      "kind": "item",
+      "id": "24cb2626f1454a088823360cdf07934a",
+      "content_hash": "409c72d4c11cdb8db59a3c367a205e1a737faaba7bcee3777381ae8a4fd08d3c",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":28,\"label\":\"topic or process\",\"name\":\"soldering inspection\",\"score\":0.9908797740936279,\"start\":8},{\"end\":70,\"label\":\"object or substance\",\"name\":\"joint defects\",\"score\":0.7611477375030518,\"start\":57},{\"end\":49,\"label\":\"object or substance\",\"name\":\"photographs\",\"score\":0.5801194906234741,\"start\":38},{\"end\":136,\"label\":\"object or substance\",\"name\":\"board location\",\"score\":0.5043798685073853,\"start\":122}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"board location\":0.5442392230033875,\"joint defects\":0.5282258987426758,\"photographs\":0.5221143960952759,\"soldering inspection\":0.6718189120292664},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"f5075f9f049671910b2cb0ba75cd71e823452d5645e240f0a7bd71a84d2781bc\"}",
+      "updated_at": "2026-09-30 00:25:52.162084"
+    },
+    {
+      "kind": "item",
+      "id": "70ba74589bd345af8cfed360964c8153",
+      "content_hash": "40639e2e8df48e0c430cbaaa08800f23d44ff33b9d7b34be8d86523a72a64e9a",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":38,\"label\":\"topic or process\",\"name\":\"soldering practice record\",\"score\":0.5681986808776855,\"start\":13}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"soldering practice record\":0.7476747035980225},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"cfde30b68ca0582f48f1dc7708d015a420bf56161d066b80e7911aaacf5254df\"}",
+      "updated_at": "2026-09-30 00:25:59.527282"
+    },
+    {
+      "kind": "item",
+      "id": "db9894293ad34467b527f8baf3f09215",
+      "content_hash": "90d3031ec9c2072ebbabec429a2c0502c8c3088651172b41d31fc66bcb75160e",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":60,\"label\":\"named entity\",\"name\":\"board identifier\",\"score\":0.9051889777183533,\"start\":44},{\"end\":110,\"label\":\"topic or process\",\"name\":\"repairs\",\"score\":0.7936193943023682,\"start\":103},{\"end\":32,\"label\":\"topic or process\",\"name\":\"soldering rework\",\"score\":0.6465123891830444,\"start\":16},{\"end\":83,\"label\":\"topic or process\",\"name\":\"inspection\",\"score\":0.5580224990844727,\"start\":73}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"board identifier\":0.6924929618835449,\"inspection\":0.5828250646591187,\"repairs\":0.585624098777771,\"soldering rework\":0.6853703260421753},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"09f12978c7ce75bda59104575cdb653515b6fd06fdf3b59512f650915baa00a7\"}",
+      "updated_at": "2026-09-30 00:26:07.145146"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "90f1deedf7a049c9cfa22e6b67a1811a8c7837a6158d181382ed8e1c0aee85f2",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop\"}",
+      "state": "held",
+      "score": 0.7789328694343567,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:25:43.258805",
+      "updated_at": "2026-09-30 00:25:52.379878"
+    },
+    {
+      "key": "01cecf1b8e49d3c37f124c7a192563abc02ab3fdcd1cf4f1a76fedf2efcf76eb",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop inspection\"}",
+      "state": "held",
+      "score": 0.6887834072113037,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:25:43.269540",
+      "updated_at": "2026-09-30 00:25:52.377341"
+    },
+    {
+      "key": "dff0992e30629c5d8c91eef412551756527b05c0b691cb79fd56126b3b8f8328",
+      "kind": "concept",
+      "payload": "{\"name\":\"soldering inspection\"}",
+      "state": "held",
+      "score": 0.9908797740936279,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:25:51.755868",
+      "updated_at": "2026-09-30 00:25:52.226508"
+    },
+    {
+      "key": "2a1c26a2d17f93c3064b627b32f477d681a51684e4f5188a7a19401ab4567ece",
+      "kind": "concept",
+      "payload": "{\"name\":\"joint defects\"}",
+      "state": "held",
+      "score": 0.7611477375030518,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:25:51.765473",
+      "updated_at": "2026-09-30 00:25:52.223083"
+    },
+    {
+      "key": "5aa6fdd748befef4651a6eca6ddc775ae80d31f93eee8cef43c53adf976dc997",
+      "kind": "concept",
+      "payload": "{\"name\":\"photographs\"}",
+      "state": "held",
+      "score": 0.5801194906234741,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:25:51.771679",
+      "updated_at": "2026-09-30 00:25:52.221175"
+    },
+    {
+      "key": "66f06b5616c9bd398e6b732b887a62e9f526236e2239b30f7b1a4adc021656cd",
+      "kind": "concept",
+      "payload": "{\"name\":\"board location\"}",
+      "state": "held",
+      "score": 0.5043798685073853,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:25:51.778850",
+      "updated_at": "2026-09-30 00:25:52.218763"
+    },
+    {
+      "key": "c0492fc0f79887d7cc47cdbc7e407b3cd4d35a37bff359e9711128d1ae28f59b",
+      "kind": "concept",
+      "payload": "{\"name\":\"soldering practice record\"}",
+      "state": "held",
+      "score": 0.5681986808776855,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:25:59.536694",
+      "updated_at": "2026-09-30 00:25:59.572216"
+    },
+    {
+      "key": "2d7399ed9ae595b52dfc820936f487931dcc46fadd86b8a64508c1770b3b6ded",
+      "kind": "concept",
+      "payload": "{\"name\":\"board identifier\"}",
+      "state": "held",
+      "score": 0.9051889777183533,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:07.157792",
+      "updated_at": "2026-09-30 00:26:07.240405"
+    },
+    {
+      "key": "7dd5616a5e3c659957601e64f17aa870fc1ec8e1702634c7e95be47908ff234f",
+      "kind": "concept",
+      "payload": "{\"name\":\"repairs\"}",
+      "state": "held",
+      "score": 0.7936193943023682,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:07.170197",
+      "updated_at": "2026-09-30 00:26:07.246742"
+    },
+    {
+      "key": "d126118eb66f6cbc109275c94b451110d015fa9081670496bc5ff930debd436a",
+      "kind": "concept",
+      "payload": "{\"name\":\"soldering rework\"}",
+      "state": "held",
+      "score": 0.6465123891830444,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:07.177909",
+      "updated_at": "2026-09-30 00:26:07.250603"
+    },
+    {
+      "key": "c93f6cddf9577d7216b6c2223fa985bb59f08bbfe9825e01ef6053b2d3e5cd6b",
+      "kind": "concept",
+      "payload": "{\"name\":\"inspection\"}",
+      "state": "held",
+      "score": 0.5580224990844727,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:07.184751",
+      "updated_at": "2026-09-30 00:26:07.244215"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "393565a038a910f7b485b9f632719bbb333960aac126566f00e07b425e1b4c42",
+      "finding_key": "dff0992e30629c5d8c91eef412551756527b05c0b691cb79fd56126b3b8f8328",
+      "source_kind": "item",
+      "source_id": "24cb2626f1454a088823360cdf07934a",
+      "source_hash": "409c72d4c11cdb8db59a3c367a205e1a737faaba7bcee3777381ae8a4fd08d3c",
+      "group_key": "item:24cb2626f1454a088823360cdf07934a",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 8,
+      "end": 28,
+      "raw_score": 0.9908797740936279,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6718189120292664,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"answer\",\"text_hash\":\"a09943ab805accb917337e336321225af2c6d1eaa42e6e46782caa6b6a3760d2\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "6bce2e5e1503aa978b7f0734c52e72793b401bfe936ed52c4ef137a083e7ab02",
+      "finding_key": "2a1c26a2d17f93c3064b627b32f477d681a51684e4f5188a7a19401ab4567ece",
+      "source_kind": "item",
+      "source_id": "24cb2626f1454a088823360cdf07934a",
+      "source_hash": "409c72d4c11cdb8db59a3c367a205e1a737faaba7bcee3777381ae8a4fd08d3c",
+      "group_key": "item:24cb2626f1454a088823360cdf07934a",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 57,
+      "end": 70,
+      "raw_score": 0.7611477375030518,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5282258987426758,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"answer\",\"text_hash\":\"a09943ab805accb917337e336321225af2c6d1eaa42e6e46782caa6b6a3760d2\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "810e359d4c3b7ee1311c9b2c2cae0d5be62242a436f9f8431b966f88ae359816",
+      "finding_key": "5aa6fdd748befef4651a6eca6ddc775ae80d31f93eee8cef43c53adf976dc997",
+      "source_kind": "item",
+      "source_id": "24cb2626f1454a088823360cdf07934a",
+      "source_hash": "409c72d4c11cdb8db59a3c367a205e1a737faaba7bcee3777381ae8a4fd08d3c",
+      "group_key": "item:24cb2626f1454a088823360cdf07934a",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 38,
+      "end": 49,
+      "raw_score": 0.5801194906234741,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5221143960952759,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"answer\",\"text_hash\":\"a09943ab805accb917337e336321225af2c6d1eaa42e6e46782caa6b6a3760d2\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "cf5373700b50721a7e778bc6f97839484ab3dfd59852aff802daba2141388ccf",
+      "finding_key": "66f06b5616c9bd398e6b732b887a62e9f526236e2239b30f7b1a4adc021656cd",
+      "source_kind": "item",
+      "source_id": "24cb2626f1454a088823360cdf07934a",
+      "source_hash": "409c72d4c11cdb8db59a3c367a205e1a737faaba7bcee3777381ae8a4fd08d3c",
+      "group_key": "item:24cb2626f1454a088823360cdf07934a",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 122,
+      "end": 136,
+      "raw_score": 0.5043798685073853,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5442392230033875,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"answer\",\"text_hash\":\"a09943ab805accb917337e336321225af2c6d1eaa42e6e46782caa6b6a3760d2\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "338a3ad66639f28e1a8c01692bdd5d9844741401c40c25667468cc6af917f653",
+      "finding_key": "90f1deedf7a049c9cfa22e6b67a1811a8c7837a6158d181382ed8e1c0aee85f2",
+      "source_kind": "item",
+      "source_id": "b50220971ae749abbb770eafecea80a3",
+      "source_hash": "9d0a844d5beb4d4011c677b73f31b53d1003429c0f1c31dc2adcabd184135858",
+      "group_key": "item:b50220971ae749abbb770eafecea80a3",
+      "author_id": "41d32a23ee754af9af1c9b7260fc74dd",
+      "start": 48,
+      "end": 56,
+      "raw_score": 0.7789328694343567,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6055741310119629,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"f3071dd70437be372703e114c63c4a2009f1d1cd95b69a6032fb2e647f3e8759\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "26f6c5323d5a3a4761fa06b821a8a6708ece5917f5ddb84bb86b717d74e8fbbe",
+      "finding_key": "01cecf1b8e49d3c37f124c7a192563abc02ab3fdcd1cf4f1a76fedf2efcf76eb",
+      "source_kind": "item",
+      "source_id": "b50220971ae749abbb770eafecea80a3",
+      "source_hash": "9d0a844d5beb4d4011c677b73f31b53d1003429c0f1c31dc2adcabd184135858",
+      "group_key": "item:b50220971ae749abbb770eafecea80a3",
+      "author_id": "41d32a23ee754af9af1c9b7260fc74dd",
+      "start": 48,
+      "end": 67,
+      "raw_score": 0.6887834072113037,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7810532450675964,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"f3071dd70437be372703e114c63c4a2009f1d1cd95b69a6032fb2e647f3e8759\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "08d1b1ec16f64d02fe9bff60b24179c4bbf70523ab438fba52438b6fd69729d4",
+      "finding_key": "c0492fc0f79887d7cc47cdbc7e407b3cd4d35a37bff359e9711128d1ae28f59b",
+      "source_kind": "item",
+      "source_id": "70ba74589bd345af8cfed360964c8153",
+      "source_hash": "40639e2e8df48e0c430cbaaa08800f23d44ff33b9d7b34be8d86523a72a64e9a",
+      "group_key": "item:70ba74589bd345af8cfed360964c8153",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 13,
+      "end": 38,
+      "raw_score": 0.5681986808776855,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7476747035980225,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"b19cd6409146c6b96e761cdddfde374b1ad5cc1e6d49e0120c0749737330d9ac\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "7df636983003c2ab609798dc2acc3d635e73c8030fa4a7ef780e7215e648900b",
+      "finding_key": "2d7399ed9ae595b52dfc820936f487931dcc46fadd86b8a64508c1770b3b6ded",
+      "source_kind": "item",
+      "source_id": "db9894293ad34467b527f8baf3f09215",
+      "source_hash": "90d3031ec9c2072ebbabec429a2c0502c8c3088651172b41d31fc66bcb75160e",
+      "group_key": "item:db9894293ad34467b527f8baf3f09215",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 44,
+      "end": 60,
+      "raw_score": 0.9051889777183533,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6924929618835449,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"b27d4c931c9a322d55d86d4ffadcf979a7ab362f8eb89368f73d0ed6b2ecab2c\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "7246fca48658ccedad2c87300c53ca8226a46b74442df020479e946c9c5afa0f",
+      "finding_key": "7dd5616a5e3c659957601e64f17aa870fc1ec8e1702634c7e95be47908ff234f",
+      "source_kind": "item",
+      "source_id": "db9894293ad34467b527f8baf3f09215",
+      "source_hash": "90d3031ec9c2072ebbabec429a2c0502c8c3088651172b41d31fc66bcb75160e",
+      "group_key": "item:db9894293ad34467b527f8baf3f09215",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 103,
+      "end": 110,
+      "raw_score": 0.7936193943023682,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.585624098777771,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"b27d4c931c9a322d55d86d4ffadcf979a7ab362f8eb89368f73d0ed6b2ecab2c\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "bf1b3c9c57005612b9333b25ca74c967da4a1ac329420e5ecde0c4e39b82493b",
+      "finding_key": "d126118eb66f6cbc109275c94b451110d015fa9081670496bc5ff930debd436a",
+      "source_kind": "item",
+      "source_id": "db9894293ad34467b527f8baf3f09215",
+      "source_hash": "90d3031ec9c2072ebbabec429a2c0502c8c3088651172b41d31fc66bcb75160e",
+      "group_key": "item:db9894293ad34467b527f8baf3f09215",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 16,
+      "end": 32,
+      "raw_score": 0.6465123891830444,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6853703260421753,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"b27d4c931c9a322d55d86d4ffadcf979a7ab362f8eb89368f73d0ed6b2ecab2c\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "36f4560aa0cea5e8ac21e149243451c0d974def5eed1ce9d1b272a03fdfeaf2e",
+      "finding_key": "c93f6cddf9577d7216b6c2223fa985bb59f08bbfe9825e01ef6053b2d3e5cd6b",
+      "source_kind": "item",
+      "source_id": "db9894293ad34467b527f8baf3f09215",
+      "source_hash": "90d3031ec9c2072ebbabec429a2c0502c8c3088651172b41d31fc66bcb75160e",
+      "group_key": "item:db9894293ad34467b527f8baf3f09215",
+      "author_id": "9294eb9457094a4ca88c60dff5a07aad",
+      "start": 73,
+      "end": 83,
+      "raw_score": 0.5580224990844727,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5828250646591187,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"b27d4c931c9a322d55d86d4ffadcf979a7ab362f8eb89368f73d0ed6b2ecab2c\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:25:36.882831"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 34,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 24576,
+      "evidence_bytes": 39132,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "42b253bb041a71fb7f1ac973a932d0b9686358bd96a9bb586f20f93953a27033",
+      "source_kind": "item",
+      "source_id": "b50220971ae749abbb770eafecea80a3",
+      "source_hash": "9d0a844d5beb4d4011c677b73f31b53d1003429c0f1c31dc2adcabd184135858",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 68,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "3cc50514c19d5fa70d052c77b7936a67faf5fcff3d662ab3ed126a2576e80365",
+      "source_kind": "item",
+      "source_id": "24cb2626f1454a088823360cdf07934a",
+      "source_hash": "409c72d4c11cdb8db59a3c367a205e1a737faaba7bcee3777381ae8a4fd08d3c",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 137,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "15d965c043cf3c7354304d1c05a773a39f529fc9d779fe695de677985cc7f5fe",
+      "source_kind": "item",
+      "source_id": "70ba74589bd345af8cfed360964c8153",
+      "source_hash": "40639e2e8df48e0c430cbaaa08800f23d44ff33b9d7b34be8d86523a72a64e9a",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 102,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "4c9be0170a658918c8822af2570e944235283244420081089318245948d27ff5",
+      "source_kind": "item",
+      "source_id": "db9894293ad34467b527f8baf3f09215",
+      "source_hash": "90d3031ec9c2072ebbabec429a2c0502c8c3088651172b41d31fc66bcb75160e",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 111,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

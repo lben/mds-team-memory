@@ -1,0 +1,272 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "content_hash": "0b9a66525d685d18c8a3d0c141aafb38a367992607b91fb5e6fef5118e70b82f",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":23,\"label\":\"named entity\",\"name\":\"Mars exploration\",\"score\":0.9961663484573364,\"start\":7},{\"end\":41,\"label\":\"object or substance\",\"name\":\"nuclear power\",\"score\":0.9675856828689575,\"start\":28}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"mars exploration\":0.6591427326202393,\"nuclear power\":0.573112428188324},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":41,\"head\":{\"end\":23,\"name\":\"Mars exploration\",\"score\":0.8202409148216248,\"start\":7},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8202409148216248,\"start\":7,\"tail\":{\"end\":41,\"name\":\"nuclear power\",\"score\":0.8202409148216248,\"start\":28}},{\"end\":41,\"head\":{\"end\":23,\"name\":\"Mars exploration\",\"score\":0.7201869487762451,\"start\":7},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7201869487762451,\"start\":7,\"tail\":{\"end\":41,\"name\":\"nuclear power\",\"score\":0.7201869487762451,\"start\":28}},{\"end\":41,\"head\":{\"end\":23,\"name\":\"Mars exploration\",\"score\":0.5963165760040283,\"start\":7},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5963165760040283,\"start\":7,\"tail\":{\"end\":41,\"name\":\"nuclear power\",\"score\":0.5963165760040283,\"start\":28}}],\"text_hash\":\"c3b6f3ca051e99e6e9cb8e5a18bae9315bfc05442784627de21b3670f6807c7c\"}",
+      "updated_at": "2026-09-30 00:19:55.499302"
+    },
+    {
+      "kind": "profile",
+      "id": "1bc1e61ec7c448b486f3c8d173b65c65",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:20:01.993139"
+    },
+    {
+      "kind": "profile",
+      "id": "3c44f73246c140998831133d376d6f8b",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:19:55.872400"
+    },
+    {
+      "kind": "item",
+      "id": "dba76186d30647f1aa84519e2e075163",
+      "content_hash": "fc916b024ca7591e9f933acfcff1e313cc675895f567fc385baed26cbca4790b",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":19,\"label\":\"named entity\",\"name\":\"Mars exploration\",\"score\":0.9970868229866028,\"start\":3},{\"end\":63,\"label\":\"object or substance\",\"name\":\"equipment\",\"score\":0.9736694097518921,\"start\":54},{\"end\":38,\"label\":\"relation endpoint\",\"name\":\"nuclear power\",\"score\":0.89049232006073,\"start\":25}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"equipment\":0.5378159880638123,\"mars exploration\":0.6350870132446289,\"nuclear power\":0.5216807723045349},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":38,\"head\":{\"end\":19,\"name\":\"Mars exploration\",\"score\":0.8258872628211975,\"start\":3},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8258872628211975,\"start\":3,\"tail\":{\"end\":38,\"name\":\"nuclear power\",\"score\":0.8258872628211975,\"start\":25}},{\"end\":38,\"head\":{\"end\":19,\"name\":\"Mars exploration\",\"score\":0.89049232006073,\"start\":3},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.89049232006073,\"start\":3,\"tail\":{\"end\":38,\"name\":\"nuclear power\",\"score\":0.89049232006073,\"start\":25}},{\"end\":38,\"head\":{\"end\":19,\"name\":\"Mars exploration\",\"score\":0.5348925590515137,\"start\":3},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5348925590515137,\"start\":3,\"tail\":{\"end\":38,\"name\":\"nuclear power\",\"score\":0.5348925590515137,\"start\":25}}],\"text_hash\":\"d2caa1f5b4e83fa1ecb14912f5db902403a1c6edf3dca23ae50d89e7b8ae36a8\"}",
+      "updated_at": "2026-09-30 00:20:01.686564"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "04e1a8da9ac6419dc5db6f032b51bcc52d356813ffcc287a9d825a0679e2603b",
+      "kind": "concept",
+      "payload": "{\"name\":\"Mars exploration\"}",
+      "state": "active",
+      "score": 0.9970868229866028,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "e43f5a1ead84402b9540eac2ca76e66d",
+      "created_at": "2026-09-30 00:19:55.144646",
+      "updated_at": "2026-09-30 00:20:01.790288"
+    },
+    {
+      "key": "67832405a88c11272bbfdb895083dbe9f96ea3648175a51c16889435cc506103",
+      "kind": "concept",
+      "payload": "{\"name\":\"nuclear power\"}",
+      "state": "held",
+      "score": 0.9675856828689575,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:55.153716",
+      "updated_at": "2026-09-30 00:20:01.797019"
+    },
+    {
+      "key": "75a8adbb15811230b73585de99a79309c8ccab018700136805ddbd9775f739e3",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"e43f5a1ead84402b9540eac2ca76e66d\",\"source_id\":\"00e9f6a6037d4e99809d8a8ffe4f63a3\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9961663484573364,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "e43f5a1ead84402b9540eac2ca76e66d",
+      "created_at": "2026-09-30 00:19:55.180627",
+      "updated_at": "2026-09-30 00:19:55.539708"
+    },
+    {
+      "key": "8dec3e7a0cad792c881865e03540fd1c5c1196c54c4ce319052c8990120db3fd",
+      "kind": "concept",
+      "payload": "{\"name\":\"equipment\"}",
+      "state": "held",
+      "score": 0.9736694097518921,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:20:01.705899",
+      "updated_at": "2026-09-30 00:20:01.787371"
+    },
+    {
+      "key": "6fd30cdd5e0a757ff72cf8fdd9146009864301536bf052426453275bde45f222",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"e43f5a1ead84402b9540eac2ca76e66d\",\"source_id\":\"dba76186d30647f1aa84519e2e075163\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9970868229866028,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "e43f5a1ead84402b9540eac2ca76e66d",
+      "created_at": "2026-09-30 00:20:01.745597",
+      "updated_at": "2026-09-30 00:20:01.794363"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "68962cb35a7eae8f59d6102a59a0666d9837d841308fb84bb23b8bfe52ab2d0f",
+      "finding_key": "04e1a8da9ac6419dc5db6f032b51bcc52d356813ffcc287a9d825a0679e2603b",
+      "source_kind": "item",
+      "source_id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "source_hash": "0b9a66525d685d18c8a3d0c141aafb38a367992607b91fb5e6fef5118e70b82f",
+      "group_key": "item:00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "author_id": "3c44f73246c140998831133d376d6f8b",
+      "start": 7,
+      "end": 23,
+      "raw_score": 0.9961663484573364,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6591427326202393,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"c1341fda26db6a6c7b1d32dcf3b0ee3c147eb15430359eb0fdd2161a3b1567f6\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8a79841a2a4262bd5e2dacb792502871e6a1426ba57e796bdd6f29a2f67cb3ff",
+      "finding_key": "67832405a88c11272bbfdb895083dbe9f96ea3648175a51c16889435cc506103",
+      "source_kind": "item",
+      "source_id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "source_hash": "0b9a66525d685d18c8a3d0c141aafb38a367992607b91fb5e6fef5118e70b82f",
+      "group_key": "item:00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "author_id": "3c44f73246c140998831133d376d6f8b",
+      "start": 28,
+      "end": 41,
+      "raw_score": 0.9675856828689575,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.573112428188324,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"c1341fda26db6a6c7b1d32dcf3b0ee3c147eb15430359eb0fdd2161a3b1567f6\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "94fd31bc307b4eef8d145e601725753c647a6850d95cf691577723351675bd4f",
+      "finding_key": "75a8adbb15811230b73585de99a79309c8ccab018700136805ddbd9775f739e3",
+      "source_kind": "item",
+      "source_id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "source_hash": "0b9a66525d685d18c8a3d0c141aafb38a367992607b91fb5e6fef5118e70b82f",
+      "group_key": "item:00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "author_id": "3c44f73246c140998831133d376d6f8b",
+      "start": 7,
+      "end": 23,
+      "raw_score": 0.9961663484573364,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"c1341fda26db6a6c7b1d32dcf3b0ee3c147eb15430359eb0fdd2161a3b1567f6\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "719e777b9be37649abdb8e9ed29e7fb4651fda7279008cb2bfcdf0d7d803ba8e",
+      "finding_key": "04e1a8da9ac6419dc5db6f032b51bcc52d356813ffcc287a9d825a0679e2603b",
+      "source_kind": "item",
+      "source_id": "dba76186d30647f1aa84519e2e075163",
+      "source_hash": "fc916b024ca7591e9f933acfcff1e313cc675895f567fc385baed26cbca4790b",
+      "group_key": "item:dba76186d30647f1aa84519e2e075163",
+      "author_id": "1bc1e61ec7c448b486f3c8d173b65c65",
+      "start": 3,
+      "end": 19,
+      "raw_score": 0.9970868229866028,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6350870132446289,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"e9a19d41deee916c91313f62694ab64c3f6e66170e4e1822cfc673165eed2af8\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "af533112d74b5eb87497fb85703da5d0a0cb62138e1745ad83ab8eb75f798ad4",
+      "finding_key": "8dec3e7a0cad792c881865e03540fd1c5c1196c54c4ce319052c8990120db3fd",
+      "source_kind": "item",
+      "source_id": "dba76186d30647f1aa84519e2e075163",
+      "source_hash": "fc916b024ca7591e9f933acfcff1e313cc675895f567fc385baed26cbca4790b",
+      "group_key": "item:dba76186d30647f1aa84519e2e075163",
+      "author_id": "1bc1e61ec7c448b486f3c8d173b65c65",
+      "start": 54,
+      "end": 63,
+      "raw_score": 0.9736694097518921,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5378159880638123,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"e9a19d41deee916c91313f62694ab64c3f6e66170e4e1822cfc673165eed2af8\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "e293529b764901dc8dbe6ed99adbfb72774db46fc864141238a132e2d70525b2",
+      "finding_key": "67832405a88c11272bbfdb895083dbe9f96ea3648175a51c16889435cc506103",
+      "source_kind": "item",
+      "source_id": "dba76186d30647f1aa84519e2e075163",
+      "source_hash": "fc916b024ca7591e9f933acfcff1e313cc675895f567fc385baed26cbca4790b",
+      "group_key": "item:dba76186d30647f1aa84519e2e075163",
+      "author_id": "1bc1e61ec7c448b486f3c8d173b65c65",
+      "start": 25,
+      "end": 38,
+      "raw_score": 0.89049232006073,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5216807723045349,\"grounded\":true,\"label\":\"relation endpoint\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"e9a19d41deee916c91313f62694ab64c3f6e66170e4e1822cfc673165eed2af8\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "d8f46b2e662471f7e4e1b9dc43ed3377f61b6c584c6e7c5ce20a60691493dbb9",
+      "finding_key": "6fd30cdd5e0a757ff72cf8fdd9146009864301536bf052426453275bde45f222",
+      "source_kind": "item",
+      "source_id": "dba76186d30647f1aa84519e2e075163",
+      "source_hash": "fc916b024ca7591e9f933acfcff1e313cc675895f567fc385baed26cbca4790b",
+      "group_key": "item:dba76186d30647f1aa84519e2e075163",
+      "author_id": "1bc1e61ec7c448b486f3c8d173b65c65",
+      "start": 3,
+      "end": 19,
+      "raw_score": 0.9970868229866028,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"e9a19d41deee916c91313f62694ab64c3f6e66170e4e1822cfc673165eed2af8\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:19:49.211858"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 16,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 23035,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "6437022961e9f2c5884f22c85fe6b6a96bfed1d0081ad48fa19a67de00260a3b",
+      "source_kind": "item",
+      "source_id": "00e9f6a6037d4e99809d8a8ffe4f63a3",
+      "source_hash": "0b9a66525d685d18c8a3d0c141aafb38a367992607b91fb5e6fef5118e70b82f",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 70,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "9660aeaf702d5b64fa05e49393b2795fb012af64ea9994f0ac4d2e20dd7a3490",
+      "source_kind": "item",
+      "source_id": "dba76186d30647f1aa84519e2e075163",
+      "source_hash": "fc916b024ca7591e9f933acfcff1e313cc675895f567fc385baed26cbca4790b",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 79,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

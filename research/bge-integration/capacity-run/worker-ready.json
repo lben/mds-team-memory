@@ -1,0 +1,1 @@
+{"cold_start_through_first_inference_seconds": 53.41320064899992, "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206", "warmup_chunks": 1}

@@ -1,0 +1,412 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "c77c5f60a62549d7898b61cd163a9706",
+      "content_hash": "a17507997a83ef2d17a54430864d99615d25c5352e20e0a57faa6902c9f0d4a8",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":7,\"label\":\"named entity\",\"name\":\"Grafana\",\"score\":0.9989659786224365,\"start\":0},{\"end\":23,\"label\":\"named entity\",\"name\":\"Prometheus\",\"score\":0.9951139688491821,\"start\":13},{\"end\":39,\"label\":\"topic or process\",\"name\":\"metrics\",\"score\":0.8543718457221985,\"start\":32}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"grafana\":0.6835925579071045,\"metrics\":0.6061211824417114,\"prometheus\":0.6408541798591614},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":78,\"head\":{\"end\":7,\"name\":\"Grafana\",\"score\":0.8639657497406006,\"start\":0},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8639657497406006,\"start\":0,\"tail\":{\"end\":23,\"name\":\"Prometheus\",\"score\":0.8639657497406006,\"start\":13}},{\"end\":23,\"head\":{\"end\":7,\"name\":\"Grafana\",\"score\":0.6914831399917603,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.6914831399917603,\"start\":0,\"tail\":{\"end\":23,\"name\":\"Prometheus\",\"score\":0.6914831399917603,\"start\":13}},{\"end\":39,\"head\":{\"end\":7,\"name\":\"Grafana\",\"score\":0.5136273503303528,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5136273503303528,\"start\":0,\"tail\":{\"end\":39,\"name\":\"metrics\",\"score\":0.5136273503303528,\"start\":32}}],\"text_hash\":\"4dbfbdfa2cd00d72638346087cc43b35d5991036672c1f8865c0b5712fff0069\"}",
+      "updated_at": "2026-09-30 00:24:09.897422"
+    },
+    {
+      "kind": "profile",
+      "id": "740ad4ee1ad94109a0345ac3d06a5655",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:24:16.898145"
+    },
+    {
+      "kind": "profile",
+      "id": "d8624946d2ee44a28313ba3e84130477",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:24:23.027586"
+    },
+    {
+      "kind": "profile",
+      "id": "759b1378ae9e4fc58e39ce6909e32630",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:24:10.190557"
+    },
+    {
+      "kind": "item",
+      "id": "ac54a3630c854c3d8b99854d48c11bbd",
+      "content_hash": "58f47c293ed769e6c2b9ca2c8044d1574818b24fde18d62c7dbd00c4c996dc47",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":45,\"label\":\"named entity\",\"name\":\"Grafana\",\"score\":0.9991496801376343,\"start\":38},{\"end\":61,\"label\":\"named entity\",\"name\":\"Prometheus\",\"score\":0.9964616894721985,\"start\":51},{\"end\":93,\"label\":\"topic or process\",\"name\":\"operational metrics\",\"score\":0.9848218560218811,\"start\":74}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"grafana\":0.6491726636886597,\"operational metrics\":0.6183608770370483,\"prometheus\":0.6060310006141663},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":61,\"head\":{\"end\":45,\"name\":\"Grafana\",\"score\":0.8602818846702576,\"start\":38},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8602818846702576,\"start\":38,\"tail\":{\"end\":61,\"name\":\"Prometheus\",\"score\":0.8602818846702576,\"start\":51}},{\"end\":61,\"head\":{\"end\":45,\"name\":\"Grafana\",\"score\":0.8577454090118408,\"start\":38},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8577454090118408,\"start\":38,\"tail\":{\"end\":61,\"name\":\"Prometheus\",\"score\":0.8577454090118408,\"start\":51}},{\"end\":93,\"head\":{\"end\":45,\"name\":\"Grafana\",\"score\":0.5609875321388245,\"start\":38},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5609875321388245,\"start\":38,\"tail\":{\"end\":93,\"name\":\"operational metrics\",\"score\":0.5609875321388245,\"start\":74}}],\"text_hash\":\"3f03ea609666846f3aa5dc9f07c7fc419437510fc383833b23ff07333e6cfc38\"}",
+      "updated_at": "2026-09-30 00:24:16.642348"
+    },
+    {
+      "kind": "item",
+      "id": "018aee6ff1db4b8db995a901b7e0a40e",
+      "content_hash": "1db4803c09bb54e1a1249fd039d2c84216762ba22fe70c24104ca48f37b3d34c",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":31,\"label\":\"named entity\",\"name\":\"Prometheus\",\"score\":0.9978458881378174,\"start\":21},{\"end\":7,\"label\":\"named entity\",\"name\":\"Grafana\",\"score\":0.9793318510055542,\"start\":0},{\"end\":59,\"label\":\"topic or process\",\"name\":\"operations dashboard\",\"score\":0.8503758311271667,\"start\":39}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"grafana\":0.6578935384750366,\"operations dashboard\":0.610988974571228,\"prometheus\":0.605222761631012},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":86,\"head\":{\"end\":7,\"label\":\"named entity\",\"name\":\"Grafana\",\"score\":0.9793318510055542,\"start\":0},\"literal_support\":true,\"polarity\":\"negative\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.0,\"start\":0,\"tail\":{\"end\":31,\"label\":\"named entity\",\"name\":\"Prometheus\",\"score\":0.9978458881378174,\"start\":21}}],\"text_hash\":\"fa2ef2365948faa607098dbd485d71e9e9fdaaa1330ef2877ec2a701508c1693\"}",
+      "updated_at": "2026-09-30 00:24:22.707603"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "35deb25200b51c4bc0da380880755488d8726daf6524880f24c3bd95212b3fc9",
+      "kind": "concept",
+      "payload": "{\"name\":\"Grafana\"}",
+      "state": "active",
+      "score": 0.9991496801376343,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+      "created_at": "2026-09-30 00:24:09.372781",
+      "updated_at": "2026-09-30 00:24:22.778779"
+    },
+    {
+      "key": "c86b5482e0b8d40596117f1a1649f47141eee290ddbab69056848c888403f28f",
+      "kind": "concept",
+      "payload": "{\"name\":\"Prometheus\"}",
+      "state": "held",
+      "score": 0.9978458881378174,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:09.380607",
+      "updated_at": "2026-09-30 00:24:22.784036"
+    },
+    {
+      "key": "5a764dcfa690f73b4dfdf4bbfecf7ff32437517ef7d7f67a9e06d1e55805b3ab",
+      "kind": "concept",
+      "payload": "{\"name\":\"metrics\"}",
+      "state": "held",
+      "score": 0.8543718457221985,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:09.385646",
+      "updated_at": "2026-09-30 00:24:09.946686"
+    },
+    {
+      "key": "37bdca727d2f8e4fb01c0c470f02c99912ad11fa5cb790d9d06c6a530e53bffd",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"8a4fa816f3bf466983a0e9a8e8b5e764\",\"source_id\":\"c77c5f60a62549d7898b61cd163a9706\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9989659786224365,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+      "created_at": "2026-09-30 00:24:09.415357",
+      "updated_at": "2026-09-30 00:24:09.945065"
+    },
+    {
+      "key": "9518c9ff627b5e6212e4a230645ef4eec7d4697171c4ba982b728a02932fa906",
+      "kind": "concept",
+      "payload": "{\"name\":\"operational metrics\"}",
+      "state": "held",
+      "score": 0.9848218560218811,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:16.676006",
+      "updated_at": "2026-09-30 00:24:16.766929"
+    },
+    {
+      "key": "bc323fc67515b471a8149427084230959ee79a088d3c517a203b80cdc8768f40",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"8a4fa816f3bf466983a0e9a8e8b5e764\",\"source_id\":\"ac54a3630c854c3d8b99854d48c11bbd\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9991496801376343,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+      "created_at": "2026-09-30 00:24:16.709043",
+      "updated_at": "2026-09-30 00:24:16.761779"
+    },
+    {
+      "key": "663e6a3c10a9cdeefb024c881ddeed42cfc8077e4132d6b084cb0404112e1dba",
+      "kind": "concept",
+      "payload": "{\"name\":\"operations dashboard\"}",
+      "state": "held",
+      "score": 0.8503758311271667,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:22.727880",
+      "updated_at": "2026-09-30 00:24:22.786097"
+    },
+    {
+      "key": "e71b81cb1785c83db44f7ce62ff093e085eff35759896057bb30a22b28c270fe",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"8a4fa816f3bf466983a0e9a8e8b5e764\",\"source_id\":\"018aee6ff1db4b8db995a901b7e0a40e\",\"source_kind\":\"item\"}",
+      "state": "held",
+      "score": 0.9793318510055542,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+      "created_at": "2026-09-30 00:24:22.753276",
+      "updated_at": "2026-09-30 00:24:22.782246"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "58223e4acd150caddfc4151f1ec940c6a5a7ba91a63dfe8ed42e94cd857513f5",
+      "finding_key": "35deb25200b51c4bc0da380880755488d8726daf6524880f24c3bd95212b3fc9",
+      "source_kind": "item",
+      "source_id": "c77c5f60a62549d7898b61cd163a9706",
+      "source_hash": "a17507997a83ef2d17a54430864d99615d25c5352e20e0a57faa6902c9f0d4a8",
+      "group_key": "item:c77c5f60a62549d7898b61cd163a9706",
+      "author_id": "759b1378ae9e4fc58e39ce6909e32630",
+      "start": 0,
+      "end": 7,
+      "raw_score": 0.9989659786224365,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6835925579071045,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"da841f531ae362dc9f5a9d756853eb59478e449250ad9d7b73f31b7f051ecda6\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ce4dd42def8bfb17ce831e49c04393468a83f12322d6e4df2cc1685ddfe676b5",
+      "finding_key": "c86b5482e0b8d40596117f1a1649f47141eee290ddbab69056848c888403f28f",
+      "source_kind": "item",
+      "source_id": "c77c5f60a62549d7898b61cd163a9706",
+      "source_hash": "a17507997a83ef2d17a54430864d99615d25c5352e20e0a57faa6902c9f0d4a8",
+      "group_key": "item:c77c5f60a62549d7898b61cd163a9706",
+      "author_id": "759b1378ae9e4fc58e39ce6909e32630",
+      "start": 13,
+      "end": 23,
+      "raw_score": 0.9951139688491821,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6408541798591614,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"da841f531ae362dc9f5a9d756853eb59478e449250ad9d7b73f31b7f051ecda6\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ebffada7e2afad9e5f6e61bd025213b28a754783aeaf7efadec99b11e868867c",
+      "finding_key": "5a764dcfa690f73b4dfdf4bbfecf7ff32437517ef7d7f67a9e06d1e55805b3ab",
+      "source_kind": "item",
+      "source_id": "c77c5f60a62549d7898b61cd163a9706",
+      "source_hash": "a17507997a83ef2d17a54430864d99615d25c5352e20e0a57faa6902c9f0d4a8",
+      "group_key": "item:c77c5f60a62549d7898b61cd163a9706",
+      "author_id": "759b1378ae9e4fc58e39ce6909e32630",
+      "start": 32,
+      "end": 39,
+      "raw_score": 0.8543718457221985,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6061211824417114,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"da841f531ae362dc9f5a9d756853eb59478e449250ad9d7b73f31b7f051ecda6\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ce9f9028d2a8a0667a3a8681077ad553b5e4c158e036e2dc1a2af45c484c1d9e",
+      "finding_key": "37bdca727d2f8e4fb01c0c470f02c99912ad11fa5cb790d9d06c6a530e53bffd",
+      "source_kind": "item",
+      "source_id": "c77c5f60a62549d7898b61cd163a9706",
+      "source_hash": "a17507997a83ef2d17a54430864d99615d25c5352e20e0a57faa6902c9f0d4a8",
+      "group_key": "item:c77c5f60a62549d7898b61cd163a9706",
+      "author_id": "759b1378ae9e4fc58e39ce6909e32630",
+      "start": 0,
+      "end": 7,
+      "raw_score": 0.9989659786224365,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"da841f531ae362dc9f5a9d756853eb59478e449250ad9d7b73f31b7f051ecda6\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "cd400c7f6500ee96eb5dcc29f39a7d2422374b4700de9c7c3188753cdbd43541",
+      "finding_key": "35deb25200b51c4bc0da380880755488d8726daf6524880f24c3bd95212b3fc9",
+      "source_kind": "item",
+      "source_id": "ac54a3630c854c3d8b99854d48c11bbd",
+      "source_hash": "58f47c293ed769e6c2b9ca2c8044d1574818b24fde18d62c7dbd00c4c996dc47",
+      "group_key": "item:ac54a3630c854c3d8b99854d48c11bbd",
+      "author_id": "740ad4ee1ad94109a0345ac3d06a5655",
+      "start": 38,
+      "end": 45,
+      "raw_score": 0.9991496801376343,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6491726636886597,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"abf0aea30de925f6ea19855751a739c808054497ed12e859e3521848d4cfedb3\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "e725e9316bab9a0039bd01016027596d9d7c6391cebd7b2ce907edae41910880",
+      "finding_key": "c86b5482e0b8d40596117f1a1649f47141eee290ddbab69056848c888403f28f",
+      "source_kind": "item",
+      "source_id": "ac54a3630c854c3d8b99854d48c11bbd",
+      "source_hash": "58f47c293ed769e6c2b9ca2c8044d1574818b24fde18d62c7dbd00c4c996dc47",
+      "group_key": "item:ac54a3630c854c3d8b99854d48c11bbd",
+      "author_id": "740ad4ee1ad94109a0345ac3d06a5655",
+      "start": 51,
+      "end": 61,
+      "raw_score": 0.9964616894721985,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6060310006141663,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"abf0aea30de925f6ea19855751a739c808054497ed12e859e3521848d4cfedb3\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "410e289b537a9dd58bdcd8526e12aefef2a5047cc6ed9ea3f4fdac70f6561ec9",
+      "finding_key": "9518c9ff627b5e6212e4a230645ef4eec7d4697171c4ba982b728a02932fa906",
+      "source_kind": "item",
+      "source_id": "ac54a3630c854c3d8b99854d48c11bbd",
+      "source_hash": "58f47c293ed769e6c2b9ca2c8044d1574818b24fde18d62c7dbd00c4c996dc47",
+      "group_key": "item:ac54a3630c854c3d8b99854d48c11bbd",
+      "author_id": "740ad4ee1ad94109a0345ac3d06a5655",
+      "start": 74,
+      "end": 93,
+      "raw_score": 0.9848218560218811,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6183608770370483,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"abf0aea30de925f6ea19855751a739c808054497ed12e859e3521848d4cfedb3\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "357d0ac7e71b844581fa8caaff0efef0c63a19c8ead84925b9eea92cddfbb7a8",
+      "finding_key": "bc323fc67515b471a8149427084230959ee79a088d3c517a203b80cdc8768f40",
+      "source_kind": "item",
+      "source_id": "ac54a3630c854c3d8b99854d48c11bbd",
+      "source_hash": "58f47c293ed769e6c2b9ca2c8044d1574818b24fde18d62c7dbd00c4c996dc47",
+      "group_key": "item:ac54a3630c854c3d8b99854d48c11bbd",
+      "author_id": "740ad4ee1ad94109a0345ac3d06a5655",
+      "start": 38,
+      "end": 45,
+      "raw_score": 0.9991496801376343,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"abf0aea30de925f6ea19855751a739c808054497ed12e859e3521848d4cfedb3\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8f184741827934ee913464ecaa990928b4bb2282a362e07936f877a7a1e26abd",
+      "finding_key": "c86b5482e0b8d40596117f1a1649f47141eee290ddbab69056848c888403f28f",
+      "source_kind": "item",
+      "source_id": "018aee6ff1db4b8db995a901b7e0a40e",
+      "source_hash": "1db4803c09bb54e1a1249fd039d2c84216762ba22fe70c24104ca48f37b3d34c",
+      "group_key": "item:018aee6ff1db4b8db995a901b7e0a40e",
+      "author_id": "d8624946d2ee44a28313ba3e84130477",
+      "start": 21,
+      "end": 31,
+      "raw_score": 0.9978458881378174,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.605222761631012,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"2c93b05a479fb45729c6464e744935345dde8c340813bb24bd105de6ba6611e7\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "808dddbfc254105fb254097bd686968b6a5fe0f23f233a0f7c0e867a7fbb1ff9",
+      "finding_key": "35deb25200b51c4bc0da380880755488d8726daf6524880f24c3bd95212b3fc9",
+      "source_kind": "item",
+      "source_id": "018aee6ff1db4b8db995a901b7e0a40e",
+      "source_hash": "1db4803c09bb54e1a1249fd039d2c84216762ba22fe70c24104ca48f37b3d34c",
+      "group_key": "item:018aee6ff1db4b8db995a901b7e0a40e",
+      "author_id": "d8624946d2ee44a28313ba3e84130477",
+      "start": 0,
+      "end": 7,
+      "raw_score": 0.9793318510055542,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6578935384750366,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"2c93b05a479fb45729c6464e744935345dde8c340813bb24bd105de6ba6611e7\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "7b62833e2bcaf4afdc5d79ed5aad593f84e4c308e7c4b43b6a143816c9ec4ab8",
+      "finding_key": "663e6a3c10a9cdeefb024c881ddeed42cfc8077e4132d6b084cb0404112e1dba",
+      "source_kind": "item",
+      "source_id": "018aee6ff1db4b8db995a901b7e0a40e",
+      "source_hash": "1db4803c09bb54e1a1249fd039d2c84216762ba22fe70c24104ca48f37b3d34c",
+      "group_key": "item:018aee6ff1db4b8db995a901b7e0a40e",
+      "author_id": "d8624946d2ee44a28313ba3e84130477",
+      "start": 39,
+      "end": 59,
+      "raw_score": 0.8503758311271667,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.610988974571228,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"2c93b05a479fb45729c6464e744935345dde8c340813bb24bd105de6ba6611e7\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "40cecedbedff0058bb4798ac33c00551dd4d01a4a4575c1d92e26c08ce7d14fa",
+      "finding_key": "e71b81cb1785c83db44f7ce62ff093e085eff35759896057bb30a22b28c270fe",
+      "source_kind": "item",
+      "source_id": "018aee6ff1db4b8db995a901b7e0a40e",
+      "source_hash": "1db4803c09bb54e1a1249fd039d2c84216762ba22fe70c24104ca48f37b3d34c",
+      "group_key": "item:018aee6ff1db4b8db995a901b7e0a40e",
+      "author_id": "d8624946d2ee44a28313ba3e84130477",
+      "start": 0,
+      "end": 7,
+      "raw_score": 0.9793318510055542,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"2c93b05a479fb45729c6464e744935345dde8c340813bb24bd105de6ba6611e7\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:24:02.440929"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 22,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 18432,
+      "evidence_bytes": 36511,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "43cfdf32d698f7b245d8fc9ccd4a2ae1c5aca69a05df3cedbd38bd078ce9fc54",
+      "source_kind": "item",
+      "source_id": "c77c5f60a62549d7898b61cd163a9706",
+      "source_hash": "a17507997a83ef2d17a54430864d99615d25c5352e20e0a57faa6902c9f0d4a8",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 78,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "711f8be217e2520bdc090fe2d3e1566fa25d414e735e9306882bb5b2d23838ab",
+      "source_kind": "item",
+      "source_id": "ac54a3630c854c3d8b99854d48c11bbd",
+      "source_hash": "58f47c293ed769e6c2b9ca2c8044d1574818b24fde18d62c7dbd00c4c996dc47",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 94,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "446eb8c812bdef0135e6090567d6f4ef71c1a31559337d5db8fb80f5c9c2ba29",
+      "source_kind": "item",
+      "source_id": "018aee6ff1db4b8db995a901b7e0a40e",
+      "source_hash": "1db4803c09bb54e1a1249fd039d2c84216762ba22fe70c24104ca48f37b3d34c",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 86,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

@@ -1,0 +1,96 @@
+{"output": "/home/mds/bge-quality/ml-quality-r2yk_h1t", "fixture_sha256": "d5621a5bc88fa67a341b0750bf0fe78d8eb8bcc1d96c71047cdbc37c1cd17289"}
+/home/mds/mds-uat/releases/20260930-000700-468391/.ml-venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+/home/mds/mds-uat/releases/20260930-000700-468391/.ml-venv/lib/python3.12/site-packages/gliner2/models/boundary/model.py:2101: UserWarning: Checkpoint uses legacy list-valued extra_special_tokens metadata; loading with compatibility normalization.
+  tokenizer = load_extractor_tokenizer(tokenizer_source)
+/home/mds/mds-uat/releases/20260930-000700-468391/.ml-venv/lib/python3.12/site-packages/gliner2/models/boundary/model.py:1147: RuntimeWarning: Encoder rejected attn_implementation='sdpa'; falling back to 'eager' (DebertaV2Model does not support an attention implementation through torch.nn.functional.scaled_dot_product_attention yet. Please request the support for this architecture: https://github.com/huggingface/transformers/issues/28005. If you believe this error is a bug, please open an issue in Transformers GitHub repository and load your model with the argument `attn_implementation="eager"` meanwhile. Example: `model = AutoModel.from_pretrained("openai/whisper-tiny", attn_implementation="eager")`)
+  self.encoder = self._load_encoder(
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "solar_system_membership", "status": "FAIL", "seconds": 69.4010365310005}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "space_telescope_alias_and_instrument", "status": "PASS", "seconds": 16.130927132999204}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "moon_negation", "status": "FAIL", "seconds": 14.048084172998642}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "mars_hypothetical_questions", "status": "FAIL", "seconds": 14.254820715999813}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "web_validation_dependency", "status": "FAIL", "seconds": 13.616146338999897}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "web_framework_runtime", "status": "FAIL", "seconds": 12.826488090000566}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "render_output", "status": "FAIL", "seconds": 12.719454047999534}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "workshop_lighting_replacement", "status": "PASS", "seconds": 15.437153840000974}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "passive_voice_worker_broker", "status": "PASS", "seconds": 18.507924550000098}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "unrelated_bench_equipment", "status": "FAIL", "seconds": 18.923269799999616}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "one_author_repeats_dependency", "status": "FAIL", "seconds": 21.531180051000774}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "copied_definition_and_relationship", "status": "FAIL", "seconds": 27.016763969999374}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "independent_control_definitions", "status": "FAIL", "seconds": 17.780423882999457}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "ambiguous_control_acronym", "status": "FAIL", "seconds": 32.204854555000566}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "hyphenated_material_spelling", "status": "PASS", "seconds": 31.872661180999785}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "meaningful_language_symbols", "status": "PASS", "seconds": 14.573690089999218}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "private_home_automation", "status": "PASS", "seconds": 1.8414349170016067}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "conflicting_monitoring_evidence", "status": "FAIL", "seconds": 22.025029342999915}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "edited_smart_home_sources", "status": "INCOMPLETE", "seconds": 26.24531209500128}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "deleted_backup_sources", "status": "INCOMPLETE", "seconds": 15.347241424000458}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "database_expertise_with_outcomes", "status": "FAIL", "seconds": 30.72285459699924}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "workshop_expertise_with_outcomes", "status": "FAIL", "seconds": 32.06720888900054}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "one_accepted_answer_is_sparse", "status": "FAIL", "seconds": 15.916875631999574}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+ML SQLite retries final: {}
+{"case": "astronomy_questions_are_not_expertise", "status": "PASS", "seconds": 21.33239492699977}
+{"status": "FAIL", "report": "/home/mds/bge-quality/ml-quality-r2yk_h1t/report.json"}
+/home/mds/mds-uat/ml/bootstrap/44d6873c714fd5b04083620fdff883c5be9800b647525df3b6f4c3816ffe06ea/python/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

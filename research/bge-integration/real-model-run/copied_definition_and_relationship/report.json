@@ -1,0 +1,810 @@
+{
+  "id": "copied_definition_and_relationship",
+  "domain": "electronics",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/9ccce753734d460f971035fb5c892f3b",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/f638c661147e4a409f98910f10beaa66",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/3fa2e24615f84a63ae555ec51316cff1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/copied_definition_and_relationship/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Arduino",
+      "Pulse-Width Modulation"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [
+      {
+        "canonical": "Pulse-Width Modulation",
+        "alias": "PWM"
+      }
+    ],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Arduino",
+        "predicate": "uses",
+        "tail": "Pulse-Width Modulation"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "Arduino"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 9.411166797000988,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 8.380768544999228,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 2,
+          "seconds": 7.543135046000316,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 25.33507038800053,
+      "inference_calls": 3,
+      "observed": {
+        "concepts": [
+          {
+            "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+            "name": "Arduino",
+            "mentions": 3
+          }
+        ],
+        "terms": [
+          {
+            "name": "Arduino",
+            "concept_id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+              "label": "Arduino",
+              "concepts": [
+                {
+                  "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+                  "name": "Arduino",
+                  "size": 3
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "9ccce753734d460f971035fb5c892f3b",
+              "kind": "note",
+              "question": null,
+              "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+              "contributors": 3,
+              "group_size": 3,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:21:57.135433Z",
+              "updated_at": "2026-09-30T00:22:06.644511Z",
+              "concepts": [
+                {
+                  "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+                  "name": "Arduino"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [
+                {
+                  "id": "9ccce753734d460f971035fb5c892f3b",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "alice",
+                  "author_verified": true,
+                  "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:21:57.135433Z",
+                  "updated_at": "2026-09-30T00:22:06.644511Z"
+                },
+                {
+                  "id": "f638c661147e4a409f98910f10beaa66",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "ben",
+                  "author_verified": true,
+                  "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:22:06.608831Z",
+                  "updated_at": "2026-09-30T00:22:06.646230Z"
+                },
+                {
+                  "id": "3fa2e24615f84a63ae555ec51316cff1",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "cara",
+                  "author_verified": true,
+                  "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:22:15.054022Z",
+                  "updated_at": "2026-09-30T00:22:15.072409Z"
+                }
+              ],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "f638c661147e4a409f98910f10beaa66",
+              "kind": "note",
+              "question": null,
+              "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+              "contributors": 3,
+              "group_size": 3,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:22:06.608831Z",
+              "updated_at": "2026-09-30T00:22:06.646230Z",
+              "concepts": [
+                {
+                  "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+                  "name": "Arduino"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [
+                {
+                  "id": "9ccce753734d460f971035fb5c892f3b",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "alice",
+                  "author_verified": true,
+                  "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:21:57.135433Z",
+                  "updated_at": "2026-09-30T00:22:06.644511Z"
+                },
+                {
+                  "id": "f638c661147e4a409f98910f10beaa66",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "ben",
+                  "author_verified": true,
+                  "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:22:06.608831Z",
+                  "updated_at": "2026-09-30T00:22:06.646230Z"
+                },
+                {
+                  "id": "3fa2e24615f84a63ae555ec51316cff1",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "cara",
+                  "author_verified": true,
+                  "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:22:15.054022Z",
+                  "updated_at": "2026-09-30T00:22:15.072409Z"
+                }
+              ],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 2,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "3fa2e24615f84a63ae555ec51316cff1",
+              "kind": "note",
+              "question": null,
+              "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+              "visibility": "team",
+              "author": "cara",
+              "author_verified": true,
+              "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+              "contributors": 3,
+              "group_size": 3,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:22:15.054022Z",
+              "updated_at": "2026-09-30T00:22:15.072409Z",
+              "concepts": [
+                {
+                  "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+                  "name": "Arduino"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [
+                {
+                  "id": "9ccce753734d460f971035fb5c892f3b",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "alice",
+                  "author_verified": true,
+                  "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:21:57.135433Z",
+                  "updated_at": "2026-09-30T00:22:06.644511Z"
+                },
+                {
+                  "id": "f638c661147e4a409f98910f10beaa66",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "ben",
+                  "author_verified": true,
+                  "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:22:06.608831Z",
+                  "updated_at": "2026-09-30T00:22:06.646230Z"
+                },
+                {
+                  "id": "3fa2e24615f84a63ae555ec51316cff1",
+                  "kind": "note",
+                  "question": null,
+                  "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                  "visibility": "team",
+                  "author": "cara",
+                  "author_verified": true,
+                  "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+                  "is_mine": false,
+                  "parent_id": null,
+                  "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                  "contributors": 3,
+                  "group_size": 3,
+                  "helped": 0,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:22:15.054022Z",
+                  "updated_at": "2026-09-30T00:22:15.072409Z"
+                }
+              ],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Arduino": {
+            "query": "Arduino",
+            "terms": [
+              "arduino"
+            ],
+            "concepts": [
+              {
+                "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+                "name": "Arduino"
+              }
+            ],
+            "items": [
+              {
+                "id": "9ccce753734d460f971035fb5c892f3b",
+                "kind": "note",
+                "question": null,
+                "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                "contributors": 3,
+                "group_size": 3,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:57.135433Z",
+                "updated_at": "2026-09-30T00:22:06.644511Z",
+                "type": "item",
+                "snippet": "Our <mark>Arduino</mark> uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                "coverage": 1.0,
+                "score": 0.7394459154672438
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "PWM": {
+            "query": "PWM",
+            "terms": [
+              "pwm"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "9ccce753734d460f971035fb5c892f3b",
+                "kind": "note",
+                "question": null,
+                "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                "contributors": 3,
+                "group_size": 3,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:57.135433Z",
+                "updated_at": "2026-09-30T00:22:06.644511Z",
+                "type": "item",
+                "snippet": "Our Arduino uses Pulse-Width Modulation (<mark>PWM</mark>) to control the indicator brightness.",
+                "coverage": 1.0,
+                "score": 0.7394459154672438
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Pulse-Width Modulation": {
+            "query": "Pulse-Width Modulation",
+            "terms": [
+              "pulse",
+              "width",
+              "modulation"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "9ccce753734d460f971035fb5c892f3b",
+                "kind": "note",
+                "question": null,
+                "body": "Our Arduino uses Pulse-Width Modulation (PWM) to control the indicator brightness.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": "a3cb05ab74344ccfa3eb2a5ace4cb258",
+                "contributors": 3,
+                "group_size": 3,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:57.135433Z",
+                "updated_at": "2026-09-30T00:22:06.644511Z",
+                "type": "item",
+                "snippet": "Our Arduino uses <mark>Pulse-Width</mark> <mark>Modulation</mark> (PWM) to control the indicator brightness.",
+                "coverage": 0.5,
+                "score": 0.7394469154672437
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben",
+          "cara": "cara"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 33,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "9ccce753734d460f971035fb5c892f3b",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "f638c661147e4a409f98910f10beaa66",
+      "storage_kind": "item",
+      "actor": "ben"
+    },
+    {
+      "id": "3fa2e24615f84a63ae555ec51316cff1",
+      "storage_kind": "item",
+      "actor": "cara"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Arduino",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+          "name": "Arduino",
+          "mentions": 3
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Pulse-Width Modulation",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "Pulse-Width Modulation",
+        "alias": "PWM"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Arduino",
+        "predicate": "uses",
+        "tail": "Pulse-Width Modulation"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "Arduino"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 27.016763969999374,
+  "inference_calls": 3,
+  "sampled_peak_tree_rss_bytes": 3877081088,
+  "sampled_cpu_seconds": 46.75
+}

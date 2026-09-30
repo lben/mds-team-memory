@@ -1,8 +1,8 @@
 # Offline deployment package
 
 This directory is delivered by an ordinary Git pull. It contains the built UI,
-a Linux Python 3.12.14 / uv 0.12.10 bootstrap, and 51 numbered parts of the
-compressed model and Linux dependency bundle (about 4.5 GiB). No Git LFS client,
+a Linux Python 3.12.14 / uv 0.12.10 bootstrap, and 25 numbered parts of the
+compressed model and Linux dependency bundle (about 2.19 GiB). No Git LFS client,
 manual model download, Node or Docker is needed on the deploying PC.
 
 Configure `tools/deploy.toml` from its example, then run `Update.cmd [UAT|PROD]`
@@ -11,19 +11,20 @@ CLI validates all hashes locally and again on the server, joins the parts,
 decompresses the bundle, installs offline and starts the app and ML daemon.
 See the repository README and SERVER_SETUP.md for requirements and recovery.
 
-The models retain the selected extractor, BGE-large and spaCy pins and add the
-pinned Qwen3-4B-Instruct-2507 Q4_K_M verifier. Each role's licenses and immutable
+The models retain the selected GLiNER2.5-base, BGE-large-en-v1.5 and spaCy
+en_core_web_trf pins. BGE handles both embeddings and concept relevance in the
+same inference process. This payload contains no generative LLM. Each role's licenses and immutable
 revision/checksum metadata are in `offline/manifest.json`; model license/source
 files are also included in the bundle where supplied by the original assets.
-The verifier wheel is built on the pinned RHEL/UBI 8.10 image with native CPU
-extensions disabled, making it portable to SSE2 x86_64 CPUs. This prioritizes
-compatibility; inference speed must be measured on the actual UAT machine.
+Qwen, llama.cpp and its wheel are absent from this package. Historical Qwen
+assets remain in Git history and in an existing server generation retained for
+rollback; Update never deletes generations still referenced by old releases.
 Package checks and daemon startup do not establish release-quality acceptance.
 Recorded deployment, compatibility and recovery results are in
-[VERIFICATION.md](VERIFICATION.md).
+[BGE_VERIFICATION.md](BGE_VERIFICATION.md).
 
 For maintainers: build the UI, then use `tools/package_update.py` with verified
-four-role assets, pinned Linux wheels and a Linux-created bootstrap archive.
+three-role assets, pinned Linux wheels and a Linux-created bootstrap archive.
 Do not edit numbered parts or hashes. Frontend source changes require a new UI
 package. The dependency lock must match exactly.
 

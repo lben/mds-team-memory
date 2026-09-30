@@ -1,0 +1,597 @@
+{
+  "id": "conflicting_monitoring_evidence",
+  "domain": "software_operations",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/c77c5f60a62549d7898b61cd163a9706",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/ac54a3630c854c3d8b99854d48c11bbd",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/018aee6ff1db4b8db995a901b7e0a40e",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/conflicting_monitoring_evidence/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Grafana",
+      "Prometheus"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Grafana",
+        "predicate": "uses",
+        "tail": "Prometheus"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 7.892210295000041,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.573893085998861,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 2,
+          "seconds": 6.094971960999828,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 20.56107534199873,
+      "inference_calls": 3,
+      "observed": {
+        "concepts": [
+          {
+            "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+            "name": "Grafana",
+            "mentions": 3
+          }
+        ],
+        "terms": [
+          {
+            "name": "Grafana",
+            "concept_id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+              "label": "Grafana",
+              "concepts": [
+                {
+                  "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+                  "name": "Grafana",
+                  "size": 3
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "c77c5f60a62549d7898b61cd163a9706",
+              "kind": "note",
+              "question": null,
+              "body": "Grafana uses Prometheus for the metrics displayed on our operations dashboard.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "759b1378ae9e4fc58e39ce6909e32630",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:24:02.375069Z",
+              "updated_at": "2026-09-30T00:24:02.414827Z",
+              "concepts": [
+                {
+                  "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+                  "name": "Grafana"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "ac54a3630c854c3d8b99854d48c11bbd",
+              "kind": "note",
+              "question": null,
+              "body": "The dashboard configuration notes say Grafana uses Prometheus to retrieve operational metrics.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "740ad4ee1ad94109a0345ac3d06a5655",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:24:10.328979Z",
+              "updated_at": "2026-09-30T00:24:10.357598Z",
+              "concepts": [
+                {
+                  "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+                  "name": "Grafana"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 2,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "018aee6ff1db4b8db995a901b7e0a40e",
+              "kind": "note",
+              "question": null,
+              "body": "Grafana does not use Prometheus in the operations dashboard configuration I inspected.",
+              "visibility": "team",
+              "author": "cara",
+              "author_verified": true,
+              "author_id": "d8624946d2ee44a28313ba3e84130477",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:24:16.946761Z",
+              "updated_at": "2026-09-30T00:24:16.966130Z",
+              "concepts": [
+                {
+                  "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+                  "name": "Grafana"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Grafana": {
+            "query": "Grafana",
+            "terms": [
+              "grafana"
+            ],
+            "concepts": [
+              {
+                "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+                "name": "Grafana"
+              }
+            ],
+            "items": [
+              {
+                "id": "c77c5f60a62549d7898b61cd163a9706",
+                "kind": "note",
+                "question": null,
+                "body": "Grafana uses Prometheus for the metrics displayed on our operations dashboard.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "759b1378ae9e4fc58e39ce6909e32630",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:02.375069Z",
+                "updated_at": "2026-09-30T00:24:02.414827Z",
+                "type": "item",
+                "snippet": "<mark>Grafana</mark> uses Prometheus for the metrics displayed on our operations dashboard.",
+                "coverage": 1.0,
+                "score": 0.3000010239361702
+              },
+              {
+                "id": "ac54a3630c854c3d8b99854d48c11bbd",
+                "kind": "note",
+                "question": null,
+                "body": "The dashboard configuration notes say Grafana uses Prometheus to retrieve operational metrics.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "740ad4ee1ad94109a0345ac3d06a5655",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:10.328979Z",
+                "updated_at": "2026-09-30T00:24:10.357598Z",
+                "type": "item",
+                "snippet": "The dashboard configuration notes say <mark>Grafana</mark> uses Prometheus to retrieve operational metrics.",
+                "coverage": 1.0,
+                "score": 0.30000098844672657
+              },
+              {
+                "id": "018aee6ff1db4b8db995a901b7e0a40e",
+                "kind": "note",
+                "question": null,
+                "body": "Grafana does not use Prometheus in the operations dashboard configuration I inspected.",
+                "visibility": "team",
+                "author": "cara",
+                "author_verified": true,
+                "author_id": "d8624946d2ee44a28313ba3e84130477",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:16.946761Z",
+                "updated_at": "2026-09-30T00:24:16.966130Z",
+                "type": "item",
+                "snippet": "<mark>Grafana</mark> does not use Prometheus in the operations dashboard configuration I inspected.",
+                "coverage": 1.0,
+                "score": 0.30000098844672657
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Prometheus": {
+            "query": "Prometheus",
+            "terms": [
+              "prometheus"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "c77c5f60a62549d7898b61cd163a9706",
+                "kind": "note",
+                "question": null,
+                "body": "Grafana uses Prometheus for the metrics displayed on our operations dashboard.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "759b1378ae9e4fc58e39ce6909e32630",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:02.375069Z",
+                "updated_at": "2026-09-30T00:24:02.414827Z",
+                "type": "item",
+                "snippet": "Grafana uses <mark>Prometheus</mark> for the metrics displayed on our operations dashboard.",
+                "coverage": 1.0,
+                "score": 0.3000010239361702
+              },
+              {
+                "id": "ac54a3630c854c3d8b99854d48c11bbd",
+                "kind": "note",
+                "question": null,
+                "body": "The dashboard configuration notes say Grafana uses Prometheus to retrieve operational metrics.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "740ad4ee1ad94109a0345ac3d06a5655",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:10.328979Z",
+                "updated_at": "2026-09-30T00:24:10.357598Z",
+                "type": "item",
+                "snippet": "The dashboard configuration notes say Grafana uses <mark>Prometheus</mark> to retrieve operational metrics.",
+                "coverage": 1.0,
+                "score": 0.30000098844672657
+              },
+              {
+                "id": "018aee6ff1db4b8db995a901b7e0a40e",
+                "kind": "note",
+                "question": null,
+                "body": "Grafana does not use Prometheus in the operations dashboard configuration I inspected.",
+                "visibility": "team",
+                "author": "cara",
+                "author_verified": true,
+                "author_id": "d8624946d2ee44a28313ba3e84130477",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:24:16.946761Z",
+                "updated_at": "2026-09-30T00:24:16.966130Z",
+                "type": "item",
+                "snippet": "Grafana does not use <mark>Prometheus</mark> in the operations dashboard configuration I inspected.",
+                "coverage": 1.0,
+                "score": 0.30000098844672657
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben",
+          "cara": "cara"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 22,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "c77c5f60a62549d7898b61cd163a9706",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "ac54a3630c854c3d8b99854d48c11bbd",
+      "storage_kind": "item",
+      "actor": "ben"
+    },
+    {
+      "id": "018aee6ff1db4b8db995a901b7e0a40e",
+      "storage_kind": "item",
+      "actor": "cara"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Grafana",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "8a4fa816f3bf466983a0e9a8e8b5e764",
+          "name": "Grafana",
+          "mentions": 3
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Prometheus",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Grafana",
+        "predicate": "uses",
+        "tail": "Prometheus"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 22.025029342999915,
+  "inference_calls": 3,
+  "sampled_peak_tree_rss_bytes": 3890708480,
+  "sampled_cpu_seconds": 43.90999999999997
+}

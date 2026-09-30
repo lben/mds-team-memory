@@ -1,0 +1,984 @@
+{
+  "id": "space_telescope_alias_and_instrument",
+  "domain": "astronomy",
+  "status": "PASS",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/links/5ba5f187cabd4f409d3369c5cf5a123a/evidence",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/a11eed3e890548b5b2766b4ae736db63",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/b53791c02cf64c728eb65f4615c9f7b0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/space_telescope_alias_and_instrument/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Hubble Space Telescope",
+      "gyroscopes"
+    ],
+    "absent_concepts": [],
+    "aliases": [
+      {
+        "canonical": "Hubble Space Telescope",
+        "alias": "HST"
+      }
+    ],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "Hubble Space Telescope",
+        "predicate": "uses",
+        "tail": "gyroscopes"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "gyroscopes",
+        "predicate": "uses",
+        "tail": "Hubble Space Telescope"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.947509544999775,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 7.769984254000519,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 14.717493799000295,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "8ba736b99e114611b3e4a7fe9dc4779f",
+            "name": "gyroscopes",
+            "mentions": 2
+          },
+          {
+            "id": "5c4788e216ed4582b82530ef3feba41f",
+            "name": "Hubble Space Telescope",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Hubble Space Telescope",
+            "concept_id": "5c4788e216ed4582b82530ef3feba41f",
+            "is_canonical": true
+          },
+          {
+            "name": "HST",
+            "concept_id": "5c4788e216ed4582b82530ef3feba41f",
+            "is_canonical": false
+          },
+          {
+            "name": "gyroscopes",
+            "concept_id": "8ba736b99e114611b3e4a7fe9dc4779f",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [
+          {
+            "canonical": "Hubble Space Telescope",
+            "canonical_id": "5c4788e216ed4582b82530ef3feba41f",
+            "alias": "HST",
+            "public_search_confirmed": true
+          }
+        ],
+        "relationships": [
+          {
+            "finding_key": "9587c7431dd4eef4ff027b3329c565c0da10d7c2bdf8f44e625c04ff8d1e5593",
+            "kind": "relationship",
+            "src_id": "5c4788e216ed4582b82530ef3feba41f",
+            "dst_id": "8ba736b99e114611b3e4a7fe9dc4779f",
+            "predicate": "uses",
+            "state": "active",
+            "origin": "automatic",
+            "override": "automatic",
+            "policy_version": "grounded-cold-start-v12-bge",
+            "support_count": 2,
+            "conflicts": false,
+            "src_name": "Hubble Space Telescope",
+            "dst_name": "gyroscopes",
+            "directed": true,
+            "sources": [
+              {
+                "source_kind": "item",
+                "source_id": "a11eed3e890548b5b2766b4ae736db63",
+                "source_hash": "6570c1b58f07b449df73e8ee515d1742444ab35ad827caddd32ccd8b4a16ebc8",
+                "start": 0,
+                "end": 87,
+                "quote": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                "text": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                "context_source": false,
+                "polarity": "positive",
+                "literal_support": true,
+                "assertion_allowed": true,
+                "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                "locator": "",
+                "origin": "note",
+                "document_id": null,
+                "filename": null,
+                "parent_id": null
+              },
+              {
+                "source_kind": "item",
+                "source_id": "b53791c02cf64c728eb65f4615c9f7b0",
+                "source_hash": "462ede56a60c4e0934ce1e9b72ad6a217391e53206622ba55d7bdcc3d1b4969f",
+                "start": 0,
+                "end": 96,
+                "quote": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                "text": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                "context_source": false,
+                "polarity": "positive",
+                "literal_support": true,
+                "assertion_allowed": true,
+                "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                "locator": "",
+                "origin": "note",
+                "document_id": null,
+                "filename": null,
+                "parent_id": null
+              }
+            ]
+          }
+        ],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "5c4788e216ed4582b82530ef3feba41f",
+              "label": "Hubble Space Telescope + 1 more",
+              "concepts": [
+                {
+                  "id": "5c4788e216ed4582b82530ef3feba41f",
+                  "name": "Hubble Space Telescope",
+                  "size": 2
+                },
+                {
+                  "id": "8ba736b99e114611b3e4a7fe9dc4779f",
+                  "name": "gyroscopes",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "source": "5c4788e216ed4582b82530ef3feba41f",
+              "target": "8ba736b99e114611b3e4a7fe9dc4779f",
+              "label": "uses",
+              "style": "solid",
+              "state": "active",
+              "origin": "automatic",
+              "directed": true,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; active.",
+              "link_id": "5ba5f187cabd4f409d3369c5cf5a123a",
+              "finding_key": "9587c7431dd4eef4ff027b3329c565c0da10d7c2bdf8f44e625c04ff8d1e5593",
+              "alternative_count": 2,
+              "conflicts": false
+            }
+          ],
+          "total_nodes": 2,
+          "total_edges": 1,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [
+          {
+            "link_id": "5ba5f187cabd4f409d3369c5cf5a123a",
+            "src_name": "Hubble Space Telescope",
+            "dst_name": "gyroscopes",
+            "occurrence_count": 2,
+            "items": [
+              {
+                "id": "a11eed3e890548b5b2766b4ae736db63",
+                "kind": "note",
+                "body": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:19:18.909715Z"
+              },
+              {
+                "id": "b53791c02cf64c728eb65f4615c9f7b0",
+                "kind": "note",
+                "body": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:19:25.915094Z"
+              }
+            ],
+            "passages": [],
+            "summary": {
+              "source": "5c4788e216ed4582b82530ef3feba41f",
+              "target": "8ba736b99e114611b3e4a7fe9dc4779f",
+              "label": "uses",
+              "style": "solid",
+              "state": "active",
+              "origin": "automatic",
+              "directed": true,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; active.",
+              "link_id": "5ba5f187cabd4f409d3369c5cf5a123a",
+              "finding_key": "9587c7431dd4eef4ff027b3329c565c0da10d7c2bdf8f44e625c04ff8d1e5593",
+              "alternative_count": 2,
+              "conflicts": false
+            },
+            "claims": [
+              {
+                "finding_key": "9587c7431dd4eef4ff027b3329c565c0da10d7c2bdf8f44e625c04ff8d1e5593",
+                "kind": "relationship",
+                "src_id": "5c4788e216ed4582b82530ef3feba41f",
+                "dst_id": "8ba736b99e114611b3e4a7fe9dc4779f",
+                "predicate": "uses",
+                "state": "active",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "Hubble Space Telescope",
+                "dst_name": "gyroscopes",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "a11eed3e890548b5b2766b4ae736db63",
+                    "source_hash": "6570c1b58f07b449df73e8ee515d1742444ab35ad827caddd32ccd8b4a16ebc8",
+                    "start": 0,
+                    "end": 87,
+                    "quote": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                    "text": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "b53791c02cf64c728eb65f4615c9f7b0",
+                    "source_hash": "462ede56a60c4e0934ce1e9b72ad6a217391e53206622ba55d7bdcc3d1b4969f",
+                    "start": 0,
+                    "end": 96,
+                    "quote": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                    "text": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "869b675f944b759a91e8e01f1af4c3d5e435fc70d73ec77c680ed746730cd556",
+                "kind": "association",
+                "src_id": "5c4788e216ed4582b82530ef3feba41f",
+                "dst_id": "8ba736b99e114611b3e4a7fe9dc4779f",
+                "predicate": "related to",
+                "state": "weak",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "Hubble Space Telescope",
+                "dst_name": "gyroscopes",
+                "directed": false,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "a11eed3e890548b5b2766b4ae736db63",
+                    "source_hash": "6570c1b58f07b449df73e8ee515d1742444ab35ad827caddd32ccd8b4a16ebc8",
+                    "start": 0,
+                    "end": 87,
+                    "quote": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                    "text": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "b53791c02cf64c728eb65f4615c9f7b0",
+                    "source_hash": "462ede56a60c4e0934ce1e9b72ad6a217391e53206622ba55d7bdcc3d1b4969f",
+                    "start": 0,
+                    "end": 96,
+                    "quote": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                    "text": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "5fb9130028bcb0d4644fbece1eab85794764eaed3ec8b4d2f296dd34cfe8c7a5",
+                "kind": "relationship",
+                "src_id": "5c4788e216ed4582b82530ef3feba41f",
+                "dst_id": "8ba736b99e114611b3e4a7fe9dc4779f",
+                "predicate": "depends on",
+                "state": "withdrawn",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 0,
+                "conflicts": false,
+                "src_name": "Hubble Space Telescope",
+                "dst_name": "gyroscopes",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "a11eed3e890548b5b2766b4ae736db63",
+                    "source_hash": "6570c1b58f07b449df73e8ee515d1742444ab35ad827caddd32ccd8b4a16ebc8",
+                    "start": 4,
+                    "end": 48,
+                    "quote": "Hubble Space Telescope (HST) uses gyroscopes",
+                    "text": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "b53791c02cf64c728eb65f4615c9f7b0",
+                    "source_hash": "462ede56a60c4e0934ce1e9b72ad6a217391e53206622ba55d7bdcc3d1b4969f",
+                    "start": 26,
+                    "end": 70,
+                    "quote": "Hubble Space Telescope (HST) uses gyroscopes",
+                    "text": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              }
+            ],
+            "review_note": null,
+            "reviewed_by": null
+          }
+        ],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "a11eed3e890548b5b2766b4ae736db63",
+              "kind": "note",
+              "question": null,
+              "body": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "8087814c38b14dc7b4a600f8457c1bd9",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:19:18.909715Z",
+              "updated_at": "2026-09-30T00:19:18.948048Z",
+              "concepts": [
+                {
+                  "id": "8ba736b99e114611b3e4a7fe9dc4779f",
+                  "name": "gyroscopes"
+                },
+                {
+                  "id": "5c4788e216ed4582b82530ef3feba41f",
+                  "name": "Hubble Space Telescope"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "b53791c02cf64c728eb65f4615c9f7b0",
+              "kind": "note",
+              "question": null,
+              "body": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "f8ccb08546584b13b3d78c67ee05c266",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:19:25.915094Z",
+              "updated_at": "2026-09-30T00:19:25.948781Z",
+              "concepts": [
+                {
+                  "id": "8ba736b99e114611b3e4a7fe9dc4779f",
+                  "name": "gyroscopes"
+                },
+                {
+                  "id": "5c4788e216ed4582b82530ef3feba41f",
+                  "name": "Hubble Space Telescope"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "HST": {
+            "query": "HST",
+            "terms": [
+              "hst"
+            ],
+            "concepts": [
+              {
+                "id": "5c4788e216ed4582b82530ef3feba41f",
+                "name": "Hubble Space Telescope"
+              }
+            ],
+            "items": [
+              {
+                "id": "a11eed3e890548b5b2766b4ae736db63",
+                "kind": "note",
+                "question": null,
+                "body": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "8087814c38b14dc7b4a600f8457c1bd9",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:18.909715Z",
+                "updated_at": "2026-09-30T00:19:18.948048Z",
+                "type": "item",
+                "snippet": "The <mark>Hubble Space Telescope</mark> (<mark>HST</mark>) uses gyroscopes to measure changes in its orientation.",
+                "coverage": 1.0,
+                "score": 0.30000203076923077
+              },
+              {
+                "id": "b53791c02cf64c728eb65f4615c9f7b0",
+                "kind": "note",
+                "question": null,
+                "body": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "f8ccb08546584b13b3d78c67ee05c266",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:25.915094Z",
+                "updated_at": "2026-09-30T00:19:25.948781Z",
+                "type": "item",
+                "snippet": "For pointing control, the <mark>Hubble Space Telescope</mark> (<mark>HST</mark>) uses gyroscopes that detect its rotation.",
+                "coverage": 1.0,
+                "score": 0.3000019701492537
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Hubble Space Telescope": {
+            "query": "Hubble Space Telescope",
+            "terms": [
+              "hubble",
+              "space",
+              "telescope"
+            ],
+            "concepts": [
+              {
+                "id": "5c4788e216ed4582b82530ef3feba41f",
+                "name": "Hubble Space Telescope"
+              }
+            ],
+            "items": [
+              {
+                "id": "a11eed3e890548b5b2766b4ae736db63",
+                "kind": "note",
+                "question": null,
+                "body": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "8087814c38b14dc7b4a600f8457c1bd9",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:18.909715Z",
+                "updated_at": "2026-09-30T00:19:18.948048Z",
+                "type": "item",
+                "snippet": "The <mark>Hubble Space Telescope</mark> (<mark>HST</mark>) uses gyroscopes to measure changes in its orientation.",
+                "coverage": 1.0,
+                "score": 0.30000203076923077
+              },
+              {
+                "id": "b53791c02cf64c728eb65f4615c9f7b0",
+                "kind": "note",
+                "question": null,
+                "body": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "f8ccb08546584b13b3d78c67ee05c266",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:25.915094Z",
+                "updated_at": "2026-09-30T00:19:25.948781Z",
+                "type": "item",
+                "snippet": "For pointing control, the <mark>Hubble Space Telescope</mark> (<mark>HST</mark>) uses gyroscopes that detect its rotation.",
+                "coverage": 1.0,
+                "score": 0.3000019701492537
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "gyroscopes": {
+            "query": "gyroscopes",
+            "terms": [
+              "gyroscopes"
+            ],
+            "concepts": [
+              {
+                "id": "8ba736b99e114611b3e4a7fe9dc4779f",
+                "name": "gyroscopes"
+              }
+            ],
+            "items": [
+              {
+                "id": "a11eed3e890548b5b2766b4ae736db63",
+                "kind": "note",
+                "question": null,
+                "body": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "8087814c38b14dc7b4a600f8457c1bd9",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:18.909715Z",
+                "updated_at": "2026-09-30T00:19:18.948048Z",
+                "type": "item",
+                "snippet": "The Hubble Space Telescope (HST) uses <mark>gyroscopes</mark> to measure changes in its orientation.",
+                "coverage": 1.0,
+                "score": 0.3000010153846154
+              },
+              {
+                "id": "b53791c02cf64c728eb65f4615c9f7b0",
+                "kind": "note",
+                "question": null,
+                "body": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "f8ccb08546584b13b3d78c67ee05c266",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:25.915094Z",
+                "updated_at": "2026-09-30T00:19:25.948781Z",
+                "type": "item",
+                "snippet": "For pointing control, the Hubble Space Telescope (HST) uses <mark>gyroscopes</mark> that detect its rotation.",
+                "coverage": 1.0,
+                "score": 0.30000098507462686
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 23,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "a11eed3e890548b5b2766b4ae736db63",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "b53791c02cf64c728eb65f4615c9f7b0",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Hubble Space Telescope",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "5c4788e216ed4582b82530ef3feba41f",
+          "name": "Hubble Space Telescope",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "gyroscopes",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "8ba736b99e114611b3e4a7fe9dc4779f",
+          "name": "gyroscopes",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "Hubble Space Telescope",
+        "alias": "HST"
+      },
+      "expected_present": true,
+      "observed": [
+        {
+          "canonical": "Hubble Space Telescope",
+          "canonical_id": "5c4788e216ed4582b82530ef3feba41f",
+          "alias": "HST",
+          "public_search_confirmed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Hubble Space Telescope",
+        "predicate": "uses",
+        "tail": "gyroscopes"
+      },
+      "expected_present": true,
+      "observed": [
+        {
+          "finding_key": "9587c7431dd4eef4ff027b3329c565c0da10d7c2bdf8f44e625c04ff8d1e5593",
+          "kind": "relationship",
+          "src_id": "5c4788e216ed4582b82530ef3feba41f",
+          "dst_id": "8ba736b99e114611b3e4a7fe9dc4779f",
+          "predicate": "uses",
+          "state": "active",
+          "origin": "automatic",
+          "override": "automatic",
+          "policy_version": "grounded-cold-start-v12-bge",
+          "support_count": 2,
+          "conflicts": false,
+          "src_name": "Hubble Space Telescope",
+          "dst_name": "gyroscopes",
+          "directed": true,
+          "sources": [
+            {
+              "source_kind": "item",
+              "source_id": "a11eed3e890548b5b2766b4ae736db63",
+              "source_hash": "6570c1b58f07b449df73e8ee515d1742444ab35ad827caddd32ccd8b4a16ebc8",
+              "start": 0,
+              "end": 87,
+              "quote": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+              "text": "The Hubble Space Telescope (HST) uses gyroscopes to measure changes in its orientation.",
+              "context_source": false,
+              "polarity": "positive",
+              "literal_support": true,
+              "assertion_allowed": true,
+              "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+              "locator": "",
+              "origin": "note",
+              "document_id": null,
+              "filename": null,
+              "parent_id": null
+            },
+            {
+              "source_kind": "item",
+              "source_id": "b53791c02cf64c728eb65f4615c9f7b0",
+              "source_hash": "462ede56a60c4e0934ce1e9b72ad6a217391e53206622ba55d7bdcc3d1b4969f",
+              "start": 0,
+              "end": 96,
+              "quote": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+              "text": "For pointing control, the Hubble Space Telescope (HST) uses gyroscopes that detect its rotation.",
+              "context_source": false,
+              "polarity": "positive",
+              "literal_support": true,
+              "assertion_allowed": true,
+              "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+              "locator": "",
+              "origin": "note",
+              "document_id": null,
+              "filename": null,
+              "parent_id": null
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "gyroscopes",
+        "predicate": "uses",
+        "tail": "Hubble Space Telescope"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 16.130927132999204,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3937181696,
+  "sampled_cpu_seconds": 33.28
+}

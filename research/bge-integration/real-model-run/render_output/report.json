@@ -1,0 +1,477 @@
+{
+  "id": "render_output",
+  "domain": "digital_media",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/3d3bc9a1845c4baa966796b9175f5ab1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/f887f41031a74535bee7c32d1ab216cc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/render_output/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Blender",
+      "OpenEXR"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "Blender",
+        "predicate": "produces",
+        "tail": "OpenEXR"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "OpenEXR",
+        "predicate": "produces",
+        "tail": "Blender"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.837981919999947,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 4.557927586000005,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 11.395909505999953,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "28557e7587c34e05b4d1d96a4ccafcae",
+            "name": "OpenEXR",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "OpenEXR",
+            "concept_id": "28557e7587c34e05b4d1d96a4ccafcae",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "28557e7587c34e05b4d1d96a4ccafcae",
+              "label": "OpenEXR",
+              "concepts": [
+                {
+                  "id": "28557e7587c34e05b4d1d96a4ccafcae",
+                  "name": "OpenEXR",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "3d3bc9a1845c4baa966796b9175f5ab1",
+              "kind": "note",
+              "question": null,
+              "body": "In our render workflow, Blender produces OpenEXR for the compositing stage.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:29.810629Z",
+              "updated_at": "2026-09-30T00:20:29.849526Z",
+              "concepts": [
+                {
+                  "id": "28557e7587c34e05b4d1d96a4ccafcae",
+                  "name": "OpenEXR"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "f887f41031a74535bee7c32d1ab216cc",
+              "kind": "note",
+              "question": null,
+              "body": "The animation export task confirms that Blender produces OpenEXR with the selected output settings.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "c467af8007f14b33a8b0d284b48bfe4a",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:36.708626Z",
+              "updated_at": "2026-09-30T00:20:36.722413Z",
+              "concepts": [
+                {
+                  "id": "28557e7587c34e05b4d1d96a4ccafcae",
+                  "name": "OpenEXR"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Blender": {
+            "query": "Blender",
+            "terms": [
+              "blender"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "3d3bc9a1845c4baa966796b9175f5ab1",
+                "kind": "note",
+                "question": null,
+                "body": "In our render workflow, Blender produces OpenEXR for the compositing stage.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:29.810629Z",
+                "updated_at": "2026-09-30T00:20:29.849526Z",
+                "type": "item",
+                "snippet": "In our render workflow, <mark>Blender</mark> produces OpenEXR for the compositing stage.",
+                "coverage": 1.0,
+                "score": 0.300001051625239
+              },
+              {
+                "id": "f887f41031a74535bee7c32d1ab216cc",
+                "kind": "note",
+                "question": null,
+                "body": "The animation export task confirms that Blender produces OpenEXR with the selected output settings.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "c467af8007f14b33a8b0d284b48bfe4a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:36.708626Z",
+                "updated_at": "2026-09-30T00:20:36.722413Z",
+                "type": "item",
+                "snippet": "The animation export task confirms that <mark>Blender</mark> produces OpenEXR with the selected output settings.",
+                "coverage": 1.0,
+                "score": 0.30000095320623915
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "OpenEXR": {
+            "query": "OpenEXR",
+            "terms": [
+              "openexr"
+            ],
+            "concepts": [
+              {
+                "id": "28557e7587c34e05b4d1d96a4ccafcae",
+                "name": "OpenEXR"
+              }
+            ],
+            "items": [
+              {
+                "id": "3d3bc9a1845c4baa966796b9175f5ab1",
+                "kind": "note",
+                "question": null,
+                "body": "In our render workflow, Blender produces OpenEXR for the compositing stage.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "3b1a3e87989b4baeaea7ff7b06ff7b05",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:29.810629Z",
+                "updated_at": "2026-09-30T00:20:29.849526Z",
+                "type": "item",
+                "snippet": "In our render workflow, Blender produces <mark>OpenEXR</mark> for the compositing stage.",
+                "coverage": 1.0,
+                "score": 0.300001051625239
+              },
+              {
+                "id": "f887f41031a74535bee7c32d1ab216cc",
+                "kind": "note",
+                "question": null,
+                "body": "The animation export task confirms that Blender produces OpenEXR with the selected output settings.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "c467af8007f14b33a8b0d284b48bfe4a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:36.708626Z",
+                "updated_at": "2026-09-30T00:20:36.722413Z",
+                "type": "item",
+                "snippet": "The animation export task confirms that Blender produces <mark>OpenEXR</mark> with the selected output settings.",
+                "coverage": 1.0,
+                "score": 0.30000095320623915
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 22,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "3d3bc9a1845c4baa966796b9175f5ab1",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "f887f41031a74535bee7c32d1ab216cc",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Blender",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "concepts",
+      "assertion": "OpenEXR",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "28557e7587c34e05b4d1d96a4ccafcae",
+          "name": "OpenEXR",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Blender",
+        "predicate": "produces",
+        "tail": "OpenEXR"
+      },
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "OpenEXR",
+        "predicate": "produces",
+        "tail": "Blender"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 12.719454047999534,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3946471424,
+  "sampled_cpu_seconds": 30.65999999999994
+}

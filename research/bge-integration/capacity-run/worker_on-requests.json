@@ -1,0 +1,5720 @@
+[
+  {
+    "client": 0,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Elasticsearch uses Nginx to store audit events. The team reviewed incident 9c44e7f6d5 on service c92f6b059b. The recorded duration was 465 seconds and the batch contained 15652 records. Run reference worker_on-000000-ce0bf7e62d8f58ca.",
+    "id": "07de7d1b1dc24f9abc1a777a4273c0a2",
+    "group_size": 1,
+    "seconds": 3.5123286270008975,
+    "completed_elapsed": 135.5465869360014
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000186a1",
+    "ok": true,
+    "seconds": 2.9191822089997004,
+    "completed_elapsed": 138.4657955620005
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.20960721099982,
+    "completed_elapsed": 143.6754238980011
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.965550709001036,
+    "completed_elapsed": 145.64099735700074
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000186a4",
+    "ok": true,
+    "seconds": 6.082162253000206,
+    "completed_elapsed": 151.7231802770002
+  },
+  {
+    "client": 0,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared SQLite with Terraform for project 60666001f8. Ticket 1dd1fb411c documents a memory limit of 919 MiB and a queue length of 83942. A later review will verify the results. Run reference worker_on-000005-838515d563d1bbc2.",
+    "id": "28acc574d9bb4f3295c5352ee85e13fd",
+    "group_size": 1,
+    "seconds": 4.598793460001616,
+    "completed_elapsed": 156.32206232000135
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.325505127000724,
+    "completed_elapsed": 160.64759203100039
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000186a7",
+    "ok": true,
+    "seconds": 1.7290310009993846,
+    "completed_elapsed": 162.37665349000054
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.388690169000256,
+    "completed_elapsed": 167.7653669090014
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.6848982100000285,
+    "completed_elapsed": 171.4503181609998
+  },
+  {
+    "client": 0,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "SQLite uses Redis to store audit events. The team reviewed incident af01b61f77 on service 1d7de22269. The recorded duration was 711 seconds and the batch contained 25071 records. Run reference worker_on-000010-079d606982c5d54f.",
+    "id": "ed2e11cecd3e487f8645bbc289e79d3f",
+    "group_size": 1,
+    "seconds": 1.9496469600017008,
+    "completed_elapsed": 173.40007741200134
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.239352210999641,
+    "completed_elapsed": 178.63945091400092
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.800860459999967,
+    "completed_elapsed": 182.44034699900112
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000186ad",
+    "ok": true,
+    "seconds": 3.308005625998703,
+    "completed_elapsed": 185.74836408400006
+  },
+  {
+    "client": 0,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.312548294001317,
+    "completed_elapsed": 191.06096612800138
+  },
+  {
+    "client": 0,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Airflow produces events for Prometheus. The migration for workspace a37317fbb6 started in partition fb9ffa247a, copied 99426 records, and completed its first validation after 322 seconds. Run reference worker_on-000015-d0ca5a94aac81b33.",
+    "id": "ab5dba8479c24b9995deae2306af7e11",
+    "group_size": 1,
+    "seconds": 4.546893585998987,
+    "completed_elapsed": 195.60797654700036
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000018a71",
+    "ok": true,
+    "seconds": 3.3842030439991504,
+    "completed_elapsed": 135.41281322800023
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.560280585001237,
+    "completed_elapsed": 139.97316139600116
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 8.26250554500075,
+    "completed_elapsed": 148.23570302500048
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000018a74",
+    "ok": true,
+    "seconds": 3.882433126998876,
+    "completed_elapsed": 152.11815769399982
+  },
+  {
+    "client": 1,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Spark found a connection issue with Kafka. Operator 51abd43ef7 restarted job 7c0400cb6d after 409 attempts. The next run processed 26572 records successfully. Run reference worker_on-100004-1d175d09bf846ba1.",
+    "id": "1a8a6619831e4b42b02d810693c71285",
+    "group_size": 1,
+    "seconds": 2.2005695850002667,
+    "completed_elapsed": 154.31881719500052
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.788495250999404,
+    "completed_elapsed": 159.1073378630008
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000018a77",
+    "ok": true,
+    "seconds": 1.1581718749985157,
+    "completed_elapsed": 160.26553769699967
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.824956503000067,
+    "completed_elapsed": 166.09051720000025
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.0916843350005365,
+    "completed_elapsed": 170.1822296600003
+  },
+  {
+    "client": 1,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Terraform produces events for Grafana. The migration for workspace e6cf050b89 started in partition 20edd6bbd5, copied 74558 records, and completed its first validation after 677 seconds. Run reference worker_on-100009-3f681dbb046628f4.",
+    "id": "17ced180dba14e6b88ee90b39170e67d",
+    "group_size": 1,
+    "seconds": 3.5569433770015166,
+    "completed_elapsed": 173.73924249500124
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.484194127999217,
+    "completed_elapsed": 179.22345712300012
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.915085836000799,
+    "completed_elapsed": 186.13857804200052
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000018a7d",
+    "ok": true,
+    "seconds": 3.819856001999142,
+    "completed_elapsed": 189.95852800300054
+  },
+  {
+    "client": 1,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.2160355010000785,
+    "completed_elapsed": 193.17458950400032
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.944317086999945,
+    "completed_elapsed": 138.9671595210002
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.968975378000323,
+    "completed_elapsed": 144.93616564900003
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000018e44",
+    "ok": true,
+    "seconds": 1.1048340010001994,
+    "completed_elapsed": 146.0410284410009
+  },
+  {
+    "client": 2,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 8b37ad11e1 depends on Spark. Its Linux configuration uses deployment aa3e64a6ee. The observed retry interval was 667 seconds, with 10124 pending requests at the end of the review. Run reference worker_on-200003-5f608655fe5a79b0.",
+    "id": "dc9b56d0deb44eea85b1410e44ca0107",
+    "group_size": 1,
+    "seconds": 4.98063466900021,
+    "completed_elapsed": 151.0217480680003
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.311513877000834,
+    "completed_elapsed": 155.3332839450013
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000018e47",
+    "ok": true,
+    "seconds": 4.754789377999259,
+    "completed_elapsed": 160.08810573899973
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.5473950849991525,
+    "completed_elapsed": 163.6355196149998
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.10880337799972,
+    "completed_elapsed": 168.74445136800023
+  },
+  {
+    "client": 2,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Jenkins produces events for SQLite. The migration for workspace 9c0558ff34 started in partition 984c2f45a5, copied 93784 records, and completed its first validation after 222 seconds. Run reference worker_on-200008-d2605b86983debaf.",
+    "id": "993c30d20d144bbaa91be588de8e7daa",
+    "group_size": 1,
+    "seconds": 3.1212747099998523,
+    "completed_elapsed": 171.86581611899965
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.439404046001073,
+    "completed_elapsed": 181.30528783200134
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.8915447509989463,
+    "completed_elapsed": 185.19686550000006
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000018e4d",
+    "ok": true,
+    "seconds": 3.405526335000104,
+    "completed_elapsed": 188.60241591900012
+  },
+  {
+    "client": 2,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.295368627999778,
+    "completed_elapsed": 194.8978270050011
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.5775182930010487,
+    "completed_elapsed": 135.61086231100126
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000019214",
+    "ok": true,
+    "seconds": 5.567791669000144,
+    "completed_elapsed": 141.17866477200005
+  },
+  {
+    "client": 3,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Prometheus with Grafana for project 7ecf2f05f3. Ticket e32fd85e92 documents a memory limit of 952 MiB and a queue length of 60013. A later review will verify the results. Run reference worker_on-300002-162c28a03ef7d8e9.",
+    "id": "3990fd1b3f5447ecb196be6f1d20cb06",
+    "group_size": 1,
+    "seconds": 11.549345629999152,
+    "completed_elapsed": 152.72810744399976
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.18817912600025,
+    "completed_elapsed": 156.9163076950008
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000019217",
+    "ok": true,
+    "seconds": 3.0327159599983133,
+    "completed_elapsed": 159.9490469049997
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.149958503001471,
+    "completed_elapsed": 166.09902424200118
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.297880334999718,
+    "completed_elapsed": 171.39693632700073
+  },
+  {
+    "client": 3,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "FastAPI uses Jenkins to store audit events. The team reviewed incident 660a4da0a4 on service 37a754c30b. The recorded duration was 508 seconds and the batch contained 10315 records. Run reference worker_on-300007-6628e490014acf97.",
+    "id": "dddc4fb219a244e9954e133859fd90be",
+    "group_size": 1,
+    "seconds": 6.004169544999968,
+    "completed_elapsed": 177.4012221640005
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.066721752000376,
+    "completed_elapsed": 181.46796787400126
+  },
+  {
+    "client": 3,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 12.102509922000536,
+    "completed_elapsed": 193.57054837900068
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000195e4",
+    "ok": true,
+    "seconds": 0.42821962500056543,
+    "completed_elapsed": 132.45071443400047
+  },
+  {
+    "client": 4,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project cfdc9b3932 depends on Spark. Its Elasticsearch configuration uses deployment f27bebda2f. The observed retry interval was 712 seconds, with 26388 pending requests at the end of the review. Run reference worker_on-400001-8bbadf6c52cbe64d.",
+    "id": "52088c7a2f424b18942b05422884927e",
+    "group_size": 1,
+    "seconds": 4.609687002999635,
+    "completed_elapsed": 137.06050356200103
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.255278751999867,
+    "completed_elapsed": 141.3158100640012
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000195e7",
+    "ok": true,
+    "seconds": 5.645078752999325,
+    "completed_elapsed": 146.96091673299998
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.2185259599991696,
+    "completed_elapsed": 150.17948040100055
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.8587760420014092,
+    "completed_elapsed": 151.0382864430012
+  },
+  {
+    "client": 4,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Ansible found a connection issue with Airflow. Operator 41cc787569 restarted job c09e56f133 after 747 attempts. The next run processed 22109 records successfully. Run reference worker_on-400006-6dac42c5d21d46f0.",
+    "id": "2e82941a145f4164a71e104471385a0a",
+    "group_size": 1,
+    "seconds": 7.484249253000598,
+    "completed_elapsed": 158.5226182380011
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.83325792100004,
+    "completed_elapsed": 168.3558841590002
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.489799334000054,
+    "completed_elapsed": 170.8457138270005
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000195ed",
+    "ok": true,
+    "seconds": 2.991678709999178,
+    "completed_elapsed": 173.83741412000018
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.73310208699877,
+    "completed_elapsed": 181.57053829100005
+  },
+  {
+    "client": 4,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 2489ae7d23 depends on Python. Its Elasticsearch configuration uses deployment 02418be3d4. The observed retry interval was 74 seconds, with 33429 pending requests at the end of the review. Run reference worker_on-400011-36c10add709c5b54.",
+    "id": "4084950e5e7a4c59a797e0d91e85c984",
+    "group_size": 1,
+    "seconds": 4.186057251999955,
+    "completed_elapsed": 185.75669675100107
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000195f0",
+    "ok": true,
+    "seconds": 3.6564028350003355,
+    "completed_elapsed": 189.4131224190005
+  },
+  {
+    "client": 4,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.934686168000553,
+    "completed_elapsed": 192.34783333700034
+  },
+  {
+    "client": 5,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Redis produces events for Python. The migration for workspace 007d9f1b5c started in partition 866f44ea91, copied 93123 records, and completed its first validation after 348 seconds. Run reference worker_on-500000-57d922bd8a2fabcb.",
+    "id": "b2f35781560e4db7b08c44a1dca04178",
+    "group_size": 1,
+    "seconds": 3.2162385009996797,
+    "completed_elapsed": 135.242116894
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.08315741899969,
+    "completed_elapsed": 140.32529756300028
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000199b7",
+    "ok": true,
+    "seconds": 4.622980877000373,
+    "completed_elapsed": 144.9482913990014
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.652940045998548,
+    "completed_elapsed": 154.601279945
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.2813961259998905,
+    "completed_elapsed": 158.88270394600113
+  },
+  {
+    "client": 5,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Docker found a connection issue with Jenkins. Operator 6d3d808ca4 restarted job e2efef51c4 after 937 attempts. The next run processed 47098 records successfully. Run reference worker_on-500005-44d6bd2482431e74.",
+    "id": "709f85c23b054965920e4fc7ae2ca808",
+    "group_size": 1,
+    "seconds": 3.6563570849993994,
+    "completed_elapsed": 162.53914761499982
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.101872585999445,
+    "completed_elapsed": 168.6410575760001
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.100054417998763,
+    "completed_elapsed": 171.7411401190002
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000199bd",
+    "ok": true,
+    "seconds": 2.3745757510005205,
+    "completed_elapsed": 174.1157392870009
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.329342042999997,
+    "completed_elapsed": 177.44514499700017
+  },
+  {
+    "client": 5,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Docker produces events for Spark. The migration for workspace cb897cc043 started in partition 3f16b9495c, copied 29818 records, and completed its first validation after 458 seconds. Run reference worker_on-500010-502af49d5c8191d5.",
+    "id": "5a95d6ac09d0443791c81ab9458bd3c7",
+    "group_size": 1,
+    "seconds": 3.8112448769988987,
+    "completed_elapsed": 181.25689424899974
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000199c0",
+    "ok": true,
+    "seconds": 3.483973460000925,
+    "completed_elapsed": 184.74088904200107
+  },
+  {
+    "client": 5,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.858117503999893,
+    "completed_elapsed": 194.59902846300065
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.3686758749990986,
+    "completed_elapsed": 132.39194697600033
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000019d87",
+    "ok": true,
+    "seconds": 8.252733463001277,
+    "completed_elapsed": 140.6447023970013
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.707532712000102,
+    "completed_elapsed": 147.352255400001
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.664452042999983,
+    "completed_elapsed": 151.0167614430011
+  },
+  {
+    "client": 6,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Linux produces events for Git. The migration for workspace e61ac8ba30 started in partition 8dd3db06b3, copied 76797 records, and completed its first validation after 562 seconds. Run reference worker_on-600004-fb85baa34b026dc0.",
+    "id": "a2fbc6d4049d4153a59847d63aae87d3",
+    "group_size": 1,
+    "seconds": 3.9146508339999855,
+    "completed_elapsed": 154.93149698600064
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.951417001999289,
+    "completed_elapsed": 159.88294940500055
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.6167136280000705,
+    "completed_elapsed": 166.4996901579998
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000019d8d",
+    "ok": true,
+    "seconds": 2.1681205840013718,
+    "completed_elapsed": 168.6678289090014
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.531944794000083,
+    "completed_elapsed": 173.20000407800035
+  },
+  {
+    "client": 6,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared PostgreSQL with FastAPI for project 250deb7102. Ticket 4bc6401a98 documents a memory limit of 75 MiB and a queue length of 50878. A later review will verify the results. Run reference worker_on-600009-6e242bbd33753771.",
+    "id": "cdf7988ff3f14f299eaecd9a39fd33c1",
+    "group_size": 1,
+    "seconds": 5.87459683599991,
+    "completed_elapsed": 179.07470716399985
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000019d90",
+    "ok": true,
+    "seconds": 2.9210158759997285,
+    "completed_elapsed": 181.99574412400034
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.0682420449993515,
+    "completed_elapsed": 189.0640091690002
+  },
+  {
+    "client": 6,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.6673163779996685,
+    "completed_elapsed": 193.73135533800087
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a157",
+    "ok": true,
+    "seconds": 0.42258645800029626,
+    "completed_elapsed": 132.4514765590011
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.085865377999653,
+    "completed_elapsed": 138.53735135399984
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.4575987930002157,
+    "completed_elapsed": 140.99497335500018
+  },
+  {
+    "client": 7,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project c7306ebb52 depends on Git. Its Elasticsearch configuration uses deployment 74c836df82. The observed retry interval was 971 seconds, with 94038 pending requests at the end of the review. Run reference worker_on-700003-e17447692194794f.",
+    "id": "51005607d4d7482a9614b647060dc238",
+    "group_size": 1,
+    "seconds": 4.278894669001602,
+    "completed_elapsed": 145.27396231600142
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.770583002999047,
+    "completed_elapsed": 152.0445689019998
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.0898814590000256,
+    "completed_elapsed": 153.13448852800138
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a15d",
+    "ok": true,
+    "seconds": 3.3596658339993155,
+    "completed_elapsed": 156.49420136200024
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.046406628000113,
+    "completed_elapsed": 161.54063794800095
+  },
+  {
+    "client": 7,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 130805746b depends on Nginx. Its Docker configuration uses deployment 59e4a91447. The observed retry interval was 362 seconds, with 74514 pending requests at the end of the review. Run reference worker_on-700008-83a0afcc331d8a1e.",
+    "id": "892b286ff8ba4dc4b2906bb05da42a1d",
+    "group_size": 1,
+    "seconds": 13.358630798000377,
+    "completed_elapsed": 174.89935728700038
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a160",
+    "ok": true,
+    "seconds": 4.174337960001139,
+    "completed_elapsed": 179.07373341400125
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 8.334185337000235,
+    "completed_elapsed": 187.40794137600096
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.1640237499996147,
+    "completed_elapsed": 188.5719875850009
+  },
+  {
+    "client": 7,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a163",
+    "ok": true,
+    "seconds": 7.969310962000236,
+    "completed_elapsed": 196.5413462560009
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.295335127000726,
+    "completed_elapsed": 136.31846093600143
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.547300959000495,
+    "completed_elapsed": 137.8658045200009
+  },
+  {
+    "client": 8,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Ansible with Parquet for project ea49fa45e5. Ticket acbd364c23 documents a memory limit of 620 MiB and a queue length of 62195. A later review will verify the results. Run reference worker_on-800002-4b73edb8901b02f6.",
+    "id": "14c86c867ad340e8854d6268a8cfab3c",
+    "group_size": 1,
+    "seconds": 6.3371035029995255,
+    "completed_elapsed": 144.20306881500073
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.945476419999977,
+    "completed_elapsed": 150.1485850680001
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.8874264999994921,
+    "completed_elapsed": 151.03604298500068
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a52d",
+    "ok": true,
+    "seconds": 3.5068490850007947,
+    "completed_elapsed": 154.54292119500133
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.200162459001149,
+    "completed_elapsed": 158.74309994600117
+  },
+  {
+    "client": 8,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 1a548d54d3 depends on Elasticsearch. Its Prometheus configuration uses deployment 1fb35f4058. The observed retry interval was 804 seconds, with 87409 pending requests at the end of the review. Run reference worker_on-800007-143055b42eedaac8.",
+    "id": "69ae8ae07fb34f49b0b1c8f5a8df917b",
+    "group_size": 1,
+    "seconds": 6.6318228370000725,
+    "completed_elapsed": 165.37501615800102
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a530",
+    "ok": true,
+    "seconds": 3.445168668000406,
+    "completed_elapsed": 168.82020653400104
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.71051591899959,
+    "completed_elapsed": 173.53076732800037
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.91851916899941,
+    "completed_elapsed": 177.44932887200048
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a533",
+    "ok": true,
+    "seconds": 2.97826062599961,
+    "completed_elapsed": 180.42761624800005
+  },
+  {
+    "client": 8,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 4837541da1 depends on Git. Its Grafana configuration uses deployment 0500edda82. The observed retry interval was 83 seconds, with 1662 pending requests at the end of the review. Run reference worker_on-800012-bcebde38d6fc58b2.",
+    "id": "f585ddb416fb4471b31038866fcaf980",
+    "group_size": 1,
+    "seconds": 4.158918334998816,
+    "completed_elapsed": 184.58664079200025
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.925959250998858,
+    "completed_elapsed": 188.5126312100001
+  },
+  {
+    "client": 8,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a536",
+    "ok": true,
+    "seconds": 5.398316961000091,
+    "completed_elapsed": 193.91095942100037
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.006254877000174,
+    "completed_elapsed": 136.03298843599987
+  },
+  {
+    "client": 9,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 1e9628fb79 depends on Elasticsearch. Its Nginx configuration uses deployment 27199bcf88. The observed retry interval was 152 seconds, with 36343 pending requests at the end of the review. Run reference worker_on-900001-2369a9683ded56ea.",
+    "id": "d74537e41bab410dbadd342d3977de7b",
+    "group_size": 1,
+    "seconds": 4.540013668998654,
+    "completed_elapsed": 140.57308185500005
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.8345592509995186,
+    "completed_elapsed": 143.40766289800013
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.1412630009999702,
+    "completed_elapsed": 145.54895685700103
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a8fd",
+    "ok": true,
+    "seconds": 2.1832447510005295,
+    "completed_elapsed": 147.73222369200084
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.997459293999782,
+    "completed_elapsed": 152.72970448600063
+  },
+  {
+    "client": 9,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Docker found a connection issue with Git. Operator f0ac225d48 restarted job 189e073f22 after 815 attempts. The next run processed 98934 records successfully. Run reference worker_on-900006-ece400cc65438b2f.",
+    "id": "f169749bd4924d90bab69eaaffa9d2fa",
+    "group_size": 1,
+    "seconds": 3.9948910849998356,
+    "completed_elapsed": 156.72468665400083
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a900",
+    "ok": true,
+    "seconds": 2.8046541679996153,
+    "completed_elapsed": 159.52936319699984
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.210894502999508,
+    "completed_elapsed": 164.74029799100026
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.040313210998647,
+    "completed_elapsed": 170.78067778500008
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a903",
+    "ok": true,
+    "seconds": 3.970290834999105,
+    "completed_elapsed": 174.75099016199965
+  },
+  {
+    "client": 9,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Linux with PostgreSQL for project 5f8c31a39d. Ticket d52206507b documents a memory limit of 829 MiB and a queue length of 49127. A later review will verify the results. Run reference worker_on-900011-90964814d99e6fea.",
+    "id": "46ea870c6edb42ecaf758e9549819b6c",
+    "group_size": 1,
+    "seconds": 10.555461253999965,
+    "completed_elapsed": 185.30653387500024
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.299315127000227,
+    "completed_elapsed": 189.60587250200115
+  },
+  {
+    "client": 9,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001a906",
+    "ok": true,
+    "seconds": 3.6831706690009014,
+    "completed_elapsed": 193.28906733800068
+  },
+  {
+    "client": 10,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Spark produces events for FastAPI. The migration for workspace a0b6781145 started in partition e26cdba9cb, copied 64057 records, and completed its first validation after 331 seconds. Run reference worker_on-1000000-9d3f5eb615c8a0a5.",
+    "id": "11ac571fa70443fdb42fd46df44e043b",
+    "group_size": 1,
+    "seconds": 2.3360964599996805,
+    "completed_elapsed": 134.36253014400063
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.952933001999554,
+    "completed_elapsed": 138.31548418700004
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 16.924380757000108,
+    "completed_elapsed": 155.23988652800108
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001accd",
+    "ok": true,
+    "seconds": 3.1916675430002215,
+    "completed_elapsed": 158.4315764460007
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.97169929499978,
+    "completed_elapsed": 165.4032977830011
+  },
+  {
+    "client": 10,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Redis with Ansible for project a26fdb4648. Ticket fbcfaa7ed7 documents a memory limit of 13 MiB and a queue length of 26051. A later review will verify the results. Run reference worker_on-1000005-95f5d4b35360028c.",
+    "id": "944e2f66279e445994036eb48d0aa286",
+    "group_size": 1,
+    "seconds": 4.089676667999811,
+    "completed_elapsed": 169.4930892430002
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001acd0",
+    "ok": true,
+    "seconds": 2.6676362930011237,
+    "completed_elapsed": 172.16075941100098
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.2740959620005015,
+    "completed_elapsed": 179.43487637300132
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 7.089828377998856,
+    "completed_elapsed": 186.5247395839997
+  },
+  {
+    "client": 10,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001acd3",
+    "ok": true,
+    "seconds": 6.205177543999525,
+    "completed_elapsed": 192.72994883700085
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.690316961001372,
+    "completed_elapsed": 136.71695114500108
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.49669604400151,
+    "completed_elapsed": 141.21368239700132
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b09d",
+    "ok": true,
+    "seconds": 3.5561109600002965,
+    "completed_elapsed": 144.7698161900007
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.8940314179999405,
+    "completed_elapsed": 147.663871525001
+  },
+  {
+    "client": 11,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Prometheus uses Python to store audit events. The team reviewed incident af16de938d on service 74dfc0ace6. The recorded duration was 453 seconds and the batch contained 65472 records. Run reference worker_on-1100004-82f3e352bff8f449.",
+    "id": "804ffc63ec66426cb4b3491ea15dde07",
+    "group_size": 1,
+    "seconds": 4.840576627000701,
+    "completed_elapsed": 152.50453402700077
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b0a0",
+    "ok": true,
+    "seconds": 1.162544500999502,
+    "completed_elapsed": 153.66709982000066
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.618668502000219,
+    "completed_elapsed": 160.2857934470012
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.71235371000148,
+    "completed_elapsed": 163.9981715740014
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b0a3",
+    "ok": true,
+    "seconds": 4.759119627000473,
+    "completed_elapsed": 168.7573407430009
+  },
+  {
+    "client": 11,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Python found a connection issue with Airflow. Operator 7ae6b4910f restarted job 1d7ef15716 after 37 attempts. The next run processed 78887 records successfully. Run reference worker_on-1100009-49f03a7ebe5b9984.",
+    "id": "0f15d6b4e48941e7831c4768dbf41c4b",
+    "group_size": 1,
+    "seconds": 3.113265460000548,
+    "completed_elapsed": 171.8707072440011
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.6302261279997765,
+    "completed_elapsed": 177.5009621219997
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b0a6",
+    "ok": true,
+    "seconds": 3.3047278770009143,
+    "completed_elapsed": 180.8057347490012
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.464912085999458,
+    "completed_elapsed": 186.2707433760006
+  },
+  {
+    "client": 11,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.7649020019998716,
+    "completed_elapsed": 190.0357030440009
+  },
+  {
+    "client": 11,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Kafka with FastAPI for project 8170c0132b. Ticket e8520f15e5 documents a memory limit of 896 MiB and a queue length of 55596. A later review will verify the results. Run reference worker_on-1100014-159236b4d1176276.",
+    "id": "ac8ed411f30c4523b5992243383aac9f",
+    "group_size": 1,
+    "seconds": 4.787574584999675,
+    "completed_elapsed": 194.8234215880002
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.0658953330002987,
+    "completed_elapsed": 132.08930647600027
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b46d",
+    "ok": true,
+    "seconds": 3.0084322929997143,
+    "completed_elapsed": 135.0977747270008
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.5270401279994985,
+    "completed_elapsed": 139.62483585500013
+  },
+  {
+    "client": 12,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Ansible uses Docker to store audit events. The team reviewed incident 411cd30ab2 on service 91f93dd5dc. The recorded duration was 938 seconds and the batch contained 27624 records. Run reference worker_on-1200003-970d80bf43a57d63.",
+    "id": "24390aa473a94c26904fc8e056662fdf",
+    "group_size": 1,
+    "seconds": 2.1877913339994848,
+    "completed_elapsed": 141.8127150220007
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b470",
+    "ok": true,
+    "seconds": 5.873750794999069,
+    "completed_elapsed": 147.68648994199975
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.024154667999028,
+    "completed_elapsed": 150.71066777600026
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.352181792999545,
+    "completed_elapsed": 153.06287119400076
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b473",
+    "ok": true,
+    "seconds": 4.762575168999319,
+    "completed_elapsed": 157.825478363
+  },
+  {
+    "client": 12,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Git produces events for Linux. The migration for workspace 2598f95bc0 started in partition 008f58248a, copied 63019 records, and completed its first validation after 431 seconds. Run reference worker_on-1200008-0ec4ed85c33fcf98.",
+    "id": "eb0399ab4c4348b599a061aa9fd03160",
+    "group_size": 1,
+    "seconds": 4.183206669000356,
+    "completed_elapsed": 162.008775323
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 8.5453787130009,
+    "completed_elapsed": 170.55418149400066
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b476",
+    "ok": true,
+    "seconds": 3.049165251000886,
+    "completed_elapsed": 173.6033741200008
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.858198669000558,
+    "completed_elapsed": 178.4615987060006
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 8.062026503999732,
+    "completed_elapsed": 186.52365254300094
+  },
+  {
+    "client": 12,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Terraform produces events for Kafka. The migration for workspace ed73de124a started in partition 5295c7cd34, copied 77398 records, and completed its first validation after 750 seconds. Run reference worker_on-1200013-be298923688f4244.",
+    "id": "368bc7d83b1f4d5fbe97941d6d5d8ac3",
+    "group_size": 1,
+    "seconds": 4.715061627000978,
+    "completed_elapsed": 191.2388495030009
+  },
+  {
+    "client": 12,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.499142168999242,
+    "completed_elapsed": 197.73800425599984
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b83d",
+    "ok": true,
+    "seconds": 3.7953267519988003,
+    "completed_elapsed": 135.8244605609998
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.117082460999882,
+    "completed_elapsed": 140.94156977199964
+  },
+  {
+    "client": 13,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project b3a54017a6 depends on FastAPI. Its SQLite configuration uses deployment 6a165e14d5. The observed retry interval was 552 seconds, with 59908 pending requests at the end of the review. Run reference worker_on-1300002-38dd031f28b27eb0.",
+    "id": "c6557774741440f380ff300268dbb62b",
+    "group_size": 1,
+    "seconds": 3.978928418000578,
+    "completed_elapsed": 144.9205948150011
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b840",
+    "ok": true,
+    "seconds": 6.072406335999403,
+    "completed_elapsed": 150.99304056800065
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.312551794000683,
+    "completed_elapsed": 156.30564411200066
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.293089210999824,
+    "completed_elapsed": 162.59875582300083
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b843",
+    "ok": true,
+    "seconds": 4.10925916800079,
+    "completed_elapsed": 166.7080433250012
+  },
+  {
+    "client": 13,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Linux found a connection issue with Spark. Operator 17cb2c6151 restarted job 7e6896bf46 after 860 attempts. The next run processed 86696 records successfully. Run reference worker_on-1300007-f923da74d18c591a.",
+    "id": "b103005dd9b446dc8985b13f08439594",
+    "group_size": 1,
+    "seconds": 5.59520758600047,
+    "completed_elapsed": 172.3033331610004
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 9.441048170998329,
+    "completed_elapsed": 181.74441108199971
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001b846",
+    "ok": true,
+    "seconds": 3.121696667998549,
+    "completed_elapsed": 184.8661311249998
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.877374960999077,
+    "completed_elapsed": 190.74355779500002
+  },
+  {
+    "client": 13,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.875259084999925,
+    "completed_elapsed": 194.61883979600134
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.266843127999891,
+    "completed_elapsed": 137.29905243699977
+  },
+  {
+    "client": 14,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "SQLite produces events for Airflow. The migration for workspace 2539d61812 started in partition 958d2425af, copied 75868 records, and completed its first validation after 452 seconds. Run reference worker_on-1400001-d41b4b86d2f1314f.",
+    "id": "9bae08a7f315412bb3a5408945a2f59b",
+    "group_size": 1,
+    "seconds": 13.554719173000194,
+    "completed_elapsed": 150.85385573500025
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001bc10",
+    "ok": true,
+    "seconds": 4.243777583998963,
+    "completed_elapsed": 155.0976432360003
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.601662543000202,
+    "completed_elapsed": 159.6993138630005
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.21432391900089,
+    "completed_elapsed": 163.91366165700128
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001bc13",
+    "ok": true,
+    "seconds": 2.322630834998563,
+    "completed_elapsed": 166.2363154499999
+  },
+  {
+    "client": 14,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Grafana found a connection issue with Jenkins. Operator 5622769385 restarted job f1e7a94b24 after 639 attempts. The next run processed 47696 records successfully. Run reference worker_on-1400006-7528fcd28dcf9670.",
+    "id": "a478f82eaa4d4f5da36f2aaaf808a5ef",
+    "group_size": 1,
+    "seconds": 3.9350862940009392,
+    "completed_elapsed": 170.17149682700074
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 7.246405837000566,
+    "completed_elapsed": 177.41792837200046
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001bc16",
+    "ok": true,
+    "seconds": 8.023197836999316,
+    "completed_elapsed": 185.4411513340001
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.377489627000614,
+    "completed_elapsed": 190.8186644610014
+  },
+  {
+    "client": 14,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.947906918001536,
+    "completed_elapsed": 194.76660196300145
+  },
+  {
+    "client": 15,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Ansible produces events for Terraform. The migration for workspace fa7479dd68 started in partition 5e7fe665a9, copied 84110 records, and completed its first validation after 795 seconds. Run reference worker_on-1500000-5c7563f17b91c69e.",
+    "id": "a58c7227b5c94db19e68d2b72849ddd3",
+    "group_size": 1,
+    "seconds": 5.609188919999724,
+    "completed_elapsed": 137.6441871040006
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001bfe0",
+    "ok": true,
+    "seconds": 1.0474577089989907,
+    "completed_elapsed": 138.69166760400003
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.312623878000522,
+    "completed_elapsed": 144.0043744400009
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.8193317499990371,
+    "completed_elapsed": 145.8237537320001
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001bfe3",
+    "ok": true,
+    "seconds": 1.9896937089997664,
+    "completed_elapsed": 147.81347102499967
+  },
+  {
+    "client": 15,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Nginx found a connection issue with Docker. Operator a0fd1b02ba restarted job e4f2e2b34e after 381 attempts. The next run processed 30760 records successfully. Run reference worker_on-1500005-695734586d648836.",
+    "id": "0f756c5c139a43349ed8ca0a361a0499",
+    "group_size": 1,
+    "seconds": 4.922904959999869,
+    "completed_elapsed": 152.7364685270004
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.8920656259997486,
+    "completed_elapsed": 154.62856736200047
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001bfe6",
+    "ok": true,
+    "seconds": 2.6631364179993398,
+    "completed_elapsed": 157.29173519600045
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.786734294999405,
+    "completed_elapsed": 164.07849299100053
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.427479044001302,
+    "completed_elapsed": 170.50599653500103
+  },
+  {
+    "client": 15,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Prometheus uses Docker to store audit events. The team reviewed incident 56e48858b1 on service 8edc736bfb. The recorded duration was 506 seconds and the batch contained 11191 records. Run reference worker_on-1500010-1928838e22f3cad9.",
+    "id": "f69a0318bbd94a3494867e46607e1864",
+    "group_size": 1,
+    "seconds": 3.2984125849998236,
+    "completed_elapsed": 173.80449549500008
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.086251210999762,
+    "completed_elapsed": 179.8907678730011
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.468844461000117,
+    "completed_elapsed": 186.35964037600024
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001bfec",
+    "ok": true,
+    "seconds": 3.9683518769998045,
+    "completed_elapsed": 190.3280222530011
+  },
+  {
+    "client": 15,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.419163462000142,
+    "completed_elapsed": 196.7471960060011
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001c3b0",
+    "ok": true,
+    "seconds": 3.2657867509988137,
+    "completed_elapsed": 135.29844314399998
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.440897046000828,
+    "completed_elapsed": 142.7393621480005
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.6164245840009244,
+    "completed_elapsed": 145.35583423200114
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001c3b3",
+    "ok": true,
+    "seconds": 5.9571150859992485,
+    "completed_elapsed": 151.31297048499982
+  },
+  {
+    "client": 16,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project c610766886 depends on Jenkins. Its Nginx configuration uses deployment c3ef910053. The observed retry interval was 305 seconds, with 74460 pending requests at the end of the review. Run reference worker_on-1600004-5c420de6b62fe91e.",
+    "id": "66e475daa58b4c77a1ead17f09475d09",
+    "group_size": 1,
+    "seconds": 7.219544253001004,
+    "completed_elapsed": 158.53263519600114
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.899845167999956,
+    "completed_elapsed": 162.43250394800089
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001c3b6",
+    "ok": true,
+    "seconds": 4.063780501999645,
+    "completed_elapsed": 166.49631028300064
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.695602752999548,
+    "completed_elapsed": 172.19193245300085
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 7.772843920000014,
+    "completed_elapsed": 179.96481399799995
+  },
+  {
+    "client": 16,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared FastAPI with Jenkins for project 9b5a2cdb51. Ticket 7134379d35 documents a memory limit of 679 MiB and a queue length of 51126. A later review will verify the results. Run reference worker_on-1600009-68ac0f86b6918f60.",
+    "id": "5a29e8af7b1844de839294bc02a4d735",
+    "group_size": 1,
+    "seconds": 3.1701343770000676,
+    "completed_elapsed": 183.13502908300143
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.765662752000935,
+    "completed_elapsed": 187.90071787700072
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.5267687939995085,
+    "completed_elapsed": 191.4275343370009
+  },
+  {
+    "client": 16,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001c3bc",
+    "ok": true,
+    "seconds": 4.054303334998622,
+    "completed_elapsed": 195.48186492199966
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.0464857510014554,
+    "completed_elapsed": 135.07344264400126
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.6245334169998387,
+    "completed_elapsed": 135.69800122800007
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001c783",
+    "ok": true,
+    "seconds": 2.9666052510001464,
+    "completed_elapsed": 138.66463131199998
+  },
+  {
+    "client": 17,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Kafka with Redis for project 71ac6844ff. Ticket 6b8c7759fc documents a memory limit of 933 MiB and a queue length of 82016. A later review will verify the results. Run reference worker_on-1700003-33abc9a8b5bcf4ef.",
+    "id": "57c8c52d15ff43ca8b4b7e743d868bac",
+    "group_size": 1,
+    "seconds": 5.380807377001474,
+    "completed_elapsed": 144.04552439800136
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.0080343750014435,
+    "completed_elapsed": 145.05366698200123
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001c786",
+    "ok": true,
+    "seconds": 9.654549838000094,
+    "completed_elapsed": 154.70824282000103
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.731722127999092,
+    "completed_elapsed": 161.4399890730001
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.853582877000008,
+    "completed_elapsed": 166.29359645000113
+  },
+  {
+    "client": 17,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "FastAPI produces events for Ansible. The migration for workspace a845765101 started in partition cc4fce71e2, copied 72039 records, and completed its first validation after 295 seconds. Run reference worker_on-1700008-e9e4b02611d5102d.",
+    "id": "5dff3cf6b0434033bc1359dc4d9a914c",
+    "group_size": 1,
+    "seconds": 3.984565961000044,
+    "completed_elapsed": 170.27826086900131
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.176090502000079,
+    "completed_elapsed": 176.4543734960007
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.459098420000373,
+    "completed_elapsed": 182.913507958001
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001c78c",
+    "ok": true,
+    "seconds": 5.635999711001205,
+    "completed_elapsed": 188.54953525200108
+  },
+  {
+    "client": 17,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.880647460999171,
+    "completed_elapsed": 194.43021875500017
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.2264724999986356,
+    "completed_elapsed": 132.2500661009999
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cb53",
+    "ok": true,
+    "seconds": 5.559956294000585,
+    "completed_elapsed": 137.81004639500134
+  },
+  {
+    "client": 18,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Grafana with Jenkins for project 64bf96f1c9. Ticket 8c4ab0fc94 documents a memory limit of 93 MiB and a queue length of 98215. A later review will verify the results. Run reference worker_on-1800002-70a15882c79bef7c.",
+    "id": "002f872bd4754451afc0682ffe624ba1",
+    "group_size": 1,
+    "seconds": 2.6496065849987644,
+    "completed_elapsed": 140.4597329799999
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.179781794000519,
+    "completed_elapsed": 144.639536607001
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cb56",
+    "ok": true,
+    "seconds": 6.213778543999069,
+    "completed_elapsed": 150.853337818
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.9458577089990285,
+    "completed_elapsed": 153.79922161099967
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.605151711000872,
+    "completed_elapsed": 160.40440373900128
+  },
+  {
+    "client": 18,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Spark found a connection issue with Python. Operator dd03be178d restarted job 6675848a16 after 350 attempts. The next run processed 68107 records successfully. Run reference worker_on-1800007-67d0940f158bd572.",
+    "id": "f1cc89c34c154de4b49a0418d372d749",
+    "group_size": 1,
+    "seconds": 5.753523461999066,
+    "completed_elapsed": 166.15801486700002
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.047175670000797,
+    "completed_elapsed": 173.20521637000093
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.244711459999962,
+    "completed_elapsed": 177.44995437200123
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cb5c",
+    "ok": true,
+    "seconds": 4.7638904609993915,
+    "completed_elapsed": 182.2138544160007
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.336350960000345,
+    "completed_elapsed": 187.55023137600074
+  },
+  {
+    "client": 18,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared PostgreSQL with Kubernetes for project cf3c8323d9. Ticket 73dba77747 documents a memory limit of 597 MiB and a queue length of 3534. A later review will verify the results. Run reference worker_on-1800012-e0413083f91bb391.",
+    "id": "2c11a20371a54d219516d1c644a91280",
+    "group_size": 1,
+    "seconds": 3.9711590019996947,
+    "completed_elapsed": 191.52148058700004
+  },
+  {
+    "client": 18,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cb5f",
+    "ok": true,
+    "seconds": 1.9526830430004338,
+    "completed_elapsed": 193.47418442100025
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cf23",
+    "ok": true,
+    "seconds": 7.309515960998397,
+    "completed_elapsed": 139.33326722899983
+  },
+  {
+    "client": 19,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Parquet with Python for project e76f0569dd. Ticket 7e9d5360af documents a memory limit of 509 MiB and a queue length of 53528. A later review will verify the results. Run reference worker_on-1900001-2e9444ca5276c4b1.",
+    "id": "0cc746572760474880d8b58d9ab7e3f5",
+    "group_size": 1,
+    "seconds": 4.946544668999195,
+    "completed_elapsed": 144.28013614799966
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.5545177509993664,
+    "completed_elapsed": 147.8346741080004
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cf26",
+    "ok": true,
+    "seconds": 3.766124210998896,
+    "completed_elapsed": 151.60082894399966
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.765697918999649,
+    "completed_elapsed": 158.36655352900016
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.9644132510002237,
+    "completed_elapsed": 160.33099253
+  },
+  {
+    "client": 19,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Airflow uses Nginx to store audit events. The team reviewed incident e1f7d77eef on service f34c0eee58. The recorded duration was 533 seconds and the batch contained 19204 records. Run reference worker_on-1900006-c7f48eb189a41545.",
+    "id": "3e5cc5cd46e4411bb962ef7856b9f953",
+    "group_size": 1,
+    "seconds": 5.085599710999304,
+    "completed_elapsed": 165.41667911600052
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.088523418999102,
+    "completed_elapsed": 170.50522236899997
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.089062043000013,
+    "completed_elapsed": 174.59431416200096
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cf2c",
+    "ok": true,
+    "seconds": 4.338413669000147,
+    "completed_elapsed": 178.93275108099988
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.833921460998681,
+    "completed_elapsed": 183.76669349999975
+  },
+  {
+    "client": 19,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 69414a4c15 depends on Spark. Its Terraform configuration uses deployment 0830b3543f. The observed retry interval was 872 seconds, with 58574 pending requests at the end of the review. Run reference worker_on-1900011-e94d21bf9c5f0fa0.",
+    "id": "a7b0d518076e4782ba1d83702fc3fa4f",
+    "group_size": 1,
+    "seconds": 2.095775792000495,
+    "completed_elapsed": 185.8625495840006
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001cf2f",
+    "ok": true,
+    "seconds": 1.4250908750000235,
+    "completed_elapsed": 187.28766287600047
+  },
+  {
+    "client": 19,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.110694961000263,
+    "completed_elapsed": 192.39837858700048
+  },
+  {
+    "client": 20,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Kafka with Docker for project 22ce233a99. Ticket 8d2f21fed3 documents a memory limit of 97 MiB and a queue length of 46733. A later review will verify the results. Run reference worker_on-2000000-12ced9e5d9675d1f.",
+    "id": "2b73ef3a39b74519b418a2d8f9a28d93",
+    "group_size": 1,
+    "seconds": 4.87026171099933,
+    "completed_elapsed": 136.89634802
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.010674958999516,
+    "completed_elapsed": 137.90705072899982
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001d2f6",
+    "ok": true,
+    "seconds": 7.182838794999043,
+    "completed_elapsed": 145.08992264900007
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.667557336000755,
+    "completed_elapsed": 150.7575086100005
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.339529083999878,
+    "completed_elapsed": 155.0970784860001
+  },
+  {
+    "client": 20,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Nginx with Python for project fb76055346. Ticket 1f8e2aa15d documents a memory limit of 165 MiB and a queue length of 93366. A later review will verify the results. Run reference worker_on-2000005-e9ef0529571f605e.",
+    "id": "3c42c4fb192047189d82fb4c72685349",
+    "group_size": 1,
+    "seconds": 2.8262312520000705,
+    "completed_elapsed": 157.92340223800056
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.511569461999898,
+    "completed_elapsed": 165.43499295000038
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.165372960000241,
+    "completed_elapsed": 170.60039291000066
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001d2fc",
+    "ok": true,
+    "seconds": 1.118564876000164,
+    "completed_elapsed": 171.71901016100128
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 8.902959879000264,
+    "completed_elapsed": 180.62199779000002
+  },
+  {
+    "client": 20,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "FastAPI produces events for Airflow. The migration for workspace 2de532945a started in partition 0a4cc9f9ae, copied 89335 records, and completed its first validation after 236 seconds. Run reference worker_on-2000010-e69baa59554c7a6b.",
+    "id": "26a66be9e6b34ca9b0c68a415ad691cd",
+    "group_size": 1,
+    "seconds": 4.124803127000632,
+    "completed_elapsed": 184.74696033400141
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001d2ff",
+    "ok": true,
+    "seconds": 3.5416429179986153,
+    "completed_elapsed": 188.2886324179999
+  },
+  {
+    "client": 20,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.206692335999833,
+    "completed_elapsed": 193.4953482130004
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.5861256270000013,
+    "completed_elapsed": 135.62191331100075
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001d6c6",
+    "ok": true,
+    "seconds": 8.481329754000399,
+    "completed_elapsed": 144.10326906500086
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.532954210000753,
+    "completed_elapsed": 146.63626048300102
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.413711749999493,
+    "completed_elapsed": 148.05000889999974
+  },
+  {
+    "client": 21,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Spark produces events for Prometheus. The migration for workspace dda02ab846 started in partition 8c1bc103de, copied 9536 records, and completed its first validation after 31 seconds. Run reference worker_on-2100004-fd283beff2dfff65.",
+    "id": "0c24b287ec3342c6ba85358af174563f",
+    "group_size": 1,
+    "seconds": 10.472143630000573,
+    "completed_elapsed": 158.52225253000142
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.51155246000053,
+    "completed_elapsed": 163.03382824000073
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.247171752000213,
+    "completed_elapsed": 166.28106470000057
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001d6cc",
+    "ok": true,
+    "seconds": 3.324219293999704,
+    "completed_elapsed": 169.60530520199973
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.28157400300006,
+    "completed_elapsed": 176.8869047879998
+  },
+  {
+    "client": 21,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project d7aeef2355 depends on SQLite. Its Nginx configuration uses deployment 3b3b94554f. The observed retry interval was 790 seconds, with 10204 pending requests at the end of the review. Run reference worker_on-2100009-185ec4dfee40dd14.",
+    "id": "f7f04e34f4b043d6821fb52ea7309715",
+    "group_size": 1,
+    "seconds": 3.9127917929999967,
+    "completed_elapsed": 180.7997930399997
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001d6cf",
+    "ok": true,
+    "seconds": 3.5910557099996367,
+    "completed_elapsed": 184.3908739590006
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.469447876999766,
+    "completed_elapsed": 189.86034066899992
+  },
+  {
+    "client": 21,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.7838959189994057,
+    "completed_elapsed": 193.6442665880004
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001da96",
+    "ok": true,
+    "seconds": 3.5807629190003354,
+    "completed_elapsed": 135.61023685300097
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.033396460999938,
+    "completed_elapsed": 140.64365514699966
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.88275833499938,
+    "completed_elapsed": 144.52644469000006
+  },
+  {
+    "client": 22,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "FastAPI produces events for Nginx. The migration for workspace 5cddfcd5b3 started in partition ff5e3fc8d9, copied 63685 records, and completed its first validation after 673 seconds. Run reference worker_on-2200003-c80391d6ce062550.",
+    "id": "29ead5d908594f5484604865b18e2632",
+    "group_size": 1,
+    "seconds": 3.713397210000039,
+    "completed_elapsed": 148.2399347339997
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.299246836000748,
+    "completed_elapsed": 154.5392072780014
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 11.801906796999901,
+    "completed_elapsed": 166.34113911700115
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001da9c",
+    "ok": true,
+    "seconds": 5.1377899600011006,
+    "completed_elapsed": 171.4789504520013
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.020130377000896,
+    "completed_elapsed": 176.49910262100093
+  },
+  {
+    "client": 22,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "SQLite uses Linux to store audit events. The team reviewed incident 1dd659bcc7 on service 3073129ca5. The recorded duration was 839 seconds and the batch contained 62493 records. Run reference worker_on-2200008-13f38e5721a00b70.",
+    "id": "57cb0532384a4ca3bece33bb4e03710b",
+    "group_size": 1,
+    "seconds": 9.271982170999763,
+    "completed_elapsed": 185.77117258399994
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001da9f",
+    "ok": true,
+    "seconds": 3.919000751000567,
+    "completed_elapsed": 189.6901961270014
+  },
+  {
+    "client": 22,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.655652003999421,
+    "completed_elapsed": 197.34588938100023
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.812810919000185,
+    "completed_elapsed": 136.83681376999994
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.092896168998777,
+    "completed_elapsed": 140.9297523969999
+  },
+  {
+    "client": 23,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 1b2f8e31c8 depends on Terraform. Its Jenkins configuration uses deployment 4dd0772d52. The observed retry interval was 991 seconds, with 15190 pending requests at the end of the review. Run reference worker_on-2300002-edd36471bbf070d5.",
+    "id": "20f7cc78ea1e48b4bb8a329d56ecb656",
+    "group_size": 1,
+    "seconds": 5.648351961001026,
+    "completed_elapsed": 146.57824656600133
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.699764461000086,
+    "completed_elapsed": 152.2780331110007
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.761172209000506,
+    "completed_elapsed": 155.0392277360006
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001de6c",
+    "ok": true,
+    "seconds": 4.7750777100009145,
+    "completed_elapsed": 159.81435640500058
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.489165793998836,
+    "completed_elapsed": 165.30354465799974
+  },
+  {
+    "client": 23,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Git found a connection issue with SQLite. Operator 7ad7cfdb16 restarted job e756df43bc after 758 attempts. The next run processed 14053 records successfully. Run reference worker_on-2300007-bfba6a0ba934e777.",
+    "id": "65969d3af6a34f59b6f7623011bd2274",
+    "group_size": 1,
+    "seconds": 2.723684417998811,
+    "completed_elapsed": 168.0274999510002
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001de6f",
+    "ok": true,
+    "seconds": 2.730962584999361,
+    "completed_elapsed": 170.75848386899997
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.066545544999826,
+    "completed_elapsed": 176.82505695500004
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.090137211000183,
+    "completed_elapsed": 181.9152202490004
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001de72",
+    "ok": true,
+    "seconds": 4.885780042999613,
+    "completed_elapsed": 186.80102308400092
+  },
+  {
+    "client": 23,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Docker produces events for Terraform. The migration for workspace f565adf753 started in partition 6207639537, copied 94832 records, and completed its first validation after 97 seconds. Run reference worker_on-2300012-ebe7e35fa85742aa.",
+    "id": "19edc980bedb45f8a5548e6dafc0997f",
+    "group_size": 1,
+    "seconds": 4.437148711000191,
+    "completed_elapsed": 191.23829421200026
+  },
+  {
+    "client": 23,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.3222909169999184,
+    "completed_elapsed": 193.5606033790009
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 9.230103338000845,
+    "completed_elapsed": 141.25721506400077
+  },
+  {
+    "client": 24,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 69812870e7 depends on Nginx. Its Airflow configuration uses deployment df0aba5ed0. The observed retry interval was 216 seconds, with 25822 pending requests at the end of the review. Run reference worker_on-2400001-50c0b05b51c385dc.",
+    "id": "834b784a92ea4f71a89741eb5360e6a7",
+    "group_size": 1,
+    "seconds": 3.277312834999975,
+    "completed_elapsed": 144.53460906500004
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 8.261808212000687,
+    "completed_elapsed": 152.79644211100094
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.4351287089994003,
+    "completed_elapsed": 155.2316023200001
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e23c",
+    "ok": true,
+    "seconds": 11.79026054699898,
+    "completed_elapsed": 167.02188449200003
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.553442835000169,
+    "completed_elapsed": 171.57534982700054
+  },
+  {
+    "client": 24,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Parquet with Grafana for project fe1641d517. Ticket 018b79de27 documents a memory limit of 279 MiB and a queue length of 3232. A later review will verify the results. Run reference worker_on-2400006-27299b2e76df2af0.",
+    "id": "817d5dd2195543c5891d9d167e9cea51",
+    "group_size": 1,
+    "seconds": 2.9610715010003332,
+    "completed_elapsed": 174.53653203700014
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e23f",
+    "ok": true,
+    "seconds": 4.286283793999246,
+    "completed_elapsed": 178.82285412300007
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.920650086000023,
+    "completed_elapsed": 185.74352558400096
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.2365130850012065,
+    "completed_elapsed": 188.98006600200097
+  },
+  {
+    "client": 24,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e242",
+    "ok": true,
+    "seconds": 1.3489651259988023,
+    "completed_elapsed": 190.3290562530001
+  },
+  {
+    "client": 24,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project d2ec28498c depends on Git. Its Prometheus configuration uses deployment df5dadfd2a. The observed retry interval was 478 seconds, with 92049 pending requests at the end of the review. Run reference worker_on-2400011-13ba028159c6f3da.",
+    "id": "dfd0b6536f594529ba8b7f9a5983083c",
+    "group_size": 1,
+    "seconds": 2.8078369600007136,
+    "completed_elapsed": 193.13697237900124
+  },
+  {
+    "client": 25,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 7dc849912a depends on Kafka. Its FastAPI configuration uses deployment 43694f7d80. The observed retry interval was 473 seconds, with 5417 pending requests at the end of the review. Run reference worker_on-2500000-b48b44e29a70efb9.",
+    "id": "57bb511d02504dff8e881a8ccc1d2df9",
+    "group_size": 1,
+    "seconds": 3.307509543001288,
+    "completed_elapsed": 135.33172881100108
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.1276211259992124,
+    "completed_elapsed": 137.45937043699996
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.6367163760005496,
+    "completed_elapsed": 139.09612643800028
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e60c",
+    "ok": true,
+    "seconds": 1.8778283760002523,
+    "completed_elapsed": 140.97398152200003
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 11.858192839001276,
+    "completed_elapsed": 152.83221898600095
+  },
+  {
+    "client": 25,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project bd4492cf6a depends on FastAPI. Its Nginx configuration uses deployment cd8d1be83f. The observed retry interval was 624 seconds, with 4447 pending requests at the end of the review. Run reference worker_on-2500005-c5a81063a2e8ddf9.",
+    "id": "63f96624be36476d94d8044dffa7739e",
+    "group_size": 1,
+    "seconds": 3.9866658759983693,
+    "completed_elapsed": 156.81896781999967
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e60f",
+    "ok": true,
+    "seconds": 3.0959142520005116,
+    "completed_elapsed": 159.91488811400086
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 8.483874546000152,
+    "completed_elapsed": 168.3987853260005
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.782763041999715,
+    "completed_elapsed": 170.1815741600003
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e612",
+    "ok": true,
+    "seconds": 0.8180574590005563,
+    "completed_elapsed": 170.99965616100053
+  },
+  {
+    "client": 25,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 205b412876 depends on FastAPI. Its SQLite configuration uses deployment 009464a8b8. The observed retry interval was 656 seconds, with 52814 pending requests at the end of the review. Run reference worker_on-2500010-df2432af713cb5e5.",
+    "id": "889c0c7236cd40bc88669cdaaf82d888",
+    "group_size": 1,
+    "seconds": 2.0785097919997497,
+    "completed_elapsed": 173.07825357799993
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.4205356259990367,
+    "completed_elapsed": 174.49881057899984
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e615",
+    "ok": true,
+    "seconds": 5.706748419001087,
+    "completed_elapsed": 180.2055829150013
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.243466586000068,
+    "completed_elapsed": 187.44907504300136
+  },
+  {
+    "client": 25,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.773451502000171,
+    "completed_elapsed": 191.22255221200066
+  },
+  {
+    "client": 25,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project c09b1355b5 depends on Redis. Its Docker configuration uses deployment 7100b81d74. The observed retry interval was 265 seconds, with 24771 pending requests at the end of the review. Run reference worker_on-2500015-10029af35dcc4692.",
+    "id": "a3ae4c7ba0204f0d984fab3ab12c5c43",
+    "group_size": 1,
+    "seconds": 5.494702669000617,
+    "completed_elapsed": 196.71736167200106
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.5745710840001266,
+    "completed_elapsed": 134.60204856000018
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.45923675099948,
+    "completed_elapsed": 137.0613271029997
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e9dc",
+    "ok": true,
+    "seconds": 6.035519627999747,
+    "completed_elapsed": 143.09687852299976
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.200868418000027,
+    "completed_elapsed": 147.29777060800006
+  },
+  {
+    "client": 26,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared PostgreSQL with Elasticsearch for project 559c502247. Ticket e64f52a571 documents a memory limit of 542 MiB and a queue length of 4033. A later review will verify the results. Run reference worker_on-2600004-5fb3562ae24fac71.",
+    "id": "1d0ba6c40a7c46ada3b5333c7b4f71d3",
+    "group_size": 1,
+    "seconds": 6.3005375870016,
+    "completed_elapsed": 153.5983984450013
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e9df",
+    "ok": true,
+    "seconds": 3.0723240839997743,
+    "completed_elapsed": 156.67074473700086
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.960345126999528,
+    "completed_elapsed": 161.63111228100024
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.787701293998907,
+    "completed_elapsed": 166.4188437419998
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e9e2",
+    "ok": true,
+    "seconds": 3.6261256679990765,
+    "completed_elapsed": 170.04499924300035
+  },
+  {
+    "client": 26,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Parquet uses Python to store audit events. The team reviewed incident 747b30a465 on service f6ccdbdfe3. The recorded duration was 801 seconds and the batch contained 37469 records. Run reference worker_on-2600009-a7ae68f86763c38a.",
+    "id": "56986e9213cb4336b6dba1ab1427ff21",
+    "group_size": 1,
+    "seconds": 7.192704503999266,
+    "completed_elapsed": 177.23778837200007
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.6633931689993915,
+    "completed_elapsed": 181.90120716599995
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001e9e5",
+    "ok": true,
+    "seconds": 1.4921842499988998,
+    "completed_elapsed": 183.39340991599965
+  },
+  {
+    "client": 26,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.289448045999961,
+    "completed_elapsed": 192.6829301710004
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.4317093760000716,
+    "completed_elapsed": 135.46306876900053
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001edac",
+    "ok": true,
+    "seconds": 5.511151503000292,
+    "completed_elapsed": 140.974242272001
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.743414545000633,
+    "completed_elapsed": 147.7176667750009
+  },
+  {
+    "client": 27,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Terraform with Elasticsearch for project 5fcc3c759a. Ticket f747f3bffd documents a memory limit of 159 MiB and a queue length of 62784. A later review will verify the results. Run reference worker_on-2700003-b6411c35459b869e.",
+    "id": "1f1214f4d96048d59fcb9f04328f97df",
+    "group_size": 1,
+    "seconds": 2.766820002001623,
+    "completed_elapsed": 150.48462998500145
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001edaf",
+    "ok": true,
+    "seconds": 4.348282584998742,
+    "completed_elapsed": 154.83293790300013
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.871765460000461,
+    "completed_elapsed": 159.70472394700118
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.8360488759990403,
+    "completed_elapsed": 162.54079553100019
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001edb2",
+    "ok": true,
+    "seconds": 6.664839294999183,
+    "completed_elapsed": 169.2056484929999
+  },
+  {
+    "client": 27,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Python produces events for Ansible. The migration for workspace 19e1a85eb2 started in partition 46ce825125, copied 62551 records, and completed its first validation after 962 seconds. Run reference worker_on-2700008-ac0a4dee2813f4ba.",
+    "id": "8c82471e4e144f11b087c4292f995f92",
+    "group_size": 1,
+    "seconds": 3.5214446680001856,
+    "completed_elapsed": 172.7272131610007
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.4688187499996275,
+    "completed_elapsed": 174.19605649500045
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001edb5",
+    "ok": true,
+    "seconds": 3.5418184179998207,
+    "completed_elapsed": 177.7378973720006
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.115112085999499,
+    "completed_elapsed": 182.85303170800034
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.4762519180003437,
+    "completed_elapsed": 186.32935616800023
+  },
+  {
+    "client": 27,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Ansible uses Python to store audit events. The team reviewed incident 797bcaf8be on service 9262481aae. The recorded duration was 985 seconds and the batch contained 17072 records. Run reference worker_on-2700013-9cf78bee81fd50ea.",
+    "id": "759c3cf0cd0f476f95c2d5bef614d259",
+    "group_size": 1,
+    "seconds": 2.0575200429993856,
+    "completed_elapsed": 188.3869800020002
+  },
+  {
+    "client": 27,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.824704295000629,
+    "completed_elapsed": 196.21172704700075
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f17c",
+    "ok": true,
+    "seconds": 4.5961224179991405,
+    "completed_elapsed": 136.62055368599977
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.0615473779998865,
+    "completed_elapsed": 143.682123898001
+  },
+  {
+    "client": 28,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Elasticsearch found a connection issue with PostgreSQL. Operator 93d136f3b3 restarted job ec3f3b2349 after 113 attempts. The next run processed 51871 records successfully. Run reference worker_on-2800002-7245227ce63345d1.",
+    "id": "c300308ef200436daa02a7d0e2d3d68c",
+    "group_size": 1,
+    "seconds": 4.052799877001235,
+    "completed_elapsed": 147.73501940000097
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f17f",
+    "ok": true,
+    "seconds": 5.216767543999595,
+    "completed_elapsed": 152.95184511099978
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.865648793000219,
+    "completed_elapsed": 157.817515404
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.178426208000019,
+    "completed_elapsed": 158.99596894600108
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f182",
+    "ok": true,
+    "seconds": 3.0674442519994045,
+    "completed_elapsed": 162.06344974000058
+  },
+  {
+    "client": 28,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Airflow produces events for Spark. The migration for workspace 4c588369a5 started in partition 61abd0e498, copied 98727 records, and completed its first validation after 384 seconds. Run reference worker_on-2800007-9e6f753926bfc261.",
+    "id": "19b019021e10472f89ef2914caa0d25b",
+    "group_size": 1,
+    "seconds": 6.211443586000314,
+    "completed_elapsed": 168.27501803400082
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.345653210999444,
+    "completed_elapsed": 172.62069324500044
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f185",
+    "ok": true,
+    "seconds": 5.0749870849995204,
+    "completed_elapsed": 177.69570208000005
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.083678420000069,
+    "completed_elapsed": 183.77940379200118
+  },
+  {
+    "client": 28,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.746175876000052,
+    "completed_elapsed": 186.52560516800077
+  },
+  {
+    "client": 28,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared SQLite with Docker for project bd4316d46f. Ticket bd11b6e346 documents a memory limit of 270 MiB and a queue length of 94453. A later review will verify the results. Run reference worker_on-2800012-f1bf18c0d64a443b.",
+    "id": "295a8d6fd5ec4acdab6e83a79755d2de",
+    "group_size": 1,
+    "seconds": 9.560695963000398,
+    "completed_elapsed": 196.08639479700105
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.04388875100085,
+    "completed_elapsed": 135.0813413520009
+  },
+  {
+    "client": 29,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Linux uses Kubernetes to store audit events. The team reviewed incident 4868d2c3d8 on service f6efd66548. The recorded duration was 37 seconds and the batch contained 73553 records. Run reference worker_on-2900001-9df29295149117a4.",
+    "id": "55fb2727b5cf4b6880df3891de1007fa",
+    "group_size": 1,
+    "seconds": 9.087507711999933,
+    "completed_elapsed": 144.16896114799965
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f54f",
+    "ok": true,
+    "seconds": 0.6036688340009277,
+    "completed_elapsed": 144.77266039900132
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 11.62546554599976,
+    "completed_elapsed": 156.39814594500058
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.0075358760004747,
+    "completed_elapsed": 158.40571211300085
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f552",
+    "ok": true,
+    "seconds": 2.950957417999234,
+    "completed_elapsed": 161.35669086400048
+  },
+  {
+    "client": 29,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Linux produces events for Prometheus. The migration for workspace 7d977d7dc2 started in partition 30864a95c9, copied 95537 records, and completed its first validation after 564 seconds. Run reference worker_on-2900006-080162291d5e14a1.",
+    "id": "c3c147005cb243af853924cdd56ba2e3",
+    "group_size": 1,
+    "seconds": 7.599506587001088,
+    "completed_elapsed": 168.95627378500103
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.741110753000612,
+    "completed_elapsed": 174.6974083290006
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f555",
+    "ok": true,
+    "seconds": 4.40503825199994,
+    "completed_elapsed": 179.10247028900085
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.865955419001693,
+    "completed_elapsed": 183.96845466700142
+  },
+  {
+    "client": 29,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.0563860020010907,
+    "completed_elapsed": 187.02486321000106
+  },
+  {
+    "client": 29,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project d7e46e5a48 depends on SQLite. Its Elasticsearch configuration uses deployment 498ad9c3f7. The observed retry interval was 336 seconds, with 98943 pending requests at the end of the review. Run reference worker_on-2900011-5db64a629b0a4ea4.",
+    "id": "ccdf35966cc64e248a1fc4e0f48ed979",
+    "group_size": 1,
+    "seconds": 10.004830546000449,
+    "completed_elapsed": 197.02979921400038
+  },
+  {
+    "client": 30,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "PostgreSQL uses Terraform to store audit events. The team reviewed incident 411118996b on service 2348ac08db. The recorded duration was 11 seconds and the batch contained 54547 records. Run reference worker_on-3000000-aa04350b0c4d482c.",
+    "id": "24077270d75e4d4ca091ee1447f2a672",
+    "group_size": 1,
+    "seconds": 4.374413461000586,
+    "completed_elapsed": 136.41045939500145
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f91f",
+    "ok": true,
+    "seconds": 5.087104709999039,
+    "completed_elapsed": 141.49758960500003
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.9276565020009,
+    "completed_elapsed": 145.42526902400095
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.3899412939990725,
+    "completed_elapsed": 150.81524035999973
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f922",
+    "ok": true,
+    "seconds": 6.2284604190008395,
+    "completed_elapsed": 157.04372165400127
+  },
+  {
+    "client": 30,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared SQLite with Ansible for project 46ef148d87. Ticket 45b2a967bb documents a memory limit of 528 MiB and a queue length of 76852. A later review will verify the results. Run reference worker_on-3000005-754c17ab4e6cb642.",
+    "id": "ea06b476b7c84c3bba28a498469d02e0",
+    "group_size": 1,
+    "seconds": 3.5882522510000854,
+    "completed_elapsed": 160.63208982200013
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.003942127999835,
+    "completed_elapsed": 166.63605949200064
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001f925",
+    "ok": true,
+    "seconds": 3.5017708350005705,
+    "completed_elapsed": 170.13787620200128
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.287450585999977,
+    "completed_elapsed": 174.42534957899989
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.146740959999079,
+    "completed_elapsed": 178.5721171639998
+  },
+  {
+    "client": 30,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Ansible found a connection issue with Spark. Operator 65a80dd814 restarted job fc48aee63a after 99 attempts. The next run processed 24529 records successfully. Run reference worker_on-3000010-e7be13ddd979e552.",
+    "id": "19cab88ff08c4790bcad846c112ef1ce",
+    "group_size": 1,
+    "seconds": 5.835468253000727,
+    "completed_elapsed": 184.40769662500134
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.331247710000753,
+    "completed_elapsed": 189.73896450200118
+  },
+  {
+    "client": 30,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 7.116070128999127,
+    "completed_elapsed": 196.85506304800037
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001fcef",
+    "ok": true,
+    "seconds": 0.4333604170005856,
+    "completed_elapsed": 132.46303947600063
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.7369846279998455,
+    "completed_elapsed": 140.20007977100067
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.271537710001212,
+    "completed_elapsed": 144.47164956500092
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001fcf2",
+    "ok": true,
+    "seconds": 3.276479209998797,
+    "completed_elapsed": 147.74815169199974
+  },
+  {
+    "client": 31,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Nginx with Grafana for project e30292cfb7. Ticket a360fc16ec documents a memory limit of 497 MiB and a queue length of 13506. A later review will verify the results. Run reference worker_on-3100004-ec536b781df3e86e.",
+    "id": "ff92af63688348a18af25caa444a832e",
+    "group_size": 1,
+    "seconds": 10.305355421000058,
+    "completed_elapsed": 158.05358719600008
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.978071125000497,
+    "completed_elapsed": 159.03168482100045
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001fcf5",
+    "ok": true,
+    "seconds": 1.0539645009994274,
+    "completed_elapsed": 160.08567544700054
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.685606001999986,
+    "completed_elapsed": 165.7713209909998
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.4350341680001293,
+    "completed_elapsed": 169.20639420100088
+  },
+  {
+    "client": 31,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Nginx uses Terraform to store audit events. The team reviewed incident 722475c852 on service ba6bae4ad8. The recorded duration was 566 seconds and the batch contained 2747 records. Run reference worker_on-3100009-1eb3bf6324678760.",
+    "id": "3fa31fd354d74cb98ac6bc07209d4bfc",
+    "group_size": 1,
+    "seconds": 5.3070003779994295,
+    "completed_elapsed": 174.51347295400046
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.477350295001088,
+    "completed_elapsed": 180.99095508200116
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.463189918000353,
+    "completed_elapsed": 182.45416895800008
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000001fcfb",
+    "ok": true,
+    "seconds": 3.449066084000151,
+    "completed_elapsed": 185.90325816699988
+  },
+  {
+    "client": 31,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.248856502999843,
+    "completed_elapsed": 192.1521376290002
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.733197626999754,
+    "completed_elapsed": 134.75782668600004
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.573164752999219,
+    "completed_elapsed": 141.33101327199984
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000200c2",
+    "ok": true,
+    "seconds": 5.942729461001363,
+    "completed_elapsed": 147.27377185800106
+  },
+  {
+    "client": 32,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Terraform uses Kubernetes to store audit events. The team reviewed incident bf784c2f39 on service 14ca09b52b. The recorded duration was 386 seconds and the batch contained 60702 records. Run reference worker_on-3200003-5b00deb6fb949c46.",
+    "id": "291263d6aecf4f0ab88b868920b1e25b",
+    "group_size": 1,
+    "seconds": 3.2857470429989917,
+    "completed_elapsed": 150.55960777600012
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.350388793998718,
+    "completed_elapsed": 154.9100181949998
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000200c5",
+    "ok": true,
+    "seconds": 4.540159793999919,
+    "completed_elapsed": 159.45028157200068
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 10.377249754999866,
+    "completed_elapsed": 169.82755757700033
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 8.09693621200131,
+    "completed_elapsed": 177.92451716400137
+  },
+  {
+    "client": 32,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 4e433bb7d0 depends on Redis. Its Grafana configuration uses deployment 420e8de561. The observed retry interval was 818 seconds, with 37114 pending requests at the end of the review. Run reference worker_on-3200008-015aeda11d9576c9.",
+    "id": "0f1abe570e2f46c49d51a5990bb69ffa",
+    "group_size": 1,
+    "seconds": 3.8462250019983912,
+    "completed_elapsed": 181.7708427489997
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.9245811269993283,
+    "completed_elapsed": 184.69545033400027
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.7916170850003255,
+    "completed_elapsed": 188.48709850200066
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000200cb",
+    "ok": true,
+    "seconds": 3.4079972929994256,
+    "completed_elapsed": 191.8951166700008
+  },
+  {
+    "client": 32,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.796155793999787,
+    "completed_elapsed": 197.69129392300056
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.3247237920004409,
+    "completed_elapsed": 132.3524913930014
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000020492",
+    "ok": true,
+    "seconds": 3.6986063349995675,
+    "completed_elapsed": 136.0511325610005
+  },
+  {
+    "client": 33,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Redis produces events for Kubernetes. The migration for workspace 676373589e started in partition d468b91f43, copied 51318 records, and completed its first validation after 188 seconds. Run reference worker_on-3300002-09fb8dc558082359.",
+    "id": "44b0c95c438b4e9c934d2dc93f3e1d98",
+    "group_size": 1,
+    "seconds": 2.052759418000278,
+    "completed_elapsed": 138.1039710620007
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.4225163769988285,
+    "completed_elapsed": 141.526514272
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000020495",
+    "ok": true,
+    "seconds": 3.5097018350006692,
+    "completed_elapsed": 145.03640939900106
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.02170158700028,
+    "completed_elapsed": 154.0581386110007
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.860529751998911,
+    "completed_elapsed": 158.9186939880001
+  },
+  {
+    "client": 33,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Git found a connection issue with Terraform. Operator 52199965e8 restarted job 25f0b4df31 after 827 attempts. The next run processed 81983 records successfully. Run reference worker_on-3300007-6f2274aa9b400104.",
+    "id": "300f12aa09884603811e8a4da4679795",
+    "group_size": 1,
+    "seconds": 3.6213756680008373,
+    "completed_elapsed": 162.5401570310005
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 10.188339755000925,
+    "completed_elapsed": 172.72851103600078
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.788691294999808,
+    "completed_elapsed": 178.51723058100106
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002049b",
+    "ok": true,
+    "seconds": 1.2746445419998054,
+    "completed_elapsed": 179.7919013310002
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.693052001999604,
+    "completed_elapsed": 184.48497937499997
+  },
+  {
+    "client": 33,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 44e43bdab9 depends on Elasticsearch. Its Redis configuration uses deployment 7600d157af. The observed retry interval was 284 seconds, with 18287 pending requests at the end of the review. Run reference worker_on-3300012-27482df7594eb792.",
+    "id": "88272e23b80e42e488396ec3e7fcba57",
+    "group_size": 1,
+    "seconds": 6.626701877001324,
+    "completed_elapsed": 191.11193583600107
+  },
+  {
+    "client": 33,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002049e",
+    "ok": true,
+    "seconds": 5.233673627999451,
+    "completed_elapsed": 196.34563046400035
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000020862",
+    "ok": true,
+    "seconds": 3.276160417999563,
+    "completed_elapsed": 135.309210894
+  },
+  {
+    "client": 34,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Terraform uses Nginx to store audit events. The team reviewed incident f511a5747f on service 4e03496196. The recorded duration was 557 seconds and the batch contained 90776 records. Run reference worker_on-3400001-6d9a24b995fe571b.",
+    "id": "4ac84f824982448193345e1e651f7a19",
+    "group_size": 1,
+    "seconds": 1.4861970430010842,
+    "completed_elapsed": 136.79548393700134
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.337187544000699,
+    "completed_elapsed": 141.13277264700082
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000020865",
+    "ok": true,
+    "seconds": 3.421469752000121,
+    "completed_elapsed": 144.55426514900137
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.546890002000509,
+    "completed_elapsed": 150.10117790100048
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.9212532080000528,
+    "completed_elapsed": 151.02246631799972
+  },
+  {
+    "client": 34,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Linux uses Redis to store audit events. The team reviewed incident 9306667a17 on service 2d9d06c204. The recorded duration was 649 seconds and the batch contained 33050 records. Run reference worker_on-3400006-f3977406748b3772.",
+    "id": "2aa48918bc194e84ac5d55b4172280f2",
+    "group_size": 1,
+    "seconds": 5.7961706679998315,
+    "completed_elapsed": 156.81870469500063
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.301949253000203,
+    "completed_elapsed": 162.12066186500124
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.90829108700018,
+    "completed_elapsed": 169.02897891000066
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002086b",
+    "ok": true,
+    "seconds": 4.570936877000349,
+    "completed_elapsed": 173.59994816200015
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.197712835000857,
+    "completed_elapsed": 176.7976827470011
+  },
+  {
+    "client": 34,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Redis with Spark for project bf1950ea82. Ticket 776284c5a6 documents a memory limit of 111 MiB and a queue length of 93714. A later review will verify the results. Run reference worker_on-3400011-37410ca7967d7e4d.",
+    "id": "ecec2d5915ee472ca9ad172d83108e29",
+    "group_size": 1,
+    "seconds": 3.4446635020012764,
+    "completed_elapsed": 180.24244670700136
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002086e",
+    "ok": true,
+    "seconds": 3.522972627000854,
+    "completed_elapsed": 183.76544162500068
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.514443252001001,
+    "completed_elapsed": 188.2799091270008
+  },
+  {
+    "client": 34,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 8.58571304600082,
+    "completed_elapsed": 196.8656490480007
+  },
+  {
+    "client": 35,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project c7a13592cb depends on Jenkins. Its SQLite configuration uses deployment 3f188d30fb. The observed retry interval was 870 seconds, with 35431 pending requests at the end of the review. Run reference worker_on-3500000-f1d3a7850fa566bd.",
+    "id": "fd43648a23ab4dd9bf4dc1286c2a74f7",
+    "group_size": 1,
+    "seconds": 3.2458254600005603,
+    "completed_elapsed": 135.2707160610007
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.599180752999018,
+    "completed_elapsed": 140.869919105
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000020c35",
+    "ok": true,
+    "seconds": 3.4850340020002477,
+    "completed_elapsed": 144.35497485700034
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.360483460999603,
+    "completed_elapsed": 150.71548569300103
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.4373474179992627,
+    "completed_elapsed": 153.15285815300012
+  },
+  {
+    "client": 35,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Spark produces events for Kubernetes. The migration for workspace 71c7385c6d started in partition 82ca97178a, copied 70084 records, and completed its first validation after 991 seconds. Run reference worker_on-3500005-3ce461ca9ebc486d.",
+    "id": "c9673c4a53e04854baae1af0ba164229",
+    "group_size": 1,
+    "seconds": 5.677531043998897,
+    "completed_elapsed": 158.83050453000033
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.07205229399915,
+    "completed_elapsed": 163.90258219899988
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.233993085999828,
+    "completed_elapsed": 169.13661170100022
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000020c3b",
+    "ok": true,
+    "seconds": 2.6753442930003075,
+    "completed_elapsed": 171.8119824940004
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.086459336000189,
+    "completed_elapsed": 176.89849524700003
+  },
+  {
+    "client": 35,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Jenkins with Kafka for project cd383b6f61. Ticket 674985dd5c documents a memory limit of 950 MiB and a queue length of 29843. A later review will verify the results. Run reference worker_on-3500010-8efc9c4ca2ed0bcf.",
+    "id": "2073fcd753804891a0b6b78b249d369e",
+    "group_size": 1,
+    "seconds": 5.338222627000505,
+    "completed_elapsed": 182.23680087400135
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000020c3e",
+    "ok": true,
+    "seconds": 5.441498459998911,
+    "completed_elapsed": 187.67831929299973
+  },
+  {
+    "client": 35,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 8.383268337000118,
+    "completed_elapsed": 196.06161575500118
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.6787780429986014,
+    "completed_elapsed": 135.7155556859998
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021005",
+    "ok": true,
+    "seconds": 3.1521906689995376,
+    "completed_elapsed": 138.86777868799982
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.403908543999933,
+    "completed_elapsed": 144.2717166069997
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.947897628000646,
+    "completed_elapsed": 151.2196603600005
+  },
+  {
+    "client": 36,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Prometheus produces events for Airflow. The migration for workspace c33d1e4098 started in partition d686b604aa, copied 93974 records, and completed its first validation after 305 seconds. Run reference worker_on-3600004-588cd2ffba69c9c8.",
+    "id": "3e24a88c3d574f639e470edcc749a7bd",
+    "group_size": 1,
+    "seconds": 1.8440190840010473,
+    "completed_elapsed": 153.06377161100136
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.124528543999986,
+    "completed_elapsed": 158.1883312380014
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.464258920001157,
+    "completed_elapsed": 163.65262007400088
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002100b",
+    "ok": true,
+    "seconds": 4.556612085001689,
+    "completed_elapsed": 168.20925540900134
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.967252379001366,
+    "completed_elapsed": 176.17654416300138
+  },
+  {
+    "client": 36,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Prometheus found a connection issue with Ansible. Operator c20d7738b1 restarted job bdd361df85 after 896 attempts. The next run processed 64954 records successfully. Run reference worker_on-3600009-df5db8f22c0e82af.",
+    "id": "f060e7b4fa7841d597515cea1e4ccc04",
+    "group_size": 1,
+    "seconds": 3.863900543001364,
+    "completed_elapsed": 180.04052974800106
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002100e",
+    "ok": true,
+    "seconds": 3.173752168999272,
+    "completed_elapsed": 183.21430837499975
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.044494460000351,
+    "completed_elapsed": 188.2588260850007
+  },
+  {
+    "client": 36,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.553277253000488,
+    "completed_elapsed": 193.81212596300065
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000213d5",
+    "ok": true,
+    "seconds": 3.209973668001112,
+    "completed_elapsed": 135.24170497700106
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.596202667999023,
+    "completed_elapsed": 137.83797210400007
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.566654501000812,
+    "completed_elapsed": 141.40465785500055
+  },
+  {
+    "client": 37,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Spark with Airflow for project 78f02d9e9e. Ticket 6f3dd427db documents a memory limit of 755 MiB and a queue length of 17698. A later review will verify the results. Run reference worker_on-3700003-47c2c353e885310a.",
+    "id": "010a12d78eed42cfac1808549fb55d37",
+    "group_size": 1,
+    "seconds": 3.189415292999911,
+    "completed_elapsed": 144.594437482001
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.51576100300008,
+    "completed_elapsed": 150.11021944300046
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.781677794000643,
+    "completed_elapsed": 154.8919280700011
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000213db",
+    "ok": true,
+    "seconds": 4.536648044000685,
+    "completed_elapsed": 159.42859878000127
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 10.699285505001171,
+    "completed_elapsed": 170.12790607700117
+  },
+  {
+    "client": 37,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Kafka found a connection issue with SQLite. Operator 1dd7b079f8 restarted job 6df0446b61 after 729 attempts. The next run processed 68846 records successfully. Run reference worker_on-3700008-1719752ef3499497.",
+    "id": "26f901bd457c44a29d57444c25748947",
+    "group_size": 1,
+    "seconds": 3.4266647509994073,
+    "completed_elapsed": 173.55465670299964
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000213de",
+    "ok": true,
+    "seconds": 7.008046586999626,
+    "completed_elapsed": 180.56275820700102
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.899451878000036,
+    "completed_elapsed": 187.46223262600142
+  },
+  {
+    "client": 37,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.242227418999391,
+    "completed_elapsed": 193.7044860040005
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.8185202089989616,
+    "completed_elapsed": 134.84845785200014
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.6211486680003873,
+    "completed_elapsed": 137.46962902000087
+  },
+  {
+    "client": 38,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Docker produces events for Grafana. The migration for workspace 6dd680c5ff started in partition e63b8c12fb, copied 19524 records, and completed its first validation after 320 seconds. Run reference worker_on-3800002-1c6d394ff86d02ed.",
+    "id": "2a1b4e7b5c1342debfc91fbd1a37ae66",
+    "group_size": 1,
+    "seconds": 4.963105127000745,
+    "completed_elapsed": 142.43284098100048
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.622167960998922,
+    "completed_elapsed": 147.05503339999996
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.168430878000436,
+    "completed_elapsed": 153.22349015300097
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000217ab",
+    "ok": true,
+    "seconds": 3.448978001000796,
+    "completed_elapsed": 156.67253448700103
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.70074367000052,
+    "completed_elapsed": 163.37329599000077
+  },
+  {
+    "client": 38,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for FastAPI found a connection issue with Kafka. Operator 41279db6a2 restarted job 5cd2d19b4e after 548 attempts. The next run processed 91096 records successfully. Run reference worker_on-3800007-145ad6bdb3a6b7cb.",
+    "id": "945f9af125f943049c746b67882129ed",
+    "group_size": 1,
+    "seconds": 2.868718918000013,
+    "completed_elapsed": 166.2421326170006
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000217ae",
+    "ok": true,
+    "seconds": 3.4290817929995683,
+    "completed_elapsed": 169.67123753499982
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.575084627000251,
+    "completed_elapsed": 174.24634220400003
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.809320668999135,
+    "completed_elapsed": 178.05568808099997
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000217b1",
+    "ok": true,
+    "seconds": 1.7603353340000467,
+    "completed_elapsed": 179.816050206
+  },
+  {
+    "client": 38,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "SQLite produces events for Terraform. The migration for workspace 564fbef61f started in partition 79ee8b220b, copied 12292 records, and completed its first validation after 996 seconds. Run reference worker_on-3800012-3e56372d34714924.",
+    "id": "3eea2dc730394b2d906bf2684f6ce0d8",
+    "group_size": 1,
+    "seconds": 3.219611709999299,
+    "completed_elapsed": 183.03574091600058
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.317835459998605,
+    "completed_elapsed": 186.35361112600003
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000217b4",
+    "ok": true,
+    "seconds": 3.8258935020003264,
+    "completed_elapsed": 190.17953350300013
+  },
+  {
+    "client": 38,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.144768585998463,
+    "completed_elapsed": 196.32432304699978
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.450076293998791,
+    "completed_elapsed": 135.47515335299977
+  },
+  {
+    "client": 39,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 8fa069e7bd depends on Docker. Its Airflow configuration uses deployment ed8e2c2bfc. The observed retry interval was 753 seconds, with 33748 pending requests at the end of the review. Run reference worker_on-3900001-4c25698ff7bf3166.",
+    "id": "b90b20acc6e945feae5bf037211c5b14",
+    "group_size": 1,
+    "seconds": 3.2144696260002092,
+    "completed_elapsed": 138.68978485400112
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.05745571099942,
+    "completed_elapsed": 143.7472937729999
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.276019834998806,
+    "completed_elapsed": 148.0233405250001
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021b7b",
+    "ok": true,
+    "seconds": 2.8182278350013803,
+    "completed_elapsed": 150.84159223500137
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.219722501999058,
+    "completed_elapsed": 156.061337612
+  },
+  {
+    "client": 39,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Grafana found a connection issue with Git. Operator 4f1b23e4e1 restarted job 5046ba7739 after 50 attempts. The next run processed 82638 records successfully. Run reference worker_on-3900006-1dbbd00cfa1ffd4e.",
+    "id": "0d1dc4842c6c4f2881070a5e9bf30635",
+    "group_size": 1,
+    "seconds": 5.657589710999673,
+    "completed_elapsed": 161.71902940600012
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021b7e",
+    "ok": true,
+    "seconds": 4.497086085999399,
+    "completed_elapsed": 166.2161579500007
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.2092262109999865,
+    "completed_elapsed": 171.42540886900133
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.295693501000642,
+    "completed_elapsed": 173.72113257800083
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021b81",
+    "ok": true,
+    "seconds": 0.8321757930007152,
+    "completed_elapsed": 174.5533359960009
+  },
+  {
+    "client": 39,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Elasticsearch uses Python to store audit events. The team reviewed incident f1d20e2860 on service 0e9e2c13e0. The recorded duration was 315 seconds and the batch contained 28783 records. Run reference worker_on-3900011-c4e5b904db045be9.",
+    "id": "572a712b23fa4fb48024c23728d915aa",
+    "group_size": 1,
+    "seconds": 6.926803670001391,
+    "completed_elapsed": 181.48032679100106
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.362408918001165,
+    "completed_elapsed": 184.8427587920014
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021b84",
+    "ok": true,
+    "seconds": 3.500697333998687,
+    "completed_elapsed": 188.34351579299982
+  },
+  {
+    "client": 39,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.98646971099879,
+    "completed_elapsed": 193.3300105039998
+  },
+  {
+    "client": 40,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project dcfdde41d0 depends on Terraform. Its Linux configuration uses deployment 9b71928fba. The observed retry interval was 35 seconds, with 64944 pending requests at the end of the review. Run reference worker_on-4000000-5888cf29a753c510.",
+    "id": "fdba66368d4648058d08a66b24f8e799",
+    "group_size": 1,
+    "seconds": 4.225272835999931,
+    "completed_elapsed": 136.2505740200013
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.266367795000406,
+    "completed_elapsed": 143.51696756500132
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.5057101679994958,
+    "completed_elapsed": 145.0227245240003
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021f4b",
+    "ok": true,
+    "seconds": 7.938550963001035,
+    "completed_elapsed": 152.9613049030013
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.486868501000572,
+    "completed_elapsed": 157.44819673700113
+  },
+  {
+    "client": 40,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Terraform uses Docker to store audit events. The team reviewed incident 85986db0ee on service 1f3c6b1093. The recorded duration was 735 seconds and the batch contained 39284 records. Run reference worker_on-4000005-8d661a2559f42c77.",
+    "id": "b22ff37e5a334731b45227c94c1f1f2a",
+    "group_size": 1,
+    "seconds": 3.6456502940000064,
+    "completed_elapsed": 161.09394915600024
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021f4e",
+    "ok": true,
+    "seconds": 1.295630958999027,
+    "completed_elapsed": 162.38960103099998
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 8.523716711999441,
+    "completed_elapsed": 170.9133403270007
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.0449818769993726,
+    "completed_elapsed": 173.9583535790007
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021f51",
+    "ok": true,
+    "seconds": 3.7949467939997703,
+    "completed_elapsed": 177.75335128900042
+  },
+  {
+    "client": 40,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for PostgreSQL found a connection issue with Jenkins. Operator 1f741ced0f restarted job df91493812 after 914 attempts. The next run processed 51285 records successfully. Run reference worker_on-4000010-1356f50d6a72d4af.",
+    "id": "552056c5533b4ff2b1f419c40eb46a52",
+    "group_size": 1,
+    "seconds": 4.0025073350007006,
+    "completed_elapsed": 181.75602837400038
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.677484376999928,
+    "completed_elapsed": 186.43356237599983
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000021f54",
+    "ok": true,
+    "seconds": 3.8941075849998015,
+    "completed_elapsed": 190.327693919
+  },
+  {
+    "client": 40,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.509012044998599,
+    "completed_elapsed": 196.83672950599976
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.0170671260002564,
+    "completed_elapsed": 135.04521997700067
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.703169000998969,
+    "completed_elapsed": 137.74842677000015
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002231b",
+    "ok": true,
+    "seconds": 7.081491670000105,
+    "completed_elapsed": 144.82993902400085
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.45285838000018,
+    "completed_elapsed": 154.28282773700084
+  },
+  {
+    "client": 41,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 708841ffe2 depends on Python. Its FastAPI configuration uses deployment 02c0fd0117. The observed retry interval was 382 seconds, with 98878 pending requests at the end of the review. Run reference worker_on-4100004-cc81cff020658e66.",
+    "id": "ea05b7b3a7604061aac4fddb5e254684",
+    "group_size": 1,
+    "seconds": 3.9059028760002548,
+    "completed_elapsed": 158.18882544600092
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002231e",
+    "ok": true,
+    "seconds": 2.629210126000544,
+    "completed_elapsed": 160.81804736400045
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.868457795000722,
+    "completed_elapsed": 167.68654645100105
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.930264418000661,
+    "completed_elapsed": 170.61683703500057
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022321",
+    "ok": true,
+    "seconds": 1.1696073340008297,
+    "completed_elapsed": 171.78647936900052
+  },
+  {
+    "client": 41,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for PostgreSQL found a connection issue with Git. Operator 41c32691ec restarted job 6122f55a7e after 990 attempts. The next run processed 58261 records successfully. Run reference worker_on-4100009-5d66aeb1b0ba6511.",
+    "id": "901e2b1761294dc5b5726fe25ba0fca8",
+    "group_size": 1,
+    "seconds": 6.011238668999795,
+    "completed_elapsed": 177.79781824699967
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.071968669000853,
+    "completed_elapsed": 182.86980895800116
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022324",
+    "ok": true,
+    "seconds": 5.578340668998862,
+    "completed_elapsed": 188.44817300199975
+  },
+  {
+    "client": 41,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.952071337000234,
+    "completed_elapsed": 196.4002671720009
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.173017877999882,
+    "completed_elapsed": 138.2009763540009
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000226eb",
+    "ok": true,
+    "seconds": 6.161814752998907,
+    "completed_elapsed": 144.36383910699988
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.326339794999512,
+    "completed_elapsed": 149.6902063180005
+  },
+  {
+    "client": 42,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Linux with Prometheus for project d806712633. Ticket 53432b0692 documents a memory limit of 721 MiB and a queue length of 27029. A later review will verify the results. Run reference worker_on-4200003-d6e5835bebd51304.",
+    "id": "19f4263bdae0422db137f4eaf29dfa83",
+    "group_size": 1,
+    "seconds": 4.3136632929999905,
+    "completed_elapsed": 154.003967861001
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000226ee",
+    "ok": true,
+    "seconds": 2.814262084000802,
+    "completed_elapsed": 156.81825252900126
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.851706502000525,
+    "completed_elapsed": 161.66998015600075
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 7.171477670000968,
+    "completed_elapsed": 168.8414979090012
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000226f1",
+    "ok": true,
+    "seconds": 4.593035960000634,
+    "completed_elapsed": 173.43456157800028
+  },
+  {
+    "client": 42,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Docker with Linux for project c97940173b. Ticket cdf40a3bf5 documents a memory limit of 366 MiB and a queue length of 90088. A later review will verify the results. Run reference worker_on-4200008-716ef01bb7aa7929.",
+    "id": "f9bc0aeaa79c45e1a61be55779007e83",
+    "group_size": 1,
+    "seconds": 5.70593962699968,
+    "completed_elapsed": 179.14060778900057
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.217853501000718,
+    "completed_elapsed": 182.35848387400074
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000226f4",
+    "ok": true,
+    "seconds": 3.3453637519996846,
+    "completed_elapsed": 185.70387337600005
+  },
+  {
+    "client": 42,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 10.167906213000606,
+    "completed_elapsed": 195.87180279700078
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022abb",
+    "ok": true,
+    "seconds": 3.397730294000212,
+    "completed_elapsed": 135.43130660300085
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.891571336000197,
+    "completed_elapsed": 140.32289939700058
+  },
+  {
+    "client": 43,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Airflow uses Grafana to store audit events. The team reviewed incident ed12b784ee on service c5a20e52bc. The recorded duration was 384 seconds and the batch contained 75519 records. Run reference worker_on-4300002-36a03039296d7549.",
+    "id": "4cd6a8b39e034ef794e536e6a92946a7",
+    "group_size": 1,
+    "seconds": 4.390448876998562,
+    "completed_elapsed": 144.7134566069999
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022abe",
+    "ok": true,
+    "seconds": 7.702183170998978,
+    "completed_elapsed": 152.41566436100038
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.0519812509992335,
+    "completed_elapsed": 156.46766698700048
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.613311002000046,
+    "completed_elapsed": 159.0810096969999
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022ac1",
+    "ok": true,
+    "seconds": 8.51581229600015,
+    "completed_elapsed": 167.5968471590004
+  },
+  {
+    "client": 43,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "The team compared Grafana with Parquet for project c957b6a918. Ticket 86b9ad0907 documents a memory limit of 830 MiB and a queue length of 7109. A later review will verify the results. Run reference worker_on-4300007-8c30db0c79649e77.",
+    "id": "559805a03f9d490bbe685dd0c5f0e71a",
+    "group_size": 1,
+    "seconds": 3.4285477100002026,
+    "completed_elapsed": 171.02548928600118
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.895021001000714,
+    "completed_elapsed": 173.9205321620011
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022ac4",
+    "ok": true,
+    "seconds": 5.767236085999684,
+    "completed_elapsed": 179.68779120600084
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.698930044000008,
+    "completed_elapsed": 184.3867435000011
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.6543931679989328,
+    "completed_elapsed": 188.04117058500015
+  },
+  {
+    "client": 43,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project a47a2a57bb depends on Docker. Its Parquet configuration uses deployment 416293ac7d. The observed retry interval was 487 seconds, with 23282 pending requests at the end of the review. Run reference worker_on-4300012-eb4837169c3d1a33.",
+    "id": "188a6d530cb648e9892953542935870e",
+    "group_size": 1,
+    "seconds": 1.8651342920002207,
+    "completed_elapsed": 189.90639341899987
+  },
+  {
+    "client": 43,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.905842919000861,
+    "completed_elapsed": 195.8122577970007
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 9.055160963000162,
+    "completed_elapsed": 141.08344793900142
+  },
+  {
+    "client": 44,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "A maintenance check for Nginx found a connection issue with Git. Operator 31ff4d8cca restarted job 0d46b8316a after 818 attempts. The next run processed 95031 records successfully. Run reference worker_on-4400001-22eafaeb04fd072f.",
+    "id": "5318c5b1c56040019aa0329080633701",
+    "group_size": 1,
+    "seconds": 6.43032987800143,
+    "completed_elapsed": 147.5138803580012
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022e8e",
+    "ok": true,
+    "seconds": 7.224259253998753,
+    "completed_elapsed": 154.73816323699975
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 11.196939212999496,
+    "completed_elapsed": 165.93516682500012
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.409634169000128,
+    "completed_elapsed": 169.34482878500057
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022e91",
+    "ok": true,
+    "seconds": 2.8545958340000652,
+    "completed_elapsed": 172.1994376190014
+  },
+  {
+    "client": 44,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Parquet produces events for Kafka. The migration for workspace 983950fff9 started in partition 46af44bb33, copied 4477 records, and completed its first validation after 316 seconds. Run reference worker_on-4400006-5e85a10029739540.",
+    "id": "37534b6f81d74aeab7a1cf1839789230",
+    "group_size": 1,
+    "seconds": 3.129283418000341,
+    "completed_elapsed": 175.3288010790002
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.9501610019997315,
+    "completed_elapsed": 179.2789848730008
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000022e94",
+    "ok": true,
+    "seconds": 5.249355544001446,
+    "completed_elapsed": 184.5283625000011
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.304099959999803,
+    "completed_elapsed": 189.83254741900055
+  },
+  {
+    "client": 44,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.4051611680006317,
+    "completed_elapsed": 191.23773833700034
+  },
+  {
+    "client": 44,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project e71be3dc14 depends on Ansible. Its Redis configuration uses deployment f4b35fae76. The observed retry interval was 468 seconds, with 39901 pending requests at the end of the review. Run reference worker_on-4400011-b6a098d860f2a9b0.",
+    "id": "54148d61ed854543b7aa16a17dcd1785",
+    "group_size": 1,
+    "seconds": 5.792497877999267,
+    "completed_elapsed": 197.03033338100067
+  },
+  {
+    "client": 45,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Airflow produces events for Jenkins. The migration for workspace 5c9bfceb73 started in partition 0d1ab921a3, copied 58370 records, and completed its first validation after 191 seconds. Run reference worker_on-4500000-1ef9138062de7722.",
+    "id": "ec555a6953e64f928850da835efd5794",
+    "group_size": 1,
+    "seconds": 3.226937793000616,
+    "completed_elapsed": 135.25714451900058
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002325e",
+    "ok": true,
+    "seconds": 4.943427377998887,
+    "completed_elapsed": 140.20061023000017
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.933330587000455,
+    "completed_elapsed": 147.13394915000026
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 0.7236739170002693,
+    "completed_elapsed": 147.8576694830008
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023261",
+    "ok": true,
+    "seconds": 3.7774433350004983,
+    "completed_elapsed": 151.63514115200087
+  },
+  {
+    "client": 45,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Terraform produces events for Parquet. The migration for workspace c3de34156b started in partition 11d00b07d8, copied 16401 records, and completed its first validation after 290 seconds. Run reference worker_on-4500005-7b8d0f5524f9156f.",
+    "id": "3ebe563cfe5d4857b617080ac1e9d660",
+    "group_size": 1,
+    "seconds": 3.9924323340001138,
+    "completed_elapsed": 155.627859653001
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.2397164599988173,
+    "completed_elapsed": 158.86760073799996
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023264",
+    "ok": true,
+    "seconds": 2.948921542998505,
+    "completed_elapsed": 161.8165527809997
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.841428462001204,
+    "completed_elapsed": 168.65800636800122
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.944649461000154,
+    "completed_elapsed": 173.60268112000085
+  },
+  {
+    "client": 45,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project ea4e62ffcd depends on Kafka. Its PostgreSQL configuration uses deployment 75a372752a. The observed retry interval was 136 seconds, with 59763 pending requests at the end of the review. Run reference worker_on-4500010-be1c390432728268.",
+    "id": "0fda7fbfd9b84e86bcf23201e5e9eb4d",
+    "group_size": 1,
+    "seconds": 4.247293293999974,
+    "completed_elapsed": 177.85006616400096
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.589780127000267,
+    "completed_elapsed": 182.43987299900073
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.072038794000036,
+    "completed_elapsed": 188.51193712700115
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002326a",
+    "ok": true,
+    "seconds": 3.2079704179996043,
+    "completed_elapsed": 191.71993154499978
+  },
+  {
+    "client": 45,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.030730460999621,
+    "completed_elapsed": 197.75068188099976
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002362e",
+    "ok": true,
+    "seconds": 0.20496170899969002,
+    "completed_elapsed": 132.23045539300074
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.814059712000017,
+    "completed_elapsed": 140.04453710500093
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 1.1967800419988635,
+    "completed_elapsed": 141.2413401470003
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023631",
+    "ok": true,
+    "seconds": 6.793107461000545,
+    "completed_elapsed": 148.0344691500013
+  },
+  {
+    "client": 46,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 208f7f86f8 depends on Elasticsearch. Its Prometheus configuration uses deployment 8f608e1fd0. The observed retry interval was 727 seconds, with 80375 pending requests at the end of the review. Run reference worker_on-4600004-023507fe8b8c350e.",
+    "id": "6010d5aecee24506a50e6844db83f746",
+    "group_size": 1,
+    "seconds": 3.317218710000816,
+    "completed_elapsed": 151.3518315270012
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.098219834999327,
+    "completed_elapsed": 156.4500931120001
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023634",
+    "ok": true,
+    "seconds": 2.5823342920011783,
+    "completed_elapsed": 159.0324503210013
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 10.311339420999502,
+    "completed_elapsed": 169.34379995100062
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.2107403760001034,
+    "completed_elapsed": 172.55456441100068
+  },
+  {
+    "client": 46,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Elasticsearch uses SQLite to store audit events. The team reviewed incident 341afca08e on service 95e560a268. The recorded duration was 139 seconds and the batch contained 70274 records. Run reference worker_on-4600009-97ccfa0ebf267517.",
+    "id": "e7128d9f8c3f4f658e036130681b3b3a",
+    "group_size": 1,
+    "seconds": 4.747940168999776,
+    "completed_elapsed": 177.30258974699973
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 4.88619887799905,
+    "completed_elapsed": 182.18881370800045
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 9.444050254000103,
+    "completed_elapsed": 191.63289675300075
+  },
+  {
+    "client": 46,
+    "op": "read",
+    "path": "/api/items/0000000000000000000000000002363a",
+    "ok": true,
+    "seconds": 4.078714836001382,
+    "completed_elapsed": 195.7116410890012
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 2.7136410429993703,
+    "completed_elapsed": 134.73929306100035
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.9721789589984837,
+    "completed_elapsed": 137.71149626999977
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023a01",
+    "ok": true,
+    "seconds": 7.123148044998743,
+    "completed_elapsed": 144.8347242740001
+  },
+  {
+    "client": 47,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Python produces events for Ansible. The migration for workspace 2a30c1da58 started in partition f7f52277a2, copied 55039 records, and completed its first validation after 44 seconds. Run reference worker_on-4700003-513440f3d31d4d23.",
+    "id": "0b1a50504c2a4609bef5f8faaaef8425",
+    "group_size": 1,
+    "seconds": 3.787139168000067,
+    "completed_elapsed": 148.62197152500084
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 6.239871878000486,
+    "completed_elapsed": 154.86186527800055
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023a04",
+    "ok": true,
+    "seconds": 3.2990004180010146,
+    "completed_elapsed": 158.1608873210007
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.2192247940001835,
+    "completed_elapsed": 163.38013690700063
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.6276211259992124,
+    "completed_elapsed": 167.00778569999966
+  },
+  {
+    "client": 47,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Prometheus produces events for Jenkins. The migration for workspace 41be20d5a1 started in partition daf6a62bf5, copied 94105 records, and completed its first validation after 62 seconds. Run reference worker_on-4700008-48ce2ee0a4da059b.",
+    "id": "84428284dbd3488488cfe6aede1e080e",
+    "group_size": 1,
+    "seconds": 2.7340072099996178,
+    "completed_elapsed": 169.74188828499973
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.405383919998712,
+    "completed_elapsed": 177.14729441300005
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.9584525850004866,
+    "completed_elapsed": 180.10579420700014
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023a0a",
+    "ok": true,
+    "seconds": 5.153065251999578,
+    "completed_elapsed": 185.25889420900057
+  },
+  {
+    "client": 47,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.878399585999432,
+    "completed_elapsed": 191.13733525300086
+  },
+  {
+    "client": 47,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Jenkins uses Linux to store audit events. The team reviewed incident b08f8c24ed on service 79b8ff005c. The recorded duration was 101 seconds and the batch contained 19011 records. Run reference worker_on-4700013-856d656e35462d89.",
+    "id": "8d31f940c55047dcbf46623a6238f294",
+    "group_size": 1,
+    "seconds": 5.456410003000201,
+    "completed_elapsed": 196.5938595890002
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 12.472108173000379,
+    "completed_elapsed": 144.50755089900122
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023dd1",
+    "ok": true,
+    "seconds": 6.2708007949986495,
+    "completed_elapsed": 150.77837610999995
+  },
+  {
+    "client": 48,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Kafka produces events for Linux. The migration for workspace 098ac003a4 started in partition 5893eea610, copied 37365 records, and completed its first validation after 322 seconds. Run reference worker_on-4800002-c20b4614c7d0609e.",
+    "id": "7c9c79b0911647f1b1d26fb59423023b",
+    "group_size": 1,
+    "seconds": 3.88231000199994,
+    "completed_elapsed": 154.66077982000024
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 4.829646168000181,
+    "completed_elapsed": 159.49044715499986
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023dd4",
+    "ok": true,
+    "seconds": 0.9144887509992259,
+    "completed_elapsed": 160.40495798899974
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.276296961999833,
+    "completed_elapsed": 167.6812815760004
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 9.866325879000215,
+    "completed_elapsed": 177.54763895500037
+  },
+  {
+    "client": 48,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Project 08e9605030 depends on Nginx. Its Elasticsearch configuration uses deployment 3359c1baa6. The observed retry interval was 990 seconds, with 12733 pending requests at the end of the review. Run reference worker_on-4800007-89481dbb33471d85.",
+    "id": "92c921972dfb4c48877820405e72ea8a",
+    "group_size": 1,
+    "seconds": 4.157524127000215,
+    "completed_elapsed": 181.70525099900078
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 3.7086389180003607,
+    "completed_elapsed": 185.4139320840004
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.8046156270011124,
+    "completed_elapsed": 189.21857391900085
+  },
+  {
+    "client": 48,
+    "op": "read",
+    "path": "/api/items/00000000000000000000000000023dda",
+    "ok": true,
+    "seconds": 3.823910959999921,
+    "completed_elapsed": 193.04254371200113
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000241a1",
+    "ok": true,
+    "seconds": 5.383606501998656,
+    "completed_elapsed": 137.41203272799976
+  },
+  {
+    "client": 49,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "Kubernetes uses FastAPI to store audit events. The team reviewed incident ebcaed0139 on service 4ace0e06bd. The recorded duration was 220 seconds and the batch contained 58426 records. Run reference worker_on-4900001-1a9d2ba9b904f32d.",
+    "id": "aca201f1468a4b59b03fc7c4b98f1bcd",
+    "group_size": 1,
+    "seconds": 10.306950505000714,
+    "completed_elapsed": 147.719065442001
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 3.52644846000112,
+    "completed_elapsed": 151.24553431800086
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000241a4",
+    "ok": true,
+    "seconds": 3.3929130020005687,
+    "completed_elapsed": 154.63847323700065
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 7.7597792939996,
+    "completed_elapsed": 162.39827878100004
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 2.200972876000378,
+    "completed_elapsed": 164.59927719900043
+  },
+  {
+    "client": 49,
+    "op": "write",
+    "path": "/api/capture",
+    "ok": true,
+    "body": "FastAPI uses Kafka to store audit events. The team reviewed incident 990255268e on service ccef7a8757. The recorded duration was 532 seconds and the batch contained 69002 records. Run reference worker_on-4900006-8d882bbaa10a3e17.",
+    "id": "4d1e82620c194005b203108d29e195f7",
+    "group_size": 1,
+    "seconds": 9.798039296001662,
+    "completed_elapsed": 174.3974138700014
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 5.444159544000286,
+    "completed_elapsed": 179.84159512299993
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/feed",
+    "ok": true,
+    "seconds": 5.097114293999766,
+    "completed_elapsed": 184.9387450840004
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/items/000000000000000000000000000241aa",
+    "ok": true,
+    "seconds": 1.28493645799972,
+    "completed_elapsed": 186.22372179200102
+  },
+  {
+    "client": 49,
+    "op": "read",
+    "path": "/api/search?q=PostgreSQL",
+    "ok": true,
+    "seconds": 6.912753379001515,
+    "completed_elapsed": 193.1365091710013
+  }
+]

@@ -1,0 +1,394 @@
+{
+  "id": "one_accepted_answer_is_sparse",
+  "domain": "digital_media",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions/147be4fe33644017befee20896cee60c/answers",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/items/65c117f723e24fd7874da7db837f3fcc/helped",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions/147be4fe33644017befee20896cee60c/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/questions/147be4fe33644017befee20896cee60c",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/65c117f723e24fd7874da7db837f3fcc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/one_accepted_answer_is_sparse/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Blender"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "ben",
+        "concept": "Blender"
+      },
+      {
+        "actor": "alice",
+        "concept": "Blender"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 7.240195169999424,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.885321003999707,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 14.12551617399913,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [],
+        "terms": [],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [],
+          "edges": [],
+          "total_nodes": 0,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "147be4fe33644017befee20896cee60c",
+              "kind": "question",
+              "question": null,
+              "body": "Where can I inspect the render output settings in Blender?",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "bee8fc6283f240e08d4899a04368082a",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": "resolved",
+              "accepted_answer_id": "65c117f723e24fd7874da7db837f3fcc",
+              "evidence_revision": 1,
+              "acceptance_revision": 1,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:26:09.081937Z",
+              "updated_at": "2026-09-30T00:26:16.420009Z",
+              "answers": [
+                {
+                  "id": "65c117f723e24fd7874da7db837f3fcc",
+                  "kind": "answer",
+                  "question": {
+                    "id": "147be4fe33644017befee20896cee60c",
+                    "body": "Where can I inspect the render output settings in Blender?",
+                    "status": "resolved"
+                  },
+                  "body": "In Blender, I checked the output properties and recorded the selected file format in the render checklist.",
+                  "visibility": "team",
+                  "author": "ben",
+                  "author_verified": true,
+                  "author_id": "1918ee95fd114f738f847d8c9bac386c",
+                  "is_mine": false,
+                  "parent_id": "147be4fe33644017befee20896cee60c",
+                  "group_id": null,
+                  "contributors": 1,
+                  "group_size": 1,
+                  "helped": 1,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:26:16.383191Z",
+                  "updated_at": "2026-09-30T00:26:16.397404Z"
+                }
+              ],
+              "concepts": [],
+              "suggested_experts": []
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "65c117f723e24fd7874da7db837f3fcc",
+              "kind": "answer",
+              "question": {
+                "id": "147be4fe33644017befee20896cee60c",
+                "body": "Where can I inspect the render output settings in Blender?",
+                "status": "resolved"
+              },
+              "body": "In Blender, I checked the output properties and recorded the selected file format in the render checklist.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "1918ee95fd114f738f847d8c9bac386c",
+              "is_mine": false,
+              "parent_id": "147be4fe33644017befee20896cee60c",
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 1,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:26:16.383191Z",
+              "updated_at": "2026-09-30T00:26:16.397404Z",
+              "concepts": [],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Blender": {
+            "query": "Blender",
+            "terms": [
+              "blender"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "65c117f723e24fd7874da7db837f3fcc",
+                "kind": "answer",
+                "question": {
+                  "id": "147be4fe33644017befee20896cee60c",
+                  "body": "Where can I inspect the render output settings in Blender?",
+                  "status": "resolved"
+                },
+                "body": "In Blender, I checked the output properties and recorded the selected file format in the render checklist.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "1918ee95fd114f738f847d8c9bac386c",
+                "is_mine": false,
+                "parent_id": "147be4fe33644017befee20896cee60c",
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 1,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:26:16.383191Z",
+                "updated_at": "2026-09-30T00:26:16.397404Z",
+                "type": "item",
+                "snippet": "In <mark>Blender</mark>, I checked the output properties and recorded the selected file format in the render checklist.",
+                "coverage": 1.0,
+                "score": 0.7158892124455563
+              },
+              {
+                "id": "147be4fe33644017befee20896cee60c",
+                "kind": "question",
+                "question": null,
+                "body": "Where can I inspect the render output settings in Blender?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "bee8fc6283f240e08d4899a04368082a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "resolved",
+                "accepted_answer_id": "65c117f723e24fd7874da7db837f3fcc",
+                "evidence_revision": 1,
+                "acceptance_revision": 1,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:26:09.081937Z",
+                "updated_at": "2026-09-30T00:26:16.420009Z",
+                "type": "item",
+                "snippet": "Where can I inspect the render output settings in <mark>Blender</mark>?",
+                "answer_count": 1,
+                "coverage": 1.0,
+                "score": 0.3000011186440678
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben",
+          "cara": "cara"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 29,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "147be4fe33644017befee20896cee60c",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "65c117f723e24fd7874da7db837f3fcc",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Blender",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "ben",
+        "concept": "Blender"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "Blender"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 15.916875631999574,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3903213568,
+  "sampled_cpu_seconds": 30.639999999999986
+}

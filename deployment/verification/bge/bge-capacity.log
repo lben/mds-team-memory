@@ -1,0 +1,24 @@
+ARTIFACT_DIRECTORY=/home/mds/bge-capacity/mds-ml-load-check-bbv7s6ul
+Migrated database
+/home/mds/mds-uat/releases/20260930-003028-945282/tools/ml_load_check.py:250: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  con.execute('INSERT INTO profiles(id,token_hash,display_name,claim_locked,created_at) VALUES(?,?,?,?,?)',
+/home/mds/mds-uat/releases/20260930-003028-945282/tools/ml_load_check.py:265: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+  con.execute('''INSERT INTO knowledge_items(id,kind,body,visibility,author_profile_id,parent_id,
+{"seed": {"items": 50000, "profiles": 50, "canonical_concepts": 20, "jobs": 50000, "kinds": {"answer": 5000, "note": 37500, "question": 7500}, "characters": 18845019, "max_characters": 7399, "seconds": 11.984902047001015}, "runtime": {"uid": 10001, "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]", "sqlite": "3.53.1", "migration": "0015", "machine": "x86_64", "sqlite_filesystem": "overlay", "platform": "Linux-7.0.12-linuxkit-x86_64-with-glibc2.28", "cpu_affinity": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "host_memory_bytes": 6209777664, "cgroup": "0::/", "cgroup_limits": {"cpu_quota": "400000 100000", "memory_max": "5368709120", "swap_max": "0"}}}
+{"phase": "worker_off", "summary": {"seconds": 64.61923303000003, "concurrent_clients": 50, "traffic_start_elapsed": 67.34669011300139, "traffic_end_elapsed": 131.96592314300142, "mix": "one capture per five operations; other requests rotate feed, item, search", "requests": 751, "errors": [], "read": {"count": 604, "successes": 604, "p50_seconds": 4.00055866799994, "p95_seconds": 8.199888670000291, "max_seconds": 14.365345547999823}, "write": {"count": 147, "successes": 147, "p50_seconds": 3.5466771270002937, "p95_seconds": 6.855254084999615, "max_seconds": 9.591620795999916}}}
+{"phase": "worker_on", "summary": {"seconds": 65.7288218220001, "concurrent_clients": 50, "traffic_start_elapsed": 132.02186005899966, "traffic_end_elapsed": 197.75068188099976, "mix": "one capture per five operations; other requests rotate feed, item, search", "requests": 666, "errors": [], "read": {"count": 536, "successes": 536, "p50_seconds": 4.536648044000685, "p95_seconds": 8.902959879000264, "max_seconds": 16.924380757000108}, "write": {"count": 130, "successes": 130, "p50_seconds": 4.157524127000215, "p95_seconds": 10.305355421000058, "max_seconds": 13.554719173000194}}}
+{
+  "verdict": "FAIL",
+  "failures": [
+    "Write p95 exceeds paired acceptance gate or has no samples"
+  ],
+  "resources": {
+    "worker_tree_rss": 4188872704,
+    "web_tree_rss": 384352256,
+    "wal_bytes": 44281792,
+    "database_bytes": 95997952,
+    "cgroup_memory_bytes": 5165117440
+  },
+  "worker_handled_contention_retries_by_operation": {}
+}
+ARTIFACT_DIRECTORY=/home/mds/bge-capacity/mds-ml-load-check-bbv7s6ul

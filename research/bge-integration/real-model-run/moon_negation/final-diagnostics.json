@@ -1,0 +1,245 @@
+{
+  "ml_sources": [
+    {
+      "kind": "profile",
+      "id": "6e21071b9df148728e608fe3f963bdeb",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:19:41.672996"
+    },
+    {
+      "kind": "item",
+      "id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+      "content_hash": "57a96a42eb12a5a85fa65b38034334a386138d8d8b698d808624b638a01b1ee1",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":8,\"label\":\"named entity\",\"name\":\"Moon\",\"score\":0.9907926917076111,\"start\":4},{\"end\":34,\"label\":\"object or substance\",\"name\":\"sunlight\",\"score\":0.9467799663543701,\"start\":26},{\"end\":51,\"label\":\"object or substance\",\"name\":\"sunlight\",\"score\":0.9449836015701294,\"start\":43},{\"end\":84,\"label\":\"object or substance\",\"name\":\"lunar surface\",\"score\":0.7678415775299072,\"start\":71}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"lunar surface\":0.7364037036895752,\"moon\":0.6343866586685181,\"sunlight\":0.6607326865196228},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":35,\"head\":{\"end\":8,\"name\":\"Moon\",\"score\":0.912277102470398,\"start\":4},\"literal_support\":true,\"polarity\":\"negative\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.912277102470398,\"start\":0,\"tail\":{\"end\":34,\"name\":\"sunlight\",\"score\":0.912277102470398,\"start\":26}}],\"text_hash\":\"4886f756e0c894ef914f1c8941d342fa6c9b1524b3662b4c402965accfe6e509\"}",
+      "updated_at": "2026-09-30 00:19:41.363532"
+    },
+    {
+      "kind": "profile",
+      "id": "20cde982b67544f39c2b0d4e99869b31",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:19:47.833701"
+    },
+    {
+      "kind": "item",
+      "id": "567abfa12e9c47b6987034386aa22598",
+      "content_hash": "3d6e293d1236d90aba49349f431010c3e75c35c106a539fce21f41dbf33b6b44",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":8,\"label\":\"named entity\",\"name\":\"Moon\",\"score\":0.9931946992874146,\"start\":4},{\"end\":32,\"label\":\"object or substance\",\"name\":\"sunlight\",\"score\":0.9076597690582275,\"start\":24},{\"end\":93,\"label\":\"object or substance\",\"name\":\"reflected light\",\"score\":0.8882241249084473,\"start\":78}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"moon\":0.5662349462509155,\"reflected light\":0.6927686929702759,\"sunlight\":0.5840585231781006},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":44,\"head\":{\"end\":8,\"name\":\"Moon\",\"score\":0.7127940654754639,\"start\":4},\"literal_support\":true,\"polarity\":\"negative\",\"predicate\":\"produces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7127940654754639,\"start\":0,\"tail\":{\"end\":32,\"name\":\"sunlight\",\"score\":0.7127940654754639,\"start\":24}}],\"text_hash\":\"df4cbc70b3efa705d55addf0058b032190149af7217a5c139501b5a7a77b37d5\"}",
+      "updated_at": "2026-09-30 00:19:47.652623"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "c6d04133dc07ea014d4f6283c00cf0bbcfbd043284800b420829c8c462ff7646",
+      "kind": "concept",
+      "payload": "{\"name\":\"Moon\"}",
+      "state": "held",
+      "score": 0.9931946992874146,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:40.985768",
+      "updated_at": "2026-09-30 00:19:47.716476"
+    },
+    {
+      "key": "eba136b321b561bab5f045db26b1d1293bf624261ba5fdea0fae1afdac9d4a38",
+      "kind": "concept",
+      "payload": "{\"name\":\"sunlight\"}",
+      "state": "held",
+      "score": 0.9467799663543701,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:40.994597",
+      "updated_at": "2026-09-30 00:19:47.718052"
+    },
+    {
+      "key": "4fbea6dc7e9e1bc2b9e25ad3d5f935d1937f4854e8fea2428117570ceec2c681",
+      "kind": "concept",
+      "payload": "{\"name\":\"lunar surface\"}",
+      "state": "held",
+      "score": 0.7678415775299072,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:41.001560",
+      "updated_at": "2026-09-30 00:19:41.417321"
+    },
+    {
+      "key": "f2e38a53ffe3d2f4b325c7c9af1a6248162b141e7f206963a308df64e3332ea3",
+      "kind": "concept",
+      "payload": "{\"name\":\"reflected light\"}",
+      "state": "held",
+      "score": 0.8882241249084473,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:19:47.670718",
+      "updated_at": "2026-09-30 00:19:47.714764"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "8e576df4b2607606822048b25611ea00576cf757ab4ed749dd40911834963902",
+      "finding_key": "c6d04133dc07ea014d4f6283c00cf0bbcfbd043284800b420829c8c462ff7646",
+      "source_kind": "item",
+      "source_id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+      "source_hash": "57a96a42eb12a5a85fa65b38034334a386138d8d8b698d808624b638a01b1ee1",
+      "group_key": "item:a0cbc62125aa4c93ad30c8904ff1dec7",
+      "author_id": "6e21071b9df148728e608fe3f963bdeb",
+      "start": 4,
+      "end": 8,
+      "raw_score": 0.9907926917076111,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6343866586685181,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"78a5d278703799808d6348bada54bfd42d48dc97e87d3ffb5d4fe1aac58f1ea4\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "1f569480a7680ed5890fcb0750abe315fcbc6014a7940fc03f2abdf7a280b3d9",
+      "finding_key": "eba136b321b561bab5f045db26b1d1293bf624261ba5fdea0fae1afdac9d4a38",
+      "source_kind": "item",
+      "source_id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+      "source_hash": "57a96a42eb12a5a85fa65b38034334a386138d8d8b698d808624b638a01b1ee1",
+      "group_key": "item:a0cbc62125aa4c93ad30c8904ff1dec7",
+      "author_id": "6e21071b9df148728e608fe3f963bdeb",
+      "start": 26,
+      "end": 34,
+      "raw_score": 0.9467799663543701,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6607326865196228,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"78a5d278703799808d6348bada54bfd42d48dc97e87d3ffb5d4fe1aac58f1ea4\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "d9dd6d2bd7d4afd1a298fb37e0b1709b5994f71dbb6f2f6904cf8a99d475f206",
+      "finding_key": "4fbea6dc7e9e1bc2b9e25ad3d5f935d1937f4854e8fea2428117570ceec2c681",
+      "source_kind": "item",
+      "source_id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+      "source_hash": "57a96a42eb12a5a85fa65b38034334a386138d8d8b698d808624b638a01b1ee1",
+      "group_key": "item:a0cbc62125aa4c93ad30c8904ff1dec7",
+      "author_id": "6e21071b9df148728e608fe3f963bdeb",
+      "start": 71,
+      "end": 84,
+      "raw_score": 0.7678415775299072,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7364037036895752,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"78a5d278703799808d6348bada54bfd42d48dc97e87d3ffb5d4fe1aac58f1ea4\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8916102a773b111f9118889c6db028d995919057cbab8bac6cd52b8613670155",
+      "finding_key": "c6d04133dc07ea014d4f6283c00cf0bbcfbd043284800b420829c8c462ff7646",
+      "source_kind": "item",
+      "source_id": "567abfa12e9c47b6987034386aa22598",
+      "source_hash": "3d6e293d1236d90aba49349f431010c3e75c35c106a539fce21f41dbf33b6b44",
+      "group_key": "item:567abfa12e9c47b6987034386aa22598",
+      "author_id": "20cde982b67544f39c2b0d4e99869b31",
+      "start": 4,
+      "end": 8,
+      "raw_score": 0.9931946992874146,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5662349462509155,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"49b2866a05c6f6876344ceafa501d5abfbbb87506d74c56d034232c3e203d74b\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "1f1c8780e1b51b8b1650b356ebe9c596f400503fdb033c8561f580208a5b2d79",
+      "finding_key": "eba136b321b561bab5f045db26b1d1293bf624261ba5fdea0fae1afdac9d4a38",
+      "source_kind": "item",
+      "source_id": "567abfa12e9c47b6987034386aa22598",
+      "source_hash": "3d6e293d1236d90aba49349f431010c3e75c35c106a539fce21f41dbf33b6b44",
+      "group_key": "item:567abfa12e9c47b6987034386aa22598",
+      "author_id": "20cde982b67544f39c2b0d4e99869b31",
+      "start": 24,
+      "end": 32,
+      "raw_score": 0.9076597690582275,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5840585231781006,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"49b2866a05c6f6876344ceafa501d5abfbbb87506d74c56d034232c3e203d74b\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ff8e2522c5ebaf538777c8ef4ded078a91e4262ec133daa0d1d8c50c06f3fc09",
+      "finding_key": "f2e38a53ffe3d2f4b325c7c9af1a6248162b141e7f206963a308df64e3332ea3",
+      "source_kind": "item",
+      "source_id": "567abfa12e9c47b6987034386aa22598",
+      "source_hash": "3d6e293d1236d90aba49349f431010c3e75c35c106a539fce21f41dbf33b6b44",
+      "group_key": "item:567abfa12e9c47b6987034386aa22598",
+      "author_id": "20cde982b67544f39c2b0d4e99869b31",
+      "start": 78,
+      "end": 93,
+      "raw_score": 0.8882241249084473,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6927686929702759,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"49b2866a05c6f6876344ceafa501d5abfbbb87506d74c56d034232c3e203d74b\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:19:35.078338"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 16,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 8
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 18978,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "b158388dc6eb3d085aa4aed7a9f1f97504fbb83298ba441c06dc32368a77457c",
+      "source_kind": "item",
+      "source_id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+      "source_hash": "57a96a42eb12a5a85fa65b38034334a386138d8d8b698d808624b638a01b1ee1",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 85,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "3b31b2f2b3e0dd92a41462fae88e758608ed3ef00f2744c0d594852e4d8f58e4",
+      "source_kind": "item",
+      "source_id": "567abfa12e9c47b6987034386aa22598",
+      "source_hash": "3d6e293d1236d90aba49349f431010c3e75c35c106a539fce21f41dbf33b6b44",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 94,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

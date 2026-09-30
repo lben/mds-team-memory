@@ -1,5 +1,5 @@
 MDS TEAM MEMORY — GIT BRANCH EVOLUTION
-Updated: 2026-09-27
+Updated: 2026-09-29
 
 This map records verified Git ancestry and the purpose of each work branch.
 Milestones below are historical references; branch tips may advance.
@@ -237,3 +237,11 @@ limits, support offline deployment, and pass quality and lifecycle checks.
 The detailed requirements and historical results are in
 ML_IMPLEMENTATION_PLAN.md. Update this map when another branch or a major
 handoff changes the line of development; preserve historical commit IDs.
+
+withgpt6.1solhigh -> gpt6.1solhigh_bge (2026-09-29)
+  d46ef86 / 3aab705  Commit isolated non-LLM comparisons and retained inputs.
+  gpt6.1solhigh_bge   Owner-selected BGE replacement, shared encoder/inference
+                    process, three-model offline Update payload. Deployment
+                    evidence: deployment/BGE_VERIFICATION.md. Quality acceptance
+                    remains open; real-model expectations and the paired load
+                    latency gate failed.

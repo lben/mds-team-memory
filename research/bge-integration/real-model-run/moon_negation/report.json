@@ -1,0 +1,415 @@
+{
+  "id": "moon_negation",
+  "domain": "astronomy",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/a0cbc62125aa4c93ad30c8904ff1dec7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/567abfa12e9c47b6987034386aa22598",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/moon_negation/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Moon",
+      "sunlight"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Moon",
+        "predicate": "produces",
+        "tail": "sunlight"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.648153628000728,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.126203711000926,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 12.774357339001654,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [],
+        "terms": [],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [],
+          "edges": [],
+          "total_nodes": 0,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+              "kind": "note",
+              "question": null,
+              "body": "The Moon does not produce sunlight. We see sunlight reflected from the lunar surface.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "6e21071b9df148728e608fe3f963bdeb",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:19:35.016899Z",
+              "updated_at": "2026-09-30T00:19:35.054922Z",
+              "concepts": [],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "567abfa12e9c47b6987034386aa22598",
+              "kind": "note",
+              "question": null,
+              "body": "The Moon never produces sunlight of its own. Its bright appearance comes from reflected light.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "20cde982b67544f39c2b0d4e99869b31",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:19:41.722550Z",
+              "updated_at": "2026-09-30T00:19:41.739601Z",
+              "concepts": [],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Moon": {
+            "query": "Moon",
+            "terms": [
+              "moon"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+                "kind": "note",
+                "question": null,
+                "body": "The Moon does not produce sunlight. We see sunlight reflected from the lunar surface.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "6e21071b9df148728e608fe3f963bdeb",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:35.016899Z",
+                "updated_at": "2026-09-30T00:19:35.054922Z",
+                "type": "item",
+                "snippet": "The <mark>Moon</mark> does not produce sunlight. We see sunlight reflected from the lunar surface.",
+                "coverage": 1.0,
+                "score": 0.3000010143084261
+              },
+              {
+                "id": "567abfa12e9c47b6987034386aa22598",
+                "kind": "note",
+                "question": null,
+                "body": "The Moon never produces sunlight of its own. Its bright appearance comes from reflected light.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "20cde982b67544f39c2b0d4e99869b31",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:41.722550Z",
+                "updated_at": "2026-09-30T00:19:41.739601Z",
+                "type": "item",
+                "snippet": "The <mark>Moon</mark> never produces sunlight of its own. Its bright appearance comes from reflected light.",
+                "coverage": 1.0,
+                "score": 0.3000009860896445
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "sunlight": {
+            "query": "sunlight",
+            "terms": [
+              "sunlight"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+                "kind": "note",
+                "question": null,
+                "body": "The Moon does not produce sunlight. We see sunlight reflected from the lunar surface.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "6e21071b9df148728e608fe3f963bdeb",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:35.016899Z",
+                "updated_at": "2026-09-30T00:19:35.054922Z",
+                "type": "item",
+                "snippet": "The Moon does not produce <mark>sunlight</mark>. We see <mark>sunlight</mark> reflected from the lunar surface.",
+                "coverage": 1.0,
+                "score": 0.3000013884657236
+              },
+              {
+                "id": "567abfa12e9c47b6987034386aa22598",
+                "kind": "note",
+                "question": null,
+                "body": "The Moon never produces sunlight of its own. Its bright appearance comes from reflected light.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "20cde982b67544f39c2b0d4e99869b31",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:41.722550Z",
+                "updated_at": "2026-09-30T00:19:41.739601Z",
+                "type": "item",
+                "snippet": "The Moon never produces <mark>sunlight</mark> of its own. Its bright appearance comes from reflected light.",
+                "coverage": 1.0,
+                "score": 0.3000009860896445
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 16,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "a0cbc62125aa4c93ad30c8904ff1dec7",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "567abfa12e9c47b6987034386aa22598",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Moon",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "concepts",
+      "assertion": "sunlight",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Moon",
+        "predicate": "produces",
+        "tail": "sunlight"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 14.048084172998642,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3943170048,
+  "sampled_cpu_seconds": 29.47
+}

@@ -1,0 +1,801 @@
+{
+  "id": "independent_control_definitions",
+  "domain": "electronics",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/links/70a901a94a594892b343a22df0c01763/evidence",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/54b27aae9e8d46539bdbb33274bf7a9f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/80d5d126ae4a4835aded17cafa3468a2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/independent_control_definitions/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Arduino",
+      "Pulse-Width Modulation"
+    ],
+    "absent_concepts": [],
+    "aliases": [
+      {
+        "canonical": "Pulse-Width Modulation",
+        "alias": "PWM"
+      }
+    ],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "Arduino",
+        "predicate": "uses",
+        "tail": "Pulse-Width Modulation"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "Pulse-Width Modulation",
+        "predicate": "uses",
+        "tail": "Arduino"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 7.766949211998508,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 8.57725008700072,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 16.34419929899923,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+            "name": "Arduino",
+            "mentions": 2
+          },
+          {
+            "id": "010c1a6c1b75465d8e03da665f3a14f3",
+            "name": "Pulse-Width Modulation",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Pulse-Width Modulation",
+            "concept_id": "010c1a6c1b75465d8e03da665f3a14f3",
+            "is_canonical": true
+          },
+          {
+            "name": "PWM",
+            "concept_id": "010c1a6c1b75465d8e03da665f3a14f3",
+            "is_canonical": false
+          },
+          {
+            "name": "Arduino",
+            "concept_id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [
+          {
+            "canonical": "Pulse-Width Modulation",
+            "canonical_id": "010c1a6c1b75465d8e03da665f3a14f3",
+            "alias": "PWM",
+            "public_search_confirmed": true
+          }
+        ],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "010c1a6c1b75465d8e03da665f3a14f3",
+              "label": "Pulse-Width Modulation",
+              "concepts": [
+                {
+                  "id": "010c1a6c1b75465d8e03da665f3a14f3",
+                  "name": "Pulse-Width Modulation",
+                  "size": 2
+                }
+              ]
+            },
+            {
+              "id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+              "label": "Arduino",
+              "concepts": [
+                {
+                  "id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+                  "name": "Arduino",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "source": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+              "target": "010c1a6c1b75465d8e03da665f3a14f3",
+              "label": "uses",
+              "style": "dashed",
+              "state": "held",
+              "origin": "automatic",
+              "directed": true,
+              "count": 1,
+              "support_count": 1,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "1 independent supporting source groups. Automatic; held.",
+              "link_id": "70a901a94a594892b343a22df0c01763",
+              "finding_key": "089da16a6f3d4a9d2c1e1ccf4d9d18ca7d934c7e1ff4da284078f0b3853767f0",
+              "alternative_count": 1,
+              "conflicts": false
+            }
+          ],
+          "total_nodes": 2,
+          "total_edges": 1,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [
+          {
+            "link_id": "70a901a94a594892b343a22df0c01763",
+            "src_name": "Pulse-Width Modulation",
+            "dst_name": "Arduino",
+            "occurrence_count": 2,
+            "items": [
+              {
+                "id": "54b27aae9e8d46539bdbb33274bf7a9f",
+                "kind": "note",
+                "body": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:22:23.972791Z"
+              },
+              {
+                "id": "80d5d126ae4a4835aded17cafa3468a2",
+                "kind": "note",
+                "body": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:22:31.803231Z"
+              }
+            ],
+            "passages": [],
+            "summary": {
+              "source": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+              "target": "010c1a6c1b75465d8e03da665f3a14f3",
+              "label": "uses",
+              "style": "dashed",
+              "state": "held",
+              "origin": "automatic",
+              "directed": true,
+              "count": 1,
+              "support_count": 1,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "1 independent supporting source groups. Automatic; held.",
+              "link_id": "70a901a94a594892b343a22df0c01763",
+              "finding_key": "089da16a6f3d4a9d2c1e1ccf4d9d18ca7d934c7e1ff4da284078f0b3853767f0",
+              "alternative_count": 1,
+              "conflicts": false
+            },
+            "claims": [
+              {
+                "finding_key": "089da16a6f3d4a9d2c1e1ccf4d9d18ca7d934c7e1ff4da284078f0b3853767f0",
+                "kind": "relationship",
+                "src_id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+                "dst_id": "010c1a6c1b75465d8e03da665f3a14f3",
+                "predicate": "uses",
+                "state": "held",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 1,
+                "conflicts": false,
+                "src_name": "Arduino",
+                "dst_name": "Pulse-Width Modulation",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "80d5d126ae4a4835aded17cafa3468a2",
+                    "source_hash": "12612c08c8d40708abac3c559a24758f3335960c5f71a6c91fb1d2b6cd2ccaa3",
+                    "start": 0,
+                    "end": 116,
+                    "quote": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                    "text": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "b3320353e04bf7223d33c123b3b4d0233219e8dc4bdc91724ed41c7c61a2d9ac",
+                "kind": "association",
+                "src_id": "010c1a6c1b75465d8e03da665f3a14f3",
+                "dst_id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+                "predicate": "related to",
+                "state": "weak",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "Pulse-Width Modulation",
+                "dst_name": "Arduino",
+                "directed": false,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "54b27aae9e8d46539bdbb33274bf7a9f",
+                    "source_hash": "3f8148574feba3b07e5ea0774efa0a7e5dd0867a0fa28626d539913be3660b35",
+                    "start": 0,
+                    "end": 89,
+                    "quote": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+                    "text": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "80d5d126ae4a4835aded17cafa3468a2",
+                    "source_hash": "12612c08c8d40708abac3c559a24758f3335960c5f71a6c91fb1d2b6cd2ccaa3",
+                    "start": 0,
+                    "end": 116,
+                    "quote": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                    "text": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              }
+            ],
+            "review_note": null,
+            "reviewed_by": null
+          }
+        ],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "54b27aae9e8d46539bdbb33274bf7a9f",
+              "kind": "note",
+              "question": null,
+              "body": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "2b144a2f878f43de98e7cccb1cfd7888",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:22:23.972791Z",
+              "updated_at": "2026-09-30T00:22:24.014712Z",
+              "concepts": [
+                {
+                  "id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+                  "name": "Arduino"
+                },
+                {
+                  "id": "010c1a6c1b75465d8e03da665f3a14f3",
+                  "name": "Pulse-Width Modulation"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "80d5d126ae4a4835aded17cafa3468a2",
+              "kind": "note",
+              "question": null,
+              "body": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "c60a0f6a651c45c3b1fc5a64107bad12",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:22:31.803231Z",
+              "updated_at": "2026-09-30T00:22:31.846434Z",
+              "concepts": [
+                {
+                  "id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+                  "name": "Arduino"
+                },
+                {
+                  "id": "010c1a6c1b75465d8e03da665f3a14f3",
+                  "name": "Pulse-Width Modulation"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Arduino": {
+            "query": "Arduino",
+            "terms": [
+              "arduino"
+            ],
+            "concepts": [
+              {
+                "id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+                "name": "Arduino"
+              }
+            ],
+            "items": [
+              {
+                "id": "54b27aae9e8d46539bdbb33274bf7a9f",
+                "kind": "note",
+                "question": null,
+                "body": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "2b144a2f878f43de98e7cccb1cfd7888",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:23.972791Z",
+                "updated_at": "2026-09-30T00:22:24.014712Z",
+                "type": "item",
+                "snippet": "The <mark>Arduino</mark> uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+                "coverage": 1.0,
+                "score": 0.30000106607929516
+              },
+              {
+                "id": "80d5d126ae4a4835aded17cafa3468a2",
+                "kind": "note",
+                "question": null,
+                "body": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "c60a0f6a651c45c3b1fc5a64107bad12",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:31.803231Z",
+                "updated_at": "2026-09-30T00:22:31.846434Z",
+                "type": "item",
+                "snippet": "On the demonstration board, <mark>Arduino</mark> uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                "coverage": 1.0,
+                "score": 0.30000094163424124
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "PWM": {
+            "query": "PWM",
+            "terms": [
+              "pwm"
+            ],
+            "concepts": [
+              {
+                "id": "010c1a6c1b75465d8e03da665f3a14f3",
+                "name": "Pulse-Width Modulation"
+              }
+            ],
+            "items": [
+              {
+                "id": "54b27aae9e8d46539bdbb33274bf7a9f",
+                "kind": "note",
+                "question": null,
+                "body": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "2b144a2f878f43de98e7cccb1cfd7888",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:23.972791Z",
+                "updated_at": "2026-09-30T00:22:24.014712Z",
+                "type": "item",
+                "snippet": "The Arduino uses <mark>Pulse-Width Modulation</mark> (<mark>PWM</mark>) for the dimmable indicator in my prototype.",
+                "coverage": 1.0,
+                "score": 0.3000021321585903
+              },
+              {
+                "id": "80d5d126ae4a4835aded17cafa3468a2",
+                "kind": "note",
+                "question": null,
+                "body": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "c60a0f6a651c45c3b1fc5a64107bad12",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:31.803231Z",
+                "updated_at": "2026-09-30T00:22:31.846434Z",
+                "type": "item",
+                "snippet": "On the demonstration board, Arduino uses <mark>Pulse-Width Modulation</mark> (<mark>PWM</mark>) to set the duty cycle of the indicator output.",
+                "coverage": 1.0,
+                "score": 0.3000018832684825
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Pulse-Width Modulation": {
+            "query": "Pulse-Width Modulation",
+            "terms": [
+              "pulse",
+              "width",
+              "modulation"
+            ],
+            "concepts": [
+              {
+                "id": "010c1a6c1b75465d8e03da665f3a14f3",
+                "name": "Pulse-Width Modulation"
+              }
+            ],
+            "items": [
+              {
+                "id": "54b27aae9e8d46539bdbb33274bf7a9f",
+                "kind": "note",
+                "question": null,
+                "body": "The Arduino uses Pulse-Width Modulation (PWM) for the dimmable indicator in my prototype.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "2b144a2f878f43de98e7cccb1cfd7888",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:23.972791Z",
+                "updated_at": "2026-09-30T00:22:24.014712Z",
+                "type": "item",
+                "snippet": "The Arduino uses <mark>Pulse-Width Modulation</mark> (<mark>PWM</mark>) for the dimmable indicator in my prototype.",
+                "coverage": 1.0,
+                "score": 0.3000021321585903
+              },
+              {
+                "id": "80d5d126ae4a4835aded17cafa3468a2",
+                "kind": "note",
+                "question": null,
+                "body": "On the demonstration board, Arduino uses Pulse-Width Modulation (PWM) to set the duty cycle of the indicator output.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "c60a0f6a651c45c3b1fc5a64107bad12",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:22:31.803231Z",
+                "updated_at": "2026-09-30T00:22:31.846434Z",
+                "type": "item",
+                "snippet": "On the demonstration board, Arduino uses <mark>Pulse-Width Modulation</mark> (<mark>PWM</mark>) to set the duty cycle of the indicator output.",
+                "coverage": 1.0,
+                "score": 0.3000018832684825
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 23,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "54b27aae9e8d46539bdbb33274bf7a9f",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "80d5d126ae4a4835aded17cafa3468a2",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Arduino",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "ad1dcbe029d746c9b8d3d46f070e6dc9",
+          "name": "Arduino",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Pulse-Width Modulation",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "010c1a6c1b75465d8e03da665f3a14f3",
+          "name": "Pulse-Width Modulation",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "Pulse-Width Modulation",
+        "alias": "PWM"
+      },
+      "expected_present": true,
+      "observed": [
+        {
+          "canonical": "Pulse-Width Modulation",
+          "canonical_id": "010c1a6c1b75465d8e03da665f3a14f3",
+          "alias": "PWM",
+          "public_search_confirmed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Arduino",
+        "predicate": "uses",
+        "tail": "Pulse-Width Modulation"
+      },
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Pulse-Width Modulation",
+        "predicate": "uses",
+        "tail": "Arduino"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 17.780423882999457,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3879436288,
+  "sampled_cpu_seconds": 35.19999999999999
+}

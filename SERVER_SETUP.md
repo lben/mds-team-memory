@@ -16,7 +16,7 @@ The web process and ML worker use nohup and keep running after logout.
 
 Your deploying PC needs Git, uv and internet access for uv's first installation
 of the pinned Paramiko client (or a pre-populated uv cache). No npm or Docker
-is needed for normal Update runs. Allow roughly 10 GiB free on the PC for the
+is needed for normal Update runs. Allow roughly 14 GiB free on the PC for the
 Git objects and checked-out assets. The Linux server needs RHEL 8.10 x86_64,
 SSH/SFTP, bash, tar, sha256sum, a writable local filesystem, and approximately
 14 GiB free for first-install staging, including the 2 GiB reserve. Permit the
@@ -306,12 +306,12 @@ the file used by backup and reset. The worker uses at most four CPUs from its
 allowed affinity, low scheduling priority and the existing 8 GiB process-tree
 RSS ceiling. RSS monitoring can briefly overshoot; it is not a hard kernel
 memory cap. Use an approved user-level cgroup if a hard quota is required.
-The September 29 four-model compatibility check used four CPUs and a 5 GiB
-hard container limit without swap. Historical three-model checks also used
-4 GiB limits. The earlier combined load check allowed eight CPUs for the web
-app, load driver and ML, while verifying that ML stayed within four CPUs;
-its total memory limit was 4 GiB. The new verifier package has not repeated
-that capacity benchmark. See `deployment/VERIFICATION.md` for current evidence.
+The current BGE branch uses three models in one inference child. BGE is shared
+between embeddings and concept relevance; Qwen and llama.cpp are removed from
+the delivered generation. Current compatibility checks use four CPUs and a
+5 GiB hard container limit without extra swap. Historical load results do not
+measure this branch. The current 50-client paired load check exceeded its write
+latency gate. See `deployment/BGE_VERIFICATION.md` for current evidence.
 These container measurements do not establish production
 Xeon throughput or host kernel and filesystem behavior.
 

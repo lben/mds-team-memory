@@ -1,0 +1,340 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "0a89e74f00fb45519b416b723e7c51ff",
+      "content_hash": "4ac3d7e0b8ba8420124a65b133a2cb10232847198a9e9cd10072c27651466f2d",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":6,\"label\":\"named entity\",\"name\":\"Docker\",\"score\":0.99610835313797,\"start\":0},{\"end\":17,\"label\":\"named entity\",\"name\":\"Linux\",\"score\":0.9803800582885742,\"start\":12}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"docker\":0.7355207204818726,\"linux\":0.641737699508667},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":58,\"head\":{\"end\":6,\"name\":\"Docker\",\"score\":0.8917579054832458,\"start\":0},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8917579054832458,\"start\":0,\"tail\":{\"end\":17,\"name\":\"Linux\",\"score\":0.8917579054832458,\"start\":12}},{\"end\":17,\"head\":{\"end\":6,\"name\":\"Docker\",\"score\":0.9354152083396912,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9354152083396912,\"start\":0,\"tail\":{\"end\":17,\"name\":\"Linux\",\"score\":0.9354152083396912,\"start\":12}},{\"end\":17,\"head\":{\"end\":6,\"name\":\"Docker\",\"score\":0.7162182331085205,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"replaces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7162182331085205,\"start\":0,\"tail\":{\"end\":17,\"name\":\"Linux\",\"score\":0.7162182331085205,\"start\":12}}],\"text_hash\":\"18786ca61a3bd54a8759cbff6a38396a7f6f499f3b872c33c1583173a0e6b9d2\"}",
+      "updated_at": "2026-09-30 00:21:42.357060"
+    },
+    {
+      "kind": "profile",
+      "id": "9414d58b66214d2cbb9e510c4d291fca",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:21:55.643009"
+    },
+    {
+      "kind": "item",
+      "id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+      "content_hash": "6b2087eefcfecee612bf9dd6d2d2d1c459f3e0f958633f2e2e8d033434fd7908",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":47,\"label\":\"named entity\",\"name\":\"Docker\",\"score\":0.9925317168235779,\"start\":41},{\"end\":58,\"label\":\"named entity\",\"name\":\"Linux\",\"score\":0.9774061441421509,\"start\":53}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"docker\":0.6678259372711182,\"linux\":0.645115852355957},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":58,\"head\":{\"end\":47,\"name\":\"Docker\",\"score\":0.9627920985221863,\"start\":41},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9627920985221863,\"start\":41,\"tail\":{\"end\":58,\"name\":\"Linux\",\"score\":0.9627920985221863,\"start\":53}},{\"end\":58,\"head\":{\"end\":47,\"name\":\"Docker\",\"score\":0.9602089524269104,\"start\":41},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9602089524269104,\"start\":41,\"tail\":{\"end\":58,\"name\":\"Linux\",\"score\":0.9602089524269104,\"start\":53}}],\"text_hash\":\"65569170f334f00ad09c84e6af55dd82feb28b8e5a568f0d10da9225af22fee3\"}",
+      "updated_at": "2026-09-30 00:21:48.792984"
+    },
+    {
+      "kind": "item",
+      "id": "3cb06fa103284f29a3d48f1f07b161ac",
+      "content_hash": "c623e1d3a13f556424c85115de1a85e5e44a2b0c5a66f26691b5659337684c0b",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":56,\"label\":\"named entity\",\"name\":\"Docker\",\"score\":0.993506908416748,\"start\":50},{\"end\":67,\"label\":\"named entity\",\"name\":\"Linux\",\"score\":0.9785041213035583,\"start\":62},{\"end\":96,\"label\":\"topic or process\",\"name\":\"container deployment\",\"score\":0.9124197363853455,\"start\":76}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"container deployment\":0.7145966291427612,\"docker\":0.7363244295120239,\"linux\":0.6375603675842285},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":97,\"head\":{\"end\":56,\"name\":\"Docker\",\"score\":0.9221612811088562,\"start\":50},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9221612811088562,\"start\":0,\"tail\":{\"end\":67,\"name\":\"Linux\",\"score\":0.9221612811088562,\"start\":62}},{\"end\":67,\"head\":{\"end\":56,\"name\":\"Docker\",\"score\":0.9298691153526306,\"start\":50},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.9298691153526306,\"start\":50,\"tail\":{\"end\":67,\"name\":\"Linux\",\"score\":0.9298691153526306,\"start\":62}},{\"end\":67,\"head\":{\"end\":56,\"name\":\"Docker\",\"score\":0.7650418877601624,\"start\":50},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"replaces\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7650418877601624,\"start\":50,\"tail\":{\"end\":67,\"name\":\"Linux\",\"score\":0.7650418877601624,\"start\":62}}],\"text_hash\":\"f875d1a189a04afbb1bf783e31a6472e96db3ee988a7f1679ade38c9dbcb27eb\"}",
+      "updated_at": "2026-09-30 00:21:55.418507"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "5c0244b28f6faafe2e07917234105a27a997cdb9c54ca7f0e22a2794f48debac",
+      "kind": "concept",
+      "payload": "{\"name\":\"Docker\"}",
+      "state": "active",
+      "score": 0.99610835313797,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "3eb42f9ac3194467b045434f8d49f5d2",
+      "created_at": "2026-09-30 00:21:42.055457",
+      "updated_at": "2026-09-30 00:21:55.516057"
+    },
+    {
+      "key": "5c6937c4250e1fedc6ef0125883e036319b7d8a1c1efa1347ca836b12cfaf652",
+      "kind": "concept",
+      "payload": "{\"name\":\"Linux\"}",
+      "state": "held",
+      "score": 0.9803800582885742,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:21:42.063112",
+      "updated_at": "2026-09-30 00:21:55.512246"
+    },
+    {
+      "key": "246722cbbf82876c316701f2652ebe68897bda730c9ab687e71974dd0fc4ce5b",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"3eb42f9ac3194467b045434f8d49f5d2\",\"source_id\":\"0a89e74f00fb45519b416b723e7c51ff\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.99610835313797,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "3eb42f9ac3194467b045434f8d49f5d2",
+      "created_at": "2026-09-30 00:21:42.091549",
+      "updated_at": "2026-09-30 00:21:42.397834"
+    },
+    {
+      "key": "6b571036a58cd3b924cf5647f22dca8ae49f93f05eb49a509d8b99609a16a1c7",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"3eb42f9ac3194467b045434f8d49f5d2\",\"source_id\":\"1ea35630e4ea4f1fa63b82de7559cf2c\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9925317168235779,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "3eb42f9ac3194467b045434f8d49f5d2",
+      "created_at": "2026-09-30 00:21:48.934325",
+      "updated_at": "2026-09-30 00:21:48.958698"
+    },
+    {
+      "key": "c1c0575af63a256917409c22dcafd743786a6929765ce41ab3244b7a3b50dcc6",
+      "kind": "concept",
+      "payload": "{\"name\":\"container deployment\"}",
+      "state": "held",
+      "score": 0.9124197363853455,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:21:55.441108",
+      "updated_at": "2026-09-30 00:21:55.510366"
+    },
+    {
+      "key": "09c74cf07363f22b6e7ad27165e80925d9f9a26bfb9795afd4756e1bb0cbbe22",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"3eb42f9ac3194467b045434f8d49f5d2\",\"source_id\":\"3cb06fa103284f29a3d48f1f07b161ac\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.993506908416748,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "3eb42f9ac3194467b045434f8d49f5d2",
+      "created_at": "2026-09-30 00:21:55.467804",
+      "updated_at": "2026-09-30 00:21:55.514228"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "97cab05dd4124d4ab06ccbbd65a50ad95714813097887bbebe9829b152965138",
+      "finding_key": "5c0244b28f6faafe2e07917234105a27a997cdb9c54ca7f0e22a2794f48debac",
+      "source_kind": "item",
+      "source_id": "0a89e74f00fb45519b416b723e7c51ff",
+      "source_hash": "4ac3d7e0b8ba8420124a65b133a2cb10232847198a9e9cd10072c27651466f2d",
+      "group_key": "item:0a89e74f00fb45519b416b723e7c51ff",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 0,
+      "end": 6,
+      "raw_score": 0.99610835313797,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7355207204818726,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"614709d9f648d90fd49e9fdd5c008a9f841aec92988a24dafce45aa525f78a7c\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "9fe5feca2628320cb2e6b9e3884ddd3c1898c012836f9244a1595a9df85f7cd1",
+      "finding_key": "5c6937c4250e1fedc6ef0125883e036319b7d8a1c1efa1347ca836b12cfaf652",
+      "source_kind": "item",
+      "source_id": "0a89e74f00fb45519b416b723e7c51ff",
+      "source_hash": "4ac3d7e0b8ba8420124a65b133a2cb10232847198a9e9cd10072c27651466f2d",
+      "group_key": "item:0a89e74f00fb45519b416b723e7c51ff",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 12,
+      "end": 17,
+      "raw_score": 0.9803800582885742,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.641737699508667,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"614709d9f648d90fd49e9fdd5c008a9f841aec92988a24dafce45aa525f78a7c\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "2ccc0944f481389ca9223fb6b2e877483c1a133cba1a1b036dca1d97f7380f73",
+      "finding_key": "246722cbbf82876c316701f2652ebe68897bda730c9ab687e71974dd0fc4ce5b",
+      "source_kind": "item",
+      "source_id": "0a89e74f00fb45519b416b723e7c51ff",
+      "source_hash": "4ac3d7e0b8ba8420124a65b133a2cb10232847198a9e9cd10072c27651466f2d",
+      "group_key": "item:0a89e74f00fb45519b416b723e7c51ff",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 0,
+      "end": 6,
+      "raw_score": 0.99610835313797,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"614709d9f648d90fd49e9fdd5c008a9f841aec92988a24dafce45aa525f78a7c\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "dbf075933b48af168d957482896dbd063c9ea36131c07ced50317a977bf5768c",
+      "finding_key": "5c0244b28f6faafe2e07917234105a27a997cdb9c54ca7f0e22a2794f48debac",
+      "source_kind": "item",
+      "source_id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+      "source_hash": "6b2087eefcfecee612bf9dd6d2d2d1c459f3e0f958633f2e2e8d033434fd7908",
+      "group_key": "item:1ea35630e4ea4f1fa63b82de7559cf2c",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 41,
+      "end": 47,
+      "raw_score": 0.9925317168235779,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6678259372711182,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"ff3638019d864ed44ffb3b1eec5514f315fef4e493b718400fa17a0a4b3816aa\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "d200393edbe19c9da4d8bbe96e8be61fdb57aceebb81b9f5b7432a5c6e6b4085",
+      "finding_key": "5c6937c4250e1fedc6ef0125883e036319b7d8a1c1efa1347ca836b12cfaf652",
+      "source_kind": "item",
+      "source_id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+      "source_hash": "6b2087eefcfecee612bf9dd6d2d2d1c459f3e0f958633f2e2e8d033434fd7908",
+      "group_key": "item:1ea35630e4ea4f1fa63b82de7559cf2c",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 53,
+      "end": 58,
+      "raw_score": 0.9774061441421509,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.645115852355957,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"ff3638019d864ed44ffb3b1eec5514f315fef4e493b718400fa17a0a4b3816aa\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "aa176f114d23f80f43291046e1d5577c42ac511b0f3482dd0b01d7ef3bed682a",
+      "finding_key": "6b571036a58cd3b924cf5647f22dca8ae49f93f05eb49a509d8b99609a16a1c7",
+      "source_kind": "item",
+      "source_id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+      "source_hash": "6b2087eefcfecee612bf9dd6d2d2d1c459f3e0f958633f2e2e8d033434fd7908",
+      "group_key": "item:1ea35630e4ea4f1fa63b82de7559cf2c",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 41,
+      "end": 47,
+      "raw_score": 0.9925317168235779,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"ff3638019d864ed44ffb3b1eec5514f315fef4e493b718400fa17a0a4b3816aa\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "bda93253c458989a3a1709601a8e88c8ddf6686eb3895502adb7d0c84a300f77",
+      "finding_key": "5c0244b28f6faafe2e07917234105a27a997cdb9c54ca7f0e22a2794f48debac",
+      "source_kind": "item",
+      "source_id": "3cb06fa103284f29a3d48f1f07b161ac",
+      "source_hash": "c623e1d3a13f556424c85115de1a85e5e44a2b0c5a66f26691b5659337684c0b",
+      "group_key": "item:3cb06fa103284f29a3d48f1f07b161ac",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 50,
+      "end": 56,
+      "raw_score": 0.993506908416748,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7363244295120239,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"ba69e3a505deae30fde28882fb3b569acb691f050935335e5c14d1d218eb3b1f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "f036b891cd0559f16a585e6babab2cfe3400469171095d50ee067b692c1cadbe",
+      "finding_key": "5c6937c4250e1fedc6ef0125883e036319b7d8a1c1efa1347ca836b12cfaf652",
+      "source_kind": "item",
+      "source_id": "3cb06fa103284f29a3d48f1f07b161ac",
+      "source_hash": "c623e1d3a13f556424c85115de1a85e5e44a2b0c5a66f26691b5659337684c0b",
+      "group_key": "item:3cb06fa103284f29a3d48f1f07b161ac",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 62,
+      "end": 67,
+      "raw_score": 0.9785041213035583,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6375603675842285,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"ba69e3a505deae30fde28882fb3b569acb691f050935335e5c14d1d218eb3b1f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "3609b8eef8e357eaef411508e77279b40302788a46a4325a23287ba3e5954045",
+      "finding_key": "c1c0575af63a256917409c22dcafd743786a6929765ce41ab3244b7a3b50dcc6",
+      "source_kind": "item",
+      "source_id": "3cb06fa103284f29a3d48f1f07b161ac",
+      "source_hash": "c623e1d3a13f556424c85115de1a85e5e44a2b0c5a66f26691b5659337684c0b",
+      "group_key": "item:3cb06fa103284f29a3d48f1f07b161ac",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 76,
+      "end": 96,
+      "raw_score": 0.9124197363853455,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7145966291427612,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"ba69e3a505deae30fde28882fb3b569acb691f050935335e5c14d1d218eb3b1f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "07f945b4586a2dcef61b7d58168fc7567cb2216a42c01795b6157a371f27016b",
+      "finding_key": "09c74cf07363f22b6e7ad27165e80925d9f9a26bfb9795afd4756e1bb0cbbe22",
+      "source_kind": "item",
+      "source_id": "3cb06fa103284f29a3d48f1f07b161ac",
+      "source_hash": "c623e1d3a13f556424c85115de1a85e5e44a2b0c5a66f26691b5659337684c0b",
+      "group_key": "item:3cb06fa103284f29a3d48f1f07b161ac",
+      "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+      "start": 50,
+      "end": 56,
+      "raw_score": 0.993506908416748,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"ba69e3a505deae30fde28882fb3b569acb691f050935335e5c14d1d218eb3b1f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:21:35.439258"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 16,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 18432,
+      "evidence_bytes": 29107,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "d0756981e03eb3eb8e351c22b7d4431357c46b27b7e27fb63f83c0c255c4c9f1",
+      "source_kind": "item",
+      "source_id": "0a89e74f00fb45519b416b723e7c51ff",
+      "source_hash": "4ac3d7e0b8ba8420124a65b133a2cb10232847198a9e9cd10072c27651466f2d",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 58,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "d54614954ce4a712a3bfcec6f8f55c83df97030117b03b729b0237c6d9e29495",
+      "source_kind": "item",
+      "source_id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+      "source_hash": "6b2087eefcfecee612bf9dd6d2d2d1c459f3e0f958633f2e2e8d033434fd7908",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 72,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "f476dca01072bf97af3e0bdebc1a3546f80d2337989b2eb3c97807e746f736cd",
+      "source_kind": "item",
+      "source_id": "3cb06fa103284f29a3d48f1f07b161ac",
+      "source_hash": "c623e1d3a13f556424c85115de1a85e5e44a2b0c5a66f26691b5659337684c0b",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 97,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

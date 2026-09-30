@@ -1,0 +1,76 @@
+Checking local model parts and deployment package...
+Updating UAT at mds@127.0.0.1:/home/mds/mds-uat
+Checking server utilities and bootstrap space...
+/usr/bin/tar
+/usr/bin/sha256sum
+Checking python and uv...
+3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ] SQLite 3.53.1
+Checking uv...
+uv 0.12.10 (x86_64-unknown-linux-musl)
+Deploying release 20260930-003028-945282 to uat (mds@127.0.0.1:/home/mds/mds-uat)
+Assembling release in /Users/bleon/ClaudeCodexWorkspace/WorkKnowledgeBase/mds-team-memory/build/release...
+Uploading to mds@127.0.0.1:/home/mds/mds-uat...
+unpacked 20260930-003028-945282
+Server already has this verified model generation; no model upload needed.
+Using CPython 3.12.14 interpreter at: /home/mds/mds-uat/ml/bootstrap/44d6873c714fd5b04083620fdff883c5be9800b647525df3b6f4c3816ffe06ea/python/bin/python3.12
+Creating virtual environment at: .venv
+Activate with: source .venv/bin/activate
+Resolved 28 packages in 92ms
+Prepared 28 packages in 219ms
+Installed 28 packages in 91ms
+ + alembic==1.19.1
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + click==8.5.0
+ + fastapi==0.141.1
+ + greenlet==3.5.5
+ + h11==0.16.0
+ + httptools==0.8.0
+ + idna==3.19
+ + lxml==6.1.3
+ + mako==1.4.1
+ + markupsafe==3.0.3
+ + pydantic==2.13.4
+ + pydantic-core==2.46.4
+ + pypdf==6.16.2
+ + python-docx==1.2.0
+ + python-dotenv==1.2.3
+ + python-multipart==0.0.32
+ + pyyaml==6.0.3
+ + sqlalchemy==2.0.52
+ + starlette==1.6.0
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + uvicorn==0.52.4
+ + uvloop==0.22.1
+ + watchfiles==1.2.0
+ + websockets==17.1
+Offline ML imports: OK
+Separate offline web and ML environments ready
+database is compatible with 20260930-003028-945282
+ML: stopped (pid 671)
+stopped (pid 639)
+ML: stopped
+database backed up to /home/mds/mds-uat/backups/20260930-003028-945282
+ML: stopped
+migrated to the schema of 20260930-003028-945282
+ML: stopped
+current -> 20260930-003028-945282
+started 20260930-003028-945282 on 0.0.0.0:8000 (pid 1532)
+ML: started for 20260930-003028-945282 (pid 1564)
+release is ready: web health and configured ML worker verified
+
+Deployed 20260930-003028-945282 to uat.
+release: 20260930-003028-945282
+rollback target: 20260930-000700-468391
+process: running (pid 1532)
+health: ok on http://127.0.0.1:8000/api/health
+data: /home/mds/mds-uat/data
+ML: running (pid 1564)
+{"backfill_kind": null, "cpu_limit": 4, "database": "/home/mds/mds-uat/data/mds.sqlite3", "failed": 0, "memory_limit_bytes": 5368709120, "oldest_at": null, "pending": 0, "revision": 2, "status": "idle", "worker_active": true, "worker_lease_until": 1790728403.5216615}
+
+If this is the first deploy, create the first administrator:
+  ssh -p 22295 -t mds@127.0.0.1 bash /home/mds/mds-uat/mdsctl.sh manage create-admin
+Web server and ML worker are running. Open http://127.0.0.1:8000
+PASSWORD_PROMPT_COUNT 1

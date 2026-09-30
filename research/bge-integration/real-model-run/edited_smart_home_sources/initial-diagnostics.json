@@ -1,0 +1,326 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "content_hash": "d0a8e2a8c4aa2bde6626170df62221a65647390c4e2c13eaf20129f572376739",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":26,\"label\":\"named entity\",\"name\":\"Zigbee\",\"score\":0.9836565256118774,\"start\":20},{\"end\":14,\"label\":\"named entity\",\"name\":\"Home Assistant\",\"score\":0.9314849376678467,\"start\":0},{\"end\":43,\"label\":\"topic or process\",\"name\":\"workshop\",\"score\":0.7043412327766418,\"start\":35},{\"end\":63,\"label\":\"relation endpoint\",\"name\":\"workshop temperature sensors\",\"score\":0.5451347231864929,\"start\":35}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"home assistant\":0.7116906642913818,\"workshop\":0.5554605722427368,\"workshop temperature sensors\":0.7454770803451538,\"zigbee\":0.7570646405220032},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":64,\"head\":{\"end\":14,\"name\":\"Home Assistant\",\"score\":0.7008233070373535,\"start\":0},\"literal_support\":true,\"polarity\":\"positive\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7008233070373535,\"start\":0,\"tail\":{\"end\":26,\"name\":\"Zigbee\",\"score\":0.7008233070373535,\"start\":20}},{\"end\":63,\"head\":{\"end\":14,\"name\":\"Home Assistant\",\"score\":0.5451347231864929,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5451347231864929,\"start\":0,\"tail\":{\"end\":63,\"name\":\"workshop temperature sensors\",\"score\":0.5451347231864929,\"start\":35}},{\"end\":26,\"head\":{\"end\":14,\"name\":\"Home Assistant\",\"score\":0.6197812557220459,\"start\":0},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.6197812557220459,\"start\":0,\"tail\":{\"end\":26,\"name\":\"Zigbee\",\"score\":0.6197812557220459,\"start\":20}},{\"end\":26,\"head\":{\"end\":26,\"name\":\"Zigbee\",\"score\":0.6306182742118835,\"start\":20},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"part_of\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.6306182742118835,\"start\":0,\"tail\":{\"end\":14,\"name\":\"Home Assistant\",\"score\":0.6306182742118835,\"start\":0}}],\"text_hash\":\"fa6e96a388497c9a41e4ff32985c3e6eebd657a357402d78f07eb8f206cb933e\"}",
+      "updated_at": "2026-09-30 00:24:37.415970"
+    },
+    {
+      "kind": "profile",
+      "id": "69ff6b488f69458b9879e8ed0afe6b5f",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:24:37.641902"
+    },
+    {
+      "kind": "profile",
+      "id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:24:37.729065"
+    },
+    {
+      "kind": "item",
+      "id": "4cd8f09c0183448f8982562a887812d9",
+      "content_hash": "588d385a7b11380a055eaf7239d578b898055a1ac5d28043b420a8eb2f10f58d",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":65,\"label\":\"named entity\",\"name\":\"Zigbee\",\"score\":0.9893332123756409,\"start\":59},{\"end\":53,\"label\":\"named entity\",\"name\":\"Home Assistant\",\"score\":0.9887048602104187,\"start\":39},{\"end\":88,\"label\":\"topic or process\",\"name\":\"workshop telemetry\",\"score\":0.991912841796875,\"start\":70}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"home assistant\":0.623978316783905,\"workshop telemetry\":0.6564017534255981,\"zigbee\":0.6846367120742798},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[{\"end\":65,\"head\":{\"end\":53,\"name\":\"Home Assistant\",\"score\":0.8147469162940979,\"start\":39},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.8147469162940979,\"start\":39,\"tail\":{\"end\":65,\"name\":\"Zigbee\",\"score\":0.8147469162940979,\"start\":59}},{\"end\":88,\"head\":{\"end\":53,\"name\":\"Home Assistant\",\"score\":0.5745362639427185,\"start\":39},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"uses\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5745362639427185,\"start\":39,\"tail\":{\"end\":88,\"name\":\"workshop telemetry\",\"score\":0.5745362639427185,\"start\":70}},{\"end\":65,\"head\":{\"end\":53,\"name\":\"Home Assistant\",\"score\":0.7586250901222229,\"start\":39},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.7586250901222229,\"start\":39,\"tail\":{\"end\":65,\"name\":\"Zigbee\",\"score\":0.7586250901222229,\"start\":59}},{\"end\":88,\"head\":{\"end\":53,\"name\":\"Home Assistant\",\"score\":0.5218313336372375,\"start\":39},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"depends_on\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.5218313336372375,\"start\":39,\"tail\":{\"end\":88,\"name\":\"workshop telemetry\",\"score\":0.5218313336372375,\"start\":70}},{\"end\":65,\"head\":{\"end\":65,\"name\":\"Zigbee\",\"score\":0.6054454445838928,\"start\":59},\"literal_support\":false,\"polarity\":\"uncertain\",\"predicate\":\"part_of\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"score\":0.6054454445838928,\"start\":39,\"tail\":{\"end\":53,\"name\":\"Home Assistant\",\"score\":0.6054454445838928,\"start\":39}}],\"text_hash\":\"def5620b3f4da859d89c6b8d4431748c8a50eae86b2a2ee16b22fd7e032c44a0\"}",
+      "updated_at": "2026-09-30 00:24:37.226672"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "c2ac034615559dec12c62de83d97e4e8136c38e9b709e2385e4e18ef7b181bb3",
+      "kind": "concept",
+      "payload": "{\"name\":\"Zigbee\"}",
+      "state": "active",
+      "score": 0.9893332123756409,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "bf462f1fc0824bdab0cf6dfe04d7064a",
+      "created_at": "2026-09-30 00:24:30.363876",
+      "updated_at": "2026-09-30 00:24:37.480425"
+    },
+    {
+      "key": "78d215b55d418c7df4c57e9b38c5a628e55f2c3a97ab9ae192412933ecc59101",
+      "kind": "concept",
+      "payload": "{\"name\":\"Home Assistant\"}",
+      "state": "held",
+      "score": 0.9887048602104187,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:30.370584",
+      "updated_at": "2026-09-30 00:24:37.483379"
+    },
+    {
+      "key": "90f1deedf7a049c9cfa22e6b67a1811a8c7837a6158d181382ed8e1c0aee85f2",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop\"}",
+      "state": "held",
+      "score": 0.7043412327766418,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:30.377721",
+      "updated_at": "2026-09-30 00:24:37.475580"
+    },
+    {
+      "key": "fa9b15642e2e603f6fb6c9f8a09cb6f836bd9517d7e084a3b505bd693c118e95",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop temperature sensors\"}",
+      "state": "held",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:30.381871",
+      "updated_at": "2026-09-30 00:24:37.478355"
+    },
+    {
+      "key": "9b43a76153fac96311cb9e77e3b6ba12bed112f64ba2180b49eb8256a8427e92",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop telemetry\"}",
+      "state": "held",
+      "score": 0.991912841796875,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:36.971258",
+      "updated_at": "2026-09-30 00:24:37.285996"
+    },
+    {
+      "key": "47a93216e4ddbb814645942344efe52e448c1ed5b5e810f6b0eff356b5424a7c",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"bf462f1fc0824bdab0cf6dfe04d7064a\",\"source_id\":\"4cd8f09c0183448f8982562a887812d9\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9893332123756409,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "bf462f1fc0824bdab0cf6dfe04d7064a",
+      "created_at": "2026-09-30 00:24:37.001500",
+      "updated_at": "2026-09-30 00:24:37.295335"
+    },
+    {
+      "key": "aa6e35cf6d0d2d55fe112709f628cde8dc41965fcc84b6d10c007e40c18050a2",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"bf462f1fc0824bdab0cf6dfe04d7064a\",\"source_id\":\"fd2eb6d4464743b6b0e7e9bee4cbd7b4\",\"source_kind\":\"item\"}",
+      "state": "held",
+      "score": 0.9836565256118774,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "bf462f1fc0824bdab0cf6dfe04d7064a",
+      "created_at": "2026-09-30 00:24:37.454062",
+      "updated_at": "2026-09-30 00:24:37.485440"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "e55e9c35d1e746fc2c9172b5b0e0f270a14326a33f7a0eb4a7a494bc1f774688",
+      "finding_key": "c2ac034615559dec12c62de83d97e4e8136c38e9b709e2385e4e18ef7b181bb3",
+      "source_kind": "item",
+      "source_id": "4cd8f09c0183448f8982562a887812d9",
+      "source_hash": "588d385a7b11380a055eaf7239d578b898055a1ac5d28043b420a8eb2f10f58d",
+      "group_key": "item:4cd8f09c0183448f8982562a887812d9",
+      "author_id": "69ff6b488f69458b9879e8ed0afe6b5f",
+      "start": 59,
+      "end": 65,
+      "raw_score": 0.9893332123756409,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6846367120742798,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"aeef7cded6bec0454b33afc626d5d99b7d3a476f46831588a030723b21140053\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "3bed708ad24afc92daaa295e0e3845fea702d69a9b5b9f78a86c9e7142e3b2f5",
+      "finding_key": "78d215b55d418c7df4c57e9b38c5a628e55f2c3a97ab9ae192412933ecc59101",
+      "source_kind": "item",
+      "source_id": "4cd8f09c0183448f8982562a887812d9",
+      "source_hash": "588d385a7b11380a055eaf7239d578b898055a1ac5d28043b420a8eb2f10f58d",
+      "group_key": "item:4cd8f09c0183448f8982562a887812d9",
+      "author_id": "69ff6b488f69458b9879e8ed0afe6b5f",
+      "start": 39,
+      "end": 53,
+      "raw_score": 0.9887048602104187,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.623978316783905,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"aeef7cded6bec0454b33afc626d5d99b7d3a476f46831588a030723b21140053\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "0356f50e3a0f1a153c8b5e6c4c4100774a1eda43358b941d902ba42360f62ee4",
+      "finding_key": "9b43a76153fac96311cb9e77e3b6ba12bed112f64ba2180b49eb8256a8427e92",
+      "source_kind": "item",
+      "source_id": "4cd8f09c0183448f8982562a887812d9",
+      "source_hash": "588d385a7b11380a055eaf7239d578b898055a1ac5d28043b420a8eb2f10f58d",
+      "group_key": "item:4cd8f09c0183448f8982562a887812d9",
+      "author_id": "69ff6b488f69458b9879e8ed0afe6b5f",
+      "start": 70,
+      "end": 88,
+      "raw_score": 0.991912841796875,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6564017534255981,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"aeef7cded6bec0454b33afc626d5d99b7d3a476f46831588a030723b21140053\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "65cb895b28a21131bd13855cc08f39b9c7f317500ff21f28ff3b8bd881dca1be",
+      "finding_key": "47a93216e4ddbb814645942344efe52e448c1ed5b5e810f6b0eff356b5424a7c",
+      "source_kind": "item",
+      "source_id": "4cd8f09c0183448f8982562a887812d9",
+      "source_hash": "588d385a7b11380a055eaf7239d578b898055a1ac5d28043b420a8eb2f10f58d",
+      "group_key": "item:4cd8f09c0183448f8982562a887812d9",
+      "author_id": "69ff6b488f69458b9879e8ed0afe6b5f",
+      "start": 59,
+      "end": 65,
+      "raw_score": 0.9893332123756409,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"aeef7cded6bec0454b33afc626d5d99b7d3a476f46831588a030723b21140053\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "875d32530d4503872c9993f38d08e77b52278df0c3c76d42c3b7a37fd3c9dd68",
+      "finding_key": "c2ac034615559dec12c62de83d97e4e8136c38e9b709e2385e4e18ef7b181bb3",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "d0a8e2a8c4aa2bde6626170df62221a65647390c4e2c13eaf20129f572376739",
+      "group_key": "item:fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "author_id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "start": 20,
+      "end": 26,
+      "raw_score": 0.9836565256118774,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7570646405220032,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"03c40004ba9ca880388ccd572be8d695aea0bf113377e491f12a08227bcbc7a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "9bff3caa59289923c0ff8fb47e33a8c01b7804502ad1a64351f36f9510a86254",
+      "finding_key": "78d215b55d418c7df4c57e9b38c5a628e55f2c3a97ab9ae192412933ecc59101",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "d0a8e2a8c4aa2bde6626170df62221a65647390c4e2c13eaf20129f572376739",
+      "group_key": "item:fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "author_id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "start": 0,
+      "end": 14,
+      "raw_score": 0.9314849376678467,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7116906642913818,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"03c40004ba9ca880388ccd572be8d695aea0bf113377e491f12a08227bcbc7a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "15a7e96d76c97ed3d7feb497dd638e9bdfcf79b1ff2613bd437b6efe6c8df78a",
+      "finding_key": "90f1deedf7a049c9cfa22e6b67a1811a8c7837a6158d181382ed8e1c0aee85f2",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "d0a8e2a8c4aa2bde6626170df62221a65647390c4e2c13eaf20129f572376739",
+      "group_key": "item:fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "author_id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "start": 35,
+      "end": 43,
+      "raw_score": 0.7043412327766418,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5554605722427368,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"03c40004ba9ca880388ccd572be8d695aea0bf113377e491f12a08227bcbc7a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "72eb5e004b1f00f24ca8d1dffafde3b1b3564f16726da40a214e0a683271350b",
+      "finding_key": "fa9b15642e2e603f6fb6c9f8a09cb6f836bd9517d7e084a3b505bd693c118e95",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "d0a8e2a8c4aa2bde6626170df62221a65647390c4e2c13eaf20129f572376739",
+      "group_key": "item:fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "author_id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "start": 35,
+      "end": 63,
+      "raw_score": 0.5451347231864929,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7454770803451538,\"grounded\":true,\"label\":\"relation endpoint\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"03c40004ba9ca880388ccd572be8d695aea0bf113377e491f12a08227bcbc7a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "6d957a8c185b1d07516dcb19ebfa70ef1bc233d526752dc0f7f977e16198caba",
+      "finding_key": "aa6e35cf6d0d2d55fe112709f628cde8dc41965fcc84b6d10c007e40c18050a2",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "d0a8e2a8c4aa2bde6626170df62221a65647390c4e2c13eaf20129f572376739",
+      "group_key": "item:fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "author_id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "start": 20,
+      "end": 26,
+      "raw_score": 0.9836565256118774,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"03c40004ba9ca880388ccd572be8d695aea0bf113377e491f12a08227bcbc7a1\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:24:24.509070"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 22,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 29792,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "168fe570562a00f14b87d73f05a6e95e60a7b0ae65e5e13c108fb86a0182c59e",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "d0a8e2a8c4aa2bde6626170df62221a65647390c4e2c13eaf20129f572376739",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 64,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "789b12ae94f751380fcaf0f48b17ae82a4ab8fdb07badf820794b10114e55f0b",
+      "source_kind": "item",
+      "source_id": "4cd8f09c0183448f8982562a887812d9",
+      "source_hash": "588d385a7b11380a055eaf7239d578b898055a1ac5d28043b420a8eb2f10f58d",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 89,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

@@ -1,0 +1,388 @@
+{
+  "ml_sources": [
+    {
+      "kind": "profile",
+      "id": "c0ea9b2e8af34905b7317c38c1e8a629",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:22:14.830141"
+    },
+    {
+      "kind": "item",
+      "id": "9ccce753734d460f971035fb5c892f3b",
+      "content_hash": "d38f6efb3370ef347646a06869a7b65946111307b964fed9bf4746be4b2d318f",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":11,\"label\":\"named entity\",\"name\":\"Arduino\",\"score\":0.9964888095855713,\"start\":4},{\"end\":39,\"label\":\"topic or process\",\"name\":\"Pulse-Width Modulation\",\"score\":0.8887611031532288,\"start\":17},{\"end\":44,\"label\":\"topic or process\",\"name\":\"PWM\",\"score\":0.6486127972602844,\"start\":41}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[{\"full_name\":{\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"rule\":\"parenthetical_compact_name\",\"short_name\":{\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\"}],\"corroborated_definitions\":[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.9932523369789124,\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"short_name\":{\"confidence\":0.9883561730384827,\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_compact_name\"]}],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"arduino\":0.7054978013038635,\"pulse-width modulation\":0.7459573149681091,\"pwm\":0.7665079832077026},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\"}",
+      "updated_at": "2026-09-30 00:22:14.310703"
+    },
+    {
+      "kind": "profile",
+      "id": "2d3b6580711642cd87f0cb113e05dd7c",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:22:22.582418"
+    },
+    {
+      "kind": "profile",
+      "id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:22:15.003421"
+    },
+    {
+      "kind": "item",
+      "id": "f638c661147e4a409f98910f10beaa66",
+      "content_hash": "eeb268a1219502c85384b7c393e7dd1fa244fa5817afd03c51641db19679be4e",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":11,\"label\":\"named entity\",\"name\":\"Arduino\",\"score\":0.9964888095855713,\"start\":4},{\"end\":39,\"label\":\"topic or process\",\"name\":\"Pulse-Width Modulation\",\"score\":0.8887611031532288,\"start\":17},{\"end\":44,\"label\":\"topic or process\",\"name\":\"PWM\",\"score\":0.6486127972602844,\"start\":41}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[{\"full_name\":{\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"rule\":\"parenthetical_compact_name\",\"short_name\":{\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\"}],\"corroborated_definitions\":[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.9932523369789124,\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"short_name\":{\"confidence\":0.9883561730384827,\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_compact_name\"]}],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"arduino\":0.7054978013038635,\"pulse-width modulation\":0.7459573149681091,\"pwm\":0.7665079832077026},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\"}",
+      "updated_at": "2026-09-30 00:22:14.503014"
+    },
+    {
+      "kind": "item",
+      "id": "3fa2e24615f84a63ae555ec51316cff1",
+      "content_hash": "e6e4ef79bb12847b9e2591d56da8d6f33e8716ef8b07a74256d8243ccb598f3f",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":11,\"label\":\"named entity\",\"name\":\"Arduino\",\"score\":0.9964888095855713,\"start\":4},{\"end\":39,\"label\":\"topic or process\",\"name\":\"Pulse-Width Modulation\",\"score\":0.8887611031532288,\"start\":17},{\"end\":44,\"label\":\"topic or process\",\"name\":\"PWM\",\"score\":0.6486127972602844,\"start\":41}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[{\"full_name\":{\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"rule\":\"parenthetical_compact_name\",\"short_name\":{\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\"}],\"corroborated_definitions\":[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.9932523369789124,\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"short_name\":{\"confidence\":0.9883561730384827,\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_compact_name\"]}],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"arduino\":0.7054978013038635,\"pulse-width modulation\":0.7459573149681091,\"pwm\":0.7665079832077026},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\"}",
+      "updated_at": "2026-09-30 00:22:22.304803"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "95163ccb30b623b78bd05942a6496f7a2637aa8575cca65c9c6370b52e3f6273",
+      "kind": "concept",
+      "payload": "{\"name\":\"Pulse-Width Modulation\"}",
+      "state": "held",
+      "score": 0.8887611031532288,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:22:05.571194",
+      "updated_at": "2026-09-30 00:22:22.432493"
+    },
+    {
+      "key": "ed44717017ba4b628068d720f929b5d76f74da98fe037e4587f75243a3a9ead6",
+      "kind": "alias_definition",
+      "payload": "{\"alias_key\":\"pwm\",\"concept_key\":\"95163ccb30b623b78bd05942a6496f7a2637aa8575cca65c9c6370b52e3f6273\",\"full_key\":\"pulse-width modulation\",\"name\":\"Pulse-Width Modulation\",\"routing_signature\":\"a6b32d8aef302b0886ecaaea5f4941ab2c597320a51a340c8616eef57509a871\"}",
+      "state": "stale",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:22:05.575702",
+      "updated_at": "2026-09-30 00:22:05.575708"
+    },
+    {
+      "key": "f4433a6caf012ed12bc245aa1208377d5b4b088fd5df8a2f1f23e448da943934",
+      "kind": "concept",
+      "payload": "{\"name\":\"Arduino\"}",
+      "state": "active",
+      "score": 0.9964888095855713,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+      "created_at": "2026-09-30 00:22:05.585250",
+      "updated_at": "2026-09-30 00:22:22.428904"
+    },
+    {
+      "key": "29dafc23c1fd3ae55ef0825da7b867de431a53192fdaeb58d4dd59972a43140a",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"5a1aa6b4c8b74ad8ac55b51a890e33a4\",\"source_id\":\"9ccce753734d460f971035fb5c892f3b\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9964888095855713,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+      "created_at": "2026-09-30 00:22:05.634495",
+      "updated_at": "2026-09-30 00:22:14.379265"
+    },
+    {
+      "key": "8fac92b8110828020d78929abb061afad03708e14c5360602b950d3144d7bf8d",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"5a1aa6b4c8b74ad8ac55b51a890e33a4\",\"source_id\":\"f638c661147e4a409f98910f10beaa66\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9964888095855713,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+      "created_at": "2026-09-30 00:22:14.021434",
+      "updated_at": "2026-09-30 00:22:14.582299"
+    },
+    {
+      "key": "a81244adda6eeb9059af6a520d0ab40da08d86622f26811546eb488bbb832f2a",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"5a1aa6b4c8b74ad8ac55b51a890e33a4\",\"source_id\":\"3fa2e24615f84a63ae555ec51316cff1\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9964888095855713,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "5a1aa6b4c8b74ad8ac55b51a890e33a4",
+      "created_at": "2026-09-30 00:22:22.380600",
+      "updated_at": "2026-09-30 00:22:22.434271"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "2d085bdc36268e809987ca876fa7e264b72317f404463d0dd577ab8b689d3112",
+      "finding_key": "ed44717017ba4b628068d720f929b5d76f74da98fe037e4587f75243a3a9ead6",
+      "source_kind": "item",
+      "source_id": "9ccce753734d460f971035fb5c892f3b",
+      "source_hash": "d38f6efb3370ef347646a06869a7b65946111307b964fed9bf4746be4b2d318f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+      "start": 17,
+      "end": 44,
+      "raw_score": 0.9883561730384827,
+      "polarity": "positive",
+      "features": "{\"assertion_allowed\":true,\"definition_methods\":[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.9932523369789124,\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"origin\":\"syntax_and_alias_role_record\",\"short_name\":{\"confidence\":0.9883561730384827,\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_compact_name\"]}],\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "608ae168a1ccde86909fef2e9d34e86f002f9c9ea53e8837f8d9f1283249f3dc",
+      "finding_key": "f4433a6caf012ed12bc245aa1208377d5b4b088fd5df8a2f1f23e448da943934",
+      "source_kind": "item",
+      "source_id": "9ccce753734d460f971035fb5c892f3b",
+      "source_hash": "d38f6efb3370ef347646a06869a7b65946111307b964fed9bf4746be4b2d318f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+      "start": 4,
+      "end": 11,
+      "raw_score": 0.9964888095855713,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7054978013038635,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "4b312fd69271ed5d812bb3398dbde49f5876491fe009fdcb8afc4db670ac402a",
+      "finding_key": "95163ccb30b623b78bd05942a6496f7a2637aa8575cca65c9c6370b52e3f6273",
+      "source_kind": "item",
+      "source_id": "9ccce753734d460f971035fb5c892f3b",
+      "source_hash": "d38f6efb3370ef347646a06869a7b65946111307b964fed9bf4746be4b2d318f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+      "start": 17,
+      "end": 39,
+      "raw_score": 0.8887611031532288,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7459573149681091,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "6b807a186f01e2a0e1b2f52e98921dfb318da017f629c5ae1ef22962a4bb5e99",
+      "finding_key": "29dafc23c1fd3ae55ef0825da7b867de431a53192fdaeb58d4dd59972a43140a",
+      "source_kind": "item",
+      "source_id": "9ccce753734d460f971035fb5c892f3b",
+      "source_hash": "d38f6efb3370ef347646a06869a7b65946111307b964fed9bf4746be4b2d318f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "c0ea9b2e8af34905b7317c38c1e8a629",
+      "start": 4,
+      "end": 11,
+      "raw_score": 0.9964888095855713,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "023dcdd88e081e2d75031cdde30c8e2151f767a8093b38c8e11a65390d03c042",
+      "finding_key": "ed44717017ba4b628068d720f929b5d76f74da98fe037e4587f75243a3a9ead6",
+      "source_kind": "item",
+      "source_id": "f638c661147e4a409f98910f10beaa66",
+      "source_hash": "eeb268a1219502c85384b7c393e7dd1fa244fa5817afd03c51641db19679be4e",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+      "start": 17,
+      "end": 44,
+      "raw_score": 0.9883561730384827,
+      "polarity": "positive",
+      "features": "{\"assertion_allowed\":true,\"definition_methods\":[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.9932523369789124,\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"origin\":\"syntax_and_alias_role_record\",\"short_name\":{\"confidence\":0.9883561730384827,\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_compact_name\"]}],\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ab59bc6ab9ff87d60fec54c0ad183df9c1fb23f33ca9ca5772bb5e87849e04a7",
+      "finding_key": "f4433a6caf012ed12bc245aa1208377d5b4b088fd5df8a2f1f23e448da943934",
+      "source_kind": "item",
+      "source_id": "f638c661147e4a409f98910f10beaa66",
+      "source_hash": "eeb268a1219502c85384b7c393e7dd1fa244fa5817afd03c51641db19679be4e",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+      "start": 4,
+      "end": 11,
+      "raw_score": 0.9964888095855713,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7054978013038635,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "16f3fd626724457c9a1210a7b08caef6ab588acd9beea8efb9cedb5efe79dc71",
+      "finding_key": "95163ccb30b623b78bd05942a6496f7a2637aa8575cca65c9c6370b52e3f6273",
+      "source_kind": "item",
+      "source_id": "f638c661147e4a409f98910f10beaa66",
+      "source_hash": "eeb268a1219502c85384b7c393e7dd1fa244fa5817afd03c51641db19679be4e",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+      "start": 17,
+      "end": 39,
+      "raw_score": 0.8887611031532288,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7459573149681091,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "6329b0085d17dc8e59866126db2897d9ca7046b7dae18c0268939d7d0f5ecafa",
+      "finding_key": "8fac92b8110828020d78929abb061afad03708e14c5360602b950d3144d7bf8d",
+      "source_kind": "item",
+      "source_id": "f638c661147e4a409f98910f10beaa66",
+      "source_hash": "eeb268a1219502c85384b7c393e7dd1fa244fa5817afd03c51641db19679be4e",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "f47981eeb6f0441ba0abbcfaaa0ebb71",
+      "start": 4,
+      "end": 11,
+      "raw_score": 0.9964888095855713,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "05031980759dca4d7baf387defb8389924b32ae13f9dae1aec09aeb7595e5a16",
+      "finding_key": "ed44717017ba4b628068d720f929b5d76f74da98fe037e4587f75243a3a9ead6",
+      "source_kind": "item",
+      "source_id": "3fa2e24615f84a63ae555ec51316cff1",
+      "source_hash": "e6e4ef79bb12847b9e2591d56da8d6f33e8716ef8b07a74256d8243ccb598f3f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+      "start": 17,
+      "end": 44,
+      "raw_score": 0.9883561730384827,
+      "polarity": "positive",
+      "features": "{\"assertion_allowed\":true,\"definition_methods\":[{\"alias_model_revision\":\"72ac19b486cd4557424c8d61114e7530c243e9b0\",\"full_name\":{\"confidence\":0.9932523369789124,\"end\":39,\"start\":17,\"text\":\"Pulse-Width Modulation\"},\"origin\":\"syntax_and_alias_role_record\",\"short_name\":{\"confidence\":0.9883561730384827,\"end\":44,\"start\":41,\"text\":\"PWM\"},\"source_text_hash\":\"8e75e76757134f60666928aa225f3c8729555ea18d1c14edb758fe19347290aa\",\"syntax_model_revision\":\"272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5\",\"syntax_rule_revision\":\"r8-known-as-only\",\"syntax_rules\":[\"parenthetical_compact_name\"]}],\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "3c7b9bb302737ba80de7cdd175c2e6454a11ffc99bd89b4d208cd54e6308d69f",
+      "finding_key": "f4433a6caf012ed12bc245aa1208377d5b4b088fd5df8a2f1f23e448da943934",
+      "source_kind": "item",
+      "source_id": "3fa2e24615f84a63ae555ec51316cff1",
+      "source_hash": "e6e4ef79bb12847b9e2591d56da8d6f33e8716ef8b07a74256d8243ccb598f3f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+      "start": 4,
+      "end": 11,
+      "raw_score": 0.9964888095855713,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7054978013038635,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "f6f89a31ba755d90585d3cbbf2287b3573cb138228bd50c96c10be34eaa59e33",
+      "finding_key": "95163ccb30b623b78bd05942a6496f7a2637aa8575cca65c9c6370b52e3f6273",
+      "source_kind": "item",
+      "source_id": "3fa2e24615f84a63ae555ec51316cff1",
+      "source_hash": "e6e4ef79bb12847b9e2591d56da8d6f33e8716ef8b07a74256d8243ccb598f3f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+      "start": 17,
+      "end": 39,
+      "raw_score": 0.8887611031532288,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7459573149681091,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "f085ab0a531b49fff995a4eb3aa4c1a0bd1f46f104d7a0f1a7a8fe5f120d37d9",
+      "finding_key": "a81244adda6eeb9059af6a520d0ab40da08d86622f26811546eb488bbb832f2a",
+      "source_kind": "item",
+      "source_id": "3fa2e24615f84a63ae555ec51316cff1",
+      "source_hash": "e6e4ef79bb12847b9e2591d56da8d6f33e8716ef8b07a74256d8243ccb598f3f",
+      "group_key": "item:a3cb05ab74344ccfa3eb2a5ace4cb258",
+      "author_id": "2d3b6580711642cd87f0cb113e05dd7c",
+      "start": 4,
+      "end": 11,
+      "raw_score": 0.9964888095855713,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"eceb70c9d9bd26ccc65eb69e108e6003fbbf706e22d5f75e9166ce93feef624f\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:21:57.201027"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 33,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 13
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 18432,
+      "evidence_bytes": 35151,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "95f4d83d319ad9bfb8f558fa48e85b89adb97dfb52b7d4ea64d6a49d54de6b7f",
+      "source_kind": "item",
+      "source_id": "9ccce753734d460f971035fb5c892f3b",
+      "source_hash": "d38f6efb3370ef347646a06869a7b65946111307b964fed9bf4746be4b2d318f",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 82,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "709227d0f3c71292db92b02b78d18702bc3f1da937497452e3261c86bfd110b3",
+      "source_kind": "item",
+      "source_id": "f638c661147e4a409f98910f10beaa66",
+      "source_hash": "eeb268a1219502c85384b7c393e7dd1fa244fa5817afd03c51641db19679be4e",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 82,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "bb93848299b0bd2d989605a4d06f0dfeaf70d6ff794bad70169b07385b2ef731",
+      "source_kind": "item",
+      "source_id": "3fa2e24615f84a63ae555ec51316cff1",
+      "source_hash": "e6e4ef79bb12847b9e2591d56da8d6f33e8716ef8b07a74256d8243ccb598f3f",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 82,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

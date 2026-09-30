@@ -1,0 +1,517 @@
+{
+  "id": "unrelated_bench_equipment",
+  "domain": "electronics",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/be52b17f12884df194422e7f235c12a3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/9f5d02055aea4df98d891cb5b59f504b",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/unrelated_bench_equipment/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "soldering iron",
+      "digital multimeter"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "soldering iron",
+        "predicate": "uses",
+        "tail": "digital multimeter"
+      },
+      {
+        "head": "digital multimeter",
+        "predicate": "depends_on",
+        "tail": "soldering iron"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 8.629536462998658,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 8.684100671000124,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 17.313637133998782,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "1cec38130279414a8fe5e32630ff8ee4",
+            "name": "equipment audit",
+            "mentions": 1
+          }
+        ],
+        "terms": [
+          {
+            "name": "equipment audit",
+            "concept_id": "1cec38130279414a8fe5e32630ff8ee4",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "1cec38130279414a8fe5e32630ff8ee4",
+              "label": "equipment audit",
+              "concepts": [
+                {
+                  "id": "1cec38130279414a8fe5e32630ff8ee4",
+                  "name": "equipment audit",
+                  "size": 1
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "be52b17f12884df194422e7f235c12a3",
+              "kind": "note",
+              "question": null,
+              "body": "The bench inventory lists a soldering iron beside a digital multimeter. Each has its own storage tray.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "72a3354ee320499a88e48670aef1c133",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:21:16.569825Z",
+              "updated_at": "2026-09-30T00:21:16.613973Z",
+              "concepts": [],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "9f5d02055aea4df98d891cb5b59f504b",
+              "kind": "note",
+              "question": null,
+              "body": "I checked the serial numbers of the digital multimeter and the soldering iron during the equipment audit.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "dcdf256395ef475583b0ba3f461e748a",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:21:25.266259Z",
+              "updated_at": "2026-09-30T00:21:25.284816Z",
+              "concepts": [
+                {
+                  "id": "1cec38130279414a8fe5e32630ff8ee4",
+                  "name": "equipment audit"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "digital multimeter": {
+            "query": "digital multimeter",
+            "terms": [
+              "digital",
+              "multimeter"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "be52b17f12884df194422e7f235c12a3",
+                "kind": "note",
+                "question": null,
+                "body": "The bench inventory lists a soldering iron beside a digital multimeter. Each has its own storage tray.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "72a3354ee320499a88e48670aef1c133",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:16.569825Z",
+                "updated_at": "2026-09-30T00:21:16.613973Z",
+                "type": "item",
+                "snippet": "The bench inventory lists a soldering iron beside a <mark>digital</mark> <mark>multimeter</mark>. Each has its own storage tray.",
+                "coverage": 1.0,
+                "score": 0.300002
+              },
+              {
+                "id": "9f5d02055aea4df98d891cb5b59f504b",
+                "kind": "note",
+                "question": null,
+                "body": "I checked the serial numbers of the digital multimeter and the soldering iron during the equipment audit.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "dcdf256395ef475583b0ba3f461e748a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:25.266259Z",
+                "updated_at": "2026-09-30T00:21:25.284816Z",
+                "type": "item",
+                "snippet": "I checked the serial numbers of the <mark>digital</mark> <mark>multimeter</mark> and the soldering iron during the equipment audit.",
+                "coverage": 1.0,
+                "score": 0.300002
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "equipment audit": {
+            "query": "equipment audit",
+            "terms": [
+              "equipment",
+              "audit"
+            ],
+            "concepts": [
+              {
+                "id": "1cec38130279414a8fe5e32630ff8ee4",
+                "name": "equipment audit"
+              }
+            ],
+            "items": [
+              {
+                "id": "9f5d02055aea4df98d891cb5b59f504b",
+                "kind": "note",
+                "question": null,
+                "body": "I checked the serial numbers of the digital multimeter and the soldering iron during the equipment audit.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "dcdf256395ef475583b0ba3f461e748a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:25.266259Z",
+                "updated_at": "2026-09-30T00:21:25.284816Z",
+                "type": "item",
+                "snippet": "I checked the serial numbers of the digital multimeter and the soldering iron during the <mark>equipment audit</mark>.",
+                "coverage": 1.0,
+                "score": 0.30000099999999996
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "soldering iron": {
+            "query": "soldering iron",
+            "terms": [
+              "soldering",
+              "iron"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "be52b17f12884df194422e7f235c12a3",
+                "kind": "note",
+                "question": null,
+                "body": "The bench inventory lists a soldering iron beside a digital multimeter. Each has its own storage tray.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "72a3354ee320499a88e48670aef1c133",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:16.569825Z",
+                "updated_at": "2026-09-30T00:21:16.613973Z",
+                "type": "item",
+                "snippet": "The bench inventory lists a <mark>soldering</mark> <mark>iron</mark> beside a digital multimeter. Each has its own storage tray.",
+                "coverage": 1.0,
+                "score": 0.300002
+              },
+              {
+                "id": "9f5d02055aea4df98d891cb5b59f504b",
+                "kind": "note",
+                "question": null,
+                "body": "I checked the serial numbers of the digital multimeter and the soldering iron during the equipment audit.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "dcdf256395ef475583b0ba3f461e748a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:25.266259Z",
+                "updated_at": "2026-09-30T00:21:25.284816Z",
+                "type": "item",
+                "snippet": "I checked the serial numbers of the digital multimeter and the <mark>soldering</mark> <mark>iron</mark> during the equipment audit.",
+                "coverage": 1.0,
+                "score": 0.300002
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 22,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "be52b17f12884df194422e7f235c12a3",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "9f5d02055aea4df98d891cb5b59f504b",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "soldering iron",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "concepts",
+      "assertion": "digital multimeter",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "soldering iron",
+        "predicate": "uses",
+        "tail": "digital multimeter"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "digital multimeter",
+        "predicate": "depends_on",
+        "tail": "soldering iron"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 18.923269799999616,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3905212416,
+  "sampled_cpu_seconds": 32.289999999999964
+}

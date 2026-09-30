@@ -1,4 +1,7 @@
-# Update deployment verification — 29 September 2026
+# Historical Qwen Update verification — 29 September 2026
+
+This record describes the parent Qwen package. Current BGE results are in
+[BGE_VERIFICATION.md](BGE_VERIFICATION.md).
 
 Branch: `withgpt6.1solhigh`, from `with-opus55` at `73e743d`.
 This branch is prepared locally for owner review. No actual UAT or PROD server

@@ -1,0 +1,595 @@
+{
+  "id": "astronomy_questions_are_not_expertise",
+  "domain": "astronomy",
+  "status": "PASS",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/questions/2ab9e623f75b433e878894de22a09c90",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/questions/d49e61addf57498a8c22ee980648ca05",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/questions/8c6d702820524f5cb97a043def76fc08",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/astronomy_questions_are_not_expertise/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "orbital mechanics"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Earth",
+        "predicate": "part_of",
+        "tail": "Mars"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "orbital mechanics"
+      },
+      {
+        "actor": "ben",
+        "concept": "orbital mechanics"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.407722961999752,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.008253085999968,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 2,
+          "seconds": 7.389470835998509,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 19.80544688399823,
+      "inference_calls": 3,
+      "observed": {
+        "concepts": [
+          {
+            "id": "28288fffe02c4bbe916304ef2ce0b04e",
+            "name": "orbital mechanics",
+            "mentions": 3
+          }
+        ],
+        "terms": [
+          {
+            "name": "orbital mechanics",
+            "concept_id": "28288fffe02c4bbe916304ef2ce0b04e",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "28288fffe02c4bbe916304ef2ce0b04e",
+              "label": "orbital mechanics",
+              "concepts": [
+                {
+                  "id": "28288fffe02c4bbe916304ef2ce0b04e",
+                  "name": "orbital mechanics",
+                  "size": 3
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "2ab9e623f75b433e878894de22a09c90",
+              "kind": "question",
+              "question": null,
+              "body": "How does orbital mechanics describe a spacecraft transfer between Earth and Mars?",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "e087f2501a0f402ab5dd5814717b825e",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": "open",
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:26:24.754441Z",
+              "updated_at": "2026-09-30T00:26:24.796164Z",
+              "answers": [],
+              "concepts": [
+                {
+                  "id": "28288fffe02c4bbe916304ef2ce0b04e",
+                  "name": "orbital mechanics"
+                }
+              ],
+              "suggested_experts": []
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "d49e61addf57498a8c22ee980648ca05",
+              "kind": "question",
+              "question": null,
+              "body": "Which part of orbital mechanics explains the shape of an elliptical orbit?",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "e087f2501a0f402ab5dd5814717b825e",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": "open",
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:26:31.225660Z",
+              "updated_at": "2026-09-30T00:26:31.238686Z",
+              "answers": [],
+              "concepts": [
+                {
+                  "id": "28288fffe02c4bbe916304ef2ce0b04e",
+                  "name": "orbital mechanics"
+                }
+              ],
+              "suggested_experts": []
+            }
+          },
+          {
+            "post": 2,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "8c6d702820524f5cb97a043def76fc08",
+              "kind": "question",
+              "question": null,
+              "body": "How is orbital mechanics used to compare two possible transfer orbits?",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "7e2ee512aa864934b99a83f9dde4dbac",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": "open",
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:26:37.263603Z",
+              "updated_at": "2026-09-30T00:26:37.278879Z",
+              "answers": [],
+              "concepts": [
+                {
+                  "id": "28288fffe02c4bbe916304ef2ce0b04e",
+                  "name": "orbital mechanics"
+                }
+              ],
+              "suggested_experts": []
+            }
+          }
+        ],
+        "searches": {
+          "Earth": {
+            "query": "Earth",
+            "terms": [
+              "earth"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "2ab9e623f75b433e878894de22a09c90",
+                "kind": "question",
+                "question": null,
+                "body": "How does orbital mechanics describe a spacecraft transfer between Earth and Mars?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "e087f2501a0f402ab5dd5814717b825e",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:26:24.754441Z",
+                "updated_at": "2026-09-30T00:26:24.796164Z",
+                "type": "item",
+                "snippet": "How does orbital mechanics describe a spacecraft transfer between <mark>Earth</mark> and Mars?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.8049239156608639
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Mars": {
+            "query": "Mars",
+            "terms": [
+              "mars"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "2ab9e623f75b433e878894de22a09c90",
+                "kind": "question",
+                "question": null,
+                "body": "How does orbital mechanics describe a spacecraft transfer between Earth and Mars?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "e087f2501a0f402ab5dd5814717b825e",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:26:24.754441Z",
+                "updated_at": "2026-09-30T00:26:24.796164Z",
+                "type": "item",
+                "snippet": "How does orbital mechanics describe a spacecraft transfer between Earth and <mark>Mars</mark>?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.8049239156608639
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "orbital mechanics": {
+            "query": "orbital mechanics",
+            "terms": [
+              "orbital",
+              "mechanics"
+            ],
+            "concepts": [
+              {
+                "id": "28288fffe02c4bbe916304ef2ce0b04e",
+                "name": "orbital mechanics"
+              }
+            ],
+            "items": [
+              {
+                "id": "8c6d702820524f5cb97a043def76fc08",
+                "kind": "question",
+                "question": null,
+                "body": "How is orbital mechanics used to compare two possible transfer orbits?",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "7e2ee512aa864934b99a83f9dde4dbac",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:26:37.263603Z",
+                "updated_at": "2026-09-30T00:26:37.278879Z",
+                "type": "item",
+                "snippet": "How is <mark>orbital mechanics</mark> used to compare two possible transfer orbits?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.3000010239361702
+              },
+              {
+                "id": "2ab9e623f75b433e878894de22a09c90",
+                "kind": "question",
+                "question": null,
+                "body": "How does orbital mechanics describe a spacecraft transfer between Earth and Mars?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "e087f2501a0f402ab5dd5814717b825e",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:26:24.754441Z",
+                "updated_at": "2026-09-30T00:26:24.796164Z",
+                "type": "item",
+                "snippet": "How does <mark>orbital mechanics</mark> describe a spacecraft transfer between Earth and Mars?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.30000098844672657
+              },
+              {
+                "id": "d49e61addf57498a8c22ee980648ca05",
+                "kind": "question",
+                "question": null,
+                "body": "Which part of orbital mechanics explains the shape of an elliptical orbit?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "e087f2501a0f402ab5dd5814717b825e",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "open",
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:26:31.225660Z",
+                "updated_at": "2026-09-30T00:26:31.238686Z",
+                "type": "item",
+                "snippet": "Which part of <mark>orbital mechanics</mark> explains the shape of an elliptical orbit?",
+                "answer_count": 0,
+                "coverage": 1.0,
+                "score": 0.30000098844672657
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 27,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "2ab9e623f75b433e878894de22a09c90",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "d49e61addf57498a8c22ee980648ca05",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "8c6d702820524f5cb97a043def76fc08",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "orbital mechanics",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "28288fffe02c4bbe916304ef2ce0b04e",
+          "name": "orbital mechanics",
+          "mentions": 3
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Earth",
+        "predicate": "part_of",
+        "tail": "Mars"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "orbital mechanics"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "ben",
+        "concept": "orbital mechanics"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 21.33239492699977,
+  "inference_calls": 3,
+  "sampled_peak_tree_rss_bytes": 3904532480,
+  "sampled_cpu_seconds": 43.24000000000001
+}

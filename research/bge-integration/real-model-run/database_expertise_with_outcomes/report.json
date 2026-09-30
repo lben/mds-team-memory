@@ -1,0 +1,660 @@
+{
+  "id": "database_expertise_with_outcomes",
+  "domain": "software_operations",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions/18d6dea1f3b04990963d96fcbaed58ec/answers",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/items/9987bb9aa63a4c5583b8f34dd36a228f/helped",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/questions/18d6dea1f3b04990963d96fcbaed58ec/accept",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/items/c53a5bfe860e428189fd0386ca72f198/helped",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/items/9821e2694aa94c7bbf164cbb07d108bd/helped",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/questions/18d6dea1f3b04990963d96fcbaed58ec",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/9987bb9aa63a4c5583b8f34dd36a228f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/c53a5bfe860e428189fd0386ca72f198",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/9821e2694aa94c7bbf164cbb07d108bd",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/database_expertise_with_outcomes/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "PostgreSQL"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [],
+    "expertise": [
+      {
+        "actor": "ben",
+        "concept": "PostgreSQL"
+      }
+    ],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "PostgreSQL"
+      },
+      {
+        "actor": "cara",
+        "concept": "PostgreSQL"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.667920960999254,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 7.483536962001381,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 2,
+          "seconds": 7.553696295000918,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 3,
+          "seconds": 7.406168294999588,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 29.11132251300114,
+      "inference_calls": 4,
+      "observed": {
+        "concepts": [
+          {
+            "id": "3eac36c4ba614c41a6bbd7c494798a81",
+            "name": "PostgreSQL",
+            "mentions": 4
+          }
+        ],
+        "terms": [
+          {
+            "name": "PostgreSQL",
+            "concept_id": "3eac36c4ba614c41a6bbd7c494798a81",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "3eac36c4ba614c41a6bbd7c494798a81",
+              "label": "PostgreSQL",
+              "concepts": [
+                {
+                  "id": "3eac36c4ba614c41a6bbd7c494798a81",
+                  "name": "PostgreSQL",
+                  "size": 4
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "18d6dea1f3b04990963d96fcbaed58ec",
+              "kind": "question",
+              "question": null,
+              "body": "How can I investigate slow queries in PostgreSQL?",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "b350f7e602434608999506bfb41037ba",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": "resolved",
+              "accepted_answer_id": "9987bb9aa63a4c5583b8f34dd36a228f",
+              "evidence_revision": 1,
+              "acceptance_revision": 1,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:25:06.049896Z",
+              "updated_at": "2026-09-30T00:25:12.815096Z",
+              "answers": [
+                {
+                  "id": "9987bb9aa63a4c5583b8f34dd36a228f",
+                  "kind": "answer",
+                  "question": {
+                    "id": "18d6dea1f3b04990963d96fcbaed58ec",
+                    "body": "How can I investigate slow queries in PostgreSQL?",
+                    "status": "resolved"
+                  },
+                  "body": "For PostgreSQL query diagnosis, I compared the execution plan with the table statistics and identified the missing index.",
+                  "visibility": "team",
+                  "author": "ben",
+                  "author_verified": true,
+                  "author_id": "7f7c11aaad934b88ab962454d370249f",
+                  "is_mine": false,
+                  "parent_id": "18d6dea1f3b04990963d96fcbaed58ec",
+                  "group_id": null,
+                  "contributors": 1,
+                  "group_size": 1,
+                  "helped": 1,
+                  "marked_helped": false,
+                  "endorsements": 0,
+                  "endorsed": false,
+                  "endorsed_by_me": false,
+                  "question_status": null,
+                  "accepted_answer_id": null,
+                  "evidence_revision": 1,
+                  "acceptance_revision": 0,
+                  "correction_state": null,
+                  "source_document_id": null,
+                  "source_passage_id": null,
+                  "created_at": "2026-09-30T00:25:12.778129Z",
+                  "updated_at": "2026-09-30T00:25:12.790044Z"
+                }
+              ],
+              "concepts": [
+                {
+                  "id": "3eac36c4ba614c41a6bbd7c494798a81",
+                  "name": "PostgreSQL"
+                }
+              ],
+              "suggested_experts": []
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "9987bb9aa63a4c5583b8f34dd36a228f",
+              "kind": "answer",
+              "question": {
+                "id": "18d6dea1f3b04990963d96fcbaed58ec",
+                "body": "How can I investigate slow queries in PostgreSQL?",
+                "status": "resolved"
+              },
+              "body": "For PostgreSQL query diagnosis, I compared the execution plan with the table statistics and identified the missing index.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "7f7c11aaad934b88ab962454d370249f",
+              "is_mine": false,
+              "parent_id": "18d6dea1f3b04990963d96fcbaed58ec",
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 1,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:25:12.778129Z",
+              "updated_at": "2026-09-30T00:25:12.790044Z",
+              "concepts": [
+                {
+                  "id": "3eac36c4ba614c41a6bbd7c494798a81",
+                  "name": "PostgreSQL"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 2,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "c53a5bfe860e428189fd0386ca72f198",
+              "kind": "note",
+              "question": null,
+              "body": "I documented the PostgreSQL backup verification process and tested restoration into an empty database.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "7f7c11aaad934b88ab962454d370249f",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 1,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:25:20.316589Z",
+              "updated_at": "2026-09-30T00:25:20.351754Z",
+              "concepts": [
+                {
+                  "id": "3eac36c4ba614c41a6bbd7c494798a81",
+                  "name": "PostgreSQL"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 3,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "9821e2694aa94c7bbf164cbb07d108bd",
+              "kind": "note",
+              "question": null,
+              "body": "I traced a PostgreSQL lock wait to a long transaction and recorded the session information in the incident notes.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "7f7c11aaad934b88ab962454d370249f",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 1,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:25:27.930537Z",
+              "updated_at": "2026-09-30T00:25:27.949954Z",
+              "concepts": [
+                {
+                  "id": "3eac36c4ba614c41a6bbd7c494798a81",
+                  "name": "PostgreSQL"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "PostgreSQL": {
+            "query": "PostgreSQL",
+            "terms": [
+              "postgresql"
+            ],
+            "concepts": [
+              {
+                "id": "3eac36c4ba614c41a6bbd7c494798a81",
+                "name": "PostgreSQL"
+              }
+            ],
+            "items": [
+              {
+                "id": "c53a5bfe860e428189fd0386ca72f198",
+                "kind": "note",
+                "question": null,
+                "body": "I documented the PostgreSQL backup verification process and tested restoration into an empty database.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "7f7c11aaad934b88ab962454d370249f",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 1,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:25:20.316589Z",
+                "updated_at": "2026-09-30T00:25:20.351754Z",
+                "type": "item",
+                "snippet": "I documented the <mark>PostgreSQL</mark> backup verification process and tested restoration into an empty database.",
+                "coverage": 1.0,
+                "score": 0.7158893295790828
+              },
+              {
+                "id": "9987bb9aa63a4c5583b8f34dd36a228f",
+                "kind": "answer",
+                "question": {
+                  "id": "18d6dea1f3b04990963d96fcbaed58ec",
+                  "body": "How can I investigate slow queries in PostgreSQL?",
+                  "status": "resolved"
+                },
+                "body": "For PostgreSQL query diagnosis, I compared the execution plan with the table statistics and identified the missing index.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "7f7c11aaad934b88ab962454d370249f",
+                "is_mine": false,
+                "parent_id": "18d6dea1f3b04990963d96fcbaed58ec",
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 1,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:25:12.778129Z",
+                "updated_at": "2026-09-30T00:25:12.790044Z",
+                "type": "item",
+                "snippet": "For <mark>PostgreSQL</mark> query diagnosis, I compared the execution plan with the table statistics and identified the missing index.",
+                "coverage": 1.0,
+                "score": 0.7158892256504548
+              },
+              {
+                "id": "9821e2694aa94c7bbf164cbb07d108bd",
+                "kind": "note",
+                "question": null,
+                "body": "I traced a PostgreSQL lock wait to a long transaction and recorded the session information in the incident notes.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "7f7c11aaad934b88ab962454d370249f",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 1,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:25:27.930537Z",
+                "updated_at": "2026-09-30T00:25:27.949954Z",
+                "type": "item",
+                "snippet": "I traced a <mark>PostgreSQL</mark> lock wait to a long transaction and recorded the session information in the incident notes.",
+                "coverage": 1.0,
+                "score": 0.7158892028914462
+              },
+              {
+                "id": "18d6dea1f3b04990963d96fcbaed58ec",
+                "kind": "question",
+                "question": null,
+                "body": "How can I investigate slow queries in PostgreSQL?",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "b350f7e602434608999506bfb41037ba",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": "resolved",
+                "accepted_answer_id": "9987bb9aa63a4c5583b8f34dd36a228f",
+                "evidence_revision": 1,
+                "acceptance_revision": 1,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:25:06.049896Z",
+                "updated_at": "2026-09-30T00:25:12.815096Z",
+                "type": "item",
+                "snippet": "How can I investigate slow queries in <mark>PostgreSQL</mark>?",
+                "answer_count": 1,
+                "coverage": 1.0,
+                "score": 0.3000012303317535
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben",
+          "cara": "cara"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 36,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "18d6dea1f3b04990963d96fcbaed58ec",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "9987bb9aa63a4c5583b8f34dd36a228f",
+      "storage_kind": "item",
+      "actor": "ben"
+    },
+    {
+      "id": "c53a5bfe860e428189fd0386ca72f198",
+      "storage_kind": "item",
+      "actor": "ben"
+    },
+    {
+      "id": "9821e2694aa94c7bbf164cbb07d108bd",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "PostgreSQL",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "3eac36c4ba614c41a6bbd7c494798a81",
+          "name": "PostgreSQL",
+          "mentions": 4
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "ben",
+        "concept": "PostgreSQL"
+      },
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "PostgreSQL"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "cara",
+        "concept": "PostgreSQL"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 30.72285459699924,
+  "inference_calls": 4,
+  "sampled_peak_tree_rss_bytes": 3900170240,
+  "sampled_cpu_seconds": 60.90999999999997
+}

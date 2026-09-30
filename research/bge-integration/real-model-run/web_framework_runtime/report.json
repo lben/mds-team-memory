@@ -1,0 +1,477 @@
+{
+  "id": "web_framework_runtime",
+  "domain": "software",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/50832c395d274c79a6502ecf0b90fe5c",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/9932499ea39848e99699c82f78c6a0f6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/web_framework_runtime/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Django",
+      "Python"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "Django",
+        "predicate": "depends_on",
+        "tail": "Python"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "Python",
+        "predicate": "depends_on",
+        "tail": "Django"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 5.901671335999708,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 5.590869460998874,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 11.492540796998583,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "5f883bb9fc5943e69dfc6245a6abd599",
+            "name": "Django",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Django",
+            "concept_id": "5f883bb9fc5943e69dfc6245a6abd599",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "5f883bb9fc5943e69dfc6245a6abd599",
+              "label": "Django",
+              "concepts": [
+                {
+                  "id": "5f883bb9fc5943e69dfc6245a6abd599",
+                  "name": "Django",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "50832c395d274c79a6502ecf0b90fe5c",
+              "kind": "note",
+              "question": null,
+              "body": "Django requires Python to execute our web application.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "69d8db91958f4584ac3cc7361e2b82fe",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:16.975472Z",
+              "updated_at": "2026-09-30T00:20:17.009729Z",
+              "concepts": [
+                {
+                  "id": "5f883bb9fc5943e69dfc6245a6abd599",
+                  "name": "Django"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "9932499ea39848e99699c82f78c6a0f6",
+              "kind": "note",
+              "question": null,
+              "body": "The installation guide records that Django depends on Python for its runtime.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "8c0f044374814de1a111bef812b35576",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:22.931310Z",
+              "updated_at": "2026-09-30T00:20:22.965045Z",
+              "concepts": [
+                {
+                  "id": "5f883bb9fc5943e69dfc6245a6abd599",
+                  "name": "Django"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Django": {
+            "query": "Django",
+            "terms": [
+              "django"
+            ],
+            "concepts": [
+              {
+                "id": "5f883bb9fc5943e69dfc6245a6abd599",
+                "name": "Django"
+              }
+            ],
+            "items": [
+              {
+                "id": "50832c395d274c79a6502ecf0b90fe5c",
+                "kind": "note",
+                "question": null,
+                "body": "Django requires Python to execute our web application.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "69d8db91958f4584ac3cc7361e2b82fe",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:16.975472Z",
+                "updated_at": "2026-09-30T00:20:17.009729Z",
+                "type": "item",
+                "snippet": "<mark>Django</mark> requires Python to execute our web application.",
+                "coverage": 1.0,
+                "score": 0.3000010891089109
+              },
+              {
+                "id": "9932499ea39848e99699c82f78c6a0f6",
+                "kind": "note",
+                "question": null,
+                "body": "The installation guide records that Django depends on Python for its runtime.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "8c0f044374814de1a111bef812b35576",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:22.931310Z",
+                "updated_at": "2026-09-30T00:20:22.965045Z",
+                "type": "item",
+                "snippet": "The installation guide records that <mark>Django</mark> depends on Python for its runtime.",
+                "coverage": 1.0,
+                "score": 0.3000009243697479
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Python": {
+            "query": "Python",
+            "terms": [
+              "python"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "50832c395d274c79a6502ecf0b90fe5c",
+                "kind": "note",
+                "question": null,
+                "body": "Django requires Python to execute our web application.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "69d8db91958f4584ac3cc7361e2b82fe",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:16.975472Z",
+                "updated_at": "2026-09-30T00:20:17.009729Z",
+                "type": "item",
+                "snippet": "Django requires <mark>Python</mark> to execute our web application.",
+                "coverage": 1.0,
+                "score": 0.3000010891089109
+              },
+              {
+                "id": "9932499ea39848e99699c82f78c6a0f6",
+                "kind": "note",
+                "question": null,
+                "body": "The installation guide records that Django depends on Python for its runtime.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "8c0f044374814de1a111bef812b35576",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:22.931310Z",
+                "updated_at": "2026-09-30T00:20:22.965045Z",
+                "type": "item",
+                "snippet": "The installation guide records that Django depends on <mark>Python</mark> for its runtime.",
+                "coverage": 1.0,
+                "score": 0.3000009243697479
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 16,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "50832c395d274c79a6502ecf0b90fe5c",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "9932499ea39848e99699c82f78c6a0f6",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Django",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "5f883bb9fc5943e69dfc6245a6abd599",
+          "name": "Django",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Python",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Django",
+        "predicate": "depends_on",
+        "tail": "Python"
+      },
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Python",
+        "predicate": "depends_on",
+        "tail": "Django"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 12.826488090000566,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3949498368,
+  "sampled_cpu_seconds": 28.180000000000035
+}

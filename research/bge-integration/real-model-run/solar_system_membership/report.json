@@ -1,0 +1,599 @@
+{
+  "id": "solar_system_membership",
+  "domain": "astronomy",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/86344cb7341c43b39a1252a1e3e07547",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/9000b29e768b4f3489a3a2a13f462217",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/solar_system_membership/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Earth",
+      "Sun",
+      "Solar System"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "Earth",
+        "predicate": "part_of",
+        "tail": "Solar System"
+      },
+      {
+        "head": "Sun",
+        "predicate": "part_of",
+        "tail": "Solar System"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "Solar System",
+        "predicate": "part_of",
+        "tail": "Earth"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "Solar System"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 59.585569652999766,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 7.420523503000368,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 67.00609315600013,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "d8e5ead003b94e69833fcd3e8583e9b5",
+            "name": "Solar System",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Solar System",
+            "concept_id": "d8e5ead003b94e69833fcd3e8583e9b5",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "d8e5ead003b94e69833fcd3e8583e9b5",
+              "label": "Solar System",
+              "concepts": [
+                {
+                  "id": "d8e5ead003b94e69833fcd3e8583e9b5",
+                  "name": "Solar System",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "86344cb7341c43b39a1252a1e3e07547",
+              "kind": "note",
+              "question": null,
+              "body": "Earth is part of the Solar System. The Sun is also part of the Solar System and lies at its center.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "bd53b12723fc4c3d841d085105f1827f",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:18:10.385479Z",
+              "updated_at": "2026-09-30T00:18:10.454395Z",
+              "concepts": [
+                {
+                  "id": "d8e5ead003b94e69833fcd3e8583e9b5",
+                  "name": "Solar System"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "9000b29e768b4f3489a3a2a13f462217",
+              "kind": "note",
+              "question": null,
+              "body": "Our astronomy chart identifies Earth as part of the Solar System. The Sun is part of the Solar System, along with its planets and smaller bodies.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:19:10.066240Z",
+              "updated_at": "2026-09-30T00:19:10.082116Z",
+              "concepts": [
+                {
+                  "id": "d8e5ead003b94e69833fcd3e8583e9b5",
+                  "name": "Solar System"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Earth": {
+            "query": "Earth",
+            "terms": [
+              "earth"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "86344cb7341c43b39a1252a1e3e07547",
+                "kind": "note",
+                "question": null,
+                "body": "Earth is part of the Solar System. The Sun is also part of the Solar System and lies at its center.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "bd53b12723fc4c3d841d085105f1827f",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:18:10.385479Z",
+                "updated_at": "2026-09-30T00:18:10.454395Z",
+                "type": "item",
+                "snippet": "<mark>Earth</mark> is part of the Solar System. The Sun is also part of the Solar System and lies at its center.",
+                "coverage": 1.0,
+                "score": 0.30000104550050555
+              },
+              {
+                "id": "9000b29e768b4f3489a3a2a13f462217",
+                "kind": "note",
+                "question": null,
+                "body": "Our astronomy chart identifies Earth as part of the Solar System. The Sun is part of the Solar System, along with its planets and smaller bodies.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:10.066240Z",
+                "updated_at": "2026-09-30T00:19:10.082116Z",
+                "type": "item",
+                "snippet": "Our astronomy chart identifies <mark>Earth</mark> as part of the Solar System. The Sun is part of the Solar System, along with its planets and smaller bodies.",
+                "coverage": 1.0,
+                "score": 0.30000095829471735
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Solar System": {
+            "query": "Solar System",
+            "terms": [
+              "solar",
+              "system"
+            ],
+            "concepts": [
+              {
+                "id": "d8e5ead003b94e69833fcd3e8583e9b5",
+                "name": "Solar System"
+              }
+            ],
+            "items": [
+              {
+                "id": "86344cb7341c43b39a1252a1e3e07547",
+                "kind": "note",
+                "question": null,
+                "body": "Earth is part of the Solar System. The Sun is also part of the Solar System and lies at its center.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "bd53b12723fc4c3d841d085105f1827f",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:18:10.385479Z",
+                "updated_at": "2026-09-30T00:18:10.454395Z",
+                "type": "item",
+                "snippet": "Earth is part of the <mark>Solar System</mark>. The Sun is also part of the <mark>Solar System</mark> and lies at its center.",
+                "coverage": 1.0,
+                "score": 0.30000141740918435
+              },
+              {
+                "id": "9000b29e768b4f3489a3a2a13f462217",
+                "kind": "note",
+                "question": null,
+                "body": "Our astronomy chart identifies Earth as part of the Solar System. The Sun is part of the Solar System, along with its planets and smaller bodies.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:10.066240Z",
+                "updated_at": "2026-09-30T00:19:10.082116Z",
+                "type": "item",
+                "snippet": "Our astronomy chart identifies Earth as part of the <mark>Solar System</mark>. The Sun is part of the <mark>Solar System</mark>, along with its planets and smaller bodies.",
+                "coverage": 1.0,
+                "score": 0.3000013350548741
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Sun": {
+            "query": "Sun",
+            "terms": [
+              "sun"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "86344cb7341c43b39a1252a1e3e07547",
+                "kind": "note",
+                "question": null,
+                "body": "Earth is part of the Solar System. The Sun is also part of the Solar System and lies at its center.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "bd53b12723fc4c3d841d085105f1827f",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:18:10.385479Z",
+                "updated_at": "2026-09-30T00:18:10.454395Z",
+                "type": "item",
+                "snippet": "Earth is part of the Solar System. The <mark>Sun</mark> is also part of the Solar System and lies at its center.",
+                "coverage": 1.0,
+                "score": 0.30000104550050555
+              },
+              {
+                "id": "9000b29e768b4f3489a3a2a13f462217",
+                "kind": "note",
+                "question": null,
+                "body": "Our astronomy chart identifies Earth as part of the Solar System. The Sun is part of the Solar System, along with its planets and smaller bodies.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "9d193d0c8c274ec889fccd41bbf386cf",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:19:10.066240Z",
+                "updated_at": "2026-09-30T00:19:10.082116Z",
+                "type": "item",
+                "snippet": "Our astronomy chart identifies Earth as part of the Solar System. The <mark>Sun</mark> is part of the Solar System, along with its planets and smaller bodies.",
+                "coverage": 1.0,
+                "score": 0.30000095829471735
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 22,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "86344cb7341c43b39a1252a1e3e07547",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "9000b29e768b4f3489a3a2a13f462217",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Earth",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "concepts",
+      "assertion": "Sun",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "concepts",
+      "assertion": "Solar System",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "d8e5ead003b94e69833fcd3e8583e9b5",
+          "name": "Solar System",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Earth",
+        "predicate": "part_of",
+        "tail": "Solar System"
+      },
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Sun",
+        "predicate": "part_of",
+        "tail": "Solar System"
+      },
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Solar System",
+        "predicate": "part_of",
+        "tail": "Earth"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "Solar System"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 69.4010365310005,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 4154503168,
+  "sampled_cpu_seconds": 87.53
+}

@@ -1,0 +1,600 @@
+{
+  "id": "one_author_repeats_dependency",
+  "domain": "software",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/0a89e74f00fb45519b416b723e7c51ff",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/1ea35630e4ea4f1fa63b82de7559cf2c",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/3cb06fa103284f29a3d48f1f07b161ac",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/one_author_repeats_dependency/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Docker",
+      "Linux"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Docker",
+        "predicate": "uses",
+        "tail": "Linux"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "Docker"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 7.197073377999914,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.461636043999533,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 2,
+          "seconds": 6.511264087001109,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 20.169973509000556,
+      "inference_calls": 3,
+      "observed": {
+        "concepts": [
+          {
+            "id": "3eb42f9ac3194467b045434f8d49f5d2",
+            "name": "Docker",
+            "mentions": 3
+          }
+        ],
+        "terms": [
+          {
+            "name": "Docker",
+            "concept_id": "3eb42f9ac3194467b045434f8d49f5d2",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "3eb42f9ac3194467b045434f8d49f5d2",
+              "label": "Docker",
+              "concepts": [
+                {
+                  "id": "3eb42f9ac3194467b045434f8d49f5d2",
+                  "name": "Docker",
+                  "size": 3
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "0a89e74f00fb45519b416b723e7c51ff",
+              "kind": "note",
+              "question": null,
+              "body": "Docker uses Linux in the container host that I configured.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:21:35.374368Z",
+              "updated_at": "2026-09-30T00:21:35.414358Z",
+              "concepts": [
+                {
+                  "id": "3eb42f9ac3194467b045434f8d49f5d2",
+                  "name": "Docker"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+              "kind": "note",
+              "question": null,
+              "body": "The operating system check confirms that Docker uses Linux on this host.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:21:42.631583Z",
+              "updated_at": "2026-09-30T00:21:42.671806Z",
+              "concepts": [
+                {
+                  "id": "3eb42f9ac3194467b045434f8d49f5d2",
+                  "name": "Docker"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 2,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "3cb06fa103284f29a3d48f1f07b161ac",
+              "kind": "note",
+              "question": null,
+              "body": "I recorded the host configuration in the runbook: Docker uses Linux for our container deployment.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:21:49.149813Z",
+              "updated_at": "2026-09-30T00:21:49.170553Z",
+              "concepts": [
+                {
+                  "id": "3eb42f9ac3194467b045434f8d49f5d2",
+                  "name": "Docker"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Docker": {
+            "query": "Docker",
+            "terms": [
+              "docker"
+            ],
+            "concepts": [
+              {
+                "id": "3eb42f9ac3194467b045434f8d49f5d2",
+                "name": "Docker"
+              }
+            ],
+            "items": [
+              {
+                "id": "0a89e74f00fb45519b416b723e7c51ff",
+                "kind": "note",
+                "question": null,
+                "body": "Docker uses Linux in the container host that I configured.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:35.374368Z",
+                "updated_at": "2026-09-30T00:21:35.414358Z",
+                "type": "item",
+                "snippet": "<mark>Docker</mark> uses Linux in the container host that I configured.",
+                "coverage": 1.0,
+                "score": 0.3000010838881491
+              },
+              {
+                "id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+                "kind": "note",
+                "question": null,
+                "body": "The operating system check confirms that Docker uses Linux on this host.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:42.631583Z",
+                "updated_at": "2026-09-30T00:21:42.671806Z",
+                "type": "item",
+                "snippet": "The operating system check confirms that <mark>Docker</mark> uses Linux on this host.",
+                "coverage": 1.0,
+                "score": 0.30000101118012423
+              },
+              {
+                "id": "3cb06fa103284f29a3d48f1f07b161ac",
+                "kind": "note",
+                "question": null,
+                "body": "I recorded the host configuration in the runbook: Docker uses Linux for our container deployment.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:49.149813Z",
+                "updated_at": "2026-09-30T00:21:49.170553Z",
+                "type": "item",
+                "snippet": "I recorded the host configuration in the runbook: <mark>Docker</mark> uses Linux for our container deployment.",
+                "coverage": 1.0,
+                "score": 0.30000091873589163
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Linux": {
+            "query": "Linux",
+            "terms": [
+              "linux"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "0a89e74f00fb45519b416b723e7c51ff",
+                "kind": "note",
+                "question": null,
+                "body": "Docker uses Linux in the container host that I configured.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:35.374368Z",
+                "updated_at": "2026-09-30T00:21:35.414358Z",
+                "type": "item",
+                "snippet": "Docker uses <mark>Linux</mark> in the container host that I configured.",
+                "coverage": 1.0,
+                "score": 0.3000010838881491
+              },
+              {
+                "id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+                "kind": "note",
+                "question": null,
+                "body": "The operating system check confirms that Docker uses Linux on this host.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:42.631583Z",
+                "updated_at": "2026-09-30T00:21:42.671806Z",
+                "type": "item",
+                "snippet": "The operating system check confirms that Docker uses <mark>Linux</mark> on this host.",
+                "coverage": 1.0,
+                "score": 0.30000101118012423
+              },
+              {
+                "id": "3cb06fa103284f29a3d48f1f07b161ac",
+                "kind": "note",
+                "question": null,
+                "body": "I recorded the host configuration in the runbook: Docker uses Linux for our container deployment.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "9414d58b66214d2cbb9e510c4d291fca",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:49.149813Z",
+                "updated_at": "2026-09-30T00:21:49.170553Z",
+                "type": "item",
+                "snippet": "I recorded the host configuration in the runbook: Docker uses <mark>Linux</mark> for our container deployment.",
+                "coverage": 1.0,
+                "score": 0.30000091873589163
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 16,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "0a89e74f00fb45519b416b723e7c51ff",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "1ea35630e4ea4f1fa63b82de7559cf2c",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "3cb06fa103284f29a3d48f1f07b161ac",
+      "storage_kind": "item",
+      "actor": "alice"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Docker",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "3eb42f9ac3194467b045434f8d49f5d2",
+          "name": "Docker",
+          "mentions": 3
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Linux",
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Docker",
+        "predicate": "uses",
+        "tail": "Linux"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "Docker"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 21.531180051000774,
+  "inference_calls": 3,
+  "sampled_peak_tree_rss_bytes": 3872755712,
+  "sampled_cpu_seconds": 43.03000000000003
+}

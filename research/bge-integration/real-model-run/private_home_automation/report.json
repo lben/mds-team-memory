@@ -1,0 +1,259 @@
+{
+  "id": "private_home_automation",
+  "domain": "home_automation",
+  "status": "PASS",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/scratchpad",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/scratchpad/11534c5b8a7a428dbfcf9bff972bcf19",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/scratchpad",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/scratchpad/3a54c083690c4924bad64cb223525f93",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/scratchpad",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/scratchpad",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/private_home_automation/mds.sqlite3",
+  "expect": {
+    "concepts": [],
+    "absent_concepts": [
+      "Home Assistant",
+      "Mosquitto"
+    ],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [
+      {
+        "head": "Home Assistant",
+        "predicate": "uses",
+        "tail": "Mosquitto"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "Home Assistant"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 0.4789113749993703,
+          "inference_calls": 0,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 0.015439500000866246,
+          "inference_calls": 0,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 0.49435087500023656,
+      "inference_calls": 0,
+      "observed": {
+        "concepts": [],
+        "terms": [],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [],
+          "edges": [],
+          "total_nodes": 0,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "scratchpad",
+            "status": 200,
+            "response": {
+              "default": {
+                "id": "11534c5b8a7a428dbfcf9bff972bcf19",
+                "name": "Evaluation private note 1",
+                "is_default": false,
+                "content": "My private Home Assistant installation uses Mosquitto to exchange messages with the workshop devices.",
+                "updated_at": "2026-09-30T00:24:00.457828Z"
+              },
+              "others": []
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "scratchpad",
+            "status": 200,
+            "response": {
+              "default": {
+                "id": "3a54c083690c4924bad64cb223525f93",
+                "name": "Evaluation private note 2",
+                "is_default": false,
+                "content": "In my private setup notes, Home Assistant uses Mosquitto as the message broker for the garage sensors.",
+                "updated_at": "2026-09-30T00:24:00.954050Z"
+              },
+              "others": []
+            }
+          }
+        ],
+        "searches": {
+          "Home Assistant": {
+            "query": "Home Assistant",
+            "terms": [
+              "home",
+              "assistant"
+            ],
+            "concepts": [],
+            "items": [],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Mosquitto": {
+            "query": "Mosquitto",
+            "terms": [
+              "mosquitto"
+            ],
+            "concepts": [],
+            "items": [],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 8,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "11534c5b8a7a428dbfcf9bff972bcf19",
+      "storage_kind": "scratchpad",
+      "actor": "alice"
+    },
+    {
+      "id": "3a54c083690c4924bad64cb223525f93",
+      "storage_kind": "scratchpad",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Home Assistant",
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Mosquitto",
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Home Assistant",
+        "predicate": "uses",
+        "tail": "Mosquitto"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "Home Assistant"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 1.8414349170016067,
+  "inference_calls": 0,
+  "sampled_peak_tree_rss_bytes": 3888893952,
+  "sampled_cpu_seconds": 1.2300000000000182
+}

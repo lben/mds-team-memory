@@ -1,0 +1,260 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "content_hash": "75c2b5897761e79ec6b0992579d5829372aa1a79868527e593cb5207b40c43f1",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":12,\"label\":\"named entity\",\"name\":\"workshop\",\"score\":0.8934811949729919,\"start\":4},{\"end\":23,\"label\":\"topic or process\",\"name\":\"workshop inspection\",\"score\":0.7688446044921875,\"start\":4}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"workshop\":0.5107016563415527,\"workshop inspection\":0.6748706102371216},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"5443c3d4096336984415657724887082f346762aac26a588913e520497eec648\"}",
+      "updated_at": "2026-09-30 00:24:49.109454"
+    },
+    {
+      "kind": "profile",
+      "id": "69ff6b488f69458b9879e8ed0afe6b5f",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:24:49.318890"
+    },
+    {
+      "kind": "profile",
+      "id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:24:49.397125"
+    },
+    {
+      "kind": "item",
+      "id": "4cd8f09c0183448f8982562a887812d9",
+      "content_hash": "0845f02e97662f58e471d94a658cb379dfaeae5859f37528c6e29bc5af773f31",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":32,\"label\":\"topic or process\",\"name\":\"weekly maintenance checklist\",\"score\":0.507605254650116,\"start\":4}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"weekly maintenance checklist\":0.814643383026123},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"0a6719e12c0efb47d253185030754646e27626fc04aee8b8b6b944ff2909c28d\"}",
+      "updated_at": "2026-09-30 00:24:48.966086"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "c2ac034615559dec12c62de83d97e4e8136c38e9b709e2385e4e18ef7b181bb3",
+      "kind": "concept",
+      "payload": "{\"name\":\"Zigbee\"}",
+      "state": "withdrawn",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "bf462f1fc0824bdab0cf6dfe04d7064a",
+      "created_at": "2026-09-30 00:24:30.363876",
+      "updated_at": "2026-09-30 00:24:48.720265"
+    },
+    {
+      "key": "78d215b55d418c7df4c57e9b38c5a628e55f2c3a97ab9ae192412933ecc59101",
+      "kind": "concept",
+      "payload": "{\"name\":\"Home Assistant\"}",
+      "state": "withdrawn",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:30.370584",
+      "updated_at": "2026-09-30 00:24:48.722399"
+    },
+    {
+      "key": "90f1deedf7a049c9cfa22e6b67a1811a8c7837a6158d181382ed8e1c0aee85f2",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop\"}",
+      "state": "held",
+      "score": 0.8934811949729919,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:30.377721",
+      "updated_at": "2026-09-30 00:24:49.148393"
+    },
+    {
+      "key": "fa9b15642e2e603f6fb6c9f8a09cb6f836bd9517d7e084a3b505bd693c118e95",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop temperature sensors\"}",
+      "state": "withdrawn",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:30.381871",
+      "updated_at": "2026-09-30 00:24:48.717392"
+    },
+    {
+      "key": "9b43a76153fac96311cb9e77e3b6ba12bed112f64ba2180b49eb8256a8427e92",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop telemetry\"}",
+      "state": "withdrawn",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:36.971258",
+      "updated_at": "2026-09-30 00:24:43.534476"
+    },
+    {
+      "key": "47a93216e4ddbb814645942344efe52e448c1ed5b5e810f6b0eff356b5424a7c",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"bf462f1fc0824bdab0cf6dfe04d7064a\",\"source_id\":\"4cd8f09c0183448f8982562a887812d9\",\"source_kind\":\"item\"}",
+      "state": "withdrawn",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "bf462f1fc0824bdab0cf6dfe04d7064a",
+      "created_at": "2026-09-30 00:24:37.001500",
+      "updated_at": "2026-09-30 00:24:43.531797"
+    },
+    {
+      "key": "aa6e35cf6d0d2d55fe112709f628cde8dc41965fcc84b6d10c007e40c18050a2",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"bf462f1fc0824bdab0cf6dfe04d7064a\",\"source_id\":\"fd2eb6d4464743b6b0e7e9bee4cbd7b4\",\"source_kind\":\"item\"}",
+      "state": "withdrawn",
+      "score": 0.0,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "bf462f1fc0824bdab0cf6dfe04d7064a",
+      "created_at": "2026-09-30 00:24:37.454062",
+      "updated_at": "2026-09-30 00:24:48.724579"
+    },
+    {
+      "key": "c31bcd9082786726cc6236fabec23e9d3496ea24fb2061f82807df67711aecbe",
+      "kind": "concept",
+      "payload": "{\"name\":\"weekly maintenance checklist\"}",
+      "state": "held",
+      "score": 0.507605254650116,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:43.479310",
+      "updated_at": "2026-09-30 00:24:48.990347"
+    },
+    {
+      "key": "01cecf1b8e49d3c37f124c7a192563abc02ab3fdcd1cf4f1a76fedf2efcf76eb",
+      "kind": "concept",
+      "payload": "{\"name\":\"workshop inspection\"}",
+      "state": "held",
+      "score": 0.7688446044921875,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:24:48.690752",
+      "updated_at": "2026-09-30 00:24:49.145561"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "d17b1e5fa08cde64393f265e751abfb786faa803df03e03e29c6c8aefc41a8e5",
+      "finding_key": "c31bcd9082786726cc6236fabec23e9d3496ea24fb2061f82807df67711aecbe",
+      "source_kind": "item",
+      "source_id": "4cd8f09c0183448f8982562a887812d9",
+      "source_hash": "0845f02e97662f58e471d94a658cb379dfaeae5859f37528c6e29bc5af773f31",
+      "group_key": "item:4cd8f09c0183448f8982562a887812d9",
+      "author_id": "69ff6b488f69458b9879e8ed0afe6b5f",
+      "start": 4,
+      "end": 32,
+      "raw_score": 0.507605254650116,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.814643383026123,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"723a75a25181a490049eb42382e6d3a7ef86e273d1be0498cd256d4b2873a5ac\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "15a7e96d76c97ed3d7feb497dd638e9bdfcf79b1ff2613bd437b6efe6c8df78a",
+      "finding_key": "90f1deedf7a049c9cfa22e6b67a1811a8c7837a6158d181382ed8e1c0aee85f2",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "75c2b5897761e79ec6b0992579d5829372aa1a79868527e593cb5207b40c43f1",
+      "group_key": "item:fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "author_id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "start": 4,
+      "end": 12,
+      "raw_score": 0.8934811949729919,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5107016563415527,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"92b45198f72ae8ad58f559dbf6b5cfbaa5c0e452a3728df1b24b8048f43f30c8\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "4e54a4109731ffa506a38c1ffa32c06fb766915d48224bc63ba8dc0cf2b1559e",
+      "finding_key": "01cecf1b8e49d3c37f124c7a192563abc02ab3fdcd1cf4f1a76fedf2efcf76eb",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "75c2b5897761e79ec6b0992579d5829372aa1a79868527e593cb5207b40c43f1",
+      "group_key": "item:fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "author_id": "e45a2a3d409e4dcc86d308d58bf2400f",
+      "start": 4,
+      "end": 23,
+      "raw_score": 0.7688446044921875,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6748706102371216,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"note\",\"text_hash\":\"92b45198f72ae8ad58f559dbf6b5cfbaa5c0e452a3728df1b24b8048f43f30c8\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:24:24.509070"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 36,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 10
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 12288,
+      "evidence_bytes": 22298,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "789b12ae94f751380fcaf0f48b17ae82a4ab8fdb07badf820794b10114e55f0b",
+      "source_kind": "item",
+      "source_id": "4cd8f09c0183448f8982562a887812d9",
+      "source_hash": "0845f02e97662f58e471d94a658cb379dfaeae5859f37528c6e29bc5af773f31",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 45,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "168fe570562a00f14b87d73f05a6e95e60a7b0ae65e5e13c108fb86a0182c59e",
+      "source_kind": "item",
+      "source_id": "fd2eb6d4464743b6b0e7e9bee4cbd7b4",
+      "source_hash": "75c2b5897761e79ec6b0992579d5829372aa1a79868527e593cb5207b40c43f1",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 38,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

@@ -1,0 +1,878 @@
+{
+  "id": "web_validation_dependency",
+  "domain": "software",
+  "status": "FAIL",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/links/1bb56819e0364a529fc414090dba88d0/evidence",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/1ca223a3b7724e568c454213ddfd2610",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/36f746788d6845efbd58482043367c70",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/web_validation_dependency/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "FastAPI",
+      "Pydantic"
+    ],
+    "absent_concepts": [
+      "service",
+      "request"
+    ],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "FastAPI",
+        "predicate": "uses",
+        "tail": "Pydantic"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "Pydantic",
+        "predicate": "uses",
+        "tail": "FastAPI"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": [
+      {
+        "actor": "alice",
+        "concept": "FastAPI"
+      }
+    ]
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 5.852047419000883,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 6.18066091899891,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 12.032708337999793,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "5c305ff8452f42bd9991176b2dfa788f",
+            "name": "FastAPI",
+            "mentions": 2
+          },
+          {
+            "id": "b5371ca274dc487ba74bf68d19d207f5",
+            "name": "Pydantic",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "FastAPI",
+            "concept_id": "5c305ff8452f42bd9991176b2dfa788f",
+            "is_canonical": true
+          },
+          {
+            "name": "Pydantic",
+            "concept_id": "b5371ca274dc487ba74bf68d19d207f5",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "5c305ff8452f42bd9991176b2dfa788f",
+              "label": "FastAPI",
+              "concepts": [
+                {
+                  "id": "5c305ff8452f42bd9991176b2dfa788f",
+                  "name": "FastAPI",
+                  "size": 2
+                }
+              ]
+            },
+            {
+              "id": "b5371ca274dc487ba74bf68d19d207f5",
+              "label": "Pydantic",
+              "concepts": [
+                {
+                  "id": "b5371ca274dc487ba74bf68d19d207f5",
+                  "name": "Pydantic",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "source": "5c305ff8452f42bd9991176b2dfa788f",
+              "target": "b5371ca274dc487ba74bf68d19d207f5",
+              "label": "uses",
+              "style": "dashed",
+              "state": "held",
+              "origin": "automatic",
+              "directed": true,
+              "count": 1,
+              "support_count": 1,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "1 independent supporting source groups. Automatic; held.",
+              "link_id": "1bb56819e0364a529fc414090dba88d0",
+              "finding_key": "2815bcacf259ad9c3eece0a378682f1f611f41d759d76e91c2c3b6312a3dcc8c",
+              "alternative_count": 2,
+              "conflicts": false
+            }
+          ],
+          "total_nodes": 2,
+          "total_edges": 1,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [
+          {
+            "link_id": "1bb56819e0364a529fc414090dba88d0",
+            "src_name": "FastAPI",
+            "dst_name": "Pydantic",
+            "occurrence_count": 2,
+            "items": [
+              {
+                "id": "1ca223a3b7724e568c454213ddfd2610",
+                "kind": "note",
+                "body": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:20:03.462648Z"
+              },
+              {
+                "id": "36f746788d6845efbd58482043367c70",
+                "kind": "note",
+                "body": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:20:09.371894Z"
+              }
+            ],
+            "passages": [],
+            "summary": {
+              "source": "5c305ff8452f42bd9991176b2dfa788f",
+              "target": "b5371ca274dc487ba74bf68d19d207f5",
+              "label": "uses",
+              "style": "dashed",
+              "state": "held",
+              "origin": "automatic",
+              "directed": true,
+              "count": 1,
+              "support_count": 1,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "1 independent supporting source groups. Automatic; held.",
+              "link_id": "1bb56819e0364a529fc414090dba88d0",
+              "finding_key": "2815bcacf259ad9c3eece0a378682f1f611f41d759d76e91c2c3b6312a3dcc8c",
+              "alternative_count": 2,
+              "conflicts": false
+            },
+            "claims": [
+              {
+                "finding_key": "2815bcacf259ad9c3eece0a378682f1f611f41d759d76e91c2c3b6312a3dcc8c",
+                "kind": "relationship",
+                "src_id": "5c305ff8452f42bd9991176b2dfa788f",
+                "dst_id": "b5371ca274dc487ba74bf68d19d207f5",
+                "predicate": "uses",
+                "state": "held",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 1,
+                "conflicts": false,
+                "src_name": "FastAPI",
+                "dst_name": "Pydantic",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "36f746788d6845efbd58482043367c70",
+                    "source_hash": "603adbedf6d2e52d63f5c3ce293e992ba604bf363152d62b5d8830a2c895bd30",
+                    "start": 0,
+                    "end": 82,
+                    "quote": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                    "text": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "c475b2a617eb1047e9958da5b039ebf6c57b5eddd7f1c8e33622d8c18296691e",
+                "kind": "association",
+                "src_id": "5c305ff8452f42bd9991176b2dfa788f",
+                "dst_id": "b5371ca274dc487ba74bf68d19d207f5",
+                "predicate": "related to",
+                "state": "weak",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "FastAPI",
+                "dst_name": "Pydantic",
+                "directed": false,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "1ca223a3b7724e568c454213ddfd2610",
+                    "source_hash": "9d388cfa22b2c2d9f99169bfcbcb282cd26899989df243daf8ac56b93621fd41",
+                    "start": 0,
+                    "end": 73,
+                    "quote": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+                    "text": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "36f746788d6845efbd58482043367c70",
+                    "source_hash": "603adbedf6d2e52d63f5c3ce293e992ba604bf363152d62b5d8830a2c895bd30",
+                    "start": 0,
+                    "end": 82,
+                    "quote": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                    "text": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "958a9910b80a60f63d4e7cb210695e643ec15c311ac27b96bd7faddd886e1413",
+                "kind": "relationship",
+                "src_id": "5c305ff8452f42bd9991176b2dfa788f",
+                "dst_id": "b5371ca274dc487ba74bf68d19d207f5",
+                "predicate": "depends on",
+                "state": "withdrawn",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 0,
+                "conflicts": false,
+                "src_name": "FastAPI",
+                "dst_name": "Pydantic",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "36f746788d6845efbd58482043367c70",
+                    "source_hash": "603adbedf6d2e52d63f5c3ce293e992ba604bf363152d62b5d8830a2c895bd30",
+                    "start": 31,
+                    "end": 52,
+                    "quote": "FastAPI uses Pydantic",
+                    "text": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              }
+            ],
+            "review_note": null,
+            "reviewed_by": null
+          }
+        ],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "1ca223a3b7724e568c454213ddfd2610",
+              "kind": "note",
+              "question": null,
+              "body": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "5811d8eff2ec4e62af17a11704f77d45",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:03.462648Z",
+              "updated_at": "2026-09-30T00:20:03.500706Z",
+              "concepts": [
+                {
+                  "id": "5c305ff8452f42bd9991176b2dfa788f",
+                  "name": "FastAPI"
+                },
+                {
+                  "id": "b5371ca274dc487ba74bf68d19d207f5",
+                  "name": "Pydantic"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "36f746788d6845efbd58482043367c70",
+              "kind": "note",
+              "question": null,
+              "body": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "cce34d04b1474cc096238b6981de3471",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:09.371894Z",
+              "updated_at": "2026-09-30T00:20:09.383985Z",
+              "concepts": [
+                {
+                  "id": "5c305ff8452f42bd9991176b2dfa788f",
+                  "name": "FastAPI"
+                },
+                {
+                  "id": "b5371ca274dc487ba74bf68d19d207f5",
+                  "name": "Pydantic"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "FastAPI": {
+            "query": "FastAPI",
+            "terms": [
+              "fastapi"
+            ],
+            "concepts": [
+              {
+                "id": "5c305ff8452f42bd9991176b2dfa788f",
+                "name": "FastAPI"
+              }
+            ],
+            "items": [
+              {
+                "id": "1ca223a3b7724e568c454213ddfd2610",
+                "kind": "note",
+                "question": null,
+                "body": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "5811d8eff2ec4e62af17a11704f77d45",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:03.462648Z",
+                "updated_at": "2026-09-30T00:20:03.500706Z",
+                "type": "item",
+                "snippet": "Our <mark>FastAPI</mark> deployment uses Pydantic to validate incoming request fields.",
+                "coverage": 1.0,
+                "score": 0.30000105636743213
+              },
+              {
+                "id": "36f746788d6845efbd58482043367c70",
+                "kind": "note",
+                "question": null,
+                "body": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "cce34d04b1474cc096238b6981de3471",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:09.371894Z",
+                "updated_at": "2026-09-30T00:20:09.383985Z",
+                "type": "item",
+                "snippet": "In the API service I maintain, <mark>FastAPI</mark> uses Pydantic for typed request validation.",
+                "coverage": 1.0,
+                "score": 0.3000009493433396
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Pydantic": {
+            "query": "Pydantic",
+            "terms": [
+              "pydantic"
+            ],
+            "concepts": [
+              {
+                "id": "b5371ca274dc487ba74bf68d19d207f5",
+                "name": "Pydantic"
+              }
+            ],
+            "items": [
+              {
+                "id": "1ca223a3b7724e568c454213ddfd2610",
+                "kind": "note",
+                "question": null,
+                "body": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "5811d8eff2ec4e62af17a11704f77d45",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:03.462648Z",
+                "updated_at": "2026-09-30T00:20:03.500706Z",
+                "type": "item",
+                "snippet": "Our FastAPI deployment uses <mark>Pydantic</mark> to validate incoming request fields.",
+                "coverage": 1.0,
+                "score": 0.30000105636743213
+              },
+              {
+                "id": "36f746788d6845efbd58482043367c70",
+                "kind": "note",
+                "question": null,
+                "body": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "cce34d04b1474cc096238b6981de3471",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:09.371894Z",
+                "updated_at": "2026-09-30T00:20:09.383985Z",
+                "type": "item",
+                "snippet": "In the API service I maintain, FastAPI uses <mark>Pydantic</mark> for typed request validation.",
+                "coverage": 1.0,
+                "score": 0.3000009493433396
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "request": {
+            "query": "request",
+            "terms": [
+              "request"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "1ca223a3b7724e568c454213ddfd2610",
+                "kind": "note",
+                "question": null,
+                "body": "Our FastAPI deployment uses Pydantic to validate incoming request fields.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "5811d8eff2ec4e62af17a11704f77d45",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:03.462648Z",
+                "updated_at": "2026-09-30T00:20:03.500706Z",
+                "type": "item",
+                "snippet": "Our FastAPI deployment uses Pydantic to validate incoming <mark>request</mark> fields.",
+                "coverage": 1.0,
+                "score": 0.30000105636743213
+              },
+              {
+                "id": "36f746788d6845efbd58482043367c70",
+                "kind": "note",
+                "question": null,
+                "body": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "cce34d04b1474cc096238b6981de3471",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:09.371894Z",
+                "updated_at": "2026-09-30T00:20:09.383985Z",
+                "type": "item",
+                "snippet": "In the API service I maintain, FastAPI uses Pydantic for typed <mark>request</mark> validation.",
+                "coverage": 1.0,
+                "score": 0.3000009493433396
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "service": {
+            "query": "service",
+            "terms": [
+              "service"
+            ],
+            "concepts": [],
+            "items": [
+              {
+                "id": "36f746788d6845efbd58482043367c70",
+                "kind": "note",
+                "question": null,
+                "body": "In the API service I maintain, FastAPI uses Pydantic for typed request validation.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "cce34d04b1474cc096238b6981de3471",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:09.371894Z",
+                "updated_at": "2026-09-30T00:20:09.383985Z",
+                "type": "item",
+                "snippet": "In the API <mark>service</mark> I maintain, FastAPI uses Pydantic for typed request validation.",
+                "coverage": 1.0,
+                "score": 0.3000009493433396
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 23,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "1ca223a3b7724e568c454213ddfd2610",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "36f746788d6845efbd58482043367c70",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "FastAPI",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "5c305ff8452f42bd9991176b2dfa788f",
+          "name": "FastAPI",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Pydantic",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "b5371ca274dc487ba74bf68d19d207f5",
+          "name": "Pydantic",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "service",
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "request",
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "FastAPI",
+        "predicate": "uses",
+        "tail": "Pydantic"
+      },
+      "expected_present": true,
+      "observed": [],
+      "passed": false
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Pydantic",
+        "predicate": "uses",
+        "tail": "FastAPI"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    },
+    {
+      "category": "expertise",
+      "assertion": {
+        "actor": "alice",
+        "concept": "FastAPI"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 13.616146338999897,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3949178880,
+  "sampled_cpu_seconds": 30.22999999999999
+}

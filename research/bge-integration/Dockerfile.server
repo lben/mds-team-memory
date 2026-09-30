@@ -1,0 +1,4 @@
+FROM registry.access.redhat.com/ubi8/ubi@sha256:2dcfc23b79d88fdaeefc6ed0cfb144e41dca600bfa73c38ab5d8dca5b05d1b7f
+RUN yum install -y openssh-server shadow-utils && yum clean all && useradd --uid 10001 --create-home mds && echo 'mds:isolated-update-test' | chpasswd && ssh-keygen -A
+RUN printf '\nPasswordAuthentication yes\nUsePAM no\nPermitRootLogin no\n' >> /etc/ssh/sshd_config
+CMD ["/usr/sbin/sshd", "-D", "-e"]

@@ -1,0 +1,842 @@
+{
+  "id": "passive_voice_worker_broker",
+  "domain": "software",
+  "status": "PASS",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/links/f79f050cc2644699b41ca31217caca56/evidence",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/598649e2d78f416cab8796fc683d8c24",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/cfa73e3a6a5244ff9374f9138e84366a",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/passive_voice_worker_broker/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "Redis",
+      "Celery"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "Celery",
+        "predicate": "uses",
+        "tail": "Redis"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "Redis",
+        "predicate": "uses",
+        "tail": "Celery"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 9.219560838000689,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 7.762917586000185,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 16.982478424000874,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "fc3c2b99aeec46c89609fd2140d209b8",
+            "name": "Celery",
+            "mentions": 2
+          },
+          {
+            "id": "516b0c67b6bf432888c5c760ffade46a",
+            "name": "Redis",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "Redis",
+            "concept_id": "516b0c67b6bf432888c5c760ffade46a",
+            "is_canonical": true
+          },
+          {
+            "name": "Celery",
+            "concept_id": "fc3c2b99aeec46c89609fd2140d209b8",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [
+          {
+            "finding_key": "f365a331c63bc50fdfb7599cb703089a44fb1b59320e030cbc6edc9b4eff67ce",
+            "kind": "relationship",
+            "src_id": "fc3c2b99aeec46c89609fd2140d209b8",
+            "dst_id": "516b0c67b6bf432888c5c760ffade46a",
+            "predicate": "uses",
+            "state": "active",
+            "origin": "automatic",
+            "override": "automatic",
+            "policy_version": "grounded-cold-start-v12-bge",
+            "support_count": 2,
+            "conflicts": false,
+            "src_name": "Celery",
+            "dst_name": "Redis",
+            "directed": true,
+            "sources": [
+              {
+                "source_kind": "item",
+                "source_id": "598649e2d78f416cab8796fc683d8c24",
+                "source_hash": "b16f25d53b352d1bc16f2689c5cefc5fec0b9026ce60fd5ead2ff364a25ddf49",
+                "start": 0,
+                "end": 72,
+                "quote": "Redis is used by Celery as the broker in our background task deployment.",
+                "text": "Redis is used by Celery as the broker in our background task deployment.",
+                "context_source": false,
+                "polarity": "positive",
+                "literal_support": true,
+                "assertion_allowed": true,
+                "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                "locator": "",
+                "origin": "note",
+                "document_id": null,
+                "filename": null,
+                "parent_id": null
+              },
+              {
+                "source_kind": "item",
+                "source_id": "cfa73e3a6a5244ff9374f9138e84366a",
+                "source_hash": "d558a1e1692a6f6593f80e6b8c61486a8a29283ce650f7df46c0d592171cd70a",
+                "start": 0,
+                "end": 76,
+                "quote": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                "text": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                "context_source": false,
+                "polarity": "positive",
+                "literal_support": true,
+                "assertion_allowed": true,
+                "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                "locator": "",
+                "origin": "note",
+                "document_id": null,
+                "filename": null,
+                "parent_id": null
+              }
+            ]
+          }
+        ],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "fc3c2b99aeec46c89609fd2140d209b8",
+              "label": "Celery + 1 more",
+              "concepts": [
+                {
+                  "id": "fc3c2b99aeec46c89609fd2140d209b8",
+                  "name": "Celery",
+                  "size": 2
+                },
+                {
+                  "id": "516b0c67b6bf432888c5c760ffade46a",
+                  "name": "Redis",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "source": "fc3c2b99aeec46c89609fd2140d209b8",
+              "target": "516b0c67b6bf432888c5c760ffade46a",
+              "label": "uses",
+              "style": "solid",
+              "state": "active",
+              "origin": "automatic",
+              "directed": true,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; active.",
+              "link_id": "f79f050cc2644699b41ca31217caca56",
+              "finding_key": "f365a331c63bc50fdfb7599cb703089a44fb1b59320e030cbc6edc9b4eff67ce",
+              "alternative_count": 2,
+              "conflicts": false
+            }
+          ],
+          "total_nodes": 2,
+          "total_edges": 1,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [
+          {
+            "link_id": "f79f050cc2644699b41ca31217caca56",
+            "src_name": "Celery",
+            "dst_name": "Redis",
+            "occurrence_count": 2,
+            "items": [
+              {
+                "id": "598649e2d78f416cab8796fc683d8c24",
+                "kind": "note",
+                "body": "Redis is used by Celery as the broker in our background task deployment.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:20:58.047219Z"
+              },
+              {
+                "id": "cfa73e3a6a5244ff9374f9138e84366a",
+                "kind": "note",
+                "body": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:21:07.333484Z"
+              }
+            ],
+            "passages": [],
+            "summary": {
+              "source": "fc3c2b99aeec46c89609fd2140d209b8",
+              "target": "516b0c67b6bf432888c5c760ffade46a",
+              "label": "uses",
+              "style": "solid",
+              "state": "active",
+              "origin": "automatic",
+              "directed": true,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; active.",
+              "link_id": "f79f050cc2644699b41ca31217caca56",
+              "finding_key": "f365a331c63bc50fdfb7599cb703089a44fb1b59320e030cbc6edc9b4eff67ce",
+              "alternative_count": 2,
+              "conflicts": false
+            },
+            "claims": [
+              {
+                "finding_key": "f365a331c63bc50fdfb7599cb703089a44fb1b59320e030cbc6edc9b4eff67ce",
+                "kind": "relationship",
+                "src_id": "fc3c2b99aeec46c89609fd2140d209b8",
+                "dst_id": "516b0c67b6bf432888c5c760ffade46a",
+                "predicate": "uses",
+                "state": "active",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "Celery",
+                "dst_name": "Redis",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "598649e2d78f416cab8796fc683d8c24",
+                    "source_hash": "b16f25d53b352d1bc16f2689c5cefc5fec0b9026ce60fd5ead2ff364a25ddf49",
+                    "start": 0,
+                    "end": 72,
+                    "quote": "Redis is used by Celery as the broker in our background task deployment.",
+                    "text": "Redis is used by Celery as the broker in our background task deployment.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "cfa73e3a6a5244ff9374f9138e84366a",
+                    "source_hash": "d558a1e1692a6f6593f80e6b8c61486a8a29283ce650f7df46c0d592171cd70a",
+                    "start": 0,
+                    "end": 76,
+                    "quote": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                    "text": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "35baf40033748ab286c2a40f3ea0d788b21bcd8c3754f83320cc306f29489f18",
+                "kind": "association",
+                "src_id": "516b0c67b6bf432888c5c760ffade46a",
+                "dst_id": "fc3c2b99aeec46c89609fd2140d209b8",
+                "predicate": "related to",
+                "state": "weak",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "Redis",
+                "dst_name": "Celery",
+                "directed": false,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "598649e2d78f416cab8796fc683d8c24",
+                    "source_hash": "b16f25d53b352d1bc16f2689c5cefc5fec0b9026ce60fd5ead2ff364a25ddf49",
+                    "start": 0,
+                    "end": 72,
+                    "quote": "Redis is used by Celery as the broker in our background task deployment.",
+                    "text": "Redis is used by Celery as the broker in our background task deployment.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "cfa73e3a6a5244ff9374f9138e84366a",
+                    "source_hash": "d558a1e1692a6f6593f80e6b8c61486a8a29283ce650f7df46c0d592171cd70a",
+                    "start": 0,
+                    "end": 76,
+                    "quote": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                    "text": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "2f35d55e77efea09e9dcfe20986e09a1541e8f1ad0bafc3f55a47cbeeb37bc2f",
+                "kind": "relationship",
+                "src_id": "516b0c67b6bf432888c5c760ffade46a",
+                "dst_id": "fc3c2b99aeec46c89609fd2140d209b8",
+                "predicate": "part of",
+                "state": "withdrawn",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 0,
+                "conflicts": false,
+                "src_name": "Redis",
+                "dst_name": "Celery",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "598649e2d78f416cab8796fc683d8c24",
+                    "source_hash": "b16f25d53b352d1bc16f2689c5cefc5fec0b9026ce60fd5ead2ff364a25ddf49",
+                    "start": 0,
+                    "end": 23,
+                    "quote": "Redis is used by Celery",
+                    "text": "Redis is used by Celery as the broker in our background task deployment.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              }
+            ],
+            "review_note": null,
+            "reviewed_by": null
+          }
+        ],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "598649e2d78f416cab8796fc683d8c24",
+              "kind": "note",
+              "question": null,
+              "body": "Redis is used by Celery as the broker in our background task deployment.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "8cdac3a1f32a4feeb3b0df681819c3aa",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:58.047219Z",
+              "updated_at": "2026-09-30T00:20:58.092267Z",
+              "concepts": [
+                {
+                  "id": "fc3c2b99aeec46c89609fd2140d209b8",
+                  "name": "Celery"
+                },
+                {
+                  "id": "516b0c67b6bf432888c5c760ffade46a",
+                  "name": "Redis"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "cfa73e3a6a5244ff9374f9138e84366a",
+              "kind": "note",
+              "question": null,
+              "body": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "6be23795647747a8a8b80a1015f30638",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:21:07.333484Z",
+              "updated_at": "2026-09-30T00:21:07.373992Z",
+              "concepts": [
+                {
+                  "id": "fc3c2b99aeec46c89609fd2140d209b8",
+                  "name": "Celery"
+                },
+                {
+                  "id": "516b0c67b6bf432888c5c760ffade46a",
+                  "name": "Redis"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "Celery": {
+            "query": "Celery",
+            "terms": [
+              "celery"
+            ],
+            "concepts": [
+              {
+                "id": "fc3c2b99aeec46c89609fd2140d209b8",
+                "name": "Celery"
+              }
+            ],
+            "items": [
+              {
+                "id": "598649e2d78f416cab8796fc683d8c24",
+                "kind": "note",
+                "question": null,
+                "body": "Redis is used by Celery as the broker in our background task deployment.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "8cdac3a1f32a4feeb3b0df681819c3aa",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:58.047219Z",
+                "updated_at": "2026-09-30T00:20:58.092267Z",
+                "type": "item",
+                "snippet": "Redis is used by <mark>Celery</mark> as the broker in our background task deployment.",
+                "coverage": 1.0,
+                "score": 0.3000010153846154
+              },
+              {
+                "id": "cfa73e3a6a5244ff9374f9138e84366a",
+                "kind": "note",
+                "question": null,
+                "body": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "6be23795647747a8a8b80a1015f30638",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:07.333484Z",
+                "updated_at": "2026-09-30T00:21:07.373992Z",
+                "type": "item",
+                "snippet": "For the scheduled task queue, Redis is used by <mark>Celery</mark> to carry pending jobs.",
+                "coverage": 1.0,
+                "score": 0.30000098507462686
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "Redis": {
+            "query": "Redis",
+            "terms": [
+              "redis"
+            ],
+            "concepts": [
+              {
+                "id": "516b0c67b6bf432888c5c760ffade46a",
+                "name": "Redis"
+              }
+            ],
+            "items": [
+              {
+                "id": "598649e2d78f416cab8796fc683d8c24",
+                "kind": "note",
+                "question": null,
+                "body": "Redis is used by Celery as the broker in our background task deployment.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "8cdac3a1f32a4feeb3b0df681819c3aa",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:58.047219Z",
+                "updated_at": "2026-09-30T00:20:58.092267Z",
+                "type": "item",
+                "snippet": "<mark>Redis</mark> is used by Celery as the broker in our background task deployment.",
+                "coverage": 1.0,
+                "score": 0.3000010153846154
+              },
+              {
+                "id": "cfa73e3a6a5244ff9374f9138e84366a",
+                "kind": "note",
+                "question": null,
+                "body": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "6be23795647747a8a8b80a1015f30638",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:21:07.333484Z",
+                "updated_at": "2026-09-30T00:21:07.373992Z",
+                "type": "item",
+                "snippet": "For the scheduled task queue, <mark>Redis</mark> is used by Celery to carry pending jobs.",
+                "coverage": 1.0,
+                "score": 0.30000098507462686
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 18,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "598649e2d78f416cab8796fc683d8c24",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "cfa73e3a6a5244ff9374f9138e84366a",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "Redis",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "516b0c67b6bf432888c5c760ffade46a",
+          "name": "Redis",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "Celery",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "fc3c2b99aeec46c89609fd2140d209b8",
+          "name": "Celery",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Celery",
+        "predicate": "uses",
+        "tail": "Redis"
+      },
+      "expected_present": true,
+      "observed": [
+        {
+          "finding_key": "f365a331c63bc50fdfb7599cb703089a44fb1b59320e030cbc6edc9b4eff67ce",
+          "kind": "relationship",
+          "src_id": "fc3c2b99aeec46c89609fd2140d209b8",
+          "dst_id": "516b0c67b6bf432888c5c760ffade46a",
+          "predicate": "uses",
+          "state": "active",
+          "origin": "automatic",
+          "override": "automatic",
+          "policy_version": "grounded-cold-start-v12-bge",
+          "support_count": 2,
+          "conflicts": false,
+          "src_name": "Celery",
+          "dst_name": "Redis",
+          "directed": true,
+          "sources": [
+            {
+              "source_kind": "item",
+              "source_id": "598649e2d78f416cab8796fc683d8c24",
+              "source_hash": "b16f25d53b352d1bc16f2689c5cefc5fec0b9026ce60fd5ead2ff364a25ddf49",
+              "start": 0,
+              "end": 72,
+              "quote": "Redis is used by Celery as the broker in our background task deployment.",
+              "text": "Redis is used by Celery as the broker in our background task deployment.",
+              "context_source": false,
+              "polarity": "positive",
+              "literal_support": true,
+              "assertion_allowed": true,
+              "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+              "locator": "",
+              "origin": "note",
+              "document_id": null,
+              "filename": null,
+              "parent_id": null
+            },
+            {
+              "source_kind": "item",
+              "source_id": "cfa73e3a6a5244ff9374f9138e84366a",
+              "source_hash": "d558a1e1692a6f6593f80e6b8c61486a8a29283ce650f7df46c0d592171cd70a",
+              "start": 0,
+              "end": 76,
+              "quote": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+              "text": "For the scheduled task queue, Redis is used by Celery to carry pending jobs.",
+              "context_source": false,
+              "polarity": "positive",
+              "literal_support": true,
+              "assertion_allowed": true,
+              "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+              "locator": "",
+              "origin": "note",
+              "document_id": null,
+              "filename": null,
+              "parent_id": null
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "Redis",
+        "predicate": "uses",
+        "tail": "Celery"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 18.507924550000098,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3946418176,
+  "sampled_cpu_seconds": 32.210000000000036
+}

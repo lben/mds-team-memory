@@ -1,0 +1,844 @@
+{
+  "id": "workshop_lighting_replacement",
+  "domain": "building_maintenance",
+  "status": "PASS",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/links/14be684d1fa94df18e89c9fe21574ea7/evidence",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/8f7fea304dc24dadafe42154130894e1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/321d6f22b0be4ef89eca73d0b007faf8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/workshop_lighting_replacement/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "LED lighting",
+      "fluorescent lighting"
+    ],
+    "absent_concepts": [],
+    "aliases": [],
+    "absent_aliases": [],
+    "relationships": [
+      {
+        "head": "LED lighting",
+        "predicate": "replaces",
+        "tail": "fluorescent lighting"
+      }
+    ],
+    "absent_relationships": [
+      {
+        "head": "fluorescent lighting",
+        "predicate": "replaces",
+        "tail": "LED lighting"
+      }
+    ],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 6.440692877999027,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 7.672140295000645,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 14.112833172999672,
+      "inference_calls": 2,
+      "observed": {
+        "concepts": [
+          {
+            "id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+            "name": "fluorescent lighting",
+            "mentions": 2
+          },
+          {
+            "id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+            "name": "LED lighting",
+            "mentions": 2
+          }
+        ],
+        "terms": [
+          {
+            "name": "LED lighting",
+            "concept_id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+            "is_canonical": true
+          },
+          {
+            "name": "fluorescent lighting",
+            "concept_id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+            "is_canonical": true
+          }
+        ],
+        "aliases": [],
+        "relationships": [
+          {
+            "finding_key": "2a907e69aa1e17e024a15aa060dc304f15849f14fb23ddf9a06783739cd4b330",
+            "kind": "relationship",
+            "src_id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+            "dst_id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+            "predicate": "replaces",
+            "state": "active",
+            "origin": "automatic",
+            "override": "automatic",
+            "policy_version": "grounded-cold-start-v12-bge",
+            "support_count": 2,
+            "conflicts": false,
+            "src_name": "LED lighting",
+            "dst_name": "fluorescent lighting",
+            "directed": true,
+            "sources": [
+              {
+                "source_kind": "item",
+                "source_id": "321d6f22b0be4ef89eca73d0b007faf8",
+                "source_hash": "1b34b8820647ada39a6ec5fbd62f6dda90a9df00ff3c9a393c2828ec8d3bac32",
+                "start": 58,
+                "end": 122,
+                "quote": "LED lighting replaces fluorescent lighting throughout that room.",
+                "text": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+                "context_source": false,
+                "polarity": "positive",
+                "literal_support": true,
+                "assertion_allowed": true,
+                "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                "locator": "",
+                "origin": "note",
+                "document_id": null,
+                "filename": null,
+                "parent_id": null
+              },
+              {
+                "source_kind": "item",
+                "source_id": "8f7fea304dc24dadafe42154130894e1",
+                "source_hash": "07c8bd02077026473187f0da1b46aaac8cc4be8e1130bc028ac5c48464a8f19f",
+                "start": 0,
+                "end": 98,
+                "quote": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                "text": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                "context_source": false,
+                "polarity": "positive",
+                "literal_support": true,
+                "assertion_allowed": true,
+                "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                "locator": "",
+                "origin": "note",
+                "document_id": null,
+                "filename": null,
+                "parent_id": null
+              }
+            ]
+          }
+        ],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+              "label": "LED lighting + 1 more",
+              "concepts": [
+                {
+                  "id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+                  "name": "LED lighting",
+                  "size": 2
+                },
+                {
+                  "id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+                  "name": "fluorescent lighting",
+                  "size": 2
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "source": "537d3bae09cd4fc1a8de1ae04c37fad4",
+              "target": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+              "label": "replaces",
+              "style": "solid",
+              "state": "active",
+              "origin": "automatic",
+              "directed": true,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; active.",
+              "link_id": "14be684d1fa94df18e89c9fe21574ea7",
+              "finding_key": "2a907e69aa1e17e024a15aa060dc304f15849f14fb23ddf9a06783739cd4b330",
+              "alternative_count": 2,
+              "conflicts": false
+            }
+          ],
+          "total_nodes": 2,
+          "total_edges": 1,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [
+          {
+            "link_id": "14be684d1fa94df18e89c9fe21574ea7",
+            "src_name": "LED lighting",
+            "dst_name": "fluorescent lighting",
+            "occurrence_count": 2,
+            "items": [
+              {
+                "id": "321d6f22b0be4ef89eca73d0b007faf8",
+                "kind": "note",
+                "body": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:20:48.959980Z"
+              },
+              {
+                "id": "8f7fea304dc24dadafe42154130894e1",
+                "kind": "note",
+                "body": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                "parent_id": null,
+                "created_at": "2026-09-30T00:20:42.459705Z"
+              }
+            ],
+            "passages": [],
+            "summary": {
+              "source": "537d3bae09cd4fc1a8de1ae04c37fad4",
+              "target": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+              "label": "replaces",
+              "style": "solid",
+              "state": "active",
+              "origin": "automatic",
+              "directed": true,
+              "count": 2,
+              "support_count": 2,
+              "policy_version": "grounded-cold-start-v12-bge",
+              "evidence": "2 independent supporting source groups. Automatic; active.",
+              "link_id": "14be684d1fa94df18e89c9fe21574ea7",
+              "finding_key": "2a907e69aa1e17e024a15aa060dc304f15849f14fb23ddf9a06783739cd4b330",
+              "alternative_count": 2,
+              "conflicts": false
+            },
+            "claims": [
+              {
+                "finding_key": "2a907e69aa1e17e024a15aa060dc304f15849f14fb23ddf9a06783739cd4b330",
+                "kind": "relationship",
+                "src_id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+                "dst_id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+                "predicate": "replaces",
+                "state": "active",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "LED lighting",
+                "dst_name": "fluorescent lighting",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "321d6f22b0be4ef89eca73d0b007faf8",
+                    "source_hash": "1b34b8820647ada39a6ec5fbd62f6dda90a9df00ff3c9a393c2828ec8d3bac32",
+                    "start": 58,
+                    "end": 122,
+                    "quote": "LED lighting replaces fluorescent lighting throughout that room.",
+                    "text": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "8f7fea304dc24dadafe42154130894e1",
+                    "source_hash": "07c8bd02077026473187f0da1b46aaac8cc4be8e1130bc028ac5c48464a8f19f",
+                    "start": 0,
+                    "end": 98,
+                    "quote": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                    "text": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": true,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "8169fc0d4425266e5df8328e56e09c6df3385e899b7c770e894744c67afd9ee8",
+                "kind": "association",
+                "src_id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+                "dst_id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+                "predicate": "related to",
+                "state": "weak",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 2,
+                "conflicts": false,
+                "src_name": "LED lighting",
+                "dst_name": "fluorescent lighting",
+                "directed": false,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "321d6f22b0be4ef89eca73d0b007faf8",
+                    "source_hash": "1b34b8820647ada39a6ec5fbd62f6dda90a9df00ff3c9a393c2828ec8d3bac32",
+                    "start": 0,
+                    "end": 122,
+                    "quote": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+                    "text": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  },
+                  {
+                    "source_kind": "item",
+                    "source_id": "8f7fea304dc24dadafe42154130894e1",
+                    "source_hash": "07c8bd02077026473187f0da1b46aaac8cc4be8e1130bc028ac5c48464a8f19f",
+                    "start": 0,
+                    "end": 98,
+                    "quote": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                    "text": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                    "context_source": false,
+                    "polarity": "positive",
+                    "literal_support": false,
+                    "assertion_allowed": false,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              },
+              {
+                "finding_key": "8f5c47a1e4ee3d314d3552ead73f7b24a6afd793866627223ed0243122df7515",
+                "kind": "relationship",
+                "src_id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+                "dst_id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+                "predicate": "produces",
+                "state": "withdrawn",
+                "origin": "automatic",
+                "override": "automatic",
+                "policy_version": "grounded-cold-start-v12-bge",
+                "support_count": 0,
+                "conflicts": false,
+                "src_name": "LED lighting",
+                "dst_name": "fluorescent lighting",
+                "directed": true,
+                "sources": [
+                  {
+                    "source_kind": "item",
+                    "source_id": "8f7fea304dc24dadafe42154130894e1",
+                    "source_hash": "07c8bd02077026473187f0da1b46aaac8cc4be8e1130bc028ac5c48464a8f19f",
+                    "start": 28,
+                    "end": 70,
+                    "quote": "LED lighting replaces fluorescent lighting",
+                    "text": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                    "context_source": false,
+                    "polarity": "uncertain",
+                    "literal_support": false,
+                    "assertion_allowed": true,
+                    "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+                    "locator": "",
+                    "origin": "note",
+                    "document_id": null,
+                    "filename": null,
+                    "parent_id": null
+                  }
+                ]
+              }
+            ],
+            "review_note": null,
+            "reviewed_by": null
+          }
+        ],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "8f7fea304dc24dadafe42154130894e1",
+              "kind": "note",
+              "question": null,
+              "body": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "e7874fc9e5534e0f914ba158a67c4cf3",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:42.459705Z",
+              "updated_at": "2026-09-30T00:20:42.497627Z",
+              "concepts": [
+                {
+                  "id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+                  "name": "fluorescent lighting"
+                },
+                {
+                  "id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+                  "name": "LED lighting"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "321d6f22b0be4ef89eca73d0b007faf8",
+              "kind": "note",
+              "question": null,
+              "body": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "69da1a3ec2344a30bd67d33d0926fc93",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:20:48.959980Z",
+              "updated_at": "2026-09-30T00:20:48.973521Z",
+              "concepts": [
+                {
+                  "id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+                  "name": "fluorescent lighting"
+                },
+                {
+                  "id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+                  "name": "LED lighting"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "LED lighting": {
+            "query": "LED lighting",
+            "terms": [
+              "led",
+              "lighting"
+            ],
+            "concepts": [
+              {
+                "id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+                "name": "LED lighting"
+              }
+            ],
+            "items": [
+              {
+                "id": "8f7fea304dc24dadafe42154130894e1",
+                "kind": "note",
+                "question": null,
+                "body": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "e7874fc9e5534e0f914ba158a67c4cf3",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:42.459705Z",
+                "updated_at": "2026-09-30T00:20:42.497627Z",
+                "type": "item",
+                "snippet": "In the workshop renovation, <mark>LED lighting</mark> replaces fluorescent lighting above the assembly benches.",
+                "coverage": 1.0,
+                "score": 0.30000105769230767
+              },
+              {
+                "id": "321d6f22b0be4ef89eca73d0b007faf8",
+                "kind": "note",
+                "question": null,
+                "body": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "69da1a3ec2344a30bd67d33d0926fc93",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:48.959980Z",
+                "updated_at": "2026-09-30T00:20:48.973521Z",
+                "type": "item",
+                "snippet": "The completed workshop upgrade uses a new fixture layout. <mark>LED lighting</mark> replaces fluorescent lighting throughout that room.",
+                "coverage": 1.0,
+                "score": 0.30000094827586204
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "fluorescent lighting": {
+            "query": "fluorescent lighting",
+            "terms": [
+              "fluorescent",
+              "lighting"
+            ],
+            "concepts": [
+              {
+                "id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+                "name": "fluorescent lighting"
+              }
+            ],
+            "items": [
+              {
+                "id": "8f7fea304dc24dadafe42154130894e1",
+                "kind": "note",
+                "question": null,
+                "body": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "e7874fc9e5534e0f914ba158a67c4cf3",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:42.459705Z",
+                "updated_at": "2026-09-30T00:20:42.497627Z",
+                "type": "item",
+                "snippet": "In the workshop renovation, LED lighting replaces <mark>fluorescent lighting</mark> above the assembly benches.",
+                "coverage": 1.0,
+                "score": 0.30000105769230767
+              },
+              {
+                "id": "321d6f22b0be4ef89eca73d0b007faf8",
+                "kind": "note",
+                "question": null,
+                "body": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "69da1a3ec2344a30bd67d33d0926fc93",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:20:48.959980Z",
+                "updated_at": "2026-09-30T00:20:48.973521Z",
+                "type": "item",
+                "snippet": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces <mark>fluorescent lighting</mark> throughout that room.",
+                "coverage": 1.0,
+                "score": 0.30000094827586204
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 23,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "8f7fea304dc24dadafe42154130894e1",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "321d6f22b0be4ef89eca73d0b007faf8",
+      "storage_kind": "item",
+      "actor": "ben"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "LED lighting",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+          "name": "LED lighting",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "concepts",
+      "assertion": "fluorescent lighting",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+          "name": "fluorescent lighting",
+          "mentions": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "LED lighting",
+        "predicate": "replaces",
+        "tail": "fluorescent lighting"
+      },
+      "expected_present": true,
+      "observed": [
+        {
+          "finding_key": "2a907e69aa1e17e024a15aa060dc304f15849f14fb23ddf9a06783739cd4b330",
+          "kind": "relationship",
+          "src_id": "537d3bae09cd4fc1a8de1ae04c37fad4",
+          "dst_id": "c556c0649a1341e98d8cbfcf1d5e1fe1",
+          "predicate": "replaces",
+          "state": "active",
+          "origin": "automatic",
+          "override": "automatic",
+          "policy_version": "grounded-cold-start-v12-bge",
+          "support_count": 2,
+          "conflicts": false,
+          "src_name": "LED lighting",
+          "dst_name": "fluorescent lighting",
+          "directed": true,
+          "sources": [
+            {
+              "source_kind": "item",
+              "source_id": "321d6f22b0be4ef89eca73d0b007faf8",
+              "source_hash": "1b34b8820647ada39a6ec5fbd62f6dda90a9df00ff3c9a393c2828ec8d3bac32",
+              "start": 58,
+              "end": 122,
+              "quote": "LED lighting replaces fluorescent lighting throughout that room.",
+              "text": "The completed workshop upgrade uses a new fixture layout. LED lighting replaces fluorescent lighting throughout that room.",
+              "context_source": false,
+              "polarity": "positive",
+              "literal_support": true,
+              "assertion_allowed": true,
+              "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+              "locator": "",
+              "origin": "note",
+              "document_id": null,
+              "filename": null,
+              "parent_id": null
+            },
+            {
+              "source_kind": "item",
+              "source_id": "8f7fea304dc24dadafe42154130894e1",
+              "source_hash": "07c8bd02077026473187f0da1b46aaac8cc4be8e1130bc028ac5c48464a8f19f",
+              "start": 0,
+              "end": 98,
+              "quote": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+              "text": "In the workshop renovation, LED lighting replaces fluorescent lighting above the assembly benches.",
+              "context_source": false,
+              "polarity": "positive",
+              "literal_support": true,
+              "assertion_allowed": true,
+              "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+              "locator": "",
+              "origin": "note",
+              "document_id": null,
+              "filename": null,
+              "parent_id": null
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "relationships",
+      "assertion": {
+        "head": "fluorescent lighting",
+        "predicate": "replaces",
+        "tail": "LED lighting"
+      },
+      "expected_present": false,
+      "observed": [],
+      "passed": true
+    }
+  ],
+  "seconds": 15.437153840000974,
+  "inference_calls": 2,
+  "sampled_peak_tree_rss_bytes": 3947892736,
+  "sampled_cpu_seconds": 30.720000000000027
+}

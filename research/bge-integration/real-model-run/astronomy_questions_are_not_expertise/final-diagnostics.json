@@ -1,0 +1,400 @@
+{
+  "ml_sources": [
+    {
+      "kind": "item",
+      "id": "2ab9e623f75b433e878894de22a09c90",
+      "content_hash": "00bf17db6d84a185abf62e583adcbb4f78fd0f4eb9a1e763b2c95a46b975cbda",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":80,\"label\":\"named entity\",\"name\":\"Mars\",\"score\":0.9142897725105286,\"start\":76},{\"end\":71,\"label\":\"named entity\",\"name\":\"Earth\",\"score\":0.9085791707038879,\"start\":66},{\"end\":26,\"label\":\"topic or process\",\"name\":\"orbital mechanics\",\"score\":0.9369496703147888,\"start\":9},{\"end\":48,\"label\":\"object or substance\",\"name\":\"spacecraft\",\"score\":0.7139456868171692,\"start\":38}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"earth\":0.46482670307159424,\"mars\":0.5658162236213684,\"orbital mechanics\":0.7367362976074219,\"spacecraft\":0.6305242776870728},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"6b0b4e78c4751e9dc3b904b3c5be554845279a231218a1fc357c579b88dbb4c3\"}",
+      "updated_at": "2026-09-30 00:26:43.791233"
+    },
+    {
+      "kind": "profile",
+      "id": "7e2ee512aa864934b99a83f9dde4dbac",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:26:44.550781"
+    },
+    {
+      "kind": "profile",
+      "id": "e087f2501a0f402ab5dd5814717b825e",
+      "content_hash": "c3f27051bc76c86f97e50291be4a68bf1f40f9a2d564a5e156ba8cc825789bfe",
+      "valid": 1,
+      "model_version": "grounded-cold-start-v12-bge",
+      "result": "{\"pipeline_version\":\"72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge\",\"projection_contract\":\"5e5f11915c34a77990d71dd05a4622cc45a610562cd6ab39eb6227405ea11be9\",\"topic_feedback_contract\":\"explicit-topic-feedback-v1\"}",
+      "updated_at": "2026-09-30 00:26:44.628362"
+    },
+    {
+      "kind": "item",
+      "id": "d49e61addf57498a8c22ee980648ca05",
+      "content_hash": "0f2fa5663be43588a69391222561515ed52afc22576278e2568eac0d367b0cee",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":31,\"label\":\"topic or process\",\"name\":\"orbital mechanics\",\"score\":0.9940423369407654,\"start\":14},{\"end\":73,\"label\":\"object or substance\",\"name\":\"elliptical orbit\",\"score\":0.7134318947792053,\"start\":57}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"elliptical orbit\":0.8108855485916138,\"orbital mechanics\":0.8037628531455994},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"79d5e6c9cd25bc2daaa81bef71a6e972d67853a3f62cf5019f555077a3970dee\"}",
+      "updated_at": "2026-09-30 00:26:44.230497"
+    },
+    {
+      "kind": "item",
+      "id": "8c6d702820524f5cb97a043def76fc08",
+      "content_hash": "49d05b701d16d644bba0fe607475c9524c9f172d72137e417d1ea2ce680bb6b3",
+      "valid": 1,
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206",
+      "result": "{\"alias_scope_contract\":\"ea50a16b4aa586eaf63f1c4d2325062df3c44fe232ad0427778866b85c6bb77d\",\"concepts\":[{\"end\":24,\"label\":\"topic or process\",\"name\":\"orbital mechanics\",\"score\":0.9888490438461304,\"start\":7},{\"end\":69,\"label\":\"object or substance\",\"name\":\"transfer orbits\",\"score\":0.7985008955001831,\"start\":54}],\"conflict_coverage_revision\":\"conflict-v3\",\"conflict_definitions\":[],\"corroborated_definitions\":[],\"definitions_indexed\":2,\"dimensions\":1024,\"eligibility\":{\"margins\":{\"orbital mechanics\":0.7567821741104126,\"transfer orbits\":0.8428938388824463},\"version\":\"bge:d4aa6901d3a41ba39fb536a557fa166f842b0e09:cf3f440d0d95cfaf\"},\"embedding_count\":1,\"embedding_version\":\"d4aa6901d3a41ba39fb536a557fa166f842b0e09\",\"relation_guard_revision\":\"r1-typed-predicate-assertions\",\"relations\":[],\"text_hash\":\"53040f065a79a382157b2d6881a67274bf2fb47e9b10aca21dd389e39ef429c6\"}",
+      "updated_at": "2026-09-30 00:26:43.998128"
+    }
+  ],
+  "ml_findings": [
+    {
+      "key": "22c64af558a52a0c544cd574dc098b5ca4d50fc956a30b252570c91bfc31ec8e",
+      "kind": "concept",
+      "payload": "{\"name\":\"Mars\"}",
+      "state": "held",
+      "score": 0.9142897725105286,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:30.529113",
+      "updated_at": "2026-09-30 00:26:43.866809"
+    },
+    {
+      "key": "7fd4a4f0e07d5863bd50a117cebec7bc5b1f38309c74706a7ff9929f10c7b320",
+      "kind": "concept",
+      "payload": "{\"name\":\"Earth\"}",
+      "state": "held",
+      "score": 0.9085791707038879,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:30.536956",
+      "updated_at": "2026-09-30 00:26:43.862661"
+    },
+    {
+      "key": "432bde4b6384337a88cde4c8d77ec7317d456452589a4de44177fa1455dad1e1",
+      "kind": "concept",
+      "payload": "{\"name\":\"orbital mechanics\"}",
+      "state": "active",
+      "score": 0.9940423369407654,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "28288fffe02c4bbe916304ef2ce0b04e",
+      "created_at": "2026-09-30 00:26:30.542321",
+      "updated_at": "2026-09-30 00:26:44.270629"
+    },
+    {
+      "key": "be50006be228ec4a16d44958bf377c31eb73a2daaf7d4bf4e4a9753c619cdfe7",
+      "kind": "concept",
+      "payload": "{\"name\":\"spacecraft\"}",
+      "state": "held",
+      "score": 0.7139456868171692,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:30.547534",
+      "updated_at": "2026-09-30 00:26:43.856162"
+    },
+    {
+      "key": "84c07d9d1ad49b0b5738f8ef20e78fb2ae5acb9e628fd9d1949377a17f614293",
+      "kind": "concept",
+      "payload": "{\"name\":\"elliptical orbit\"}",
+      "state": "held",
+      "score": 0.7134318947792053,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:36.858381",
+      "updated_at": "2026-09-30 00:26:44.267929"
+    },
+    {
+      "key": "c474d6d267c0a4ee692013671937fe52fb11317c6ff5e82360aaaf1dc79ba713",
+      "kind": "concept",
+      "payload": "{\"name\":\"transfer orbits\"}",
+      "state": "held",
+      "score": 0.7985008955001831,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": null,
+      "created_at": "2026-09-30 00:26:43.513130",
+      "updated_at": "2026-09-30 00:26:44.048502"
+    },
+    {
+      "key": "a364d177076544c3fb5f8a460afdee36e8b5f1a9f13cd86058fcb2abc31957c0",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"28288fffe02c4bbe916304ef2ce0b04e\",\"source_id\":\"8c6d702820524f5cb97a043def76fc08\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9888490438461304,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "28288fffe02c4bbe916304ef2ce0b04e",
+      "created_at": "2026-09-30 00:26:43.540154",
+      "updated_at": "2026-09-30 00:26:44.050609"
+    },
+    {
+      "key": "e23fc90fefa81d9fa4ba9a81e27654496d47b39a6b22990dcdb1c69504f3bbd1",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"28288fffe02c4bbe916304ef2ce0b04e\",\"source_id\":\"2ab9e623f75b433e878894de22a09c90\",\"source_kind\":\"item\"}",
+      "state": "held",
+      "score": 0.9369496703147888,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "28288fffe02c4bbe916304ef2ce0b04e",
+      "created_at": "2026-09-30 00:26:43.835054",
+      "updated_at": "2026-09-30 00:26:43.864905"
+    },
+    {
+      "key": "b9e3eded59e7c0598beb8d90b6547bdb84d4c5f5e415d4c65c88d3c17be7d2a9",
+      "kind": "mention",
+      "payload": "{\"concept_id\":\"28288fffe02c4bbe916304ef2ce0b04e\",\"source_id\":\"d49e61addf57498a8c22ee980648ca05\",\"source_kind\":\"item\"}",
+      "state": "active",
+      "score": 0.9940423369407654,
+      "calibrated": 0,
+      "policy_version": "grounded-cold-start-v12-bge",
+      "canonical_id": "28288fffe02c4bbe916304ef2ce0b04e",
+      "created_at": "2026-09-30 00:26:44.253386",
+      "updated_at": "2026-09-30 00:26:44.274515"
+    }
+  ],
+  "ml_evidence": [
+    {
+      "key": "115867e47abee0eff3315791eb7361625e07f27aae02880286e0f6aaa87d00af",
+      "finding_key": "22c64af558a52a0c544cd574dc098b5ca4d50fc956a30b252570c91bfc31ec8e",
+      "source_kind": "item",
+      "source_id": "2ab9e623f75b433e878894de22a09c90",
+      "source_hash": "00bf17db6d84a185abf62e583adcbb4f78fd0f4eb9a1e763b2c95a46b975cbda",
+      "group_key": "item:2ab9e623f75b433e878894de22a09c90",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 76,
+      "end": 80,
+      "raw_score": 0.9142897725105286,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.5658162236213684,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"f7a8407c22064e139da97e3ec3eec93449a3232152bae18714ad7eb3b5c15182\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "f8b1bb3bf5cd1d7bcab246a1eac378d01799262e0aac64df0309e3bd29c47766",
+      "finding_key": "7fd4a4f0e07d5863bd50a117cebec7bc5b1f38309c74706a7ff9929f10c7b320",
+      "source_kind": "item",
+      "source_id": "2ab9e623f75b433e878894de22a09c90",
+      "source_hash": "00bf17db6d84a185abf62e583adcbb4f78fd0f4eb9a1e763b2c95a46b975cbda",
+      "group_key": "item:2ab9e623f75b433e878894de22a09c90",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 66,
+      "end": 71,
+      "raw_score": 0.9085791707038879,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.46482670307159424,\"grounded\":true,\"label\":\"named entity\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"f7a8407c22064e139da97e3ec3eec93449a3232152bae18714ad7eb3b5c15182\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "8c3495709f4143ee7ad5ce4b569ac1d50a84d63f22fc3b4d0d91e55fef916431",
+      "finding_key": "432bde4b6384337a88cde4c8d77ec7317d456452589a4de44177fa1455dad1e1",
+      "source_kind": "item",
+      "source_id": "2ab9e623f75b433e878894de22a09c90",
+      "source_hash": "00bf17db6d84a185abf62e583adcbb4f78fd0f4eb9a1e763b2c95a46b975cbda",
+      "group_key": "item:2ab9e623f75b433e878894de22a09c90",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 9,
+      "end": 26,
+      "raw_score": 0.9369496703147888,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7367362976074219,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"f7a8407c22064e139da97e3ec3eec93449a3232152bae18714ad7eb3b5c15182\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "6eeacaaec6be7ddf83542170e2ce4805846fbbe19774db02994eb5618f76542a",
+      "finding_key": "be50006be228ec4a16d44958bf377c31eb73a2daaf7d4bf4e4a9753c619cdfe7",
+      "source_kind": "item",
+      "source_id": "2ab9e623f75b433e878894de22a09c90",
+      "source_hash": "00bf17db6d84a185abf62e583adcbb4f78fd0f4eb9a1e763b2c95a46b975cbda",
+      "group_key": "item:2ab9e623f75b433e878894de22a09c90",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 38,
+      "end": 48,
+      "raw_score": 0.7139456868171692,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.6305242776870728,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"f7a8407c22064e139da97e3ec3eec93449a3232152bae18714ad7eb3b5c15182\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "e56c5cf90510614c650e96c723b8d00c13c39c636fa249c45b999fcbf1bef28e",
+      "finding_key": "e23fc90fefa81d9fa4ba9a81e27654496d47b39a6b22990dcdb1c69504f3bbd1",
+      "source_kind": "item",
+      "source_id": "2ab9e623f75b433e878894de22a09c90",
+      "source_hash": "00bf17db6d84a185abf62e583adcbb4f78fd0f4eb9a1e763b2c95a46b975cbda",
+      "group_key": "item:2ab9e623f75b433e878894de22a09c90",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 9,
+      "end": 26,
+      "raw_score": 0.9369496703147888,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"f7a8407c22064e139da97e3ec3eec93449a3232152bae18714ad7eb3b5c15182\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "f6835552756cb06806a7b93ad59acf3f842b46add4cdc8773763bbae40fab04e",
+      "finding_key": "432bde4b6384337a88cde4c8d77ec7317d456452589a4de44177fa1455dad1e1",
+      "source_kind": "item",
+      "source_id": "8c6d702820524f5cb97a043def76fc08",
+      "source_hash": "49d05b701d16d644bba0fe607475c9524c9f172d72137e417d1ea2ce680bb6b3",
+      "group_key": "item:8c6d702820524f5cb97a043def76fc08",
+      "author_id": "7e2ee512aa864934b99a83f9dde4dbac",
+      "start": 7,
+      "end": 24,
+      "raw_score": 0.9888490438461304,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.7567821741104126,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"2ada8308bf05e0502b228f4010580a86bc04d06e0d73a996cc93f92b035c84e2\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "ad532c2ede60c2471bbaebad6be4f6619892b4ff564fb154888f1aae73c22dee",
+      "finding_key": "c474d6d267c0a4ee692013671937fe52fb11317c6ff5e82360aaaf1dc79ba713",
+      "source_kind": "item",
+      "source_id": "8c6d702820524f5cb97a043def76fc08",
+      "source_hash": "49d05b701d16d644bba0fe607475c9524c9f172d72137e417d1ea2ce680bb6b3",
+      "group_key": "item:8c6d702820524f5cb97a043def76fc08",
+      "author_id": "7e2ee512aa864934b99a83f9dde4dbac",
+      "start": 54,
+      "end": 69,
+      "raw_score": 0.7985008955001831,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.8428938388824463,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"2ada8308bf05e0502b228f4010580a86bc04d06e0d73a996cc93f92b035c84e2\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "a7a7167e56349a5616f90ce9ca78c7efae2c3646ecc1b156ea9307ab471eacc1",
+      "finding_key": "a364d177076544c3fb5f8a460afdee36e8b5f1a9f13cd86058fcb2abc31957c0",
+      "source_kind": "item",
+      "source_id": "8c6d702820524f5cb97a043def76fc08",
+      "source_hash": "49d05b701d16d644bba0fe607475c9524c9f172d72137e417d1ea2ce680bb6b3",
+      "group_key": "item:8c6d702820524f5cb97a043def76fc08",
+      "author_id": "7e2ee512aa864934b99a83f9dde4dbac",
+      "start": 7,
+      "end": 24,
+      "raw_score": 0.9888490438461304,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"2ada8308bf05e0502b228f4010580a86bc04d06e0d73a996cc93f92b035c84e2\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "d5c311e765af72de8da6abee8e69cc36af57f650698604bdb02ab49677349148",
+      "finding_key": "432bde4b6384337a88cde4c8d77ec7317d456452589a4de44177fa1455dad1e1",
+      "source_kind": "item",
+      "source_id": "d49e61addf57498a8c22ee980648ca05",
+      "source_hash": "0f2fa5663be43588a69391222561515ed52afc22576278e2568eac0d367b0cee",
+      "group_key": "item:d49e61addf57498a8c22ee980648ca05",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 14,
+      "end": 31,
+      "raw_score": 0.9940423369407654,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.8037628531455994,\"grounded\":true,\"label\":\"topic or process\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"9cd2a4f755b1b63445f59ff91838ad1130fe777c7a06000bcafddc437081cb9d\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "7183d733eb70cb639bcb1433183beccbadd9419b753af22b5007d78bf495a3e3",
+      "finding_key": "84c07d9d1ad49b0b5738f8ef20e78fb2ae5acb9e628fd9d1949377a17f614293",
+      "source_kind": "item",
+      "source_id": "d49e61addf57498a8c22ee980648ca05",
+      "source_hash": "0f2fa5663be43588a69391222561515ed52afc22576278e2568eac0d367b0cee",
+      "group_key": "item:d49e61addf57498a8c22ee980648ca05",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 57,
+      "end": 73,
+      "raw_score": 0.7134318947792053,
+      "polarity": "positive",
+      "features": "{\"eligibility_margin\":0.8108855485916138,\"grounded\":true,\"label\":\"object or substance\",\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"9cd2a4f755b1b63445f59ff91838ad1130fe777c7a06000bcafddc437081cb9d\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    },
+    {
+      "key": "c8a64e709fb93b06951f6803923e5d716b7d314f78e7aefb73b1f9433942c3d4",
+      "finding_key": "b9e3eded59e7c0598beb8d90b6547bdb84d4c5f5e415d4c65c88d3c17be7d2a9",
+      "source_kind": "item",
+      "source_id": "d49e61addf57498a8c22ee980648ca05",
+      "source_hash": "0f2fa5663be43588a69391222561515ed52afc22576278e2568eac0d367b0cee",
+      "group_key": "item:d49e61addf57498a8c22ee980648ca05",
+      "author_id": "e087f2501a0f402ab5dd5814717b825e",
+      "start": 14,
+      "end": 31,
+      "raw_score": 0.9940423369407654,
+      "polarity": "positive",
+      "features": "{\"grounded\":true,\"locator\":\"\",\"origin\":\"question\",\"text_hash\":\"9cd2a4f755b1b63445f59ff91838ad1130fe777c7a06000bcafddc437081cb9d\"}",
+      "model_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206"
+    }
+  ],
+  "ml_overrides": [
+    {
+      "key": "8e8d900992a5fdcaa03b278c7fda342522c50c2bb2f3694024b3f4eba8e1ed2e",
+      "kind": "bootstrap",
+      "mode": "pinned",
+      "payload": "{}",
+      "username": "migration",
+      "updated_at": "2026-09-30 00:26:24.821125"
+    }
+  ],
+  "ml_jobs": [],
+  "ml_state": [
+    {
+      "id": 1,
+      "revision": 27,
+      "automation_enabled": 1,
+      "pipeline_version": "72ac19b486cd4557424c8d61114e7530c243e9b0:d4aa6901d3a41ba39fb536a557fa166f842b0e09:272a31e9d8530d1e075351d30a462d7e80e31da23574f1b274e200f3fff35bf5:grounded-spans-v12-bge:f460c0994293a206:grounded-cold-start-v12-bge",
+      "decision_policy": "{}",
+      "status": "stopped",
+      "worker_token": null,
+      "worker_lease_until": null,
+      "backfill_kind": null,
+      "backfill_cursor": "",
+      "backfill_generation": 9
+    }
+  ],
+  "ml_budget": [
+    {
+      "id": 1,
+      "embedding_bytes": 18432,
+      "evidence_bytes": 33663,
+      "active_generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "staging_generation": null,
+      "staging_cursor": "",
+      "staging_reserved_bytes": 0,
+      "staging_bytes": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "key": "328b885093bed93812ee02db028d3dd7e2dc2240fd2b0c9d91f517e0f065c3e8",
+      "source_kind": "item",
+      "source_id": "2ab9e623f75b433e878894de22a09c90",
+      "source_hash": "00bf17db6d84a185abf62e583adcbb4f78fd0f4eb9a1e763b2c95a46b975cbda",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 81,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "cc93451985bf428c89a9745b151229e12e51687f0a13e1dd85fc846d845e5075",
+      "source_kind": "item",
+      "source_id": "d49e61addf57498a8c22ee980648ca05",
+      "source_hash": "0f2fa5663be43588a69391222561515ed52afc22576278e2568eac0d367b0cee",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 74,
+      "dimensions": 1024,
+      "bytes": 4096
+    },
+    {
+      "key": "5d968b4058ca544cb78dc73bf77a71314c601710f7792ecbe68bc5a7d2e19d7f",
+      "source_kind": "item",
+      "source_id": "8c6d702820524f5cb97a043def76fc08",
+      "source_hash": "49d05b701d16d644bba0fe607475c9524c9f172d72137e417d1ea2ce680bb6b3",
+      "generation": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "start": 0,
+      "end": 70,
+      "dimensions": 1024,
+      "bytes": 4096
+    }
+  ],
+  "integrity_check": "ok"
+}

@@ -1,0 +1,752 @@
+{
+  "id": "hyphenated_material_spelling",
+  "domain": "workshop_maintenance",
+  "status": "PASS",
+  "api_trace": [
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/signup",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/concepts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/graph/global",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/expertise",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/457a3c7ccaa748089d30375dc88c8230",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/f5fa14ce6cba4ca7b866ebf299ffe15f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/5874c60f467948e19fc67966a139e474",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/items/e3031bf2a44442f08c83abade94eb68b",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ml/revision",
+      "status": 200
+    }
+  ],
+  "database": "/home/mds/bge-quality/ml-quality-r2yk_h1t/hyphenated_material_spelling/mds.sqlite3",
+  "expect": {
+    "concepts": [
+      "heat-shrink tubing"
+    ],
+    "absent_concepts": [],
+    "aliases": [
+      {
+        "canonical": "heat-shrink tubing",
+        "alias": "heat shrink tubing"
+      }
+    ],
+    "absent_aliases": [],
+    "relationships": [],
+    "absent_relationships": [],
+    "expertise": [],
+    "absent_expertise": []
+  },
+  "phases": {
+    "initial": {
+      "post_drains": [
+        {
+          "post": 0,
+          "seconds": 7.731961211999078,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 1,
+          "seconds": 8.137759379000272,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 2,
+          "seconds": 7.138057504000244,
+          "inference_calls": 1,
+          "lock_retries": {}
+        },
+        {
+          "post": 3,
+          "seconds": 7.103200876999836,
+          "inference_calls": 1,
+          "lock_retries": {}
+        }
+      ],
+      "seconds": 30.11097897199943,
+      "inference_calls": 4,
+      "observed": {
+        "concepts": [
+          {
+            "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+            "name": "heat-shrink tubing",
+            "mentions": 4
+          }
+        ],
+        "terms": [
+          {
+            "name": "heat-shrink tubing",
+            "concept_id": "80827bdfe9d545b4b9924de9b7eb25b6",
+            "is_canonical": true
+          },
+          {
+            "name": "heat shrink tubing",
+            "concept_id": "80827bdfe9d545b4b9924de9b7eb25b6",
+            "is_canonical": false
+          }
+        ],
+        "aliases": [
+          {
+            "canonical": "heat-shrink tubing",
+            "canonical_id": "80827bdfe9d545b4b9924de9b7eb25b6",
+            "alias": "heat shrink tubing",
+            "public_search_confirmed": true
+          }
+        ],
+        "relationships": [],
+        "expertise": [],
+        "graph": {
+          "clusters": [
+            {
+              "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+              "label": "heat-shrink tubing",
+              "concepts": [
+                {
+                  "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+                  "name": "heat-shrink tubing",
+                  "size": 4
+                }
+              ]
+            }
+          ],
+          "edges": [],
+          "total_nodes": 1,
+          "total_edges": 0,
+          "omitted_nodes": 0,
+          "omitted_edges": 0
+        },
+        "link_evidence": [],
+        "details": [
+          {
+            "post": 0,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "457a3c7ccaa748089d30375dc88c8230",
+              "kind": "note",
+              "question": null,
+              "body": "The cable repair kit contains heat-shrink tubing in several diameters.",
+              "visibility": "team",
+              "author": "alice",
+              "author_verified": true,
+              "author_id": "11887ab53e9a4ff3829e50e749e1eed3",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:23:14.283602Z",
+              "updated_at": "2026-09-30T00:23:14.330024Z",
+              "concepts": [
+                {
+                  "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+                  "name": "heat-shrink tubing"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 1,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "f5fa14ce6cba4ca7b866ebf299ffe15f",
+              "kind": "note",
+              "question": null,
+              "body": "We added heat-shrink tubing to the workshop stock list for cable repairs.",
+              "visibility": "team",
+              "author": "ben",
+              "author_verified": true,
+              "author_id": "af259b080b484bf08df42f3528ea0eb9",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:23:22.083836Z",
+              "updated_at": "2026-09-30T00:23:22.097789Z",
+              "concepts": [
+                {
+                  "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+                  "name": "heat-shrink tubing"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 2,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "5874c60f467948e19fc67966a139e474",
+              "kind": "note",
+              "question": null,
+              "body": "The packaging label calls the same repair material heat shrink tubing.",
+              "visibility": "team",
+              "author": "cara",
+              "author_verified": true,
+              "author_id": "8329fa083b5548509399d867b883a727",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:23:30.250370Z",
+              "updated_at": "2026-09-30T00:23:30.266879Z",
+              "concepts": [
+                {
+                  "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+                  "name": "heat-shrink tubing"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          },
+          {
+            "post": 3,
+            "storage_kind": "item",
+            "status": 200,
+            "response": {
+              "id": "e3031bf2a44442f08c83abade94eb68b",
+              "kind": "note",
+              "question": null,
+              "body": "The supplier lists heat shrink tubing by diameter in its cable repair section.",
+              "visibility": "team",
+              "author": "drew",
+              "author_verified": true,
+              "author_id": "2438d96539bc4b23a61fb874606e577a",
+              "is_mine": false,
+              "parent_id": null,
+              "group_id": null,
+              "contributors": 1,
+              "group_size": 1,
+              "helped": 0,
+              "marked_helped": false,
+              "endorsements": 0,
+              "endorsed": false,
+              "endorsed_by_me": false,
+              "question_status": null,
+              "accepted_answer_id": null,
+              "evidence_revision": 1,
+              "acceptance_revision": 0,
+              "correction_state": null,
+              "source_document_id": null,
+              "source_passage_id": null,
+              "created_at": "2026-09-30T00:23:37.417796Z",
+              "updated_at": "2026-09-30T00:23:37.430584Z",
+              "concepts": [
+                {
+                  "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+                  "name": "heat-shrink tubing"
+                }
+              ],
+              "corrections": [],
+              "revisions": [],
+              "group_members": [],
+              "source_item_id": null
+            }
+          }
+        ],
+        "searches": {
+          "heat shrink tubing": {
+            "query": "heat shrink tubing",
+            "terms": [
+              "heat",
+              "shrink",
+              "tubing"
+            ],
+            "concepts": [
+              {
+                "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+                "name": "heat-shrink tubing"
+              }
+            ],
+            "items": [
+              {
+                "id": "457a3c7ccaa748089d30375dc88c8230",
+                "kind": "note",
+                "question": null,
+                "body": "The cable repair kit contains heat-shrink tubing in several diameters.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "11887ab53e9a4ff3829e50e749e1eed3",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:14.283602Z",
+                "updated_at": "2026-09-30T00:23:14.330024Z",
+                "type": "item",
+                "snippet": "The cable repair kit contains <mark>heat-shrink tubing</mark> in several diameters.",
+                "coverage": 1.0,
+                "score": 0.3000020705882353
+              },
+              {
+                "id": "5874c60f467948e19fc67966a139e474",
+                "kind": "note",
+                "question": null,
+                "body": "The packaging label calls the same repair material heat shrink tubing.",
+                "visibility": "team",
+                "author": "cara",
+                "author_verified": true,
+                "author_id": "8329fa083b5548509399d867b883a727",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:30.250370Z",
+                "updated_at": "2026-09-30T00:23:30.266879Z",
+                "type": "item",
+                "snippet": "The packaging label calls the same repair material <mark>heat shrink tubing</mark>.",
+                "coverage": 1.0,
+                "score": 0.3000020705882353
+              },
+              {
+                "id": "f5fa14ce6cba4ca7b866ebf299ffe15f",
+                "kind": "note",
+                "question": null,
+                "body": "We added heat-shrink tubing to the workshop stock list for cable repairs.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "af259b080b484bf08df42f3528ea0eb9",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:22.083836Z",
+                "updated_at": "2026-09-30T00:23:22.097789Z",
+                "type": "item",
+                "snippet": "We added <mark>heat-shrink tubing</mark> to the workshop stock list for cable repairs.",
+                "coverage": 1.0,
+                "score": 0.30000193406593406
+              },
+              {
+                "id": "e3031bf2a44442f08c83abade94eb68b",
+                "kind": "note",
+                "question": null,
+                "body": "The supplier lists heat shrink tubing by diameter in its cable repair section.",
+                "visibility": "team",
+                "author": "drew",
+                "author_verified": true,
+                "author_id": "2438d96539bc4b23a61fb874606e577a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:37.417796Z",
+                "updated_at": "2026-09-30T00:23:37.430584Z",
+                "type": "item",
+                "snippet": "The supplier lists <mark>heat shrink tubing</mark> by diameter in its cable repair section.",
+                "coverage": 1.0,
+                "score": 0.30000193406593406
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          },
+          "heat-shrink tubing": {
+            "query": "heat-shrink tubing",
+            "terms": [
+              "heat",
+              "shrink",
+              "tubing"
+            ],
+            "concepts": [
+              {
+                "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+                "name": "heat-shrink tubing"
+              }
+            ],
+            "items": [
+              {
+                "id": "457a3c7ccaa748089d30375dc88c8230",
+                "kind": "note",
+                "question": null,
+                "body": "The cable repair kit contains heat-shrink tubing in several diameters.",
+                "visibility": "team",
+                "author": "alice",
+                "author_verified": true,
+                "author_id": "11887ab53e9a4ff3829e50e749e1eed3",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:14.283602Z",
+                "updated_at": "2026-09-30T00:23:14.330024Z",
+                "type": "item",
+                "snippet": "The cable repair kit contains <mark>heat-shrink tubing</mark> in several diameters.",
+                "coverage": 1.0,
+                "score": 0.3000020705882353
+              },
+              {
+                "id": "5874c60f467948e19fc67966a139e474",
+                "kind": "note",
+                "question": null,
+                "body": "The packaging label calls the same repair material heat shrink tubing.",
+                "visibility": "team",
+                "author": "cara",
+                "author_verified": true,
+                "author_id": "8329fa083b5548509399d867b883a727",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:30.250370Z",
+                "updated_at": "2026-09-30T00:23:30.266879Z",
+                "type": "item",
+                "snippet": "The packaging label calls the same repair material <mark>heat shrink tubing</mark>.",
+                "coverage": 1.0,
+                "score": 0.3000020705882353
+              },
+              {
+                "id": "f5fa14ce6cba4ca7b866ebf299ffe15f",
+                "kind": "note",
+                "question": null,
+                "body": "We added heat-shrink tubing to the workshop stock list for cable repairs.",
+                "visibility": "team",
+                "author": "ben",
+                "author_verified": true,
+                "author_id": "af259b080b484bf08df42f3528ea0eb9",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:22.083836Z",
+                "updated_at": "2026-09-30T00:23:22.097789Z",
+                "type": "item",
+                "snippet": "We added <mark>heat-shrink tubing</mark> to the workshop stock list for cable repairs.",
+                "coverage": 1.0,
+                "score": 0.30000193406593406
+              },
+              {
+                "id": "e3031bf2a44442f08c83abade94eb68b",
+                "kind": "note",
+                "question": null,
+                "body": "The supplier lists heat shrink tubing by diameter in its cable repair section.",
+                "visibility": "team",
+                "author": "drew",
+                "author_verified": true,
+                "author_id": "2438d96539bc4b23a61fb874606e577a",
+                "is_mine": false,
+                "parent_id": null,
+                "group_id": null,
+                "contributors": 1,
+                "group_size": 1,
+                "helped": 0,
+                "marked_helped": false,
+                "endorsements": 0,
+                "endorsed": false,
+                "endorsed_by_me": false,
+                "question_status": null,
+                "accepted_answer_id": null,
+                "evidence_revision": 1,
+                "acceptance_revision": 0,
+                "correction_state": null,
+                "source_document_id": null,
+                "source_passage_id": null,
+                "created_at": "2026-09-30T00:23:37.417796Z",
+                "updated_at": "2026-09-30T00:23:37.430584Z",
+                "type": "item",
+                "snippet": "The supplier lists <mark>heat shrink tubing</mark> by diameter in its cable repair section.",
+                "coverage": 1.0,
+                "score": 0.30000193406593406
+              }
+            ],
+            "documents": [],
+            "scratchpad": []
+          }
+        },
+        "actors_by_label": {
+          "alice": "alice",
+          "ben": "ben",
+          "cara": "cara",
+          "drew": "drew"
+        },
+        "questions_by_actor": {},
+        "notifications_by_actor": {},
+        "revision": {
+          "revision": 49,
+          "enabled": true,
+          "running": false
+        }
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "457a3c7ccaa748089d30375dc88c8230",
+      "storage_kind": "item",
+      "actor": "alice"
+    },
+    {
+      "id": "f5fa14ce6cba4ca7b866ebf299ffe15f",
+      "storage_kind": "item",
+      "actor": "ben"
+    },
+    {
+      "id": "5874c60f467948e19fc67966a139e474",
+      "storage_kind": "item",
+      "actor": "cara"
+    },
+    {
+      "id": "e3031bf2a44442f08c83abade94eb68b",
+      "storage_kind": "item",
+      "actor": "drew"
+    }
+  ],
+  "private_note_mapping": "Private notes use the public scratchpad API; no private item creation API exists.",
+  "effect_checks": [],
+  "checks": [
+    {
+      "category": "concepts",
+      "assertion": "heat-shrink tubing",
+      "expected_present": true,
+      "observed": [
+        {
+          "id": "80827bdfe9d545b4b9924de9b7eb25b6",
+          "name": "heat-shrink tubing",
+          "mentions": 4
+        }
+      ],
+      "passed": true
+    },
+    {
+      "category": "aliases",
+      "assertion": {
+        "canonical": "heat-shrink tubing",
+        "alias": "heat shrink tubing"
+      },
+      "expected_present": true,
+      "observed": [
+        {
+          "canonical": "heat-shrink tubing",
+          "canonical_id": "80827bdfe9d545b4b9924de9b7eb25b6",
+          "alias": "heat shrink tubing",
+          "public_search_confirmed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "seconds": 31.872661180999785,
+  "inference_calls": 4,
+  "sampled_peak_tree_rss_bytes": 3886788608,
+  "sampled_cpu_seconds": 58.979999999999905
+}
