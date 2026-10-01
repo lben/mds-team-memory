@@ -3,7 +3,7 @@
 # requires-python = ">=3.12"
 # dependencies = ["paramiko==4.0.0"]
 # ///
-"""Update UAT (default) or PROD from this checkout using one password prompt.
+"""Update UAT (default) or PROD from this checkout using the configured SSH client.
 
     uv run tools/update.py
     uv run tools/update.py PROD
@@ -22,7 +22,7 @@ import tomllib
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import deploy
 from deploylib import CONFIG_PATH, ROOT, Target, add_target_argument, fail, scp, ssh
-from update_session import Session
+from update_session import open_session as Session
 from deployment_package import checked_package as check_package
 
 
@@ -44,13 +44,17 @@ def configured_target(name, config_path):
             raise ValueError("UAT and PROD on the same host must have distinct application ports")
     if "@" not in target.host or not all(target.host.rsplit("@", 1)):
         raise ValueError(f"[{name}] host must include username, e.g. deployer@192.0.2.10")
-    if settings.get("ssh_options"):
-        raise ValueError("Update uses SSH/SFTP directly; configure ssh_port and host_key_sha256 instead of ssh_options")
     target.host_key_sha256 = str(settings.get("host_key_sha256", ""))
     # Bundled executables are installed before deploy.py writes app.env.
     target.uv = str(settings.get("uv", "bundled"))
     target.python = str(settings.get("python", "bundled"))
     local = config.get("local", {})
+    target.transport = str(local.get("transport", "openssh" if local.get("ssh") or local.get("scp") else "paramiko")).lower()
+    if target.transport not in {"paramiko", "openssh"}:
+        raise ValueError("[local] transport must be openssh or paramiko")
+    if target.transport == "paramiko" and settings.get("ssh_options"):
+        raise ValueError("Paramiko uses ssh_port and host_key_sha256; ssh_options requires [local] transport = 'openssh'")
+    target.local = local
     known_hosts = Path(local.get("known_hosts", "build/update-known-hosts"))
     if not known_hosts.is_absolute():
         known_hosts = ROOT / known_hosts
@@ -68,6 +72,8 @@ def bootstrap(target, directory, package):
     archive = f"{target.root}/bootstrap.tar.gz"
     # Only core Linux utilities are needed before our Python is available.
     script = 'set -eu; test "$(uname -m)" = x86_64; command -v tar; command -v sha256sum; mkdir -p "$1/ml" "$1/data" "$1/run" "$1/logs"; test "$(df -Pk "$1" | tail -1 | awk \'{print $4}\')" -ge 3145728'
+    if getattr(target, "transport", "paramiko") == "openssh" and target.local.get("scp_protocol", "scp") == "scp":
+        script += '; command -v scp'
     checked_step(target, "checking server utilities and bootstrap space", [target.bash, "-c", script, "update", target.root])
     if target.uv == "bundled" or target.python == "bundled":
         probe = ssh(target, ["test", "-x", f"{destination}/python/bin/python3.12"], capture=True)
@@ -122,6 +128,9 @@ def main(argv=None):
     target = None
     try:
         target, known_hosts = configured_target(args.target, args.config)
+        if getattr(target, "transport", "paramiko") == "openssh":
+            from native_session import validate_local
+            validate_local(target)
         directory, package, manifest, ui = checked_package()
         if args.check:
             print(f"Ready locally for {target.name.upper()}: {len(manifest['parts'])} parts; {manifest['archive']['size'] / 1024**3:.2f} GiB. No connection made.")

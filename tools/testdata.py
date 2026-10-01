@@ -13,7 +13,7 @@
     TestData.cmd UAT remove --batch <id>
 
 UAT is the default. PROD is always refused. Configuration is tools/deploy.toml;
-one SSH password prompt per server command, using Update's authenticated session.
+uses the same configured SSH transport as Update.
 """
 import argparse
 import json
@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 from app.testdata_catalog import add_selection_arguments, datasets, selection_from_args
 from deploylib import CONFIG_PATH
 from update import configured_target
-from update_session import Session
+from update_session import open_session as Session
 
 
 def remote_command(target, argv):

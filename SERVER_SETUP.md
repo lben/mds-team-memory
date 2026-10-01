@@ -19,7 +19,35 @@ Local UI output is gitignored and selected automatically by Update; it never
 repackages the models or overwrites the shared deployment package. Build never
 connects to a server. On macOS/Linux use `./Build.sh` followed by `./Update UAT`.
 
-Enter the server password once. Models and Linux dependency wheels are
+For Cmder/Git OpenSSH on your Windows work PC, add or edit `[local]` in the same
+TOML (use your actual absolute executable paths):
+
+```toml
+[local]
+transport = "openssh"
+ssh = 'C:\cmder\vendor\git-for-windows\usr\bin\ssh.exe'
+scp = 'C:\cmder\vendor\git-for-windows\usr\bin\scp.exe'
+scp_protocol = "scp"
+```
+
+Then run `Update.cmd --check` and `Update.cmd UAT`. TestData uses the same
+transport. Password/PAM/MFA and host-key prompts come from the binaries in
+your console, and their SSH agent/key settings work normally. Separate native
+connections may request the password repeatedly without an agent or connection
+reuse. Update does not store or inject passwords. Native launchers skip
+Paramiko dependency downloads. Legacy SCP avoids SFTP; the server must have
+`scp` as well as SSH command access. Both old and modern local OpenSSH clients
+are supported. Each uploaded file is verified and atomically installed.
+
+`[local].known_hosts` may name an existing OpenSSH host-key file; the default
+remains `build/update-known-hosts`. A native `host_key_sha256` pin needs its
+matching entry in that file, supplied by IT or saved from a previously trusted
+connection. Otherwise verify OpenSSH's first-connection fingerprint prompt.
+Optional `[local].ssh_options` and per-target `ssh_options` are arrays of SSH
+arguments, for example `["-i", 'C:\Users\you\.ssh\work_key']`.
+
+Existing configurations use Paramiko and ask for the server password once.
+Models and Linux dependency wheels are
 included as verified parts in `deployment/offline/`; the command uploads,
 joins, decompresses and installs them. Python 3.12.14 and uv 0.12.10 are bundled,
 as is the built UI. Server installation is offline and runs as your SSH user.
@@ -39,8 +67,10 @@ checks size/SHA256 before atomic replacement. Standard `cat`, `wc`, `cut`, `chmo
 open command channels needs the correct host/port and permitted gateway route or
 server access; Update cannot repair those server settings.
 
-Your deploying PC needs Git, uv 0.11 or newer and internet access for uv's first installation
-of the pinned Paramiko client (or a pre-populated uv cache). No npm or Docker
+Your deploying PC needs Git and uv 0.11 or newer. Native mode also needs the
+configured OpenSSH binaries; Paramiko mode needs internet access for uv's first
+installation of the pinned client (or a pre-populated uv cache). Python 3.12
+must be available locally or through uv's cache/download. No npm or Docker
 is needed for normal Update runs. Allow roughly 14 GiB free on the PC for the
 Git objects and checked-out assets. The Linux server needs RHEL 8.10 x86_64,
 SSH command access, bash, tar, sha256sum, a writable local filesystem, and approximately
@@ -61,7 +91,7 @@ installation. To use IT-managed binaries, set absolute paths in the same TOML;
 Python must be 3.12 with SQLite >= 3.51.3. Extra MDS settings belong to
 `[uat.env]`/`[prod.env]`; Update owns the data/model path settings.
 
-`--check` validates the TOML, all local part hashes, the UI and its source
+`--check` validates the TOML, native binary paths when configured, all local part hashes, the UI and its source
 fingerprint, and the dependency lock without connecting. Initial SSH host trust
 is recorded under `build/update-known-hosts`; a changed key is rejected.
 Alternatively configure `host_key_sha256` from IT to avoid the first trust prompt.

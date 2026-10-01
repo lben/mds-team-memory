@@ -1,7 +1,7 @@
 # Copy to tools/deploy.toml, then edit both server sections. This is the only
 # deployment configuration file; it is gitignored. Never put passwords here.
 # Run .\Update.cmd [UAT|PROD] in PowerShell, or ./Update [UAT|PROD] on macOS/Linux.
-# Default: UAT. Enter your server password once when prompted.
+# Default: UAT. Paramiko prompts once; native OpenSSH may prompt per connection.
 # Local Update/TestData launchers use system TLS certificates for uv downloads.
 # Company Artifactory/proxy CA certificates must be installed on your PC;
 # alternatively set SSL_CERT_FILE to an IT-provided PEM CA bundle.
@@ -45,5 +45,23 @@ keep_releases = 5
 # After Update UAT: TestData.cmd [UAT] datasets|preview|add|batches|status|remove.
 # See TESTDATA.md. PROD is refused by both client and deployed server.
 
-# [local]
+[local]
+# Optional: use the OpenSSH binaries already installed with Cmder/Git on your PC.
+# Uncomment and replace these example paths with your actual absolute paths.
+# Native mode is also selected automatically if ssh or scp is configured here.
+# transport = "openssh"                 # otherwise paramiko, for one login
+# ssh = 'C:\cmder\vendor\git-for-windows\usr\bin\ssh.exe'
+# scp = 'C:\cmder\vendor\git-for-windows\usr\bin\scp.exe'
+# scp_protocol = "scp"                  # default: legacy SCP, avoiding SFTP
+# Server needs its own scp command for legacy SCP. Local old clients use their
+# existing SCP default; newer clients get -O. -S selects the configured ssh.
+# Native authentication/host trust use the binaries' normal console prompts.
+# Each connection may ask for a password; an SSH agent/key avoids repeat prompts.
+# No passwords are saved or passed in command arguments/environment variables.
+# Native launchers do not download Paramiko. --check validates local binaries.
 # known_hosts = "build/update-known-hosts" # saved server keys on the deploying PC
+# Or point to your existing OpenSSH known_hosts using an absolute path.
+# A native host_key_sha256 pin needs its matching key already in known_hosts;
+# without a pin, verify the fingerprint in OpenSSH's first-connection prompt.
+# ssh_options = ["-i", 'C:\Users\you\.ssh\work_key'] # optional native SSH options
+# Per-server ssh_options can also be set under [uat]/[prod] in native mode.

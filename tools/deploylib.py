@@ -37,7 +37,10 @@ class Target:
         self.uv = str(settings.get("uv", "uv"))
         self.python = str(settings.get("python", "3.12"))
         self.keep_releases = _whole_number(name, "keep_releases", settings.get("keep_releases", 5))
-        self.ssh_options = [str(o) for o in settings.get("ssh_options", [])]
+        options = settings.get("ssh_options", [])
+        if not isinstance(options, list) or not all(isinstance(o, str) for o in options):
+            fail(f"[{name}] ssh_options must be an array of strings")
+        self.ssh_options = options
         self.ssh_port = _whole_number(name, "ssh_port", settings.get("ssh_port", 22))
         self.bash = str(settings.get("bash", "bash"))
         self.session = None

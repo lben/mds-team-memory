@@ -17,6 +17,13 @@ def fingerprint(key):
     return "SHA256:" + base64.b64encode(hashlib.sha256(key.asbytes()).digest()).decode().rstrip("=")
 
 
+def open_session(target, known_hosts):
+    if getattr(target, "transport", "paramiko") == "openssh":
+        from native_session import NativeSession
+        return NativeSession(target, known_hosts)
+    return Session(target, known_hosts)
+
+
 def console_authentication(username, password):
     """Use explicit SSH methods so PAM challenges are not flattened to a password."""
     import paramiko

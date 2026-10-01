@@ -3,8 +3,9 @@
 Pull this branch, configure `tools/deploy.toml`, then run `Update.cmd UAT` once
 to install the TestData server code, datasets and UAT environment marker.
 Use your existing app account to browse the resulting UAT feed, search and graph.
-No administrator password is required by TestData; server commands reuse Update's
-SSH/SFTP connection and request the SSH password once. First host trust is a
+No administrator password is required by TestData; server commands use the same
+SSH transport as Update. Paramiko requests the SSH password once; native OpenSSH uses
+the configured binary and its normal console prompts. First host trust is a
 separate prompt unless its fingerprint is configured. No server internet, root
 access, model download or additional runtime dependencies are needed.
 

@@ -198,7 +198,36 @@ actual changed/added/deleted build inputs. Run Build for custom frontend changes
 Update then validates and uploads the matching local build. Building on the
 work PC is optional when the included UI already matches the checkout.
 
-Update prompts for your server password once and reuses that SSH connection.
+For your installed Cmder/Git OpenSSH clients, add this to `tools/deploy.toml`
+(replace the example paths with your actual executables):
+
+```toml
+[local]
+transport = "openssh"
+ssh = 'C:\cmder\vendor\git-for-windows\usr\bin\ssh.exe'
+scp = 'C:\cmder\vendor\git-for-windows\usr\bin\scp.exe'
+scp_protocol = "scp"
+```
+
+Update and TestData then use those binaries directly, with their normal console
+password/PAM/MFA prompts and SSH agent/key configuration. Separate connections
+may request the password repeatedly without an agent or working connection
+reuse. Passwords are never saved or passed in arguments/environment variables.
+Legacy SCP avoids SFTP and needs `scp` on the server. Modern local clients get
+`-O`; old clients already use SCP. The configured SSH is also passed to SCP.
+Uploads use private temporary files and server-side size/SHA256 verification
+before atomic replacement. Native launchers skip Paramiko downloads;
+`Update.cmd --check` also validates the local binary paths.
+
+`[local].known_hosts` can name your existing OpenSSH host-key file; otherwise
+keys are saved in `build/update-known-hosts`. A native `host_key_sha256` pin
+needs its matching entry in that file first. Without a pin, verify OpenSSH's
+initial fingerprint prompt. Native options such as identity files or proxy
+jumps can be set as arrays in `[local].ssh_options` or per-target `ssh_options`.
+Paths with spaces work; TOML single quotes preserve Windows backslashes.
+
+Existing configurations without local binary paths use Paramiko, which
+prompts for your server password once and reuses that SSH connection.
 Typing and pasting both work; the password remains hidden while you enter it.
 Password authentication and keyboard-interactive/PAM authentication are supported.
 For a server password challenge, the initial password is reused once. Additional
