@@ -178,7 +178,7 @@ lock changes need a full offline package and cannot be repaired by a UI build.
 The equivalent command is `uv run --system-certs --python 3.12 tools/update.py [UAT|PROD]`.
 On macOS/Linux, `./Update [UAT|PROD]` is also available. uv installs the pinned
 SSH client on the deploying PC on its first run. The server needs RHEL 8.10
-x86_64, SSH/SFTP access, bash/tar/sha256sum and writable local storage; it needs
+x86_64, SSH command access, bash/tar/sha256sum and writable local storage; it needs
 neither Node nor internet access, sudo or systemd. The TOML template explains
 these requirements and optional binary overrides.
 
@@ -205,6 +205,14 @@ For a server password challenge, the initial password is reused once. Additional
 server challenges (such as an MFA code) prompt in the console, with hidden input
 when requested by the server. These responses are never saved in configuration
 or command arguments. Server policies requiring a public key are still enforced.
+SFTP is opened only when uploading, and closed before a command to support
+gateways allowing one session channel at a time. If SFTP is unavailable, Update
+streams files over a non-PTY SSH command channel. The server verifies byte count
+and SHA256 before atomically replacing the destination; this needs the standard
+`cat`, `wc`, `cut`, `chmod`, `mv` and `rm` utilities alongside bash/sha256sum.
+TestData's command-only operations need no SFTP. If SSH command channels themselves
+are refused, check the deployment server's host/port and gateway route/permissions
+with IT; password success alone does not grant command access.
 The first connection also asks you to trust the displayed SSH host fingerprint,
 unless you configured the fingerprint supplied by IT. It transfers the app and
 verified model parts, joins and decompresses them on the server, installs the

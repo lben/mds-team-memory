@@ -31,11 +31,19 @@ If the server requests MFA or another challenge, answer its additional console
 prompt. Passwords and challenge responses are not written to TOML, logs or
 command arguments. A public-key requirement cannot be satisfied by a password.
 
+SFTP is preferred for uploads but optional. Update opens it only for transfers,
+and closes it before running commands to support gateways with a one-channel
+limit. If SFTP is unavailable, files stream over SSH without a PTY; the server
+checks size/SHA256 before atomic replacement. Standard `cat`, `wc`, `cut`, `chmod`,
+`mv` and `rm` must be available. TestData needs command access only. A refusal to
+open command channels needs the correct host/port and permitted gateway route or
+server access; Update cannot repair those server settings.
+
 Your deploying PC needs Git, uv 0.11 or newer and internet access for uv's first installation
 of the pinned Paramiko client (or a pre-populated uv cache). No npm or Docker
 is needed for normal Update runs. Allow roughly 14 GiB free on the PC for the
 Git objects and checked-out assets. The Linux server needs RHEL 8.10 x86_64,
-SSH/SFTP, bash, tar, sha256sum, a writable local filesystem, and approximately
+SSH command access, bash, tar, sha256sum, a writable local filesystem, and approximately
 14 GiB free for first-install staging, including the 2 GiB reserve. Permit the
 configured app port through the existing firewall; Update cannot change a
 firewall as an ordinary user. Four CPUs and the worker's configured memory
