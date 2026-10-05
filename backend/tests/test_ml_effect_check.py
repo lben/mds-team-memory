@@ -79,7 +79,7 @@ class SyntheticInference:
         self.cpu_seconds = {}
         self.case_peak_rss = 0
 
-    def analyze(self, body, heartbeat):
+    def analyze(self, body, heartbeat, progress=None):
         from app.ml import eligibility, relation_syntax, syntax
         from ml_synthetic_records import judged
 

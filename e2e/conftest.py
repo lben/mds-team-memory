@@ -70,7 +70,7 @@ def base_url_server(tmp_path_factory):
         )
         assert result.returncode == 0, result.stderr
 
-    yield types.SimpleNamespace(url=base, create_admin=create_admin)
+    yield types.SimpleNamespace(url=base, create_admin=create_admin, data_dir=data_dir)
     server.terminate()
     try:
         server.wait(timeout=10)

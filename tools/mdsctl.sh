@@ -240,7 +240,8 @@ cmd_ml_status() {
   else
     echo "ML: stopped; queued work is retained"
   fi
-  PYTHONPATH="$release/backend" "$release/.venv/bin/python" -m app.ml.worker --status
+  # --jobs [--limit N] adds the current step and the queued jobs in processing order.
+  PYTHONPATH="$release/backend" "$release/.venv/bin/python" -m app.ml.worker --status "$@"
 }
 
 cmd_ml_logs() {
@@ -534,6 +535,6 @@ case "$command" in
     "cmd_${command//-/_}" "$@"
     ;;
   *)
-    die "usage: mdsctl.sh {start|stop|restart|status|health|logs|releases|rollback|ml-start|ml-stop|ml-status|ml-logs|preflight|manage ...|unpack|setup|backup|migrate|activate|prune}"
+    die "usage: mdsctl.sh {start|stop|restart|status|health|logs|releases|rollback|ml-start|ml-stop|ml-status [--jobs [--limit N]]|ml-logs|preflight|manage ...|unpack|setup|backup|migrate|activate|prune}"
     ;;
 esac

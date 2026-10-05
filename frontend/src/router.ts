@@ -8,6 +8,7 @@ export const router = createRouter({
     { path: '/documents/:id?', component: () => import('./views/DocumentsView.vue') },
     { path: '/leaderboard', component: () => import('./views/LeaderboardView.vue') },
     { path: '/admin/expertise', component: () => import('./views/AdminExpertiseView.vue') },
+    { path: '/admin/ml-queue', component: () => import('./views/AdminMlQueueView.vue') },
     // Old routes from before the single-window redesign.
     { path: '/impact', redirect: '/leaderboard' },
     { path: '/capture', redirect: '/' },

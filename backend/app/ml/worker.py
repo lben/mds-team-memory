@@ -20,7 +20,7 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import NullPool
 
-from . import queue
+from . import activity, queue
 from .runtime import inference_version
 
 MEMORY_CEILING = 8 * 1024**3
@@ -128,7 +128,7 @@ def _model_loop(connection, assets):
         if isinstance(body, dict) and body.get("eligibility") is True:
             result = models.judge_eligibility(body["text"], body["candidates"])
         else:
-            result = models.analyze(body)
+            result = models.analyze(body, progress=lambda note: connection.send(("progress", note)))
         connection.send(("result", result))
 
 
@@ -172,18 +172,24 @@ class InferenceProcess:
         if used > self.limit:
             raise MemoryError(f"ML process RSS {used} exceeds the {self.limit}-byte limit")
 
-    def _receive(self, heartbeat, deadline, phase, body=None):
+    def _receive(self, heartbeat, deadline, phase, body=None, progress=None):
         # poll() can become readable before a complete pickled message arrives.
         # Keep both sending and receiving off the heartbeat/deadline loop so a
         # stalled child cannot block supervision inside either pipe operation.
         responses = Queue(maxsize=1)
+        notes = Queue()
         connection = self.connection
 
         def exchange():
             try:
                 if body is not None:
                     connection.send(body)
-                responses.put((True, connection.recv()))
+                message = connection.recv()
+                # Progress notes precede the single response to a request.
+                while message[0] == "progress":
+                    notes.put(message[1])
+                    message = connection.recv()
+                responses.put((True, message))
             except BaseException as error:
                 responses.put((False, error))
 
@@ -192,6 +198,11 @@ class InferenceProcess:
         while True:
             heartbeat()
             self.check_memory()
+            latest = None
+            while not notes.empty():
+                latest = notes.get_nowait()
+            if latest is not None and progress is not None:
+                progress(latest)
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 raise TimeoutError(f"{phase} exceeded its deadline")
@@ -211,9 +222,11 @@ class InferenceProcess:
                 raise RuntimeError(message[1])
             return message
 
-    def analyze(self, body, heartbeat):
+    def analyze(self, body, heartbeat, progress=None):
         try:
             if self.process is None:
+                if progress is not None:
+                    progress({"step": "loading models"})
                 deadline = time.monotonic() + self.load_timeout
                 context = multiprocessing.get_context("spawn")
                 self.connection, child_connection = context.Pipe()
@@ -226,7 +239,7 @@ class InferenceProcess:
                 self.metadata = ready[1:]
             heartbeat()
             self.check_memory()
-            message = self._receive(heartbeat, time.monotonic() + self.job_timeout, "Inference", body)
+            message = self._receive(heartbeat, time.monotonic() + self.job_timeout, "Inference", body, progress)
             if message[0] != "result" or len(message) != 2:
                 raise RuntimeError("Invalid inference response")
             self.check_memory()
@@ -287,6 +300,7 @@ class Supervisor:
         self.connection = queue.connect_worker(path)
         self.engine = create_engine("sqlite://", creator=lambda: queue.connect_worker(path), poolclass=NullPool)
         self.inference = InferenceProcess(assets, load_timeout=load_timeout, job_timeout=job_timeout)
+        self.recorder = activity.Recorder(activity.activity_path(path))
         self.model_version = self.eligibility_version = None
         self.eligibility_cursor = ("", "")
         self.eligibility_paused_until = 0.0
@@ -339,6 +353,8 @@ class Supervisor:
         from . import adapter, embeddings
         from .sources import snapshot
 
+        self.recorder.stage({"vocabulary": "updating the concept vocabulary",
+                             "profile": "updating expertise"}.get(self.claim.source_kind, "saving results"))
         with Session(self.engine, autoflush=False, expire_on_commit=False) as db:
             db.execute(text("BEGIN IMMEDIATE"))
             with embeddings.reserve_growth(db):
@@ -369,6 +385,7 @@ class Supervisor:
 
         previous, result, metadata = None, None, ("", "", 0)
         if self.claim.source_kind in ("item", "passage"):
+            self.recorder.stage("reading the source")
             with Session(self.engine) as db:
                 previous = snapshot(db, self.claim.source_kind, self.claim.source_id)
                 if previous is not None:
@@ -379,7 +396,8 @@ class Supervisor:
                         result, metadata = cached
             if previous is not None:
                 if result is None:
-                    result, metadata = self.inference.analyze(previous.text, self.heartbeat)
+                    self.recorder.stage("running inference")
+                    result, metadata = self.inference.analyze(previous.text, self.heartbeat, self.recorder.progress)
         self.heartbeat()
         self.apply(previous, result, metadata)
 
@@ -418,6 +436,7 @@ class Supervisor:
                 self.eligibility_cursor = ("", "")
         for kind, source_id, content_hash in rows:
             self.heartbeat()
+            self.recorder.activity("checking concept relevance of an analyzed source", {"kind": kind, "id": source_id})
             with Session(self.engine) as db:
                 source = snapshot(db, kind, source_id)
                 cached = adapter.cached_result(db, source, self.model_version) if source is not None else None
@@ -466,6 +485,7 @@ class Supervisor:
         from . import adapter, embeddings, policy
 
         lower_priority()
+        self.recorder.activity("starting")
         while not self.stop.is_set():
             try:
                 self.token = queue.acquire_worker(self.connection)
@@ -480,6 +500,8 @@ class Supervisor:
         if self.token is None:
             raise RuntimeError("Another ML worker holds the lease")
         self.worker_deadline = time.time() + queue.LEASE_SECONDS
+        self.recorder.lease(self.token)
+        self.recorder.activity("preparing ML storage")
         models = json.loads((self.assets / "models.json").read_text())["models"]
         version = inference_version(models) + ":" + policy.VERSION
         self.model_version = inference_version(models)
@@ -515,6 +537,7 @@ class Supervisor:
             try:
                 if queue.checkpoint_between_batches(self.connection):
                     self.record_lock_retry(operation)
+                    self.recorder.activity("waiting for the database to checkpoint")
                     self.stop.wait(1)
                     continue
                 operation = "claim"
@@ -522,6 +545,7 @@ class Supervisor:
                 if self.claim is None:
                     operation = "backfill"
                     if queue.backfill_page(self.connection, self.token):
+                        self.recorder.activity("queueing older sources for reprocessing")
                         continue
                     operation = "housekeeping"
                     with Session(self.engine) as db:
@@ -529,6 +553,7 @@ class Supervisor:
                         advanced = embeddings.finish_generation(db)
                         db.commit()
                     if advanced:
+                        self.recorder.activity("switching to the new embedding generation")
                         continue
                     operation = "eligibility"
                     if self.verify_eligibility():
@@ -536,6 +561,7 @@ class Supervisor:
                     pending = self.connection.execute("SELECT count(*) FROM ml_jobs").fetchone()[0]
                     if mode == "once" or (mode == "drain" and pending == 0):
                         return 0
+                    self.recorder.activity("idle" if pending == 0 else "waiting for failed jobs to become due")
                     self.stop.wait(idle)
                     idle = min(10, idle * 2)
                     continue
@@ -547,9 +573,13 @@ class Supervisor:
                 continue
             idle = 1
             self.claim_deadline = self.claim.lease_until
+            self.recorder.start_job(self.claim)
             try:
                 self.process_claim()
+                self.recorder.finish_job("done")
             except Exception as error:
+                self.recorder.finish_job("interrupted" if isinstance(error, Stopped) else "failed",
+                                         f"{type(error).__name__}: {error}")
                 if database_busy(getattr(error, "orig", error)):
                     self.record_lock_retry("apply")
                 if isinstance(error, AssetsChanged):
@@ -568,6 +598,7 @@ class Supervisor:
 
     def close(self):
         self.inference.close()
+        self.recorder.stopped()
         try:
             if self.claim:
                 self.retry(Stopped("Worker stopped"))
@@ -591,6 +622,9 @@ def main(argv=None):
     actions.add_argument("--once", action="store_true", help="process one available job")
     actions.add_argument("--drain", action="store_true", help="process the queue and bounded backfill")
     actions.add_argument("--status", action="store_true", help="read queue status without loading models")
+    parser.add_argument("--jobs", action="store_true",
+                        help="with --status: show what the worker is doing and list queued jobs in processing order")
+    parser.add_argument("--limit", type=int, default=50, help="with --jobs: how many queued jobs to list (default 50)")
     parser.add_argument("--assets", type=Path, help="verified local model asset directory")
     parser.add_argument("--load-timeout-seconds", type=positive_seconds,
                         default=os.environ.get("MDS_ML_LOAD_TIMEOUT_SECONDS", LOAD_TIMEOUT_SECONDS),
@@ -599,6 +633,10 @@ def main(argv=None):
                         default=os.environ.get("MDS_ML_JOB_TIMEOUT_SECONDS", JOB_TIMEOUT_SECONDS),
                         help="Finite per-source inference deadline (default 1800 s; MDS_ML_JOB_TIMEOUT_SECONDS)")
     args = parser.parse_args(argv)
+    if args.jobs and not args.status:
+        parser.error("--jobs requires --status")
+    if args.limit < 1:
+        parser.error("--limit must be at least 1")
     if not args.status and args.assets is None:
         parser.error("--assets is required to run the worker")
     from .. import config
@@ -609,7 +647,8 @@ def main(argv=None):
     try:
         path = database_path(config.DATABASE_URL)
         if args.status:
-            print(json.dumps(status(path), sort_keys=True))
+            print(activity.render(activity.report(path, limit=args.limit)) if args.jobs
+                  else json.dumps(status(path), sort_keys=True))
             return 0
         if not (args.assets / "models.json").is_file():
             raise ValueError("--assets must contain a prepared models.json manifest")

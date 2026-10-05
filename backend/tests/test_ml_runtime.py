@@ -65,8 +65,17 @@ def test_alias_pass_uses_existing_windows_without_promoting_role_scores(monkeypa
     model.extractor = SimpleNamespace(extract=extract)
     vector = SimpleNamespace(astype=lambda dtype: SimpleNamespace(tobytes=lambda: b"\0" * 4))
     model.embedding = SimpleNamespace(encode=lambda body, **kwargs: vector)
-    result = model.analyze(text)
+    notes = []
+    result = model.analyze(text, progress=notes.append)
     bounded = list(runtime.windows(text, model.tokenizer, 192))
+    # The worker's activity report sees every step of every window, then relevance.
+    steps = {"parsing sentences", "extracting entities", "extracting relations",
+             "extracting alias definitions", "embedding the text"}
+    assert len(bounded) > 1
+    for window in range(1, len(bounded) + 1):
+        assert {note["step"] for note in notes if note.get("window") == window} == steps
+    assert all(note["windows"] == len(bounded) for note in notes[:-1])
+    assert notes[-1] == {"step": "judging concept relevance"}
     assert [(body, kwargs) for body, schema, kwargs in calls if schema == "aliases"] == [
         (body, {"threshold": 0.5, "max_len": 512, "include_confidence": True, "include_spans": True})
         for _, _, body in bounded]

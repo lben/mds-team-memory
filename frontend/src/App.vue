@@ -14,6 +14,7 @@ const titles: Record<string, string> = {
   '/documents': 'Documents',
   '/leaderboard': 'Leaderboard',
   '/admin/expertise': 'Expertise Routing',
+  '/admin/ml-queue': 'ML Queue',
 }
 const crumb = computed(() => {
   if (route.path === '/') return 'Home'
@@ -135,6 +136,7 @@ onMounted(() => {
       <div class="nav-label">Admin</div>
       <nav class="nav" data-testid="admin-nav">
         <router-link to="/admin/expertise" active-class="active"><span class="nav-dot"></span>Expertise Routing</router-link>
+        <router-link to="/admin/ml-queue" active-class="active"><span class="nav-dot"></span>ML Queue</router-link>
       </nav>
       <button class="profile" @click="showProfile = !showProfile" data-testid="profile-button">
         <span class="avatar">{{ initials }}</span>

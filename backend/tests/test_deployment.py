@@ -8,6 +8,7 @@ import sqlite3
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -43,8 +44,9 @@ def release_controller(tmp_path):
     environment["PATH"] = str(tmp_path / "bin") + os.pathsep + environment["PATH"]
 
     def run(*args):
+        # cwd: `python -m app...` searches the working directory before PYTHONPATH.
         return subprocess.run(["bash", str(control), *args], capture_output=True,
-                              text=True, timeout=10, env=environment)
+                              text=True, timeout=10, env=environment, cwd=tmp_path)
     return tmp_path, run
 
 
@@ -225,6 +227,33 @@ def test_failed_deploy_recovery_keeps_database_when_rollback_is_incompatible(mon
     assert "blocked rollback preserves" in message
     assert "discard later human writes" in message
     assert "nothing is serving" not in message
+
+
+def test_ml_status_passes_job_report_options_to_the_worker(release_controller):
+    root, run = release_controller
+    release = root / "releases/new"
+    (release / "ml-runtime.json").write_text("{}")
+    worker = release / "backend/app/ml/worker.py"
+    worker.parent.mkdir(parents=True)
+    worker.write_text("import sys\nprint('worker report', sys.argv[1:])\n")
+    result = run("ml-status", "--jobs", "--limit", "7")
+    assert result.returncode == 0, result.stderr
+    assert "ML: stopped; queued work is retained" in result.stdout
+    assert "worker report ['--status', '--jobs', '--limit', '7']" in result.stdout
+
+
+def test_serverctl_requests_the_job_report(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[2] / "tools"))
+    import serverctl
+
+    calls = []
+    # The SSH call is the boundary; the server side is covered by the mdsctl test above.
+    monkeypatch.setattr(serverctl, "load_target", lambda name: SimpleNamespace(name=name, host="deployer@server"))
+    monkeypatch.setattr(serverctl, "ctl", lambda target, *argv: calls.append(argv) or subprocess.CompletedProcess(argv, 0))
+    monkeypatch.setattr(sys, "argv", ["serverctl.py", "ml-status", "prod", "--jobs", "--limit", "120"])
+    with pytest.raises(SystemExit) as exit:
+        serverctl.main()
+    assert exit.value.code == 0 and calls == [("ml-status", "--jobs", "--limit", "120")]
 
 
 def test_stop_preserves_unrelated_process_with_stale_pid_files(tmp_path):

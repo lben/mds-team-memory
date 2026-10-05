@@ -267,17 +267,26 @@ class LocalModels:
         if self.dimensions not in (768, 1024):
             raise ValueError("Unsupported embedding dimensions")
 
-    def analyze(self, text):
+    def analyze(self, text, progress=None):
+        """`progress` receives a note before each step, for the worker's activity report."""
+        report = progress or (lambda note: None)
         concepts, endpoints, relations, chunks = {}, {}, {}, []
         source_vectors = {}
         definitions, conflicts = [], []
         source_scope = relation_syntax.SourceScope(text) if self.syntax is not None else None
         parser_ran = False
-        for start, end, body in windows(text, self.tokenizer, 192):
+        bounded = list(windows(text, self.tokenizer, 192))
+        for window, (start, end, body) in enumerate(bounded, 1):
+            def step(name):
+                report({"step": name, "window": window, "windows": len(bounded)})
+
             window_spans = {}
+            if self.syntax is not None:
+                step("parsing sentences")
             parsed = self.syntax(body) if self.syntax is not None else None
             guard = relation_syntax.prepare(parsed, text, start, source_scope=source_scope) if parsed is not None else None
             parser_ran |= parsed is not None
+            step("extracting entities")
             entities = self.extractor.extract(body, self.entity_schema, include_confidence=True,
                                               include_spans=True, max_len=512)
             for label, values in entities.get("entities", {}).items():
@@ -289,6 +298,7 @@ class LocalModels:
                         if span["score"] > concepts.get(key, {}).get("score", -1):
                             concepts[key] = span
                         window_spans[key] = concepts[key]
+            step("extracting relations")
             extracted = self.extractor.extract(body, self.relation_schema, include_confidence=True,
                                                include_spans=True, max_len=512)
             for predicate, values in extracted.get("relation_extraction", {}).items():
@@ -316,6 +326,7 @@ class LocalModels:
                 key = (relation["head"]["start"], relation["tail"]["start"], relation["predicate"])
                 relations.setdefault(key, relation)
             if self.syntax is not None:
+                step("extracting alias definitions")
                 raw_aliases = self.extractor.extract(body, self.alias_schema, **ALIAS_SETTINGS)
                 proposals = syntax.candidates(parsed)
                 for definition in corroborated_definitions(body, raw_aliases, proposals, start):
@@ -340,6 +351,7 @@ class LocalModels:
                         "start": candidate["short_name"]["start"] + start,
                         "end": candidate["short_name"]["end"] + start},
                         "rule": candidate["rule"], "source_text_hash": digest(text)})
+            step("embedding the text")
             vector = self.embedding.encode(body, normalize_embeddings=True, batch_size=1,
                                            show_progress_bar=False, convert_to_numpy=True)
             source_vectors[body] = vector
@@ -363,6 +375,7 @@ class LocalModels:
             result["relation_guard_revision"] = relation_syntax.REVISION
         from .eligibility import candidates
 
+        report({"step": "judging concept relevance"})
         result["eligibility"] = self.judge_eligibility(text, candidates(text, result["concepts"]), source_vectors)
         return result
 

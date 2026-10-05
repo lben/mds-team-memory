@@ -145,7 +145,7 @@ class RecordedInference:
         self.case_peak_rss = max(self.case_peak_rss, rss)
         self.child.check_memory()
 
-    def analyze(self, body, heartbeat):
+    def analyze(self, body, heartbeat, progress=None):
         started = time.monotonic()
         self.attempts += 1
 
@@ -158,7 +158,7 @@ class RecordedInference:
                   "eligibility_only": isinstance(body, dict),
                   "text_sha256": hashlib.sha256(text.encode()).hexdigest()}
         try:
-            result, metadata = self.child.analyze(body, pulse)
+            result, metadata = self.child.analyze(body, pulse, progress)
             record["metadata"] = dict(zip(("model_version", "embedding_version", "dimensions"), metadata))
             record["result"] = {**result, "chunks": [
                 {"start": chunk["start"], "end": chunk["end"],

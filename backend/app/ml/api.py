@@ -7,13 +7,15 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import text
 
+from .. import config
 from ..auth import require_admin
 from ..db import get_db
 from ..models import Account, Concept, ConceptTerm, ExpertiseMapping, Relationship, utcnow
-from . import adapter, effective, policy
+from . import activity, adapter, effective, policy
 from .models import Finding, Override
 from .queue import enqueue
 from .sources import finding_key, snapshot
+from .worker import database_path
 
 router = APIRouter(prefix="/api/ml", tags=["knowledge maintenance"])
 
@@ -33,6 +35,11 @@ def finding_dict(db, row):
             "policy_version": row.policy_version,
             "raw_model_score": None if row.calibrated else row.score,
             "updated_at": row.updated_at.isoformat() + "Z"}
+
+
+@router.get("/queue", dependencies=[Depends(require_admin)])
+def queue_report(offset: int = Query(0, ge=0), limit: int = Query(50, ge=1, le=200)):
+    return activity.report(database_path(config.DATABASE_URL), limit=limit, offset=offset)
 
 
 @router.get("/findings", dependencies=[Depends(require_admin)])

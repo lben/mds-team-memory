@@ -4,6 +4,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import re
 import select
 import signal
 import sqlite3
@@ -92,6 +93,51 @@ def shared_bge_child(connection, assets):
         connection.send(("result", result))
 
 
+def progress_child(connection, assets):
+    """Reports inference steps, then waits for a release file so the job can be watched."""
+    from app.ml import eligibility, relation_syntax, syntax
+    from app.ml.runtime import inference_version
+    from ml_relation_helpers import analyze as _analyze
+
+    directory = Path(assets)
+    models = json.loads((directory / "models.json").read_text())["models"]
+    connection.send(("ready", inference_version(models), models["embeddings"]["revision"], 1024))
+    while True:
+        body = connection.recv()
+        judgment = {"version": eligibility.version(models), "margins": {}}
+        if isinstance(body, dict):
+            connection.send(("result", judgment))
+            continue
+        for window in (1, 2):
+            connection.send(("progress", {"step": "extracting relations", "window": window, "windows": 2}))
+        while not (directory / "release").exists():
+            time.sleep(0.05)
+        result = _analyze(body, [], {}, full=True)
+        result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION,
+                      relation_guard_revision=relation_syntax.REVISION, eligibility=judgment)
+        connection.send(("result", result))
+
+
+def stand_in_models_child(connection, assets):
+    """The production child loop over stand-in models that report steps like LocalModels."""
+    from app.ml import runtime, worker
+
+    class Models:
+        version, embedding_version, dimensions = "model", "embeddings", 1024
+
+        def __init__(self, directory):
+            pass
+
+        def analyze(self, text, progress=None):
+            for window in (1, 2):
+                progress({"step": "extracting entities", "window": window, "windows": 2})
+                time.sleep(0.6)  # longer than one supervision poll, so each note is relayed
+            return {"text": text}
+
+    runtime.LocalModels = Models
+    worker._model_loop(connection, assets)
+
+
 def process_ended(pid):
     import psutil
 
@@ -116,6 +162,20 @@ def test_child_models_are_reused_and_loading_does_not_block_heartbeat(tmp_path):
         pid = child.process.pid if child.process else None
         child.close()
     assert pid is not None and process_ended(pid)
+
+
+@requires_ml
+def test_child_inference_steps_reach_the_supervisor(tmp_path):
+    child = InferenceProcess(tmp_path, target=stand_in_models_child)
+    notes = []
+    try:
+        result, metadata = child.analyze("body", lambda: None, notes.append)
+    finally:
+        child.close()
+    assert result == {"text": "body"} and metadata == ("model", "embeddings", 1024)
+    assert notes[0] == {"step": "loading models"}
+    assert {"step": "extracting entities", "window": 1, "windows": 2} in notes
+    assert notes[-1] == {"step": "extracting entities", "window": 2, "windows": 2}
 
 
 @requires_ml
@@ -634,7 +694,7 @@ def test_contested_alias_backfills_drain_and_recover_after_definition_removal(wo
         calls = 0
         iterations = 0
 
-        def analyze(self, body, heartbeat):
+        def analyze(self, body, heartbeat, progress=None):
             from ml_synthetic_records import judged
 
             self.calls += 1
@@ -839,3 +899,64 @@ def test_refused_eligibility_storage_pauses_the_sweep_without_stopping_the_worke
     assert concept_states(db) == {"Citrine Pump": "held"}
     assert db.execute(text("SELECT json_extract(result,'$.eligibility') FROM ml_sources WHERE id='source'")).scalar_one() is None
     assert len((assets / "bge-requests.jsonl").read_text().splitlines()) == 1
+
+
+def test_status_jobs_shows_the_running_step_then_the_finished_job(worker_store, tmp_path):
+    import threading
+    from sqlalchemy import text
+    from app.ml import adapter, policy, queue, worker
+    from app.ml.runtime import inference_version
+    from test_ml_embeddings import add_source
+
+    db, path, assets = worker_store
+    models = json.loads((assets / "models.json").read_text())["models"]
+    adapter.bootstrap(db)
+    add_source(db, "watched", body="Citrine Pump drives the cooling loop.")
+    db.execute(text("DELETE FROM ml_jobs"))
+    queue.enqueue(db, "item", "watched")
+    db.execute(text("UPDATE ml_state SET pipeline_version=:version,decision_policy='{}',backfill_kind=NULL WHERE id=1"),
+               {"version": inference_version(models) + ":" + policy.VERSION})
+    db.commit()
+    env = {**os.environ, "PYTHONPATH": str(ROOT / "backend"),
+           "MDS_DATABASE_URL": f"sqlite:///{path}", "MDS_DATA_DIR": str(tmp_path / "unused")}
+
+    def status_jobs():
+        return subprocess.run([sys.executable, "-m", "app.ml.worker", "--status", "--jobs"], env=env,
+                              capture_output=True, text=True, timeout=20, check=True).stdout
+
+    def wait_for(fragment):
+        deadline = time.monotonic() + 30
+        while fragment not in (report := status_jobs()):
+            assert time.monotonic() < deadline, report
+            time.sleep(0.2)
+        return report
+
+    stop = threading.Event()
+
+    def serve():
+        # SQLite connections stay on the thread that opened them.
+        supervisor = worker.Supervisor(path, assets, stop)
+        supervisor.inference = InferenceProcess(assets, target=progress_child)
+        try:
+            supervisor.run("daemon")
+        finally:
+            supervisor.close()
+
+    thread = threading.Thread(target=serve)
+    thread.start()
+    try:
+        running = wait_for("window 2 of 2: extracting relations")
+        assert "Worker: running since" in running
+        assert "Current job: item watched, attempt 1" in running
+        assert "Stage: running inference — window 2 of 2: extracting relations" in running
+        assert re.search(r"1\s+processing\s+item\s+0\s+\S+\s+new or changed content\s+Note: Citrine Pump drives the cooling loop\.", running)
+        (assets / "release").touch()
+        finished = wait_for("Recently finished")
+        assert re.search(r"done\s+item\s+[\d.]+s\s+Note: Citrine Pump drives the cooling loop\.", finished)
+        assert "Queue: 0 jobs" in finished
+    finally:
+        stop.set()
+        thread.join(timeout=30)
+    assert not thread.is_alive()
+    stopped = status_jobs()
+    assert "Worker: not running" in stopped and "stopped" in stopped
