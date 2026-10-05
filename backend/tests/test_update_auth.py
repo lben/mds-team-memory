@@ -95,7 +95,7 @@ def ssh_server(tmp_path, host_key, mode, *, sftp=True, channels=True, corrupt_up
         def check_channel_request(self, kind, channel_id):
             if not channels:
                 return paramiko.OPEN_FAILED_CONNECT_FAILED
-            if single_channel and any(not channel.closed for channel in accepted_channels):
+            if single_channel and any(not channel.closed or channel in running_sftp for channel in accepted_channels):
                 return paramiko.OPEN_FAILED_CONNECT_FAILED
             return paramiko.OPEN_SUCCEEDED if kind == "session" else paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
         def check_channel_subsystem_request(self, channel, name):
@@ -129,11 +129,21 @@ def ssh_server(tmp_path, host_key, mode, *, sftp=True, channels=True, corrupt_up
                     channel.send_exit_status(result.returncode)
             threading.Thread(target=reply, daemon=True).start()
             return True
+    class Subsystem(paramiko.SFTPServer):
+        # Like sshd, hold the SFTP session until its server process has exited,
+        # which happens shortly after the client's EOF or close.
+        def start_subsystem(self, name, transport, channel):
+            running_sftp.add(channel)
+            try:
+                super().start_subsystem(name, transport, channel)
+            finally:
+                time.sleep(0.1)
+                running_sftp.discard(channel)
     server = Server()
     transport = paramiko.Transport(server_socket)
     transport.add_server_key(host_key)
-    transport.set_subsystem_handler("sftp", paramiko.SFTPServer, Files)
-    errors, accepted_channels = [], []
+    transport.set_subsystem_handler("sftp", Subsystem, Files)
+    errors, accepted_channels, running_sftp = [], [], set()
     def serve():
         try:
             transport.start_server(server=server)

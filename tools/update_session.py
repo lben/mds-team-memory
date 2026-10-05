@@ -126,6 +126,11 @@ class Session:
         # Some company servers/gateways allow only one session channel at a
         # time. Release the cached SFTP channel before executing a command.
         if self.sftp is not None:
+            # sshd frees the session only once sftp-server exits, so send EOF
+            # and wait for that exit (as commands do) before the next channel.
+            channel = self.sftp.get_channel()
+            channel.shutdown_write()
+            channel.recv_exit_status()
             self.sftp.close()
             self.sftp = None
         return self._execute(command, capture=capture)

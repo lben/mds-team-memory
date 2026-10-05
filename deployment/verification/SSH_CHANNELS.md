@@ -39,3 +39,23 @@ Red Hat test filesystem. No reserve guard was disabled. Actual UAT/PROD and the
 company gateway were not contacted. The user's exact failure cause remains to be
 confirmed from the next console output; the tests establish support for these
 channel policies, not access to that server.
+
+## Releasing SFTP before the next command
+
+A real OpenSSH server with `MaxSessions 1` refused the first command after an
+SFTP upload: `ChannelException(2, 'Connect failed')`, logged as `open failed`.
+sshd frees an SFTP session only after its sftp-server process exits, and the
+client closed SFTP and opened the next channel before that happened. The
+in-process test server released the slot at channel close, so it missed this.
+
+The client now sends EOF to SFTP and waits for sftp-server's exit status before
+closing it, as it already does for commands. The test server now holds an SFTP
+session until its handler has ended, like sshd.
+
+Verification:
+
+- The existing one-channel test failed with the same refusal before the client
+  change and passed after it; the focused SSH/Update/native suites passed.
+- Against a real loopback OpenSSH 10.3 server (`MaxSessions 1`, SFTP enabled),
+  rounds of command, command, SFTP upload, command failed 20 of 20 before the
+  change and passed 100 of 100 after it.
