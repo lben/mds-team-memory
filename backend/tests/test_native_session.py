@@ -188,6 +188,27 @@ def test_native_local_binaries_with_spaces_are_one_executable_argument(tmp_path,
     session.close()
 
 
+def test_native_arguments_with_quotes_are_quoted_whole_for_msys_clients(tmp_path, monkeypatch):
+    # Git for Windows/Cmder ssh.exe re-splits the Windows command line with MSYS
+    # rules. A quote inside an argument Windows leaves unquoted (no whitespace)
+    # swallowed the following arguments, so `bash -c` reached ssh as a cipher.
+    target = target_for(tmp_path)
+    calls = []
+    def run(argv, **kwargs):
+        calls.append(argv)
+        return subprocess.CompletedProcess(argv, 0, "", "usage: scp [-346ABCOpqRrsTv] source target")
+    monkeypatch.setattr(native_session.subprocess, "run", run)
+    session = native_session.NativeSession(target, tmp_path / "known_hosts")
+    session.run("true")
+    source = tmp_path / "payload"
+    source.write_bytes(b"data")
+    assert session.put(source, "/app/payload").returncode == 0
+    session.close()
+    arguments = [argument for argv in calls[1:] for argument in argv[1:]]
+    assert len(calls) == 4
+    assert all(" " in argument for argument in arguments if set(argument) & set("\"'"))
+
+
 @pytest.mark.skipif(sys.platform != "linux", reason="Native terminal authentication exercised in the disposable Linux container")
 @pytest.mark.parametrize("method", ["password", "keyboard-interactive"])
 def test_real_native_console_password_and_mfa(tmp_path, method):

@@ -97,9 +97,12 @@ class NativeSession:
             known_hosts.write_text(keys, encoding="utf-8")
             known_hosts.chmod(0o600)
         # OpenSSH parses spaces inside -o values too; quote the file path inside
-        # the option. Managed options come first (OpenSSH uses the first value).
+        # the option. The space separator makes Windows quote the whole argument:
+        # MSYS clients (Git for Windows, Cmder) misread an escaped quote in an
+        # unquoted argument and swallow the following arguments. Managed options
+        # come first (OpenSSH uses the first value).
         self.options = ["-o", f"Port={target.ssh_port}",
-                        "-o", f'UserKnownHostsFile="{known_hosts.as_posix()}"',
+                        "-o", f'UserKnownHostsFile "{known_hosts.as_posix()}"',
                         "-o", "GlobalKnownHostsFile=none",
                         "-o", "StrictHostKeyChecking=" + ("yes" if expected else "ask"),
                         "-o", "ConnectTimeout=20",
