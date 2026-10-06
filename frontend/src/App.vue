@@ -52,6 +52,9 @@ async function submitAuth(path: 'login' | 'signup') {
     router.go(0) // who you are shows on every screen; reload rather than patch each one
   } catch (e) {
     authError.value = e instanceof ApiError ? e.message : 'Could not sign in'
+    // Enter signs in; creating an account stays a deliberate click, so a typo
+    // in the username never silently creates a second account.
+    if (path === 'login' && e instanceof ApiError && e.status === 401) authError.value += '. New here? Click Create account.'
   } finally {
     authBusy.value = false
   }
@@ -166,7 +169,7 @@ onMounted(() => {
           </p>
           <label>Username</label>
           <input v-model="username" type="text" maxlength="80" autocomplete="username" data-testid="auth-username"
-            aria-label="Username" />
+            aria-label="Username" @keyup.enter="submitAuth('login')" />
           <label style="margin-top: 8px">Password</label>
           <input
             v-model="password"
@@ -175,7 +178,7 @@ onMounted(() => {
             autocomplete="current-password"
             data-testid="auth-password"
             aria-label="Password"
-            @keyup.enter="submitAuth('signup')"
+            @keyup.enter="submitAuth('login')"
           />
           <p v-if="authError" class="form-error" data-testid="auth-error">{{ authError }}</p>
           <div class="modal-actions" style="margin-top: 12px">
