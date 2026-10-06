@@ -58,16 +58,31 @@ def test_admin_watches_the_ml_queue(browser: Browser, base_url_server):
         expect(private).to_contain_text("reprocessing older content")
         expect(page.locator("main")).not_to_contain_text("salary")
 
-        # The screen keeps itself current: finished work appears without a reload.
+        # The screen keeps itself current: finished work and its decision appear without a reload.
         with sqlite3.connect(database) as db:
             db.execute("DELETE FROM ml_jobs WHERE source_id=?", (SOURCES[0],))
+            db.execute("""INSERT INTO ml_sources(kind,id,content_hash,valid,model_version,result,updated_at)
+              VALUES ('item',?,'hash',1,'model','{}',datetime('now'))""", (SOURCES[0],))
+            db.execute("""INSERT INTO ml_findings(key,kind,payload,state,score,calibrated,policy_version,created_at,updated_at)
+              VALUES ('e2e-queue-finding','concept','{"name":"Citrine Pump"}','active',0,0,'policy',datetime('now'),datetime('now'))""")
+            db.execute("""INSERT INTO ml_evidence(key,finding_key,source_kind,source_id,source_hash,group_key,start,end,
+                raw_score,polarity,features,model_version)
+              VALUES ('e2e-queue-evidence','e2e-queue-finding','item',?,'hash','group',0,12,0.999,'positive',
+                '{"text_hash":"t","grounded":true,"label":"named entity","eligibility_margin":0.91}','model')""",
+                (SOURCES[0],))
         recorder.finish_job("done")
         expect(page.get_by_test_id("ml-recent-row").first).to_contain_text("done", timeout=6000)
+        decisions = page.get_by_test_id("ml-recent-row").first.get_by_test_id("ml-decisions")
+        expect(decisions).to_contain_text("Concept confirmed by the model Citrine Pump")
+        expect(decisions).to_contain_text("The model is 99.9% sure this is a named thing.")
         expect(page.get_by_test_id("ml-current-job")).to_have_count(0)
         expect(rows.filter(has_text="Citrine Pump")).to_have_count(0)
     finally:
         context.close()
         with sqlite3.connect(database) as db:
+            db.execute("DELETE FROM ml_evidence WHERE key='e2e-queue-evidence'")
+            db.execute("DELETE FROM ml_findings WHERE key='e2e-queue-finding'")
+            db.execute("DELETE FROM ml_sources WHERE id=?", (SOURCES[0],))
             db.execute("DELETE FROM knowledge_items WHERE id IN (?,?)", SOURCES)
             db.execute("DELETE FROM profiles WHERE id='e2e-queue-author'")
             db.execute("DELETE FROM ml_jobs")

@@ -16,7 +16,17 @@ import sqlite3
 import sys
 import time
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
+
+from . import policy
+from .sources import finding_key
+
 RECENT = 20
+# Finding kinds an operator recognises, in display order; internal bookkeeping kinds are omitted.
+FINDING_KINDS = {"concept": "concept", "mention": "topic", "alias": "alternative name", "relationship": "relationship",
+                 "association": "related concepts", "expertise": "expertise"}
 
 
 def activity_path(database):
@@ -116,6 +126,99 @@ def source_label(db, kind, source_id):
     return "Concept vocabulary refresh"
 
 
+def _concept_name(db, concept_id):
+    row = db.execute("SELECT display FROM concept_terms WHERE concept_id=? AND is_canonical=1", (concept_id,)).fetchone()
+    return row[0] if row else "(unnamed concept)"
+
+
+def _model_headline(label, state):
+    """What the model (or, for expertise, the confirmation rule) decided; never a downstream outcome."""
+    if label == "related concepts":
+        return "Suggested as related by the model" if state in ("active", "weak") else "Not suggested as related"
+    if label == "expertise":
+        return {"active": "Expertise recognised", "held": "Expertise not recognised yet"}.get(state, "Expertise withdrawn")
+    if state == "active":
+        return f"{label.capitalize()} confirmed by the model"
+    if state in ("held", "weak"):
+        return f"{label.capitalize()} not confirmed by the model"
+    return f"{label.capitalize()} withdrawn"
+
+
+def _explain(db, session, key, finding_kind, label, state, payload, features):
+    """Headline and reason, from an administrator's decision or the same rules that decided it."""
+    # Imported here: app.models binds the database URL at import, and the worker and
+    # its tests import this module before choosing their database.
+    from . import effective
+
+    # Administrators decide on the finding, its link or its relationship type (see relationships.relationship_claims).
+    if finding_kind in ("relationship", "association") and effective.predicate_name(session, payload["predicate"]) is None:
+        return "Removed by an administrator", "An administrator removed this relationship type."
+    override = db.execute("SELECT mode FROM ml_overrides WHERE key=?", (key,)).fetchone()
+    if override:
+        return (("Added by an administrator", "An administrator added it by hand.") if override[0] == "pinned"
+                else ("Removed by an administrator", "An administrator removed it."))
+    if finding_kind in ("relationship", "association"):  # one link decision governs every claim on the pair
+        pair = finding_key("relationship_pair", *sorted((payload["src_id"], payload["dst_id"])))
+        override = db.execute("SELECT mode FROM ml_overrides WHERE key=?", (pair,)).fetchone()
+        if override:
+            return (("Link confirmed by an administrator", "An administrator confirmed this link by hand.")
+                    if override[0] == "pinned" else ("Link removed by an administrator", "An administrator removed this link."))
+    if state == "stale":
+        return (f"{label.capitalize()} waiting to be checked again",
+                "A post supporting it, or the meaning of one of its names, changed; the worker will check it again.")
+    if state == "suppressed":  # without an override, only a blocked name suppresses (adapter._publish_*)
+        return "Removed by an administrator", "An administrator blocked this name."
+    if finding_kind == "expertise":
+        expected, why = policy.assess_expertise(len(features.get("actors", [])), features.get("originals", 0),
+                                                features.get("accepted_answers", 0))
+    else:
+        expected, _, why = policy.assess(finding_kind, effective.evidence_rows(session, key))
+    headline = _model_headline(label, state)
+    if expected == state:
+        return headline, why
+    # The stored decision differs from the evidence rules: the rules for publishing names
+    # (adapter._publish_alias) decided it, or it has not been re-checked since its evidence
+    # or an administrator's decision changed. The report cannot tell which.
+    if finding_kind == "alias":
+        return headline, "Decided by the rules for publishing names, or not yet re-checked; the worker will check it again."
+    return headline, "Not yet re-checked under the current evidence and decisions; the worker will decide again."
+
+
+def _shown(db, kind, source_id):
+    """Whether the source is visible now; private or deleted sources keep evidence until reprocessed."""
+    if kind == "item":
+        return db.execute("SELECT 1 FROM knowledge_items WHERE id=? AND visibility='team'", (source_id,)).fetchone()
+    table = {"passage": "document_passages", "profile": "profiles"}.get(kind)
+    return table and db.execute(f"SELECT 1 FROM {table} WHERE id=?", (source_id,)).fetchone()
+
+
+def decisions(db, session, kind, source_id):
+    """Current decisions on the findings this source supports or contradicts, and why."""
+    if not _shown(db, kind, source_id):
+        return []
+    rows = db.execute(f"""SELECT f.key, f.kind, f.state, f.payload, e.features
+      FROM ml_evidence e JOIN ml_findings f ON f.key = e.finding_key
+      WHERE e.source_kind=? AND e.source_id=? AND f.kind IN ({",".join("?" * len(FINDING_KINDS))})
+      GROUP BY f.key""", (kind, source_id, *FINDING_KINDS)).fetchall()
+    result = []
+    for key, finding_kind, state, payload, features in rows:
+        payload = json.loads(payload)
+        if finding_kind == "concept":
+            name = payload["name"]
+        elif finding_kind in ("mention", "expertise"):
+            name = _concept_name(db, payload["concept_id"])
+        elif finding_kind == "alias":
+            name = f"{payload['alias']} → {_concept_name(db, payload['concept_id'])}"
+        else:
+            predicate = payload["predicate"].replace("_", " ")
+            name = f"{_concept_name(db, payload['src_id'])} {predicate} {_concept_name(db, payload['dst_id'])}"
+        label = FINDING_KINDS[finding_kind]
+        headline, why = _explain(db, session, key, finding_kind, label, state, payload, json.loads(features))
+        result.append({"kind": label, "name": name, "state": state, "headline": headline, "why": why})
+    order = list(FINDING_KINDS.values())
+    return sorted(result, key=lambda item: (order.index(item["kind"]), item["name"]))
+
+
 def _activity(database, token, running):
     try:
         data = json.loads(activity_path(database).read_text(encoding="utf-8"))
@@ -129,50 +232,60 @@ def report(database, *, limit=50, offset=0):
     """The queue in processing order, the worker's current step and its recent results."""
     now = time.time()
     with closing(sqlite3.connect(Path(database).as_uri() + "?mode=ro", uri=True, timeout=0.25)) as db:
-        token, lease_until = db.execute("SELECT worker_token, worker_lease_until FROM ml_state WHERE id=1").fetchone()
-        running = bool(lease_until and lease_until > now)
-        busy = "(lease_token IS NOT NULL AND lease_until > :now)"
-        totals = dict(zip(("total", "processing", "retrying", "waiting", "reprocessing"), db.execute(f"""
-          SELECT count(*), coalesce(sum({busy}),0),
-            coalesce(sum(NOT {busy} AND error IS NOT NULL),0),
-            coalesce(sum(NOT {busy} AND error IS NULL),0),
-            coalesce(sum(priority > 0),0) FROM ml_jobs""", {"now": now}).fetchone()))
-        totals["by_kind"] = dict(db.execute(
-            "SELECT source_kind, count(*) FROM ml_jobs GROUP BY source_kind ORDER BY source_kind").fetchall())
-        # Claim order: available work by priority and age, then work waiting for a retry time.
-        rows = db.execute(f"""SELECT source_kind, source_id, {busy}, priority, available_at, attempts, error,
-            created_at FROM ml_jobs
-          ORDER BY {busy} DESC, available_at > :now, priority, available_at, created_at, source_kind, source_id
-          LIMIT :limit OFFSET :offset""", {"now": now, "limit": limit, "offset": offset}).fetchall()
-        jobs = []
-        for kind, source_id, processing, priority, available_at, attempts, error, created_at in rows:
-            state = "processing" if processing else "retrying" if error else "waiting"
-            jobs.append({"kind": kind, "id": source_id, "label": source_label(db, kind, source_id), "state": state,
-                         "origin": "reprocessing older content" if priority > 0 else "new or changed content",
-                         "attempts": attempts, "created_at": created_at, "available_at": available_at, "error": error})
-        activity = _activity(database, token, running)
-        current = None
-        if activity:
-            source = activity["activity"] and activity["activity"]["source"]
-            if source:
-                source["label"] = source_label(db, source["kind"], source["id"])
-            if activity["live"] and activity["job"]:
-                current = activity["job"]
-                current["label"] = source_label(db, current["kind"], current["id"])
-                row = db.execute("SELECT attempts FROM ml_jobs WHERE source_kind=? AND source_id=?",
-                                 (current["kind"], current["id"])).fetchone()
-                current["attempt"] = row[0] + 1 if row else None
-            for finished in activity["recent"]:
-                finished["label"] = source_label(db, finished["kind"], finished["id"])
+        # The decision rules read evidence through SQLAlchemy; they share this connection.
+        engine = create_engine("sqlite://", creator=lambda: db, poolclass=StaticPool, pool_reset_on_return=None)
+        with Session(engine) as session:
+            session.connection()  # SQLAlchemy rolls back once while connecting, so begin afterwards
+            db.execute("BEGIN")  # one snapshot: the worker commits while the report is read
+            return _report(database, db, session, now, limit, offset)
+
+
+def _report(database, db, session, now, limit, offset):
+    token, lease_until = db.execute("SELECT worker_token, worker_lease_until FROM ml_state WHERE id=1").fetchone()
+    running = bool(lease_until and lease_until > now)
+    busy = "(lease_token IS NOT NULL AND lease_until > :now)"
+    totals = dict(zip(("total", "processing", "retrying", "waiting", "reprocessing"), db.execute(f"""
+      SELECT count(*), coalesce(sum({busy}),0),
+        coalesce(sum(NOT {busy} AND error IS NOT NULL),0),
+        coalesce(sum(NOT {busy} AND error IS NULL),0),
+        coalesce(sum(priority > 0),0) FROM ml_jobs""", {"now": now}).fetchone()))
+    totals["by_kind"] = dict(db.execute(
+        "SELECT source_kind, count(*) FROM ml_jobs GROUP BY source_kind ORDER BY source_kind").fetchall())
+    # Claim order: available work by priority and age, then work waiting for a retry time.
+    rows = db.execute(f"""SELECT source_kind, source_id, {busy}, priority, available_at, attempts, error,
+        created_at FROM ml_jobs
+      ORDER BY {busy} DESC, available_at > :now, priority, available_at, created_at, source_kind, source_id
+      LIMIT :limit OFFSET :offset""", {"now": now, "limit": limit, "offset": offset}).fetchall()
+    jobs = []
+    for kind, source_id, processing, priority, available_at, attempts, error, created_at in rows:
+        state = "processing" if processing else "retrying" if error else "waiting"
+        jobs.append({"kind": kind, "id": source_id, "label": source_label(db, kind, source_id), "state": state,
+                     "origin": "reprocessing older content" if priority > 0 else "new or changed content",
+                     "attempts": attempts, "created_at": created_at, "available_at": available_at, "error": error})
+    activity = _activity(database, token, running)
+    current = None
+    if activity:
+        source = activity["activity"] and activity["activity"]["source"]
+        if source:
+            source["label"] = source_label(db, source["kind"], source["id"])
+        if activity["live"] and activity["job"]:
+            current = activity["job"]
+            current["label"] = source_label(db, current["kind"], current["id"])
+            row = db.execute("SELECT attempts FROM ml_jobs WHERE source_kind=? AND source_id=?",
+                             (current["kind"], current["id"])).fetchone()
+            current["attempt"] = row[0] + 1 if row else None
+        for finished in activity["recent"]:
+            finished["label"] = source_label(db, finished["kind"], finished["id"])
+            finished["decisions"] = decisions(db, session, finished["kind"], finished["id"])
     return {"now": now,
-            "worker": {"running": running,
-                       "pid": activity["pid"] if activity and activity["live"] else None,
-                       "started_at": activity["started_at"] if activity and activity["live"] else None},
-            "activity": activity and {"live": activity["live"], **(activity["activity"] or {}),
-                                      "written_at": activity.get("written_at")},
-            "current": current, "totals": totals,
-            "jobs": jobs, "offset": offset, "limit": limit,
-            "recent": activity["recent"] if activity else []}
+        "worker": {"running": running,
+                   "pid": activity["pid"] if activity and activity["live"] else None,
+                   "started_at": activity["started_at"] if activity and activity["live"] else None},
+        "activity": activity and {"live": activity["live"], **(activity["activity"] or {}),
+                                  "written_at": activity.get("written_at")},
+        "current": current, "totals": totals,
+        "jobs": jobs, "offset": offset, "limit": limit,
+        "recent": activity["recent"] if activity else []}
 
 
 def _clock(timestamp):
@@ -248,4 +361,8 @@ def render(data):
             error = f" — {_snippet(finished['error'], 120)}" if finished["error"] else ""
             lines.append(f"  {_clock(finished['finished_at'])}  {finished['outcome']:<11}  {finished['kind']:<10}  "
                          f"{finished['seconds']:>7.1f}s  {finished['label']}{error}")
+            for decision in finished["decisions"]:
+                lines.append(f"{'':>24}{decision['headline']}: {decision['name']} — {decision['why']}")
+            if not finished["decisions"] and finished["kind"] != "vocabulary":
+                lines.append(f"{'':>24}no findings from this source")
     return "\n".join(lines)

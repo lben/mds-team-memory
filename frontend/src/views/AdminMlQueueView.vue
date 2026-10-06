@@ -21,11 +21,19 @@ interface Job extends Source {
   available_at: number
   error: string | null
 }
+interface Decision {
+  kind: string
+  name: string
+  state: string
+  headline: string
+  why: string
+}
 interface Finished extends Source {
   outcome: 'done' | 'failed' | 'interrupted'
   error: string | null
   finished_at: number
   seconds: number
+  decisions: Decision[]
 }
 interface QueueReport {
   now: number
@@ -220,7 +228,7 @@ onUnmounted(() => {
         <p v-if="!report.recent.length" class="muted queue-empty">Nothing has finished since the worker started.</p>
         <table v-else class="queue-table">
           <thead>
-            <tr><th>Finished</th><th>Outcome</th><th>Source</th><th>Took</th></tr>
+            <tr><th>Finished</th><th>Outcome</th><th>Source</th><th>Model decisions</th><th>Took</th></tr>
           </thead>
           <tbody>
             <tr v-for="item in report.recent" :key="item.kind + item.id + item.finished_at" data-testid="ml-recent-row">
@@ -229,6 +237,13 @@ onUnmounted(() => {
               <td>
                 <span class="muted">{{ item.kind }}</span> {{ item.label }}
                 <div v-if="item.error" class="queue-error">{{ item.error }}</div>
+              </td>
+              <td data-testid="ml-decisions">
+                <div v-for="decision in item.decisions" :key="decision.kind + decision.name" class="queue-decision">
+                  <span class="chip" :class="{ good: decision.state === 'active', warn: ['held', 'weak'].includes(decision.state) }">{{ decision.headline }}</span> {{ decision.name }}
+                  <div class="muted">{{ decision.why }}</div>
+                </div>
+                <span v-if="!item.decisions.length && item.kind !== 'vocabulary'" class="muted">No findings from this source</span>
               </td>
               <td>{{ item.seconds.toFixed(1) }}s</td>
             </tr>
@@ -255,5 +270,7 @@ onUnmounted(() => {
 .queue-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; overflow-wrap: anywhere; }
 .queue-table tr:last-child td { border-bottom: 0; }
 .queue-table tr.processing td { background: var(--info-soft); }
+.queue-decision { margin-bottom: 6px; }
+.queue-decision:last-child { margin-bottom: 0; }
 .queue-error { margin-top: 4px; color: var(--accent-2); font-size: 11px; }
 </style>

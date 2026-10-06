@@ -98,13 +98,17 @@ def test_queue_report_is_admin_only_ordered_live_and_private(make_client, admin_
     assert current_queue_db.read_bytes() == before
 
 
+def status_jobs(path, tmp_path):
+    env = {**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[1]),
+           "MDS_DATABASE_URL": f"sqlite:///{path}", "MDS_DATA_DIR": str(tmp_path / "unused")}
+    return subprocess.run([sys.executable, "-m", "app.ml.worker", "--status", "--jobs"], env=env,
+                          capture_output=True, text=True, timeout=20, check=True).stdout
+
+
 def test_status_jobs_console_shows_each_job_origin_and_retry_state(current_queue_db, tmp_path):
     seed(current_queue_db)
     record_running_worker(current_queue_db)
-    env = {**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[1]),
-           "MDS_DATABASE_URL": f"sqlite:///{current_queue_db}", "MDS_DATA_DIR": str(tmp_path / "unused")}
-    console = subprocess.run([sys.executable, "-m", "app.ml.worker", "--status", "--jobs"], env=env,
-                             capture_output=True, text=True, timeout=20, check=True).stdout
+    console = status_jobs(current_queue_db, tmp_path)
     rows = {line.split()[0]: line for line in console.splitlines() if re.match(r"\s+\d+\s", line)}
     assert "processing" in rows["1"] and "new or changed content" in rows["1"] and "Citrine Pump" in rows["1"]
     assert "reprocessing older content" in rows["5"] and "Private contribution" in rows["5"]
@@ -127,3 +131,145 @@ def test_activity_write_failures_never_interrupt_work(tmp_path, capsys):
     recorder.finish_job("done")
     recorder.stopped()
     assert capsys.readouterr().err.count("ML activity is not being reported") == 1
+
+
+def seed_decisions(path):
+    """Findings from team-note and the author's profile, including administrator decisions as the app stores them."""
+    from app.ml.runtime import normalize
+    from app.ml.sources import finding_key
+
+    with sqlite3.connect(path) as db:
+        db.execute("""INSERT INTO ml_sources(kind,id,content_hash,valid,model_version,result,updated_at)
+          VALUES ('item','team-note','hash',1,'model','{}',datetime('now'))""")
+        for concept_id, term, display in (("c-pump", "citrine pump", "Citrine Pump"), ("c-loop", "cooling loop", "Cooling Loop")):
+            db.execute("INSERT INTO concepts(id) VALUES (?)", (concept_id,))
+            db.execute("INSERT INTO concept_terms(id,concept_id,term,display,is_canonical) VALUES (?,?,?,?,1)",
+                       ("t-" + concept_id, concept_id, term, display))
+        relation = lambda predicate: '{"dst_id":"c-loop","predicate":"%s","src_id":"c-pump"}' % predicate
+        findings = [  # key, kind, payload, state
+            ("f-pump", "concept", '{"name":"Citrine Pump"}', "active"),
+            ("f-loop", "concept", '{"name":"loop"}', "held"),
+            ("f-drop", "concept", '{"name":"Pump room"}', "suppressed"),
+            ("f-stale", "concept", '{"name":"Night shift"}', "stale"),
+            ("f-topic", "mention", '{"concept_id":"c-pump","source_id":"team-note","source_kind":"item"}', "active"),
+            ("f-uses", "relationship", relation("uses"), "active"),
+            ("f-replaces", "relationship", relation("replaces"), "active"),
+            ("f-part", "relationship", relation("part_of"), "active"),
+            ("f-related", "association", relation("related_to"), "weak"),
+            # "Restore automation" removes the pin and sets held until the worker decides again.
+            ("f-restored", "concept", '{"name":"Valve log"}', "held"),
+            ("f-term", "term", '{"concept_id":"c-pump","term":"citrine pump"}', "active"),
+            ("f-secret", "concept", '{"name":"Project Nightingale layoffs"}', "stale"),
+            ("f-expert", "expertise", '{"concept_id":"c-pump","profile_id":"author"}', "held"),
+        ]
+        db.executemany("""INSERT INTO ml_findings(key,kind,payload,state,score,calibrated,policy_version,created_at,updated_at)
+          VALUES (?,?,?,?,0,0,'policy',datetime('now'),datetime('now'))""", findings)
+        overrides = [  # key, kind, mode, payload: as adapter.fix_relationship / fix_predicate / _override write them
+            ("f-uses", "relationship", "pinned", "{}"),
+            ("f-drop", "concept", "suppressed", "{}"),
+            (finding_key("relationship_pair", "c-loop", "c-pump"), "relationship_pair", "suppressed", "{}"),
+            (finding_key("predicate", normalize("part of")), "predicate", "suppressed", '{"type_id":"t","name":"part of"}'),
+        ]
+        db.executemany("""INSERT INTO ml_overrides(key,kind,mode,payload,username,updated_at)
+          VALUES (?,?,?,?,'admin',datetime('now'))""", overrides)
+        evidence = [  # finding, source kind, source id, score, features
+            ("f-pump", "item", "team-note", .999, '{"text_hash":"t","grounded":true,"label":"named entity","eligibility_margin":0.91}'),
+            ("f-loop", "item", "team-note", .97, '{"text_hash":"t","grounded":true,"label":"named entity","eligibility_margin":0.2}'),
+            ("f-drop", "item", "team-note", .999, '{"text_hash":"t","grounded":true}'),
+            ("f-stale", "item", "team-note", .999, '{"text_hash":"t","grounded":true}'),
+            ("f-topic", "item", "team-note", .999, '{"text_hash":"t","grounded":true,"label":"named entity"}'),
+            ("f-uses", "item", "team-note", .7, '{"text_hash":"t"}'),
+            ("f-replaces", "item", "team-note", .9, '{"text_hash":"t","literal_support":true,"assertion_allowed":true}'),
+            ("f-part", "item", "team-note", .9, '{"text_hash":"t","literal_support":true,"assertion_allowed":true}'),
+            ("f-related", "item", "team-note", .5, '{"text_hash":"t"}'),
+            ("f-restored", "item", "team-note", .999, '{"text_hash":"t","grounded":true,"label":"named entity","eligibility_margin":0.9}'),
+            ("f-term", "item", "team-note", 1.0, '{"text_hash":"t"}'),
+            ("f-expert", "profile", "author", 0.0, '{"text_hash":"t","actors":["a1"],"originals":1,"accepted_answers":0}'),
+            # Made private or deleted: evidence remains until the worker reprocesses the source.
+            ("f-secret", "item", "private-note", .999, '{"text_hash":"t"}'),
+            ("f-secret", "item", "gone", .999, '{"text_hash":"t"}'),
+        ]
+        db.executemany("""INSERT INTO ml_evidence(key,finding_key,source_kind,source_id,source_hash,group_key,author_id,
+            start,end,raw_score,polarity,features,model_version)
+          VALUES (?,?,?,?,'hash','group',NULL,0,1,?,'positive',?,'model')""",
+            [(f"e{index}", *row) for index, row in enumerate(evidence)])
+
+
+def record_finished(path, *sources):
+    from app.ml import activity
+    from app.ml.queue import Claim
+
+    recorder = activity.Recorder(activity.activity_path(path))
+    recorder.lease("worker-token")
+    for kind, source_id in sources:
+        recorder.start_job(Claim(kind, source_id, 1, "claim", time.time() + 60, "worker-token"))
+        recorder.finish_job("done")
+
+
+def test_finished_jobs_explain_the_current_model_decisions(admin_client, current_queue_db, monkeypatch, tmp_path):
+    from app import config
+
+    seed(current_queue_db)
+    seed_decisions(current_queue_db)
+    record_finished(current_queue_db, ("item", "private-note"), ("item", "gone"), ("profile", "author"), ("item", "team-note"))
+    monkeypatch.setattr(config, "DATABASE_URL", f"sqlite:///{current_queue_db}")
+
+    response = admin_client.get("/api/ml/queue")
+    recent = {entry["id"]: entry["decisions"] for entry in response.json()["recent"]}
+    assert recent["private-note"] == recent["gone"] == [] and "Nightingale" not in response.text
+    assert [(d["headline"], d["name"], d["why"]) for d in recent["author"]] == [
+        ("Expertise not recognised yet", "Citrine Pump", "Needs confirmation from 2 people (has 1) across 3 separate "
+                                                         "posts (has 1), including 1 accepted answer (has 0).")]
+    assert [(d["headline"], d["name"], d["why"]) for d in recent["team-note"]] == [
+        ("Concept confirmed by the model", "Citrine Pump", "The model is 99.9% sure this is a named thing."),
+        ("Concept waiting to be checked again", "Night shift",
+         "A post supporting it, or the meaning of one of its names, changed; the worker will check it again."),
+        ("Removed by an administrator", "Pump room", "An administrator removed it."),
+        ("Concept not confirmed by the model", "Valve log",
+         "Not yet re-checked under the current evidence and decisions; the worker will decide again."),
+        ("Concept not confirmed by the model", "loop",
+         "It does not look like a subject of the post (relevance 0.200; needs at least 0.643)."),
+        ("Topic confirmed by the model", "Citrine Pump", "The model is 99.9% sure the post mentions it."),
+        ("Removed by an administrator", "Citrine Pump part of Cooling Loop", "An administrator removed this relationship type."),
+        ("Link removed by an administrator", "Citrine Pump replaces Cooling Loop", "An administrator removed this link."),
+        ("Added by an administrator", "Citrine Pump uses Cooling Loop", "An administrator added it by hand."),
+        ("Link removed by an administrator", "Citrine Pump related to Cooling Loop", "An administrator removed this link.")]
+
+    console = status_jobs(current_queue_db, tmp_path)
+    for line in ("Concept confirmed by the model: Citrine Pump — The model is 99.9% sure this is a named thing.",
+                 "Concept not confirmed by the model: loop — It does not look like a subject of the post (relevance 0.200; needs at least 0.643).",
+                 "Link removed by an administrator: Citrine Pump replaces Cooling Loop — An administrator removed this link.",
+                 "no findings from this source"):
+        assert line in console
+    assert "Nightingale" not in console
+    # Explaining decisions loads the decision rules, never the ML libraries.
+    env = {**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[1]),
+           "MDS_DATABASE_URL": f"sqlite:///{current_queue_db}", "MDS_DATA_DIR": str(tmp_path / "unused")}
+    loaded = subprocess.run([sys.executable, "-c", """
+import sys
+from app.ml.worker import main
+assert main(["--status", "--jobs"]) == 0
+print(sorted(name for name in ("torch", "spacy", "gliner2", "transformers", "sentence_transformers", "psutil") if name in sys.modules))
+"""], env=env, capture_output=True, text=True, timeout=30, check=True).stdout.splitlines()[-1]
+    assert loaded == "[]"
+
+
+def test_one_report_reads_one_database_snapshot(current_queue_db, monkeypatch):
+    from app.ml import activity
+
+    seed(current_queue_db)
+    seed_decisions(current_queue_db)
+    record_finished(current_queue_db, ("item", "team-note"), ("item", "team-note"))
+    with sqlite3.connect(current_queue_db) as db:
+        db.execute("PRAGMA journal_mode=WAL")
+    original = activity.decisions
+
+    def decisions_then_concurrent_write(db, session, kind, source_id):
+        result = original(db, session, kind, source_id)
+        with sqlite3.connect(current_queue_db) as writer:  # the worker commits mid-report
+            writer.execute("UPDATE ml_findings SET state='held' WHERE key='f-pump'")
+        return result
+
+    monkeypatch.setattr(activity, "decisions", decisions_then_concurrent_write)
+    first, second = (entry["decisions"] for entry in activity.report(current_queue_db)["recent"])
+    assert first == second and first[0]["headline"] == "Concept confirmed by the model"

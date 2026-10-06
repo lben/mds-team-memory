@@ -891,7 +891,7 @@ def apply_profile(db, profile_id):
         actors = {confirmation.actor_account_id for confirmation in records}
         originals = {groups[confirmation.item_id] for confirmation in records}
         accepted = len({confirmation.item_id for confirmation in records if confirmation.kind == "accepted"})
-        row.state = "active" if len(actors) >= 2 and len(originals) >= 3 and accepted >= 1 else "held"
+        row.state = policy.assess_expertise(len(actors), len(originals), accepted)[0]
         db.add(Evidence(key=finding_key("expertise_evidence", row.key), finding_key=row.key,
                source_kind="profile", source_id=profile_id, source_hash=source_hash,
                group_key="profile:" + profile_id, author_id=profile_id, start=0, end=0, raw_score=0.0,

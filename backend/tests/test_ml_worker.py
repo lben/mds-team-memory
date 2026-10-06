@@ -97,14 +97,14 @@ def progress_child(connection, assets):
     """Reports inference steps, then waits for a release file so the job can be watched."""
     from app.ml import eligibility, relation_syntax, syntax
     from app.ml.runtime import inference_version
-    from ml_relation_helpers import analyze as _analyze
+    from ml_relation_helpers import analyze as _analyze, span as _span
 
     directory = Path(assets)
     models = json.loads((directory / "models.json").read_text())["models"]
     connection.send(("ready", inference_version(models), models["embeddings"]["revision"], 1024))
     while True:
         body = connection.recv()
-        judgment = {"version": eligibility.version(models), "margins": {}}
+        judgment = {"version": eligibility.version(models), "margins": {"citrine pump": 0.91}}
         if isinstance(body, dict):
             connection.send(("result", judgment))
             continue
@@ -112,7 +112,8 @@ def progress_child(connection, assets):
             connection.send(("progress", {"step": "extracting relations", "window": window, "windows": 2}))
         while not (directory / "release").exists():
             time.sleep(0.05)
-        result = _analyze(body, [], {}, full=True)
+        spans = [_span(body, "Citrine Pump", score=0.999)] if "Citrine Pump" in body else []
+        result = _analyze(body, spans, {}, full=True)
         result.update(chunks=[], conflict_definitions=[], conflict_coverage_revision=syntax.CONFLICT_REVISION,
                       relation_guard_revision=relation_syntax.REVISION, eligibility=judgment)
         connection.send(("result", result))
@@ -953,7 +954,9 @@ def test_status_jobs_shows_the_running_step_then_the_finished_job(worker_store, 
         (assets / "release").touch()
         finished = wait_for("Recently finished")
         assert re.search(r"done\s+item\s+[\d.]+s\s+Note: Citrine Pump drives the cooling loop\.", finished)
-        assert "Queue: 0 jobs" in finished
+        # The real adapter and policy decided; the report explains that decision.
+        wait_for("Concept confirmed by the model: Citrine Pump — The model is 99.9% sure this is a named thing.")
+        wait_for("Queue: 0 jobs")
     finally:
         stop.set()
         thread.join(timeout=30)
