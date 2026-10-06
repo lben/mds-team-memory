@@ -182,3 +182,29 @@ def test_overview_bound_and_focus_reaches_omitted_concepts(automated_graph, make
     local = reader.get("/api/graph/local", params={"concept_id": omitted["id"]}).json()
     assert local["nodes"][0]["id"] == f"c:{omitted['id']}"
     assert len(local["nodes"]) <= 13
+
+
+def test_overview_sources_link_to_shown_concepts_and_are_bounded(admin_client, make_client, monkeypatch):
+    # The overview's concept bound depends on everything else in the shared
+    # database, so this states which concepts are shown instead.
+    from app.db import SessionLocal
+    from app.routers import graph
+
+    shown, hidden = (admin_client.post("/api/admin/concepts", json={"name": f"{name}{uuid.uuid4().hex[:8]}"}).json()
+                     for name in ("Beacon", "Lantern"))
+    writer = make_client()
+    assert writer.post("/api/capture", data={"body": f"{shown['name']} restarts nightly."}).status_code == 200
+    assert writer.post("/api/questions", json={"body": f"Who owns {shown['name']}?"}).status_code == 200
+    for filename, name in (("shown.txt", shown["name"]), ("hidden.txt", hidden["name"])):
+        assert writer.post("/api/documents", files={"file": (filename, f"{name} runbook.".encode(), "text/plain")}).status_code == 200
+
+    with SessionLocal() as db:
+        nodes, edges, omitted = graph._overview_sources(db, graph._team_subject_concepts(db), {shown["id"]})
+        assert sorted((node["type"], node["type"] == "document" and node["label"]) for node in nodes) == [
+            ("document", "shown.txt"), ("item", False), ("question", False)]  # not hidden.txt
+        assert {node["id"] for node in nodes} == {edge["source"] for edge in edges}  # nothing floats unconnected
+        assert omitted == 0
+
+        monkeypatch.setattr(graph, "MAX_OVERVIEW_SOURCES", 1)
+        nodes, edges, omitted = graph._overview_sources(db, graph._team_subject_concepts(db), {shown["id"]})
+        assert len(nodes) == 1 and omitted == 2

@@ -380,6 +380,11 @@ def test_graph_never_exposes_private_content(make_client, admin_client):
     owner.post("/api/capture", data={"body": f"{concept_name} is owned by the platform team."})
     graph = other.get("/api/graph/local", params={"concept_id": concept["id"]}).json()
     assert any(n["type"] == "item" for n in graph["nodes"])
+    overview = other.get("/api/graph/global")
+    linked = {edge["source"] for edge in overview.json()["source_edges"] if edge["concept_id"] == concept["id"]}
+    assert [(s["type"], s["label"]) for s in overview.json()["sources"] if s["id"] in linked] == [
+        ("item", f"{concept_name} is owned by the platform team.")]
+    assert "password rotation" not in overview.text
 
 
 def test_expertise_routing(make_client, admin_client):

@@ -38,6 +38,7 @@ router = APIRouter(prefix="/api/graph", tags=["graph"])
 MAX_NEIGHBORS = 12
 MAX_OVERVIEW_NODES = 200
 MAX_OVERVIEW_EDGES = 400
+MAX_OVERVIEW_SOURCES = 120
 
 
 class LinkIn(BaseModel):
@@ -218,6 +219,47 @@ def local_graph(concept_id: str, show_weak: bool = False, db: Session = Depends(
     return {"nodes": nodes, "edges": edges}
 
 
+def _overview_sources(db: Session, rows: list[tuple[str, str, str]], shown: set[str]) -> tuple[list[dict], list[dict], int]:
+    """Team posts, questions and documents that mention the shown concepts, most connected first.
+
+    `rows` are team-visible subjects only, so private items never appear.
+    """
+    subjects: dict[tuple[str, str], set[str]] = defaultdict(set)
+    passage_concepts: dict[str, set[str]] = defaultdict(set)
+    for kind, subject_id, concept_id in rows:
+        if concept_id not in shown:
+            continue
+        if kind == "item":
+            subjects[("item", subject_id)].add(concept_id)
+        else:
+            passage_concepts[subject_id].add(concept_id)
+    if passage_concepts:  # a document is one node for all of its passages
+        for passage_id, document_id in db.query(DocumentPassage.id, DocumentPassage.document_id):
+            if passage_id in passage_concepts:  # only passages about a shown concept
+                subjects[("document", document_id)] |= passage_concepts[passage_id]
+    # Most connected first; the bound also keeps the detail queries small, since
+    # imports can link tens of thousands of notes.
+    chosen = sorted(subjects, key=lambda subject: (-len(subjects[subject]), subject))[:MAX_OVERVIEW_SOURCES]
+    items = {i.id: i for i in db.query(KnowledgeItem).filter(
+        KnowledgeItem.id.in_([sid for kind, sid in chosen if kind == "item"]), KnowledgeItem.visibility == "team")}
+    docs = {d.id: d for d in db.query(Document).filter(
+        Document.id.in_([sid for kind, sid in chosen if kind == "document"]))}
+    nodes, edges = [], []
+    for kind, subject_id in chosen:
+        if kind == "item" and subject_id in items:
+            item = items[subject_id]
+            node = {"id": f"i:{item.id}", "type": "question" if item.kind == "question" else "item",
+                    "label": (item.body[:60] + "…") if len(item.body) > 60 else item.body,
+                    "kind": item.kind, "status": item.question_status}
+        elif kind == "document" and subject_id in docs:
+            node = {"id": f"d:{subject_id}", "type": "document", "label": docs[subject_id].filename}
+        else:
+            continue
+        nodes.append(node)
+        edges.extend({"source": node["id"], "concept_id": cid} for cid in sorted(subjects[(kind, subject_id)]))
+    return nodes, edges, len(subjects) - len(nodes)
+
+
 @router.get("/global")
 def global_graph(show_weak: bool = False, db: Session = Depends(get_db)):
     rows = _team_subject_concepts(db)
@@ -264,9 +306,11 @@ def global_graph(show_weak: bool = False, db: Session = Depends(get_db)):
             }
         )
     clusters.sort(key=lambda cl: -sum(c["size"] for c in cl["concepts"]))
+    sources, source_edges, omitted_sources = _overview_sources(db, rows, set(concepts))
     return {"clusters": clusters, "edges": shown_edges, "total_nodes": len(all_concepts),
             "total_edges": len(links), "omitted_nodes": len(all_concepts) - len(concepts),
-            "omitted_edges": len(links) - len(shown_edges)}
+            "omitted_edges": len(links) - len(shown_edges),
+            "sources": sources, "source_edges": source_edges, "omitted_sources": omitted_sources}
 
 
 @router.get("/links/{link_id}/evidence")

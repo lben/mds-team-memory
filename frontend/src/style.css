@@ -132,8 +132,8 @@ mark{background:#fff0a6;color:inherit;padding:1px 0}
 .home-graph{margin-bottom:16px;min-height:0}
 /* A modest increase only. 380px starved the fit and shrank every label; 520px
    fixed that but pushed the composer and the feed below the fold, which is
-   worse — the graph is not what people came to the page to use. The zoom floor
-   in KnowledgeGraph.vue is what actually keeps the labels legible. */
+   worse — the graph is not what people came to the page to use. Labels scale
+   with depth in graph3d.ts and never drop below a readable size. */
 .home-graph .graph-box{height:430px}
 .graph-empty{display:grid;place-items:center;height:150px;color:#8ea7c9;font-size:13px;padding:0 40px;text-align:center}
 .composer{padding:16px}
