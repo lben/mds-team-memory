@@ -68,4 +68,6 @@ if FRONTEND_DIST.exists():
         candidate = FRONTEND_DIST / full_path
         if full_path and candidate.is_file() and candidate.resolve().is_relative_to(FRONTEND_DIST):
             return FileResponse(candidate)
-        return FileResponse(FRONTEND_DIST / "index.html")
+        # index.html names the current build's hashed bundles, so browsers must
+        # recheck it or they keep running the previous build after an update.
+        return FileResponse(FRONTEND_DIST / "index.html", headers={"Cache-Control": "no-cache"})
