@@ -55,32 +55,32 @@ def test_critical_journey(browser: Browser, base_url_server):
     panel = admin.get_by_test_id("map-admin-panel")
     expect(panel).to_be_visible()
     admin.get_by_test_id("tab-concepts").click()
-    admin.get_by_test_id("concept-name").fill("Optima")
-    admin.get_by_test_id("concept-aliases").fill("opt-feed")
+    admin.get_by_test_id("concept-name").fill("Lantern")
+    admin.get_by_test_id("concept-aliases").fill("lan-feed")
     admin.get_by_test_id("add-concept").click()
-    expect(panel).to_contain_text("opt-feed")
-    admin.get_by_test_id("concept-name").fill("Olympus")
+    expect(panel).to_contain_text("lan-feed")
+    admin.get_by_test_id("concept-name").fill("Beacon")
     admin.get_by_test_id("add-concept").click()
-    expect(panel).to_contain_text("Olympus")
+    expect(panel).to_contain_text("Beacon")
     admin.get_by_test_id("map-profile").select_option(label=b_label)
-    admin.get_by_test_id("map-concept").select_option(label="Optima")
+    admin.get_by_test_id("map-concept").select_option(label="Lantern")
     admin.get_by_test_id("add-mapping").click()
     expect(admin.get_by_test_id("mapping-table")).to_contain_text(b_label)
 
     # ---- A captures knowledge from the composer (W1); it lands in the feed.
-    a.get_by_test_id("home-input").fill("Optima does not consume SFT directly; Olympus processes the feed first.")
+    a.get_by_test_id("home-input").fill("Lantern does not consume Quill directly; Beacon processes the feed first.")
     a.get_by_test_id("do-capture").click()
     expect(a.get_by_test_id("success-modal")).to_contain_text("Thank you")
     a.get_by_role("button", name="Add another").click()
-    expect(a.get_by_test_id("knowledge-column")).to_contain_text("Olympus processes the feed")
+    expect(a.get_by_test_id("knowledge-column")).to_contain_text("Beacon processes the feed")
 
     # ---- B searches; the graph focuses on the matched concept; helped works.
-    b.get_by_test_id("home-input").fill("olympus feed")
+    b.get_by_test_id("home-input").fill("beacon feed")
     b.get_by_test_id("do-search").click()
-    expect(b.get_by_test_id("search-banner")).to_contain_text("olympus feed")
-    expect(b.get_by_test_id("graph-title")).to_contain_text("Focused on Olympus")
+    expect(b.get_by_test_id("search-banner")).to_contain_text("beacon feed")
+    expect(b.get_by_test_id("graph-title")).to_contain_text("Focused on Beacon")
     result = b.get_by_test_id("knowledge-column").locator(".result").first
-    expect(result).to_contain_text("Olympus processes the feed")
+    expect(result).to_contain_text("Beacon processes the feed")
     result.get_by_role("button", name="✓ Helped me").click()
     expect(result.get_by_role("button", name="✓ Marked helpful")).to_be_visible()
     b.get_by_test_id("clear-search").click()
@@ -96,18 +96,18 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(a.locator(".question-card", has_text="Oops wrong question")).to_have_count(0)
 
     # ---- A asks for real (W2 spirit: same box, no retyping) — routed to B (W10).
-    a.get_by_test_id("home-input").fill("Why is the opt-feed delayed on Mondays?")
+    a.get_by_test_id("home-input").fill("Why is the lan-feed delayed on Mondays?")
     a.get_by_test_id("do-ask").click()
-    question = a.locator(".question-card", has_text="opt-feed delayed").first
+    question = a.locator(".question-card", has_text="lan-feed delayed").first
     expect(question).to_be_visible()
 
     # B sees it flagged for their expertise at the top of the questions column and answers (W3).
     b.reload()
     top_q = b.get_by_test_id("questions-column").locator(".question-card").first
-    expect(top_q).to_contain_text("opt-feed delayed")
+    expect(top_q).to_contain_text("lan-feed delayed")
     expect(top_q).to_contain_text("NEEDS YOUR EXPERTISE")
     top_q.locator(".q-head").click()
-    top_q.get_by_test_id("answer-text").fill("The upstream batch only lands at 08:30 on Mondays; Optima waits for it.")
+    top_q.get_by_test_id("answer-text").fill("The upstream batch only lands at 08:30 on Mondays; Lantern waits for it.")
     top_q.get_by_test_id("post-answer").click()
     expect(top_q).to_contain_text("08:30 on Mondays")
 
@@ -115,7 +115,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     a.reload()
     a.get_by_test_id("bell").click()
     a.locator(".notif", has_text="new answer").first.click()
-    opened = a.locator(".question-card", has_text="opt-feed delayed").first
+    opened = a.locator(".question-card", has_text="lan-feed delayed").first
     expect(opened.get_by_test_id("accept-answer")).to_be_visible()
     opened.get_by_test_id("accept-answer").click()
     opened.get_by_test_id("accept-without-topics").click()
@@ -123,7 +123,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(opened).to_contain_text("RESOLVED")
 
     # ---- Searching surfaces the resolved question first in the questions column.
-    b.get_by_test_id("home-input").fill("opt-feed Mondays delayed")
+    b.get_by_test_id("home-input").fill("lan-feed Mondays delayed")
     b.get_by_test_id("do-search").click()
     first_q = b.get_by_test_id("questions-column").locator(".question-card").first
     expect(first_q).to_contain_text("RESOLVED")
@@ -132,7 +132,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     # ---- Scratchpad privacy (W5) and share-selection (W6) — separate screen.
     a.goto(base + "/scratchpad")
     secret = "topsecret-alpha rotation password steps"
-    shareable = "The AQUA runbook lives in the operations shared drive."
+    shareable = "The Kestrel runbook lives in the operations shared drive."
     editor = a.get_by_test_id("scratch-editor")
     editor.fill(secret + "\n" + shareable)
     expect(a.locator(".autosave")).to_contain_text("Saved")
@@ -154,7 +154,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(a.get_by_test_id("success-modal")).to_be_visible()
     a.get_by_role("button", name="Add another").click()
 
-    b.get_by_test_id("home-input").fill("AQUA runbook")
+    b.get_by_test_id("home-input").fill("Kestrel runbook")
     b.get_by_test_id("do-search").click()
     expect(b.get_by_test_id("knowledge-column")).to_contain_text("operations shared drive")
     b.get_by_test_id("home-input").fill("topsecret-alpha")
@@ -176,7 +176,7 @@ def test_critical_journey(browser: Browser, base_url_server):
             "mimeType": "text/plain",
             "buffer": (
                 "Governance policy overview.\n\n"
-                "SFT data is processed through Olympus before Optima consumes it downstream.\n\n"
+                "Quill data passes through Beacon before Lantern reads it.\n\n"
                 "All consumers retain lineage metadata.\n"
             ).encode(),
         }

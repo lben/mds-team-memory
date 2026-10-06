@@ -467,33 +467,33 @@ def test_vocabulary_is_a_single_source_of_truth(make_client, admin_client):
     silently resolving to whichever concept happens to be found first."""
     suffix = uuid.uuid4().hex[:6]
     first = admin_client.post(
-        "/api/admin/concepts", json={"name": f"Optima{suffix}", "aliases": [f"opt{suffix}"]}
+        "/api/admin/concepts", json={"name": f"Citrine{suffix}", "aliases": [f"cit{suffix}"]}
     ).json()
-    assert first["name"] == f"Optima{suffix}"
-    assert first["aliases"] == [f"opt{suffix}"]
+    assert first["name"] == f"Citrine{suffix}"
+    assert first["aliases"] == [f"cit{suffix}"]
 
     # A second concept cannot claim the first one's name...
     clash = admin_client.post(
-        "/api/admin/concepts", json={"name": f"Payments{suffix}", "aliases": [f"Optima{suffix}"]}
+        "/api/admin/concepts", json={"name": f"Payments{suffix}", "aliases": [f"Citrine{suffix}"]}
     )
     assert clash.status_code == 400
-    assert f"Optima{suffix}" in clash.json()["detail"]
+    assert f"Citrine{suffix}" in clash.json()["detail"]
 
     # ...nor a case variant of it, as a name or an alias.
     assert admin_client.post(
-        "/api/admin/concepts", json={"name": f"optima{suffix}".lower(), "aliases": []}
+        "/api/admin/concepts", json={"name": f"citrine{suffix}".lower(), "aliases": []}
     ).status_code == 400
     assert admin_client.post(
-        "/api/admin/concepts", json={"name": f"Other{suffix}", "aliases": [f"OPT{suffix}"]}
+        "/api/admin/concepts", json={"name": f"Other{suffix}", "aliases": [f"CIT{suffix}"]}
     ).status_code == 400
 
     # A concept can still edit its own words.
     updated = admin_client.put(
         f"/api/admin/concepts/{first['id']}",
-        json={"name": f"Optima{suffix}", "aliases": [f"opt{suffix}", f"opti{suffix}"]},
+        json={"name": f"Citrine{suffix}", "aliases": [f"cit{suffix}", f"citr{suffix}"]},
     )
     assert updated.status_code == 200
-    assert updated.json()["aliases"] == [f"opt{suffix}", f"opti{suffix}"]
+    assert updated.json()["aliases"] == [f"cit{suffix}", f"citr{suffix}"]
 
     # A concept's identity is its canonical term, so a blank name is refused —
     # even when aliases would otherwise make the term set non-empty. Accepting
@@ -509,10 +509,10 @@ def test_vocabulary_is_a_single_source_of_truth(make_client, admin_client):
     intact = next(
         c for c in admin_client.get("/api/admin/concepts").json() if c["id"] == first["id"]
     )
-    assert intact["name"] == f"Optima{suffix}"
-    assert intact["aliases"] == [f"opt{suffix}", f"opti{suffix}"]
+    assert intact["name"] == f"Citrine{suffix}"
+    assert intact["aliases"] == [f"cit{suffix}", f"citr{suffix}"]
     assert admin_client.post(
-        "/api/admin/concepts", json={"name": f"Optima{suffix}", "aliases": []}
+        "/api/admin/concepts", json={"name": f"Citrine{suffix}", "aliases": []}
     ).status_code == 400
     assert_one_canonical_term_per_concept()
 

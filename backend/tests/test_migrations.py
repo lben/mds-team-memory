@@ -36,13 +36,13 @@ def seed_messy_0002(db: Path) -> dict:
         (profile, uuid.uuid4().hex),
     )
     ids = {}
-    for name in ["Optima", "optima", "Payments", "Warehouse"]:
+    for name in ["Citrine", "citrine", "Payments", "Warehouse"]:
         ids[name] = uuid.uuid4().hex
         con.execute("INSERT INTO concepts (id, name) VALUES (?,?)", (ids[name], name))
-    # 'optima' already belongs to a concept by name; Payments also claims it.
+    # 'citrine' already belongs to a concept by name; Payments also claims it.
     con.execute(
         "INSERT INTO concept_aliases (id, concept_id, alias) VALUES (?,?,?)",
-        (uuid.uuid4().hex, ids["Payments"], "optima"),
+        (uuid.uuid4().hex, ids["Payments"], "citrine"),
     )
     con.execute(
         "INSERT INTO concept_aliases (id, concept_id, alias) VALUES (?,?,?)",
@@ -51,7 +51,7 @@ def seed_messy_0002(db: Path) -> dict:
     con.execute(
         "INSERT INTO knowledge_items (id, kind, body, visibility, author_profile_id, created_at, updated_at) "
         "VALUES (?,?,?,?,?,datetime('now'),datetime('now'))",
-        (item, "note", "Optima and whse.", "team", profile),
+        (item, "note", "Citrine and whse.", "team", profile),
     )
     con.execute(
         "INSERT INTO documents (id, filename, stored_path, uploader_profile_id, status, uploaded_at) "
@@ -60,7 +60,7 @@ def seed_messy_0002(db: Path) -> dict:
     )
     con.execute(
         "INSERT INTO document_passages (id, document_id, ord, text, locator) VALUES (?,?,?,?,?)",
-        (passage, document, 0, "Optima passage", "Line 1"),
+        (passage, document, 0, "Citrine passage", "Line 1"),
     )
     for kind, subject in [
         ("item", item),
@@ -70,7 +70,7 @@ def seed_messy_0002(db: Path) -> dict:
     ]:
         con.execute(
             "INSERT INTO item_concepts (id, subject_kind, subject_id, concept_id) VALUES (?,?,?,?)",
-            (uuid.uuid4().hex, kind, subject, ids["Optima"]),
+            (uuid.uuid4().hex, kind, subject, ids["Citrine"]),
         )
     con.commit()
     con.close()
@@ -122,10 +122,10 @@ def test_upgrade_folds_colliding_vocabulary_without_losing_concepts(messy_db):
     con = sqlite3.connect(db)
     terms = dict(con.execute("SELECT term, is_canonical FROM concept_terms"))
     con.close()
-    assert "optima" in terms, "the first owner keeps the contested word"
+    assert "citrine" in terms, "the first owner keeps the contested word"
     assert "whse" in terms and terms["whse"] == 0, "a genuine alias survives as an alias"
     # The concept that lost the clash survives under a disambiguated name.
-    assert any(t.startswith("optima (") for t in terms)
+    assert any(t.startswith("citrine (") for t in terms)
 
 
 def test_downgrade_and_reupgrade_round_trips(messy_db):
