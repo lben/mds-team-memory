@@ -254,3 +254,21 @@ def delete_item(db: Session, item: KnowledgeItem) -> None:
         db.delete(child)
     db.delete(item)
     db.commit()
+    if item.kind == "answer" and item.parent_id:
+        _settle_question(db, item)
+
+
+def _settle_question(db: Session, answer: KnowledgeItem) -> None:
+    """A question left with no answers is open again (a trigger already handles a deleted accepted answer)."""
+    question = db.get(KnowledgeItem, answer.parent_id)
+    if question and question.question_status == "answered" and not db.query(KnowledgeItem.id).filter(
+            KnowledgeItem.parent_id == question.id, KnowledgeItem.kind == "answer").first():
+        question.question_status = "open"
+        db.commit()
+
+
+def delete_thread(db: Session, item: KnowledgeItem) -> None:
+    """An administrator removes a contribution with everything attached to it, deepest first."""
+    for child in db.query(KnowledgeItem).filter(KnowledgeItem.parent_id == item.id).all():
+        delete_thread(db, child)
+    delete_item(db, item)

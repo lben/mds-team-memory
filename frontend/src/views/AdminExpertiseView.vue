@@ -265,15 +265,6 @@ onMounted(loadState)
         </div>
       </div>
 
-      <MapAdminPanel
-        style="margin-top: 16px"
-        center-concept-id=""
-        :selected-link-id="selectedLink"
-        :selected-concept-id="selectedConcept"
-        @changed="loadData"
-        @evidence="evidenceLinkId = $event"
-      />
-
       <div class="card route-preview">
         <h3>Routing preview</h3>
         <div class="row gap8" style="margin-top: 10px">
@@ -294,6 +285,15 @@ onMounted(loadState)
           </div>
         </div>
       </div>
+      <MapAdminPanel
+        style="margin-top: 16px"
+        center-concept-id=""
+        :selected-link-id="selectedLink"
+        :selected-concept-id="selectedConcept"
+        @changed="loadData"
+        @evidence="evidenceLinkId = $event"
+      />
+
     </template>
     <EvidenceModal v-if="evidenceLinkId" :link-id="evidenceLinkId" @close="evidenceLinkId = null" />
   </section>

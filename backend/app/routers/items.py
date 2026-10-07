@@ -7,7 +7,7 @@ from ..concepts import source_concepts
 from ..db import get_db
 from ..docstore import save_uploaded_document
 from ..impact import mark_helped, notify, record_event, shared_count
-from ..knowledge import delete_item, dependents_by_others, item_dict, process_after_save
+from ..knowledge import delete_item, delete_thread, dependents_by_others, item_dict, process_after_save
 from ..models import (
     Account,
     KnowledgeItem,
@@ -132,10 +132,17 @@ def edit_item(
 
 @router.delete("/items/{item_id}")
 def remove_item(
-    item_id: str, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
+    item_id: str, profile: Profile = Depends(get_profile), admin: Account | None = Depends(get_admin),
+    db: Session = Depends(get_db),
 ):
-    """Delete your own contribution — unless a teammate has built on it."""
+    """Delete your own contribution — unless a teammate has built on it.
+
+    An administrator can delete any team contribution, with everything attached to it.
+    """
     item = _get_item(db, item_id, profile)
+    if admin is not None and item.visibility == "team":
+        delete_thread(db, item)
+        return {"deleted": True}
     if item.author_profile_id != profile.id:
         raise HTTPException(403, "Only the author can delete this")
     attached = dependents_by_others(db, item)

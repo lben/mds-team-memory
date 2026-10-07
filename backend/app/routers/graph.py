@@ -335,7 +335,8 @@ def list_links(
         )
     if state:
         query = query.filter(Relationship.state == state)
-    links = query.all()
+    published = effective.concepts(db).with_entities(Concept.id)  # as for the concept list
+    links = query.filter(Relationship.src_id.in_(published), Relationship.dst_id.in_(published)).all()
     for link in links:
         recount(db, link)
     db.commit()

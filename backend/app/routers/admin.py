@@ -130,7 +130,9 @@ def _set_terms(db: Session, concept: Concept, name: str, aliases: list[str], use
 
 @router.get("/concepts", dependencies=[Depends(require_admin)])
 def list_concepts(db: Session = Depends(get_db)):
-    concepts = db.query(Concept).all()
+    # The concepts the team sees: one withdrawn by automation (its posts deleted,
+    # say) is restored from the findings controls, not edited here.
+    concepts = effective.concepts(db).all()
     return [_concept_dict(c) for c in sorted(concepts, key=lambda c: c.name.lower())]
 
 

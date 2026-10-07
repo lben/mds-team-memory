@@ -54,16 +54,19 @@ async function saveEdit() {
 
 async function removeItem() {
   if (!detail.value) return
+  const moderating = store.auth.is_admin
   const answer = await askUser({
     title: 'Delete this contribution?',
-    message: 'It is removed for the whole team and cannot be recovered.',
+    message: moderating
+      ? 'It is removed for the whole team, together with any answers or corrections attached to it, and cannot be recovered.'
+      : 'It is removed for the whole team and cannot be recovered.',
     confirmLabel: 'Delete',
     danger: true,
   })
   if (answer === null) return
   try {
     await api.delete(`/api/items/${detail.value.id}`)
-    store.notify('Your contribution was deleted')
+    store.notify(detail.value.is_mine ? 'Your contribution was deleted' : 'Contribution deleted')
     emit('changed')
     emit('close')
   } catch (e) {
@@ -197,7 +200,7 @@ useDialog(dialogRoot, () => emit('close'))
             ask them to create one.
           </span>
           <button v-if="detail.is_mine && !editing" class="btn small" data-testid="edit-item" @click="startEdit">Edit</button>
-          <button v-if="detail.is_mine" class="btn small ghost" data-testid="delete-item" @click="removeItem">Delete</button>
+          <button v-if="detail.is_mine || store.auth.is_admin" class="btn small ghost" data-testid="delete-item" @click="removeItem">Delete</button>
           <router-link
             v-if="detail.source_document_id"
             class="btn small"

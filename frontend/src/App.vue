@@ -136,11 +136,13 @@ onMounted(() => {
         <router-link to="/documents" active-class="active"><span class="nav-dot"></span>Documents</router-link>
         <router-link to="/scratchpad" active-class="active"><span class="nav-dot"></span>Scratchpad</router-link>
       </nav>
-      <div class="nav-label">Admin</div>
-      <nav class="nav" data-testid="admin-nav">
-        <router-link to="/admin/expertise" active-class="active"><span class="nav-dot"></span>Expertise Routing</router-link>
-        <router-link to="/admin/ml-queue" active-class="active"><span class="nav-dot"></span>ML Queue</router-link>
-      </nav>
+      <template v-if="store.auth.is_admin">
+        <div class="nav-label">Admin</div>
+        <nav class="nav" data-testid="admin-nav">
+          <router-link to="/admin/expertise" active-class="active"><span class="nav-dot"></span>Expertise Routing</router-link>
+          <router-link to="/admin/ml-queue" active-class="active"><span class="nav-dot"></span>ML Queue</router-link>
+        </nav>
+      </template>
       <button class="profile" @click="showProfile = !showProfile" data-testid="profile-button">
         <span class="avatar">{{ initials }}</span>
         <span>

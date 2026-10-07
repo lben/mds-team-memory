@@ -42,8 +42,8 @@ def test_critical_journey(browser: Browser, base_url_server):
     b_label = b.evaluate("() => fetch('/api/profile').then(r => r.json()).then(p => p.label)")
     assert b_label == "bernard", b_label
 
-    # ---- Admin: link visible to all, gated by credentials; curation lives here.
-    expect(a.get_by_test_id("admin-nav")).to_be_visible()
+    # ---- Admin: links shown only to administrators; the page itself asks for credentials.
+    expect(a.get_by_test_id("admin-nav")).to_have_count(0)
     base_url_server.create_admin("installer", "first-admin-pw")
     admin.goto(base + "/admin/expertise")
     expect(admin.get_by_test_id("admin-auth")).to_contain_text("Admin sign in")
@@ -51,6 +51,7 @@ def test_critical_journey(browser: Browser, base_url_server):
     admin.get_by_test_id("admin-password").fill("first-admin-pw")
     admin.get_by_test_id("admin-submit").click()
     expect(admin.get_by_test_id("mapping-table")).to_be_visible()
+    expect(admin.get_by_test_id("admin-nav")).to_be_visible()
     # The curation table (concepts tab) is on this page now.
     panel = admin.get_by_test_id("map-admin-panel")
     expect(panel).to_be_visible()

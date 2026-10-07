@@ -90,19 +90,41 @@ async function topicFeedbackSaved() {
 }
 
 async function deleteQuestion() {
+  const moderating = store.auth.is_admin
   const answer = await askUser({
     title: 'Delete this question?',
-    message: 'This is permanent, and only works while nobody has answered it.',
+    message: moderating
+      ? 'It is removed for the whole team, together with all of its answers, and cannot be recovered.'
+      : 'This is permanent, and only works while nobody has answered it.',
     confirmLabel: 'Delete question',
     danger: true,
   })
   if (answer === null) return
   try {
-    await api.delete(`/api/questions/${props.question.id}`)
+    // An administrator deletes any question, answers included; the asker only an unanswered one.
+    await api.delete(moderating ? `/api/items/${props.question.id}` : `/api/questions/${props.question.id}`)
     store.notify('Question deleted')
     emit('deleted')
   } catch (e) {
     store.fail(e, 'Could not delete the question')
+  }
+}
+
+async function deleteAnswer(item: Item) {
+  const answer = await askUser({
+    title: 'Delete this answer?',
+    message: 'It is removed for the whole team and cannot be recovered.',
+    confirmLabel: 'Delete answer',
+    danger: true,
+  })
+  if (answer === null) return
+  try {
+    await api.delete(`/api/items/${item.id}`)
+    store.notify('Answer deleted')
+    await loadDetail()
+    emit('changed')
+  } catch (e) {
+    store.fail(e, 'Could not delete the answer')
   }
 }
 
@@ -183,6 +205,9 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
         <div class="meta"><span>{{ answer.helped }} Helpful marks</span></div>
         <div class="result-actions">
           <HelpfulActions :item="answer" @changed="emit('changed')" />
+          <button v-if="store.auth.is_admin" class="btn small ghost" data-testid="delete-answer" @click="deleteAnswer(answer)">
+            Delete answer
+          </button>
           <button
             v-if="detail.is_mine && !detail.accepted_answer_id"
             class="btn small"
@@ -225,7 +250,7 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
         ></textarea>
         <div class="row between" style="margin-top: 8px">
           <button
-            v-if="detail.is_mine && !detail.answers.length"
+            v-if="store.auth.is_admin || (detail.is_mine && !detail.answers.length)"
             class="btn small ghost"
             data-testid="delete-question"
             @click="deleteQuestion"

@@ -39,13 +39,14 @@ def test_admin_watches_the_ml_queue(browser: Browser, base_url_server):
     context = browser.new_context(viewport={"width": 1366, "height": 900})
     page = context.new_page()
     try:
-        page.goto(base_url_server.url + "/")
-        page.get_by_test_id("admin-nav").get_by_role("link", name="ML Queue").click()
+        page.goto(base_url_server.url + "/admin/ml-queue")
         expect(page.get_by_test_id("ml-queue-auth")).to_contain_text("Administrator sign-in required")
+        expect(page.get_by_test_id("admin-nav")).to_have_count(0)
         page.get_by_test_id("profile-button").click()
         page.get_by_test_id("auth-username").fill("queue-admin")
         page.get_by_test_id("auth-password").fill("queue-admin-password")
         page.get_by_test_id("do-sign-in").click()
+        expect(page.get_by_test_id("admin-nav").get_by_role("link", name="ML Queue")).to_be_visible()
 
         expect(page.get_by_test_id("ml-worker-state")).to_contain_text("Running since")
         expect(page.get_by_test_id("ml-current-job")).to_contain_text("Note: Citrine Pump feeds the cooling loop.")
