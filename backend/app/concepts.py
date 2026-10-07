@@ -90,6 +90,66 @@ def match_concepts(db: Session, text: str) -> list[Concept]:
     return sorted(concepts, key=lambda c: c.name.lower())
 
 
+# Searches forgive how a name is written. Shorter names ("AR") only match
+# exactly; a misspelling must keep the first letter and be long enough that
+# one wrong letter still identifies the name.
+LOOSE_MIN = 4
+
+
+def _compact(text: str) -> str:
+    return re.sub(r"[\W_]+", "", text.lower())
+
+
+def _typos_allowed(length: int) -> int:
+    return 2 if length >= 12 else 1 if length >= 7 else 0
+
+
+def _close(a: str, b: str, limit: int) -> bool:
+    """Levenshtein distance of at most `limit`, with the first letter kept."""
+    if a[0] != b[0] or abs(len(a) - len(b)) > limit:
+        return False
+    previous = list(range(len(b) + 1))
+    for i, x in enumerate(a, 1):
+        current = [i]
+        for j, y in enumerate(b, 1):
+            current.append(min(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + (x != y)))
+        if min(current) > limit:
+            return False
+        previous = current
+    return previous[-1] <= limit
+
+
+def _team_word(db: Session, word: str) -> bool:
+    """Whether team posts or documents use the word: then it is a word, not a misspelt name."""
+    match = {"word": f'"{word}"'}
+    return bool(db.execute(sql_text("""SELECT 1 FROM items_fts JOIN knowledge_items k ON k.rowid = items_fts.rowid
+      WHERE items_fts MATCH :word AND k.visibility = 'team' LIMIT 1"""), match).first()
+                or db.execute(sql_text("SELECT 1 FROM passages_fts WHERE passages_fts MATCH :word LIMIT 1"), match).first())
+
+
+def search_concepts(db: Session, query: str) -> list[Concept]:
+    """Concepts a search names, however it spaces, punctuates or slightly misspells them."""
+    ids = match_concept_ids(db, query)
+    names: dict[str, set[str]] = {}
+    for term, concept_id in vocabulary(db):
+        if len(key := _compact(term)) >= LOOSE_MIN:
+            names.setdefault(key, set()).add(concept_id)
+    words = re.findall(r"[^\W_]+", query.lower())
+    for start in range(len(words)):
+        for end in range(start + 1, min(len(words), start + 4) + 1):
+            window = "".join(words[start:end])
+            if len(window) < LOOSE_MIN:
+                continue
+            owners = names.get(window)
+            limit = _typos_allowed(len(window))
+            if owners is None and limit and not (end - start == 1 and _team_word(db, window)):
+                owners = set().union(*(o for key, o in names.items() if _close(key, window, limit)))
+            if owners and len(owners) == 1:  # a spelling two concepts could mean matches neither
+                ids |= owners
+    concepts = effective.concepts(db).filter(Concept.id.in_(ids or [""])).all()
+    return sorted(concepts, key=lambda c: c.name.lower())
+
+
 def source_concepts(db: Session, kind: str, source_id: str, text: str) -> list[Concept]:
     ids = effective.source_tags(db, kind, source_id, match_concept_ids(db, text))
     return sorted(effective.concepts(db).filter(Concept.id.in_(ids)).all(), key=lambda c: c.name.lower())

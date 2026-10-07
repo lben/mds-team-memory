@@ -6,7 +6,7 @@ from datetime import timedelta
 from sqlalchemy import func, text as sql_text
 from sqlalchemy.orm import Session
 
-from .concepts import match_concepts, term_groups
+from .concepts import search_concepts, term_groups
 from .knowledge import item_dict, item_dicts
 from .models import DocumentPassage, ItemConcept, KnowledgeItem, PassageConcept, Profile, Scratchpad, utcnow
 from .ml import effective
@@ -153,7 +153,7 @@ def search_all(db: Session, profile: Profile, query: str) -> dict:
         passages += _passage_hits(db, expression, coverage_groups)
 
     # Concepts the query mentions, so the knowledge graph can focus on them.
-    matched = match_concepts(db, query)
+    matched = search_concepts(db, query)
     ids = {concept.id for concept in matched}
     if ids:
         seen = {entry["id"] for entry in items}
