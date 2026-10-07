@@ -211,21 +211,21 @@ with sync_playwright() as pw:
     capture(U, "Chrono Trigger built its whole story on Time Travel between eras.")
     U.goto(base+"/"); U.wait_for_timeout(3000)
     pts = U.evaluate("""() => {
-        const el = document.querySelector('[data-testid=graph]');
-        const cy = el && el._cyreg && el._cyreg.cy; if (!cy) return [];
-        const r = el.getBoundingClientRect();
-        return cy.nodes('[nodeType = "concept"]').map(n => {
-            const p = n.renderedPosition();
+        const canvas = document.querySelector('[data-testid=graph] canvas');
+        const graph = canvas && canvas.graph3d; if (!graph) return [];
+        const r = canvas.getBoundingClientRect();
+        return graph.nodes.filter(n => n.id.startsWith('c:')).map(n => {
+            const p = graph.screenPosition(n.id);
             return {x: r.left + p.x, y: r.top + p.y};
         });
     }""")
     check("the map shows concept nodes to click", len(pts) > 0, f"{len(pts)}")
     focused = False
     for p in pts:
-        U.mouse.click(p["x"], p["y"]); U.wait_for_timeout(1600)
-        if U.get_by_test_id("graph-title").count() and "All concepts" not in U.get_by_test_id("graph-title").inner_text():
+        U.mouse.dblclick(p["x"], p["y"]); U.wait_for_timeout(1600)
+        if U.get_by_test_id("graph-title").count() and "Focused on" in U.get_by_test_id("graph-title").inner_text():
             focused = True; break
-    check("clicking a concept focuses the map on it", focused,
+    check("double-clicking a concept focuses the map on it", focused,
           U.get_by_test_id("graph-title").inner_text() if U.get_by_test_id("graph-title").count() else "no title")
     check("focusing did not error", not [c for c in crashes if "JS ERROR" in c or "HTTP 5" in c], str(crashes[:2]))
 

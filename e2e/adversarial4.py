@@ -72,11 +72,13 @@ with sync_playwright() as pw:
         except PWError: pass
     def edge_points(pg):
         return pg.evaluate("""() => {
-            const el = document.querySelector('[data-testid=graph]');
-            const cy = el && el._cyreg && el._cyreg.cy; if (!cy) return [];
-            const r = el.getBoundingClientRect();
-            return cy.edges().map(e => {const m=e.midpoint(), z=cy.zoom(), p=cy.pan();
-                return {x: r.left+m.x*z+p.x, y: r.top+m.y*z+p.y}});
+            const canvas = document.querySelector('[data-testid=graph] canvas');
+            const graph = canvas && canvas.graph3d; if (!graph) return [];
+            const r = canvas.getBoundingClientRect();
+            return graph.edges.filter(e => e.linkId).map(e => {
+                const a = graph.screenPosition(e.source), b = graph.screenPosition(e.target);
+                return {x: r.left + (a.x + b.x) / 2, y: r.top + (a.y + b.y) / 2};
+            });
         }""")
 
     print("\n### 47. A shared passage whose document was deleted", flush=True)
@@ -187,9 +189,9 @@ with sync_playwright() as pw:
 
     # The stale page still has the old link on screen. Click it.
     stale = U.evaluate(f"""() => {{
-        const el = document.querySelector('[data-testid=graph]');
-        const cy = el && el._cyreg && el._cyreg.cy; if (!cy) return 0;
-        return cy.edges().length;
+        const canvas = document.querySelector('[data-testid=graph] canvas');
+        const graph = canvas && canvas.graph3d; if (!graph) return 0;
+        return graph.edges.filter(e => e.linkId).length;
     }}""")
     check("the stale map still shows the now-deleted link (so we can click it)", stale > 0, f"{stale} edges")
     for p in edge_points(U):
@@ -250,8 +252,9 @@ with sync_playwright() as pw:
     A.goto(base+"/"); A.wait_for_timeout(2200)
     theirs = A.get_by_test_id("knowledge-column").locator(".card.result").filter(has_text="End of Tyme").first
     theirs.get_by_role("button", name="Details").click(); A.wait_for_timeout(1800)
-    check("somebody else is offered neither control on it",
-          A.get_by_test_id("edit-item").count() == 0 and A.get_by_test_id("delete-item").count() == 0)
+    # A is an administrator: they may remove someone else's contribution, never rewrite it.
+    check("an administrator can delete someone else's contribution but not edit it",
+          A.get_by_test_id("edit-item").count() == 0 and A.get_by_test_id("delete-item").count() > 0)
     A.keyboard.press("Escape"); A.wait_for_timeout(500)
 
     U.goto(base+"/"); U.wait_for_timeout(1800)

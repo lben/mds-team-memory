@@ -99,13 +99,13 @@ with sync_playwright() as pw:
     def edge_points(pg):
         """Where a human sees the links on the map, in page coordinates."""
         return pg.evaluate("""() => {
-            const el = document.querySelector('[data-testid=graph]');
-            const cy = el && el._cyreg && el._cyreg.cy;
-            if (!cy) return [];
-            const r = el.getBoundingClientRect();
-            return cy.edges().map(e => {
-                const m = e.midpoint(); const z = cy.zoom(); const p = cy.pan();
-                return {x: r.left + m.x*z + p.x, y: r.top + m.y*z + p.y};
+            const canvas = document.querySelector('[data-testid=graph] canvas');
+            const graph = canvas && canvas.graph3d;
+            if (!graph) return [];
+            const r = canvas.getBoundingClientRect();
+            return graph.edges.filter(e => e.linkId).map(e => {
+                const a = graph.screenPosition(e.source), b = graph.screenPosition(e.target);
+                return {x: r.left + (a.x + b.x) / 2, y: r.top + (a.y + b.y) / 2};
             });
         }""")
 
@@ -247,24 +247,24 @@ with sync_playwright() as pw:
     check("links were detected from what people wrote", links_n > 0, f"{links_n} links")
     if links_n:
         row = A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first
-        row.get_by_role("button", name="Approve").click(); A.wait_for_timeout(1400)
+        row.get_by_role("button", name="Keep fixed").click(); A.wait_for_timeout(1400)
         answer_ask(A, "these really do go together")
         check("approving marks it confirmed",
               "CONFIRMED" in A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text(),
               A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text()[:90])
-        A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Reject").click()
+        A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Suppress").click()
         answer_ask(A, cancel=True)
         A.wait_for_timeout(1200)
         check("cancelling the reason prompt cancels the whole decision",
               "CONFIRMED" in A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text(),
               A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text()[:90])
-        A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Reject").click()
+        A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Suppress").click()
         answer_ask(A, "")
         A.wait_for_timeout(1200)
         check("but confirming with no reason typed still rejects it",
               "REJECTED" in A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text(),
               A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.inner_text()[:90])
-        A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Approve").click()
+        A.get_by_test_id("map-admin-panel").locator(".panel-body.links").first.get_by_role("button", name="Keep fixed").click()
         answer_ask(A, "restoring for the rest of the run")
         A.wait_for_timeout(1200)
 
@@ -333,7 +333,7 @@ with sync_playwright() as pw:
     A.get_by_test_id("profile-button").click(); A.wait_for_timeout(500)
     check("the Sign out button is gone once signed out", A.get_by_test_id("sign-out").count() == 0)
     A.keyboard.press("Escape"); A.get_by_test_id("profile-button").click(); A.wait_for_timeout(300)
-    check("the Expertise Routing link is still there for everyone", A.get_by_test_id("admin-nav").count() > 0)
+    check("the Admin links are hidden once signed out", A.get_by_test_id("admin-nav").count() == 0)
     A.go_back(); A.wait_for_timeout(1800)
     check("pressing Back into the admin page after signing out shows the login, not a cached panel",
           A.get_by_test_id("admin-auth").count() > 0 and A.get_by_test_id("map-admin-panel").count() == 0,

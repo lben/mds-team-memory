@@ -179,17 +179,16 @@ with sync_playwright() as pw:
         A.get_by_test_id("add-concept").click(); A.wait_for_timeout(320)
     U.goto(base+"/"); U.wait_for_timeout(4000)
     g = U.evaluate("""() => {
-        const el = document.querySelector('[data-testid=graph]');
-        const cy = el && el._cyreg && el._cyreg.cy;
-        if (!cy) return null;
-        const box = el.getBoundingClientRect(); const ext = cy.elements().renderedBoundingBox();
-        return {nodes: cy.nodes().length, edges: cy.edges().length, zoom: +cy.zoom().toFixed(2),
-                fill: Math.round(100*(ext.w*ext.h)/(box.width*box.height)),
-                labelPx: +(11*cy.zoom()).toFixed(1)};
+        const canvas = document.querySelector('[data-testid=graph] canvas');
+        const graph = canvas && canvas.graph3d;
+        if (!graph) return null;
+        const box = canvas.getBoundingClientRect();
+        const points = graph.nodes.map(n => graph.screenPosition(n.id));
+        const inside = points.filter(p => p.x >= 0 && p.y >= 0 && p.x <= box.width && p.y <= box.height).length;
+        return {nodes: graph.nodes.length, edges: graph.edges.length, inside};
     }""")
     if g:
-        note("graph", f"with {g['nodes']} nodes and {g['edges']} links the drawing fills {g['fill']}% of its panel, "
-                      f"at zoom {g['zoom']}, so the labels render at about {g['labelPx']}px")
+        note("graph", f"with {g['nodes']} nodes and {g['edges']} links, {g['inside']} of the nodes are drawn inside the panel")
     shot(U, "knowledge_graph")
 
     print("\n--- Can I take back a mistake? ---")
