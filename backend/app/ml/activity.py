@@ -16,7 +16,7 @@ import sqlite3
 import sys
 import time
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text as text_sql
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
@@ -85,10 +85,11 @@ class Recorder:
         self.state["job"]["progress"] = note
         self.write()
 
-    def finish_job(self, outcome, error=None):
+    def finish_job(self, outcome, error=None, created=()):
         job, now = self.state["job"], time.time()
         self.recent.appendleft({"kind": job["kind"], "id": job["id"], "outcome": outcome, "error": error,
-                                "finished_at": now, "seconds": round(now - job["claimed_at"], 3)})
+                                "finished_at": now, "seconds": round(now - job["claimed_at"], 3),
+                                "created": list(created)})  # concepts this job created
         self.state["job"] = None
         self.write()
 
@@ -366,3 +367,136 @@ def render(data):
             if not finished["decisions"] and finished["kind"] != "vocabulary":
                 lines.append(f"{'':>24}no findings from this source")
     return "\n".join(lines)
+
+
+# What an author sees on their own new contribution. Phases are deliberately few
+# and plain; percentages follow the worker's real steps, in claim order.
+STEPS = ["parsing sentences", "extracting entities", "extracting relations", "extracting alias definitions",
+         "embedding the text"]
+
+
+def _phase(job):
+    """(phase, percent) for the job the worker is processing now."""
+    note, stage = job.get("progress") or {}, job["stage"]
+    if stage == "saving results":
+        return "connecting", 92
+    if note.get("step") == "judging concept relevance":
+        return "connecting", 85
+    if note.get("step") in STEPS:
+        index = STEPS.index(note["step"])
+        done = (note["window"] - 1 + index / len(STEPS)) / note["windows"]
+        return ("categorizing" if index < 2 else "relating"), round(20 + 65 * done)
+    if stage == "running inference" and not note:
+        return "categorizing", 20
+    return "ingesting", 10  # claimed, reading the source, loading models
+
+
+def _outcome(db, item_id, finding, created):
+    """What this contribution changed for one finding, as the team now sees it, or None.
+
+    `created` lists the concepts this contribution's own job created. Only what is
+    certain is claimed; anything else is left out.
+    """
+    from ..models import Concept, ConceptTerm, RelationshipType
+    from ..relationships import find_link
+    from . import effective  # lazily, as in _explain
+    from .models import Override
+    from .runtime import normalize
+
+    rows = effective.evidence_rows(db, finding.key)
+    mine = [row for row in rows if (row["source_kind"], row["source_id"]) == ("item", item_id)]
+    if not mine or finding.state not in ("active", "held") or policy.assess(finding.kind, rows)[0] != finding.state:
+        return None  # not current evidence, or not re-decided yet
+    others = [row for row in rows if row not in mine]
+    payload = json.loads(finding.payload)
+    best = max(mine, key=lambda row: row["raw_score"])
+    another = {**best, "group_key": "another", "text_hash": "another", "author_id": "another"}
+    one_more = policy.assess(finding.kind, rows + [another])[0] == "active"
+    published = effective.concepts(db)
+    if finding.kind == "concept":
+        name = payload["name"]
+        if finding.state == "active":
+            if finding.canonical_id not in created or not published.filter(Concept.id == finding.canonical_id).first():
+                return None
+            confirmed = any(row["polarity"] == "positive" for row in others)
+            return {"kind": "confirmed_concept" if confirmed else "new_concept", "name": name}
+        exists = finding.canonical_id or db.query(ConceptTerm).filter_by(term=normalize(name)).first()
+        return {"kind": "noted_concept", "name": name} if one_more and not exists else None
+    src, dst = payload["src_id"], payload["dst_id"]
+    predicate = effective.predicate_name(db, payload["predicate"])
+    if (predicate is None or published.filter(Concept.id.in_((src, dst))).count() != 2
+            or db.get(Override, finding_key("relationship_pair", *sorted((src, dst))))):
+        return None  # not shown, or an administrator decides this pair
+    name = f"{_concept_name_orm(db, src)} {predicate} {_concept_name_orm(db, dst)}"
+    link = find_link(db, src, dst)
+    if finding.state == "active":
+        shown = (link is not None and link.state == "confirmed" and not link.reviewed_by
+                 and (link.src_id, link.dst_id) == (src, dst)
+                 and db.query(RelationshipType).filter_by(id=link.relationship_type_id, name=predicate).first())
+        # Only when this post made it count: without it, the rules would not confirm it.
+        if shown and policy.assess(finding.kind, others)[0] != "active":
+            return {"kind": "confirmed_connection", "name": name}
+        return None
+    if link is not None and (link.state == "confirmed" or link.reviewed_by):
+        return None  # another statement, or an administrator, already decides this link
+    return {"kind": "noted_connection", "name": name} if one_more else None
+
+
+def _concept_name_orm(db, concept_id):
+    from ..models import ConceptTerm
+
+    term = db.query(ConceptTerm).filter_by(concept_id=concept_id, is_canonical=True).first()
+    return term.display if term else "(unnamed concept)"
+
+
+def contributions(db, database, profile_id, item_ids):
+    """Progress and outcome of the author's own team contributions; other items are left out."""
+    from ..models import Concept, ItemConcept, KnowledgeItem
+    from . import effective  # lazily, as in _explain
+    from .models import Evidence, Finding, Override
+
+    state = db.execute(text_sql("SELECT automation_enabled, worker_token, worker_lease_until FROM ml_state WHERE id=1")).one()
+    now = time.time()
+    running = bool(state.worker_lease_until and state.worker_lease_until > now)
+    activity = _activity(database, state.worker_token, running) if running else None
+    current = activity["job"] if activity and activity["live"] else None
+    order = {"new_concept": 0, "confirmed_concept": 1, "confirmed_connection": 2, "tagged": 3,
+             "noted_concept": 4, "noted_connection": 5}
+    result = {}
+    items = db.query(KnowledgeItem).filter(KnowledgeItem.id.in_(item_ids), KnowledgeItem.visibility == "team",
+                                           KnowledgeItem.author_profile_id == profile_id)
+    for item in items:
+        if not (state.automation_enabled and running):
+            result[item.id] = {"state": "off"}
+            continue
+        job = db.execute(text_sql("SELECT lease_token IS NOT NULL AND lease_until > :now FROM ml_jobs "
+                                  "WHERE source_kind='item' AND source_id=:id"), {"now": now, "id": item.id}).first()
+        if job is not None:
+            if job[0] and current and (current["kind"], current["id"]) == ("item", item.id):
+                phase, percent = _phase(current)
+            else:
+                phase, percent = "ingesting", 10 if job[0] else 3
+            result[item.id] = {"state": "working", "phase": phase, "percent": percent}
+            continue
+        outcomes = []
+        # A post is processed again after the vocabulary it changed is refreshed, so
+        # count what any of its recent jobs created.
+        created = {concept for job in (activity or {}).get("recent", [])
+                   if (job["kind"], job["id"]) == ("item", item.id) for concept in job.get("created", [])}
+        findings = (db.query(Finding).join(Evidence, Evidence.finding_key == Finding.key)
+                    .filter(Evidence.source_kind == "item", Evidence.source_id == item.id,
+                            Finding.kind.in_(("concept", "relationship")),
+                            ~Finding.key.in_(db.query(Override.key))).distinct())
+        for finding in findings:
+            outcome = _outcome(db, item.id, finding, created)
+            if outcome and outcome not in outcomes:
+                outcomes.append(outcome)
+        named = {outcome["name"] for outcome in outcomes}
+        published = effective.concepts(db).with_entities(Concept.id)
+        tags = sorted({_concept_name_orm(db, row.concept_id) for row in db.query(ItemConcept).filter(
+            ItemConcept.item_id == item.id, ItemConcept.concept_id.in_(published))} - named)
+        if tags:
+            outcomes.append({"kind": "tagged", "names": tags})
+        outcomes.sort(key=lambda outcome: order[outcome["kind"]])
+        result[item.id] = {"state": "done", "percent": 100, "outcomes": outcomes}
+    return result

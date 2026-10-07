@@ -5,6 +5,8 @@ import { knowledgeRevision, store } from '../store'
 import AskModal from './AskModal.vue'
 import { useAsk } from '../ask'
 import HelpfulActions from './HelpfulActions.vue'
+import ProcessingBar from './ProcessingBar.vue'
+import { track } from '../processing'
 import TopicCreditPanel from './TopicCreditPanel.vue'
 
 interface QuestionDetail extends Item {
@@ -51,7 +53,8 @@ async function postAnswer() {
   if (busy.value || !detail.value || !answerDraft.value.trim()) return
   busy.value = true
   try {
-    await api.post(`/api/questions/${detail.value.id}/answers`, { body: answerDraft.value.trim() })
+    const answer = await api.post<Item>(`/api/questions/${detail.value.id}/answers`, { body: answerDraft.value.trim() })
+    track(answer.id)
     answerDraft.value = ''
     store.notify('Answer posted to the whole team')
     await loadDetail()
@@ -137,6 +140,7 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
       @resolve="answerAsk"
     />
     <div class="q-head" @click="toggle">
+      <ProcessingBar :item-id="question.id" />
       <div class="row gap8 wrap">
         <span class="chip" :class="statusChip(question.question_status)">
           {{ (question.question_status || 'open').toUpperCase() }}
@@ -167,6 +171,7 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
         class="answer"
         :class="{ accepted: answer.id === detail.accepted_answer_id }"
       >
+        <ProcessingBar :item-id="answer.id" />
         <div class="answer-toolbar">
           <div class="row gap8 wrap">
             <span v-if="answer.id === detail.accepted_answer_id" class="chip good">ACCEPTED</span>

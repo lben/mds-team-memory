@@ -905,7 +905,7 @@ def test_refused_eligibility_storage_pauses_the_sweep_without_stopping_the_worke
 def test_status_jobs_shows_the_running_step_then_the_finished_job(worker_store, tmp_path):
     import threading
     from sqlalchemy import text
-    from app.ml import adapter, policy, queue, worker
+    from app.ml import activity, adapter, policy, queue, worker
     from app.ml.runtime import inference_version
     from test_ml_embeddings import add_source
 
@@ -957,6 +957,10 @@ def test_status_jobs_shows_the_running_step_then_the_finished_job(worker_store, 
         # The real adapter and policy decided; the report explains that decision.
         wait_for("Concept confirmed by the model: Citrine Pump — The model is 99.9% sure this is a named thing.")
         wait_for("Queue: 0 jobs")
+        # The finished job names the concept it created, for the author's progress line.
+        created = db.execute(text("SELECT concept_id FROM concept_terms WHERE term='citrine pump'")).scalar()
+        recent = json.loads(activity.activity_path(path).read_text())["recent"]
+        assert [concept for job in recent if job["id"] == "watched" for concept in job["created"]] == [created]
     finally:
         stop.set()
         thread.join(timeout=30)

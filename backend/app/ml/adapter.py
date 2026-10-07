@@ -256,6 +256,7 @@ def _publish_concept(db, row):
                            display=payload["name"], is_canonical=True))
         row.canonical_id = concept.id
         db.flush()
+        db.info.setdefault("created_concepts", []).append(concept.id)  # reported to the author by the worker
         return True
     return False
 

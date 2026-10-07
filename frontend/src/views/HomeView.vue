@@ -8,6 +8,8 @@ import KnowledgeGraph from '../components/KnowledgeGraph.vue'
 import QuestionCard from '../components/QuestionCard.vue'
 import SuccessModal from '../components/SuccessModal.vue'
 import HelpfulActions from '../components/HelpfulActions.vue'
+import ProcessingBar from '../components/ProcessingBar.vue'
+import { track } from '../processing'
 import { knowledgeRevision, store } from '../store'
 
 interface PassageHit {
@@ -106,6 +108,7 @@ async function ask() {
   busy.value = true
   try {
     const question = await api.post<Item>('/api/questions', { body: q })
+    track(question.id)
     text.value = ''
     results.value = null
     store.notify('Your question is now visible to the whole team')
@@ -130,6 +133,7 @@ async function capture() {
       '/api/capture',
       form,
     )
+    if (result.item) track(result.item.id)
     text.value = ''
     file.value = null
     if (fileInput.value) fileInput.value.value = ''
@@ -330,6 +334,7 @@ onMounted(async () => {
           <p v-if="!feed.length" class="muted col-empty">Nothing shared yet. Be the first — one useful sentence is enough.</p>
           <article v-for="item in feed" :key="item.id" class="card result" :data-testid="`feed-${item.id}`">
             <div>
+              <ProcessingBar :item-id="item.id" />
               <div class="row gap8 wrap">
                 <span class="chip">{{ item.kind.toUpperCase() }}</span>
                 <span v-if="item.contributors > 1" class="chip good">{{ item.contributors }} CONTRIBUTORS</span>

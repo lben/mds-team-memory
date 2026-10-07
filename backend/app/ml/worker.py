@@ -378,12 +378,14 @@ class Supervisor:
                 if not queue.complete_claim(db, self.claim):
                     raise LeaseLost("Job changed before commit")
             db.commit()
+            self.created = db.info.get("created_concepts", [])
 
     def process_claim(self):
         from . import adapter
         from .sources import snapshot
 
         previous, result, metadata = None, None, ("", "", 0)
+        self.created = []
         if self.claim.source_kind in ("item", "passage"):
             self.recorder.stage("reading the source")
             with Session(self.engine) as db:
@@ -576,7 +578,7 @@ class Supervisor:
             self.recorder.start_job(self.claim)
             try:
                 self.process_claim()
-                self.recorder.finish_job("done")
+                self.recorder.finish_job("done", created=self.created)
             except Exception as error:
                 self.recorder.finish_job("interrupted" if isinstance(error, Stopped) else "failed",
                                          f"{type(error).__name__}: {error}")

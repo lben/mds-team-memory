@@ -8,9 +8,9 @@ from pydantic import BaseModel, Field
 from sqlalchemy import text
 
 from .. import config
-from ..auth import require_admin
+from ..auth import get_profile, require_admin
 from ..db import get_db
-from ..models import Account, Concept, ConceptTerm, ExpertiseMapping, Relationship, utcnow
+from ..models import Account, Concept, ConceptTerm, ExpertiseMapping, Profile, Relationship, utcnow
 from . import activity, adapter, effective, policy
 from .models import Finding, Override
 from .queue import enqueue
@@ -35,6 +35,13 @@ def finding_dict(db, row):
             "policy_version": row.policy_version,
             "raw_model_score": None if row.calibrated else row.score,
             "updated_at": row.updated_at.isoformat() + "Z"}
+
+
+@router.get("/contributions")
+def contributions(ids: list[str] = Query(default=[], max_length=50), profile: Profile = Depends(get_profile),
+                  db=Depends(get_db)):
+    """Processing progress, then outcome, of the caller's own new contributions."""
+    return activity.contributions(db, database_path(config.DATABASE_URL), profile.id, ids)
 
 
 @router.get("/queue", dependencies=[Depends(require_admin)])
