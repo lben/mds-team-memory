@@ -220,7 +220,7 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
       <div class="answer-compose">
         <textarea
           v-model="answerDraft"
-          placeholder="Write the answer you know. No title or tags required."
+          placeholder="Write an answer"
           data-testid="answer-text"
         ></textarea>
         <div class="row between" style="margin-top: 8px">
