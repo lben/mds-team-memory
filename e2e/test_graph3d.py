@@ -6,11 +6,7 @@ import uuid
 from playwright.sync_api import Browser, expect
 
 
-def _position(page, label):
-    """Where the graph draws a node, in page coordinates (from the renderer the canvas carries).
-
-    Long labels are shortened on screen, so a label may be given by its start.
-    """
+def _read_position(page, label):
     return page.evaluate("""label => {
         const canvas = document.querySelector('.graph-box canvas')
         const graph = canvas.graph3d
@@ -19,6 +15,22 @@ def _position(page, label):
         const box = canvas.getBoundingClientRect()
         return {x: box.left + point.x, y: box.top + point.y}
     }""", label)
+
+
+def _position(page, label):
+    """Where the graph draws a node, in page coordinates (from the renderer the canvas carries).
+
+    Long labels are shortened on screen, so a label may be given by its start. New
+    content elsewhere redraws the graph, so wait until the node stops moving.
+    """
+    point = _read_position(page, label)
+    for _ in range(30):
+        page.wait_for_timeout(100)
+        settled = _read_position(page, label)
+        if abs(settled["x"] - point["x"]) < 0.5 and abs(settled["y"] - point["y"]) < 0.5:
+            return settled
+        point = settled
+    raise AssertionError(f"{label} kept moving")
 
 
 def test_graph_is_3d_and_interactive(browser: Browser, base_url_server):
