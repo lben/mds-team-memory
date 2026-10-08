@@ -77,6 +77,7 @@ async function refresh() {
     }
   } catch (e) {
     error.value = e instanceof ApiError ? e.message : 'Could not load the ML queue'
+    if (e instanceof ApiError && e.status === 401) await store.refreshIdentity() // the sign-in ran out
   }
 }
 
@@ -123,7 +124,7 @@ const workerText = computed(() => {
 const lastPage = computed(() => !report.value || report.value.offset + report.value.jobs.length >= report.value.totals.total)
 
 onMounted(async () => {
-  await store.loadAuth()
+  await store.refreshIdentity() // sign-in and profile together, so the sidebar agrees
   loaded.value = true
   await refresh()
   schedule()

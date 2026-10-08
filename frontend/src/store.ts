@@ -30,6 +30,13 @@ export const store = reactive({
   toast: '' as string,
   toastTimer: 0 as number,
   unread: 0,
+  /** Why the sign-in panel was opened for you; empty when you opened it yourself. */
+  signInReason: '',
+
+  /** Contributing needs an account: open the sign-in panel saying why. */
+  promptSignIn(reason: string) {
+    this.signInReason = reason
+  },
 
   /** The one implementation of "Helped me".
    *
@@ -76,6 +83,13 @@ export const store = reactive({
   /** Report a failed request. Loaders used to have no catch at all, so a failed
    * read left the screen showing state the server no longer agreed with. */
   fail(e: unknown, fallback: string) {
+    // A contribution refused for want of an account opens the sign-in panel instead. The
+    // sign-in may have expired while the page was open, so learn that first: the panel
+    // must offer a way back in, not a Sign out button.
+    if (e instanceof ApiError && e.status === 401 && e.message.includes('create an account')) {
+      void this.refreshIdentity().then(() => this.promptSignIn(e.message))
+      return
+    }
     this.notify(e instanceof ApiError ? e.message : fallback)
   },
 

@@ -17,7 +17,7 @@ def test_expertise_projection_withholds_changed_generation_until_recomputed(
     from app.ml.sources import finding_key
 
     suffix = uuid.uuid4().hex[:8]
-    expert, asker, peer = make_client(), make_client(), make_client()
+    expert, asker, peer = make_client(account=False), make_client(account=False), make_client(account=False)
     for actor, client in (("expert", expert), ("asker", asker), ("peer", peer)):
         assert client.post('/api/auth/signup', json={
             'username': actor + suffix, 'password': 'a-private-test-password'}).status_code == 200

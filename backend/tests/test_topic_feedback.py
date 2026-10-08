@@ -5,7 +5,7 @@ from sqlalchemy import text
 
 
 def _user(make_client):
-    client = make_client()
+    client = make_client(account=False)
     response = client.post("/api/auth/signup", json={"username": "topic" + uuid.uuid4().hex[:10], "password": "strong-password"})
     assert response.status_code == 200, response.text
     return client
@@ -134,7 +134,7 @@ def test_anonymous_and_same_account_profiles_cannot_confirm(make_client, admin_c
     from app.db import SessionLocal
     from app.models import Profile
     _, author, reader, _, aid, cid, _ = _setup(make_client, admin_client)
-    anonymous = make_client()
+    anonymous = make_client(account=False)
     selection = _selection(anonymous, aid, cid)
     assert anonymous.put(f"/api/items/{aid}/topic-feedback", json={"kind": "helped", **selection}).status_code == 401
     selection = _selection(author, aid, cid)

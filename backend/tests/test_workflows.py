@@ -13,7 +13,7 @@ def unique(text: str) -> str:
 
 
 def test_capture_and_search(make_client):
-    """W1: anonymous profile shares body-only knowledge and finds it via Search."""
+    """W1: a member shares body-only knowledge and finds it via Search."""
     client = make_client()
     marker = uuid.uuid4().hex[:10]
     body = f"The nightly batch zeta-{marker} completes at 0745 ET."
@@ -227,7 +227,7 @@ def test_search_reports_matched_concepts(make_client, admin_client):
 
 def test_scratchpad_private_and_share_selection(make_client):
     """W5+W6: scratchpad invisible to others; sharing exposes only the selection."""
-    owner, other = make_client(), make_client()
+    owner, other = make_client(), make_client()  # another member: anonymous visitors have no scratchpad access at all
     secret = uuid.uuid4().hex[:10]
     shared_fact = f"Public fact epsilon-{uuid.uuid4().hex[:8]} lives in the runbook."
     content = f"private-secret-{secret} stays private\n{shared_fact}\n"
@@ -358,7 +358,7 @@ def test_document_upload_search_open_exact_passage(make_client):
 
 def test_graph_never_exposes_private_content(make_client, admin_client):
     """W9: local/global graph results do not expose private scratchpad content."""
-    owner, other = make_client(), make_client()
+    owner, other = make_client(), make_client(account=False)
     concept_name = f"SecretSys{uuid.uuid4().hex[:6]}"
     concept = admin_client.post(
         "/api/admin/concepts", json={"name": concept_name, "aliases": []}
@@ -389,7 +389,7 @@ def test_graph_never_exposes_private_content(make_client, admin_client):
 
 def test_expertise_routing(make_client, admin_client):
     """W10: deterministic alias matching routes a question to the mapped expert."""
-    asker, expert = make_client(), make_client()
+    asker, expert = make_client(), make_client(account=False)
     suffix = uuid.uuid4().hex[:6]
     _signup(expert, f"expert{suffix}")   # expertise only goes to account holders
     concept = admin_client.post(
@@ -421,7 +421,7 @@ def test_expertise_routing(make_client, admin_client):
 def test_admin_auth_gates(make_client, admin_client):
     """No self-service admin creation over HTTP; admin APIs require a session;
     a logged-in admin can add more admins."""
-    anonymous = make_client()
+    anonymous = make_client(account=False)
     # The setup endpoint is gone: accounts are created with `manage.py create-admin`.
     intruder = {"username": "x_intruder", "password": "password123"}
     assert anonymous.post("/api/admin/setup", json=intruder).status_code != 200
@@ -434,7 +434,7 @@ def test_admin_auth_gates(make_client, admin_client):
     assert state == {"signed_in": False, "username": None, "is_admin": False}
 
     # Signing yourself up is a contributor account and never an admin one.
-    joiner = make_client()
+    joiner = make_client(account=False)
     r = joiner.post("/api/auth/signup", json={"username": f"joiner{uuid.uuid4().hex[:5]}", "password": "a-good-password"})
     assert r.status_code == 200 and r.json()["is_admin"] is False
     assert joiner.get("/api/auth/state").json()["is_admin"] is False
@@ -728,7 +728,7 @@ def test_link_discovery_review_and_reversal(make_client, admin_client):
 
 def test_link_admin_gating_and_manual_links(make_client, admin_client):
     """Only admins mutate links; manual links require a note and carry it as evidence."""
-    anonymous = make_client()
+    anonymous = make_client(account=False)
     suffix = uuid.uuid4().hex[:6]
     left = _concept(admin_client, f"Gamma{suffix}")
     right = _concept(admin_client, f"Delta{suffix}")
@@ -973,7 +973,7 @@ def test_you_are_never_routed_your_own_question(make_client, admin_client):
     routing surfaces — the 'needs your expertise' flag on the list and the
     suggested-experts line on the detail — must exclude the asker, while still
     routing the question to every other mapped expert."""
-    asker, other_expert = make_client(), make_client()
+    asker, other_expert = make_client(account=False), make_client(account=False)
     suffix = uuid.uuid4().hex[:6]
     # Both need accounts: expertise is only routable to an account holder.
     _signup(asker, f"asker{suffix}")
@@ -1000,6 +1000,17 @@ def test_you_are_never_routed_your_own_question(make_client, admin_client):
     assert f"other{suffix}" in detail["suggested_experts"]
 
 
+def legacy_post(client, body: str) -> None:
+    """A post an anonymous browser made before contributing needed an account; such posts still exist."""
+    from app.db import SessionLocal
+    from app.models import KnowledgeItem
+
+    profile_id = client.get("/api/profile").json()["id"]
+    with SessionLocal() as db:
+        db.add(KnowledgeItem(kind="note", body=body, visibility="team", author_profile_id=profile_id))
+        db.commit()
+
+
 def _signup(client, name: str) -> dict:
     r = client.post("/api/auth/signup", json={"username": name, "password": "a-good-password"})
     assert r.status_code == 200, r.text
@@ -1024,9 +1035,10 @@ def test_signing_in_changes_who_the_app_thinks_you_are(make_client, admin_client
 def test_an_account_keeps_the_work_you_did_before_you_had_one(make_client):
     """Use it first, sign up later: the point of anonymous access is lost if
     signing up orphans everything you already contributed."""
-    person = make_client()
+    person = make_client(account=False)
     body = unique("Written before I had an account")
-    person.post("/api/capture", data={"body": body})
+    assert person.post("/api/capture", data={"body": body}).status_code == 401  # contributing needs an account now
+    legacy_post(person, body)  # ...but posts from before that rule still move to the account
     anon = person.get("/api/profile").json()
     assert anon["verified"] is False
 
@@ -1044,9 +1056,8 @@ def test_an_account_keeps_the_work_you_did_before_you_had_one(make_client):
 def test_only_the_first_sign_in_on_a_machine_claims_its_anonymous_work(make_client):
     """A colleague signing in on your machine must not absorb your
     contributions. The claim is a one-shot per browser."""
-    machine = make_client()
-    body = unique("Work done anonymously on this machine")
-    machine.post("/api/capture", data={"body": body})
+    machine = make_client(account=False)
+    legacy_post(machine, unique("Work done anonymously on this machine"))
     anon_id = machine.get("/api/profile").json()["id"]
 
     first = f"first{uuid.uuid4().hex[:6]}"
@@ -1073,13 +1084,12 @@ def test_the_claim_is_spent_even_when_the_first_sign_in_claims_nothing(make_clie
     signs in here and claims nothing — and the anonymous work on this machine
     must still not fall to the next person who signs up on it.
     """
-    elsewhere = make_client()
+    elsewhere = make_client(account=False)
     visitor = f"visitor{uuid.uuid4().hex[:6]}"
     _signup(elsewhere, visitor)  # this account already owns a profile
 
-    machine = make_client()
-    body = unique("Anonymous work belonging to whoever uses this machine")
-    machine.post("/api/capture", data={"body": body})
+    machine = make_client(account=False)
+    legacy_post(machine, unique("Anonymous work belonging to whoever uses this machine"))
     anon = machine.get("/api/profile").json()
     assert anon["totals"]["shared"] == 1
 
@@ -1099,9 +1109,9 @@ def test_the_claim_is_spent_even_when_the_first_sign_in_claims_nothing(make_clie
 def test_expertise_can_only_be_routed_to_someone_with_an_account(make_client, admin_client):
     """An anonymous browser profile is unanswerable as an expert and its
     mapping would die with a cookie clear."""
-    anonymous = make_client()
+    anonymous = make_client(account=False)
     anonymous.get("/api/profile")
-    named = make_client()
+    named = make_client(account=False)
     account = f"expert{uuid.uuid4().hex[:6]}"
     _signup(named, account)
 
@@ -1115,7 +1125,7 @@ def test_expertise_can_only_be_routed_to_someone_with_an_account(make_client, ad
 def test_anyone_can_endorse_and_the_admin_sees_who_the_team_endorsed(make_client, admin_client):
     """Endorsement is the evidence an admin maps expertise from, so it cannot
     require the endorser to already be a mapped expert."""
-    author, endorser = make_client(), make_client()
+    author, endorser = make_client(account=False), make_client()
     suffix = uuid.uuid4().hex[:6]
     # Endorsement is only recorded for someone with an account.
     _signup(author, f"ledgerkeeper{suffix}")
@@ -1213,14 +1223,26 @@ def test_the_uploader_can_delete_a_document_without_destroying_shared_excerpts(m
     assert kept["source_document_id"] is None
 
 
+def test_only_an_account_can_set_a_display_name(make_client):
+    """A browser-only name vanished with the cookies and was easy to mistake for an account."""
+    person = make_client(account=False)
+    assert person.put("/api/profile", json={"display_name": "Jane S."}).status_code == 403
+    name = f"named{uuid.uuid4().hex[:6]}"
+    _signup(person, name)
+    assert person.put("/api/profile", json={"display_name": "Jane S."}).status_code == 200
+    person.post("/api/capture", data={"body": unique("Written under a chosen name")})
+    assert person.get("/api/profile").json()["label"] == "Jane S."
+    assert any(item["author"] == "Jane S." for item in person.get("/api/feed").json())
+
+
 def test_signing_out_really_makes_you_anonymous_again(make_client):
     """Claiming a browser profile binds it to an account. If the browser cookie
     still resolved to it afterwards, signing out would leave you posting as the
     account you just signed out of."""
-    person = make_client()
-    person.post("/api/capture", data={"body": unique("Written while signed in")})
+    person = make_client(account=False)
     name = f"leaver{uuid.uuid4().hex[:6]}"
     _signup(person, name)
+    person.post("/api/capture", data={"body": unique("Written while signed in")})
     signed_in = person.get("/api/profile").json()
     assert signed_in["verified"] is True and signed_in["label"] == name
 
@@ -1231,9 +1253,8 @@ def test_signing_out_really_makes_you_anonymous_again(make_client):
     assert after["id"] != signed_in["id"], "still the account's profile after signing out"
 
     body = unique("Written after signing out")
-    person.post("/api/capture", data={"body": body})
-    posted = next(i for i in person.get("/api/feed").json() if body in i["body"])
-    assert posted["author"] != name, "a signed-out person is still posting as the account"
+    assert person.post("/api/capture", data={"body": body}).status_code == 401, "a signed-out person can still post"
+    assert not any(body in i["body"] for i in person.get("/api/feed").json())
 
     # And signing back in returns you to your own work.
     person.post("/api/auth/login", json={"username": name, "password": "a-good-password"})
@@ -1245,7 +1266,7 @@ def test_the_notification_socket_knows_who_is_signed_in(make_client):
     identifies them by the session. A signed-in person's profile has no browser
     token at all, so their socket was refused and they silently fell back to
     polling."""
-    person = make_client()
+    person = make_client(account=False)
     with person.websocket_connect("/ws/notifications") as ws:
         assert ws.receive_json()["type"] == "ready"  # anonymous still works
 
@@ -1257,7 +1278,7 @@ def test_the_notification_socket_knows_who_is_signed_in(make_client):
 def test_more_than_one_person_can_endorse_the_same_contribution(make_client, admin_client):
     """Endorsement is the count an admin reads to decide who the experts are, so
     hiding the control after the first one capped every item at a single voice."""
-    author, first, second = make_client(), make_client(), make_client()
+    author, first, second = make_client(account=False), make_client(), make_client()
     _signup(author, f"sweeper{uuid.uuid4().hex[:6]}")
     item = author.post("/api/capture", data={"body": unique("Restarting the sweep needs the lock released first")}).json()["item"]
 
@@ -1294,8 +1315,10 @@ def test_endorsement_needs_an_account_on_the_receiving_end(make_client):
     """Endorsement is the evidence an admin maps expertise from, and expertise
     can only be routed to an account. Recording one against a browser profile
     led nowhere silently; it is now refused, with the reason."""
-    anonymous, endorser = make_client(), make_client()
-    item = anonymous.post("/api/capture", data={"body": unique("Written with no account")}).json()["item"]
+    anonymous, endorser = make_client(account=False), make_client()
+    body = unique("Written with no account")
+    legacy_post(anonymous, body)
+    item = next(i for i in endorser.get("/api/feed").json() if i["body"] == body)
     assert item["author_verified"] is False
 
     r = endorser.post(f"/api/items/{item['id']}/endorse")
@@ -1311,7 +1334,7 @@ def test_endorsement_needs_an_account_on_the_receiving_end(make_client):
 def test_who_knows_what_is_readable_without_being_an_admin(make_client, admin_client):
     """Knowing who to ask is the point of routing, and it was locked behind the
     admin sign-in with nowhere else to look. Reading is open; changing is not."""
-    contributor, expert = make_client(), make_client()
+    visitor, expert = make_client(account=False), make_client(account=False)
     suffix = uuid.uuid4().hex[:6]
     concept = _concept(admin_client, f"Ledgers{suffix}")
     name = f"keeper{suffix}"
@@ -1321,7 +1344,7 @@ def test_who_knows_what_is_readable_without_being_an_admin(make_client, admin_cl
         json={"profile_id": expert.get("/api/profile").json()["id"], "concept_id": concept["id"]},
     )
 
-    listed = contributor.get("/api/expertise")
+    listed = visitor.get("/api/expertise")
     assert listed.status_code == 200
     row = next(r for r in listed.json() if r["label"] == name)
     assert f"Ledgers{suffix}" in row["areas"]
@@ -1329,8 +1352,8 @@ def test_who_knows_what_is_readable_without_being_an_admin(make_client, admin_cl
     # Reading it does not hand out anything that can be acted on, and the
     # admin-only doors stay shut.
     assert "mapping_id" not in row and "profile_id" not in row
-    assert contributor.get("/api/admin/expertise").status_code == 401
-    assert contributor.post(
+    assert visitor.get("/api/admin/expertise").status_code == 401
+    assert visitor.post(
         "/api/admin/expertise", json={"profile_id": "x", "concept_id": concept["id"]}
     ).status_code == 401
 
@@ -1340,7 +1363,7 @@ def test_expertise_cannot_be_routed_to_a_profile_without_an_account(make_client,
     account holders, the note under it explains why, and the README repeats it.
     Nothing on the server enforced it, so any caller could create the mapping
     the interface refuses to offer."""
-    anonymous = make_client()
+    anonymous = make_client(account=False)
     profile_id = anonymous.get("/api/profile").json()["id"]
     concept = _concept(admin_client, f"Ledgering{uuid.uuid4().hex[:6]}")
 

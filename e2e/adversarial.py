@@ -77,6 +77,8 @@ with sync_playwright() as pw:
         pg.on("pageerror", lambda e, w=who: crashes.append(f"[{w}] JS ERROR: {str(e)[:160]}"))
         pg.on("response", lambda r, w=who: crashes.append(f"[{w}] HTTP {r.status} {r.url.split(base)[-1]}") if r.status>=500 else None)
     for pg in (A,U,N): pg.goto(base + "/"); pg.wait_for_timeout(500)
+    # Contributing needs an account, so the two people who write things have one.
+    sign_up(U, "ursula"); sign_up(N, "nadia")
 
     def toast(pg):
         return pg.locator(".toast").inner_text() if pg.locator(".toast").count() else ""
@@ -484,21 +486,15 @@ with sync_playwright() as pw:
     U.goto(base+"/"); U.wait_for_timeout(1400)
     U.get_by_test_id("profile-button").click(); U.wait_for_timeout(800)
     check("the profile panel opens", U.locator(".profile-pop").count() > 0)
-    U.get_by_test_id("display-name").fill("   ")
-    U.get_by_role("button", name="Save name").click(); U.wait_for_timeout(1000)
-    check("a whitespace-only display name is refused, and says so",
-          U.locator(".profile-pop").count() > 0 and toast(U) != "", f"toast={toast(U)!r}")
-    U.get_by_test_id("display-name").fill("Benito")
-    U.get_by_role("button", name="Save name").click(); U.wait_for_timeout(1500)
-    check("the new name shows in the sidebar", "Benito" in U.get_by_test_id("profile-button").inner_text(),
-          U.get_by_test_id("profile-button").inner_text()[:60])
-    check("the avatar shows this person's own initial, not someone else's",
-          U.locator(".avatar").first.inner_text().strip().upper().startswith("B"),
-          U.locator(".avatar").first.inner_text())
-    U.reload(); U.wait_for_timeout(1800)
-    check("the renamed author is credited on their own contributions",
-          "Benito" in U.get_by_test_id("knowledge-column").inner_text(),
-          U.get_by_test_id("knowledge-column").inner_text()[:120])
+    U.keyboard.press("Escape"); U.get_by_test_id("profile-button").click(); U.wait_for_timeout(300)
+    S = b.new_context().new_page(); S.goto(base+"/"); S.wait_for_timeout(1200)
+    S.get_by_test_id("profile-button").click(); S.wait_for_timeout(500)
+    check("without an account there is no display name to set", S.get_by_test_id("display-name").count() == 0)
+    S.get_by_test_id("home-input").fill("A stranger tries to post")
+    S.keyboard.press("Escape"); S.get_by_test_id("do-capture").click(); S.wait_for_timeout(800)
+    check("a stranger asked to post is offered an account first",
+          S.get_by_test_id("sign-in-reason").count() > 0 and S.get_by_test_id("auth-username").count() > 0)
+    S.context.close()
 
     print("\n### 22. The notification a person actually clicks", flush=True)
     U.get_by_test_id("bell").click(); U.wait_for_timeout(1200)
@@ -558,10 +554,25 @@ with sync_playwright() as pw:
     A.get_by_test_id("add-mapping").click(); A.wait_for_timeout(900)
     check("adding a mapping with nothing selected is refused", toast(A) != "", "silent")
 
-    # Only someone with an account can be an expert, so the contributor makes
-    # one. Before this the admin was asked to pick from a list of hex codes.
-    U.goto(base+"/"); U.wait_for_timeout(1500)
-    sign_up(U, "ursula")
+    # Only someone with an account can be an expert; the contributor has one,
+    # and picks the name the team sees. Before accounts the admin picked from hex codes.
+    U.goto(base+"/"); U.wait_for_timeout(1400)
+    U.get_by_test_id("profile-button").click(); U.wait_for_timeout(800)
+    U.get_by_test_id("display-name").fill("   ")
+    U.get_by_role("button", name="Save name").click(); U.wait_for_timeout(1000)
+    check("a whitespace-only display name is refused, and says so",
+          U.locator(".profile-pop").count() > 0 and toast(U) != "", f"toast={toast(U)!r}")
+    U.get_by_test_id("display-name").fill("Ursula B.")
+    U.get_by_role("button", name="Save name").click(); U.wait_for_timeout(1500)
+    check("the new name shows in the sidebar", "Ursula B." in U.get_by_test_id("profile-button").inner_text(),
+          U.get_by_test_id("profile-button").inner_text()[:60])
+    check("the avatar shows this person's own initial, not someone else's",
+          U.locator(".avatar").first.inner_text().strip().upper().startswith("U"),
+          U.locator(".avatar").first.inner_text())
+    U.reload(); U.wait_for_timeout(1800)
+    check("the renamed author is credited on their own contributions",
+          "Ursula B." in U.get_by_test_id("knowledge-column").inner_text(),
+          U.get_by_test_id("knowledge-column").inner_text()[:120])
     A.goto(base+"/admin/expertise"); A.wait_for_timeout(2000)
     opts = A.get_by_test_id("map-profile").locator("option").all_inner_texts()
     real = [o for o in opts if "Select" not in o]

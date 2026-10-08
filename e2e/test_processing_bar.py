@@ -21,6 +21,9 @@ def test_new_post_shows_progress_then_outcomes(browser: Browser, base_url_server
     page = context.new_page()
     try:
         page.goto(base_url_server.url + "/")
+        assert page.request.post(base_url_server.url + "/api/auth/signup",
+                                 data={"username": f"writer-{uuid.uuid4().hex[:6]}", "password": "writer-password"}).ok
+        page.reload()
         body = f"Night batch {uuid.uuid4().hex[:6]} lands before the morning report."
         page.get_by_test_id("home-input").fill(body)
         page.get_by_test_id("do-capture").click()

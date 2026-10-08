@@ -75,6 +75,9 @@ with sync_playwright() as pw:
     for pg, who in ((A,"admin"),(U,"user"),(V,"other")):
         pg.on("pageerror", lambda e, w=who: crashes.append(f"[{w}] JS ERROR: {str(e)[:160]}"))
         pg.on("response", lambda r, w=who: crashes.append(f"[{w}] HTTP {r.status} {r.url.split(base)[-1]}") if r.status>=500 else None)
+    # Contributing needs an account, so the two people who write things have one.
+    for pg, name in ((U, "uma"), (V, "vera")):
+        pg.goto(base+"/"); pg.wait_for_timeout(1200); sign_up(pg, name)
 
     def toast(pg): return pg.locator(".toast").inner_text() if pg.locator(".toast").count() else ""
     def login(pg):
@@ -125,9 +128,8 @@ with sync_playwright() as pw:
     vcard.locator(".q-head").click(); V.wait_for_timeout(1000)
     vcard.get_by_test_id("answer-text").fill("Thirteen, including the developer room ending.")
     vcard.get_by_test_id("post-answer").click(); V.wait_for_timeout(2200)
-    # Endorsement is only recorded for someone with an account, so the person
-    # being endorsed needs one before the action is offered at all.
-    V.goto(base+"/"); V.wait_for_timeout(1500); sign_up(V, "vera")
+    # Endorsement is only recorded for someone with an account; the person
+    # being endorsed has one, so the action is offered.
     U.reload(); U.wait_for_timeout(2200)
     ucard = U.locator(".question-card", has_text="How many endings").first
     ucard.locator(".q-head").click(); U.wait_for_timeout(1200)
@@ -145,8 +147,7 @@ with sync_playwright() as pw:
           "ENDORSED" in ucard.inner_text(), ucard.inner_text()[:160])
 
     # Now make this person a real expert for the topic and try again. Expertise
-    # only goes to people with accounts, so they make one first.
-    U.goto(base+"/"); U.wait_for_timeout(1500); sign_up(U, "uma")
+    # only goes to people with accounts, which they have.
     login(A)
     profiles = A.get_by_test_id("map-profile").locator("option").all_inner_texts()
     check("the answering people appear as mappable profiles", len(profiles) > 2, str(profiles))

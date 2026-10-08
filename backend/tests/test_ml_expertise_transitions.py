@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 import subprocess
 import sys
-import uuid
 
 import pytest
 
@@ -29,10 +28,6 @@ def test_grammar_transition_recomputes_direct_human_credit_without_requiring_ali
     case, records = saved['case'], saved['records']
     clients, items = capture(make_client, case)
     expert, asker, reader = clients['cam'], clients['alice'], clients['ben']
-    suffix = uuid.uuid4().hex[:8]
-    for actor, client in clients.items():
-        assert client.post('/api/auth/signup', json={
-            'username': actor + suffix, 'password': 'a-private-test-password'}).status_code == 200
     profile = expert.get('/api/profile').json()
     extra = []
     concept_key = finding_key('concept', 'buffered index')

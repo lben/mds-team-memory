@@ -15,6 +15,7 @@ def test_admin_deletes_an_answer_then_the_question(browser: Browser, base_url_se
         writer = member.new_page()
         writer.goto(base + "/")
         api = writer.request
+        assert api.post(base + "/api/auth/signup", data={"username": f"member-{suffix}", "password": "member-password"}).ok
         question = api.post(base + "/api/questions", data={"body": f"Who owns the {suffix} export?"}).json()["id"]
         assert api.post(base + f"/api/questions/{question}/answers", data={"body": f"The {suffix} desk."}).ok
 

@@ -69,7 +69,16 @@ def test_critical_journey(browser: Browser, base_url_server):
     expect(admin.get_by_test_id("mapping-table")).to_contain_text(b_label)
 
     # ---- A captures knowledge from the composer (W1); it lands in the feed.
+    # Contributing needs an account: Capture asks A to make one and keeps what A typed.
     a.get_by_test_id("home-input").fill("Lantern does not consume Quill directly; Beacon processes the feed first.")
+    a.get_by_test_id("do-capture").click()
+    expect(a.get_by_test_id("sign-in-reason")).to_contain_text("create an account to post")
+    a.get_by_test_id("auth-username").fill("alice")
+    a.get_by_test_id("auth-password").fill("a-good-password")
+    a.get_by_test_id("do-sign-up").click()
+    expect(a.get_by_test_id("profile-button")).to_contain_text("alice")
+    expect(a.get_by_test_id("home-input")).to_have_value(
+        "Lantern does not consume Quill directly; Beacon processes the feed first.")
     a.get_by_test_id("do-capture").click()
     expect(a.get_by_test_id("success-modal")).to_contain_text("Thank you")
     a.get_by_role("button", name="Add another").click()

@@ -47,6 +47,14 @@ def answer_ask(pg, text=None, cancel=False):
         pg.get_by_test_id("ask-confirm").click()
     pg.wait_for_timeout(700)
 
+def sign_up(pg, username, password="a-good-password"):
+    """Create an account from the sidebar, as a person does; contributing needs one."""
+    pg.goto(base+"/"); pg.wait_for_timeout(900)
+    pg.get_by_test_id("profile-button").click(); pg.wait_for_timeout(600)
+    pg.get_by_test_id("auth-username").fill(username)
+    pg.get_by_test_id("auth-password").fill(password)
+    pg.get_by_test_id("do-sign-up").click(); pg.wait_for_timeout(3000)
+
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     A = b.new_context(viewport={"width":1500,"height":950}).new_page()
@@ -55,6 +63,8 @@ with sync_playwright() as pw:
     for pg, who in ((A,"admin"),(U,"user"),(V,"other")):
         pg.on("pageerror", lambda e, w=who: crashes.append(f"[{w}] JS ERROR: {str(e)[:160]}"))
         pg.on("response", lambda r, w=who: crashes.append(f"[{w}] HTTP {r.status} {r.url.split(base)[-1]}") if r.status>=500 else None)
+
+    sign_up(U, "ulrike"); sign_up(V, "viktor")
 
     def toast(pg): return pg.locator(".toast").inner_text() if pg.locator(".toast").count() else ""
     def login(pg):
@@ -154,8 +164,15 @@ with sync_playwright() as pw:
     check("losing your profile cookie gives you a fresh identity, not a crash",
           V.get_by_test_id("home-input").count() > 0 and V.get_by_test_id("profile-button").count() > 0)
     capture(V, "A brand new identity can still contribute after losing its cookie.")
+    check("that new identity is asked to sign in before it contributes",
+          V.get_by_test_id("sign-in-reason").count() > 0, toast(V))
+    V.get_by_test_id("auth-username").fill("viktor"); V.get_by_test_id("auth-password").fill("a-good-password")
+    V.get_by_test_id("do-sign-in").click(); V.wait_for_timeout(3000)
+    check("and what it typed is still there once it has",
+          "brand new identity" in V.get_by_test_id("home-input").input_value())
+    V.get_by_test_id("do-capture").click(); V.wait_for_timeout(2500)
     V.goto(base+"/"); V.wait_for_timeout(1500)
-    check("that new identity's contribution saved",
+    check("that contribution saved, under its account",
           "brand new identity" in V.get_by_test_id("knowledge-column").inner_text())
 
     print("\n### 30. Renaming and merging concepts into each other", flush=True)

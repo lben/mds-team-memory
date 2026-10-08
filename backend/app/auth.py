@@ -1,7 +1,7 @@
 import hashlib
 import hmac
 import secrets
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, Request, Response
 from sqlalchemy.orm import Session
@@ -126,7 +126,35 @@ def get_profile(
     return _browser_profile(request, response, db)
 
 
+def requires_account(reason: str):
+    """A dependency for what only an account holder may do. A shared computer's
+    browser cannot tell its users apart, so contributions and private notes need a person."""
+    def dependency(profile: Profile = Depends(get_profile)) -> Profile:
+        if not profile.has_account:
+            raise HTTPException(401, f"Sign in or create an account to {reason}")
+        return profile
+    return dependency
+
+
+get_contributor = requires_account("post, ask or answer")
+get_scratchpad_owner = requires_account("keep a private scratchpad")
+
+
 # --- signing in and out -----------------------------------------------------
+
+
+def session_end(now: datetime | None = None) -> datetime:
+    """When a sign-in made now expires, as naive UTC like the sessions table.
+
+    Next Sunday 00:00 in the server's local time, unless MDS_SESSION_HOURS sets a length.
+    `now` is the server's local time, naive.
+    """
+    if config.SESSION_HOURS:
+        return utcnow() + timedelta(hours=config.SESSION_HOURS)
+    now = now or datetime.now()
+    days = 7 - (now.weekday() + 1) % 7  # weekday() counts Monday as 0 and Sunday as 6
+    sunday = (now + timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
+    return sunday.astimezone(timezone.utc).replace(tzinfo=None)  # a naive time is read as local, DST included
 
 
 def sign_in(db: Session, request: Request, response: Response, account: Account) -> Profile:
@@ -157,16 +185,11 @@ def sign_in(db: Session, request: Request, response: Response, account: Account)
         profile = account_profile(db, account)
 
     token = secrets.token_hex(32)
-    db.add(
-        LoginSession(
-            token_hash=hash_token(token),
-            account_id=account.id,
-            expires_at=utcnow() + timedelta(hours=config.SESSION_HOURS),
-        )
-    )
+    expires = session_end()
+    db.add(LoginSession(token_hash=hash_token(token), account_id=account.id, expires_at=expires))
     db.commit()
     response.set_cookie(
-        SESSION_COOKIE, token, max_age=config.SESSION_HOURS * 3600, **_cookie_kwargs()
+        SESSION_COOKIE, token, max_age=max(1, int((expires - utcnow()).total_seconds())), **_cookie_kwargs()
     )
     return profile
 

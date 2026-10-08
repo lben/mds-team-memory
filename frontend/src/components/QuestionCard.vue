@@ -244,6 +244,7 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
 
       <div class="answer-compose">
         <textarea
+          v-if="store.auth.signed_in"
           v-model="answerDraft"
           placeholder="Write an answer"
           data-testid="answer-text"
@@ -258,8 +259,12 @@ watch(knowledgeRevision, () => { if (open.value) loadDetail() })
             Delete question
           </button>
           <span v-else class="muted" style="font-size: 10px">Visible to the whole team immediately.</span>
-          <button class="btn small primary" :disabled="busy || !answerDraft.trim()" data-testid="post-answer" @click="postAnswer">
+          <button v-if="store.auth.signed_in" class="btn small primary" :disabled="busy || !answerDraft.trim()" data-testid="post-answer" @click="postAnswer">
             Post answer
+          </button>
+          <button v-else class="btn small primary" data-testid="sign-in-to-answer"
+            @click="store.promptSignIn('Sign in or create an account to answer')">
+            Sign in to answer
           </button>
         </div>
       </div>

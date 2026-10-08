@@ -358,7 +358,7 @@ def _apply_role_definition(item_id, name, alias, *, cached=False, entity_score=0
 
 
 def test_alias_role_union_holds_one_author_survives_cache_and_respects_removal_and_opt_out(make_client, admin_client):
-    first, second = make_client(), make_client()
+    first, second = make_client(account=False), make_client(account=False)
     for index, client in enumerate((first, second)):
         response = client.post("/api/auth/signup", json={"username": f"alias-role-owner-{index}", "password": "a-good-password"})
         assert response.status_code == 200, response.text
@@ -660,7 +660,7 @@ def _confirm_topic(client, item_id, kind, topic):
 
 
 def test_expertise_outcomes_route_old_questions_once_and_respect_overrides(make_client, admin_client, obsolete_policy):
-    expert, asker, reader = make_client(), make_client(), make_client()
+    expert, asker, reader = make_client(account=False), make_client(account=False), make_client(account=False)
     suffix = uuid.uuid4().hex[:6]
     username = f"keeper{suffix}"
     for client, name in ((expert, username), (asker, f"asker{suffix}"), (reader, f"reader{suffix}")):

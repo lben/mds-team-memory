@@ -2,6 +2,7 @@
 import copy
 import json
 from pathlib import Path
+import uuid
 
 import pytest
 
@@ -30,10 +31,14 @@ def embedding_generation_isolation(app_modules):
 
 
 def capture(make_client, case):
+    """Each actor posts from their own account, named after them."""
     clients, items = {}, []
     for post in case['posts']:
         if post['actor'] not in clients:
-            clients[post['actor']] = make_client()
+            clients[post['actor']] = make_client(account=False)
+            response = clients[post['actor']].post('/api/auth/signup', json={
+                'username': post['actor'] + uuid.uuid4().hex[:8], 'password': 'a-good-password'})
+            assert response.status_code == 200, response.text
         client = clients[post['actor']]
         if post['kind'] == 'question':
             response = client.post('/api/questions', json={'body': post['body']})
@@ -221,13 +226,8 @@ def test_explicit_topic_credit_is_independent_of_alias_coverage_with_live_manual
     case, records = saved['case'], saved['records']
     clients, items = capture(make_client, case)
     expert, asker, reader = clients['cam'], clients['alice'], clients['ben']
-    import uuid
-    for label, client in clients.items():
-        response = client.post('/api/auth/signup', json={
-            'username': label + uuid.uuid4().hex[:8], 'password': 'a-good-password'})
-        assert response.status_code == 200, response.text
     if not processed:
-        expert = make_client()
+        expert = make_client(account=False)
         response = expert.post('/api/auth/signup', json={
             'username': 'dana' + uuid.uuid4().hex[:8], 'password': 'a-good-password'})
         assert response.status_code == 200, response.text

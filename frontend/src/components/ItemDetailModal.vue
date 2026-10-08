@@ -17,6 +17,10 @@ interface Detail extends Item {
 
 const props = defineProps<{ itemId: string }>()
 const emit = defineEmits<{ close: []; changed: [] }>()
+// The sign-in panel opens in the sidebar, which this dialog covers: make way for it.
+watch(() => store.signInReason, (reason) => {
+  if (reason) emit('close')
+})
 
 const detail = ref<Detail | null>(null)
 const correctionDraft = ref('')
@@ -239,13 +243,20 @@ useDialog(dialogRoot, () => emit('close'))
               Adopt correction
             </button>
           </div>
-          <textarea
-            v-model="correctionDraft"
-            style="width: 100%; height: 70px; margin-top: 10px"
-            placeholder="Suggest a correction or an update to this knowledge"
-          ></textarea>
-          <div class="modal-actions" style="margin-top: 8px">
-            <button class="btn small" :disabled="busy || !correctionDraft.trim()" @click="submitCorrection">Propose correction</button>
+          <template v-if="store.auth.signed_in">
+            <textarea
+              v-model="correctionDraft"
+              style="width: 100%; height: 70px; margin-top: 10px"
+              placeholder="Suggest a correction or an update to this knowledge"
+            ></textarea>
+            <div class="modal-actions" style="margin-top: 8px">
+              <button class="btn small" :disabled="busy || !correctionDraft.trim()" @click="submitCorrection">Propose correction</button>
+            </div>
+          </template>
+          <div v-else class="modal-actions" style="margin-top: 8px">
+            <button class="btn small" @click="emit('close'); store.promptSignIn('Sign in or create an account to suggest a correction')">
+              Sign in to suggest a correction
+            </button>
           </div>
         </div>
 

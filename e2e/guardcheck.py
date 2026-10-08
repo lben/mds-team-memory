@@ -28,6 +28,11 @@ def check(name, ok, detail=""):
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     U = b.new_context(viewport={"width":1500,"height":950}).new_page()
+    # These actions all publish to the team, which needs an account.
+    U.goto(base+"/"); U.wait_for_timeout(1200)
+    U.get_by_test_id("profile-button").click(); U.wait_for_timeout(600)
+    U.get_by_test_id("auth-username").fill("gwen"); U.get_by_test_id("auth-password").fill("a-good-password")
+    U.get_by_test_id("do-sign-up").click(); U.wait_for_timeout(3000)
 
     U.goto(base+"/scratchpad"); U.wait_for_timeout(2000)
     U.get_by_test_id("scratch-editor").fill("A shareable line about Lavos and the endings.\nAnother line.")

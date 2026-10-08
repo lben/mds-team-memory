@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ..auth import get_account, get_profile
+from ..auth import get_account, get_contributor, get_profile
 from ..concepts import match_concepts
 from ..db import get_db
 from ..impact import notify, record_event
@@ -95,7 +95,7 @@ def list_questions(profile: Profile = Depends(get_profile), db: Session = Depend
 
 @router.post("")
 def create_question(
-    payload: QuestionIn, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
+    payload: QuestionIn, profile: Profile = Depends(get_contributor), db: Session = Depends(get_db)
 ):
     question = KnowledgeItem(
         kind="question",
@@ -147,7 +147,7 @@ def question_detail(
 def add_answer(
     question_id: str,
     payload: AnswerIn,
-    profile: Profile = Depends(get_profile),
+    profile: Profile = Depends(get_contributor),
     db: Session = Depends(get_db),
 ):
     question = _question(db, question_id)

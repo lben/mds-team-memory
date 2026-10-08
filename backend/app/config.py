@@ -11,9 +11,9 @@ SIMILARITY_THRESHOLD = float(os.environ.get("MDS_SIMILARITY_THRESHOLD", "0.95"))
 COOCCURRENCE_MIN = int(os.environ.get("MDS_COOCCURRENCE_MIN", "1"))
 MAX_UPLOAD_BYTES = int(os.environ.get("MDS_MAX_UPLOAD_BYTES", str(25 * 1024 * 1024)))
 # Applies to every account, not only admins — one session system for everyone.
-# The old name is still honoured so an existing deployment keeps its setting.
-SESSION_HOURS = int(
-    os.environ.get("MDS_SESSION_HOURS", os.environ.get("MDS_ADMIN_SESSION_HOURS", "12"))
-)
+# Unset, a sign-in lasts until the next Sunday 00:00 server time: whatever the
+# server's time zone, that falls on the weekend, so everyone signs in again by Monday. The old name is still honoured so an existing deployment keeps its setting.
+_session_hours = os.environ.get("MDS_SESSION_HOURS", os.environ.get("MDS_ADMIN_SESSION_HOURS"))
+SESSION_HOURS = int(_session_hours) if _session_hours else None
 
 ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".docx", ".txt", ".md"}

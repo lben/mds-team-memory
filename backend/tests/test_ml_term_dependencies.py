@@ -171,7 +171,8 @@ def test_native_relationship_veto_survives_stronger_published_alias_alternative(
 @pytest.fixture
 def alias_expert(current_alias, make_client):
     a = current_alias
-    expert, asker, reader, definition_owner = [make_client() for _ in range(4)]
+    expert, asker, reader = [make_client(account=False) for _ in range(3)]
+    definition_owner = make_client()
     suffix = uuid.uuid4().hex[:8]
     username = 'termexpert' + suffix
     for client, name in ((expert, username), (asker, 'asker' + suffix), (reader, 'reader' + suffix)):

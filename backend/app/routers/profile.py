@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -34,6 +34,8 @@ def set_display_name(
     profile: Profile = Depends(get_profile),
     db: Session = Depends(get_db),
 ):
+    if not profile.has_account:
+        raise HTTPException(403, "Create an account or sign in to set a display name")
     profile.display_name = payload.display_name.strip()
     db.commit()
     return {"label": profile.label, "verified": profile.has_account}

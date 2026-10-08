@@ -189,5 +189,5 @@ def search_all(db: Session, profile: Profile, query: str) -> dict:
         "concepts": [{"id": c.id, "name": c.name} for c in matched],
         "items": _rank(items, group=True),
         "documents": _rank(passages, group=False),
-        "scratchpad": _scratchpad_hits(db, profile, query),
+        "scratchpad": _scratchpad_hits(db, profile, query) if profile.has_account else [],  # scratchpads need an account
     }

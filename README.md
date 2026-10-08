@@ -39,12 +39,13 @@ For a production-like run, `npm run build` then open `http://127.0.0.1:8000`.
 ## Accounts
 
 Anyone can create a contributor account from the app itself — the profile button
-at the bottom of the sidebar. Until they do, they are identified by a cookie in
-that one browser: they can use everything, but their contributions and their
-scratchpad live in that browser only and are destroyed by clearing cookies.
-Creating an account claims the work already done in that browser, once — the
-first account to sign in on a browser absorbs its anonymous contributions, and
-nobody after that can.
+at the bottom of the sidebar. Without one, people can browse and search. Posting,
+asking, answering, correcting, uploading and keeping a private scratchpad need an
+account, so every contribution belongs to a person even on shared computers.
+Creating an account claims what was done anonymously in that browser before these
+rules, once — the first account to sign in on a browser absorbs its scratchpad and
+anonymous posts, and nobody after that can. Sign-ins last until Sunday
+00:00 server time.
 
 Signing in changes who the app thinks you are everywhere: attribution, the
 leaderboard, the scratchpad and the admin area all follow the account.

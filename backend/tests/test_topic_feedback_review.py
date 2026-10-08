@@ -6,7 +6,7 @@ from test_ml_automation import _capture, _confirm_topic, _profile_work
 
 
 def _signup(make_client):
-    client = make_client()
+    client = make_client(account=False)
     assert client.post('/api/auth/signup', json={'username': 'review' + uuid.uuid4().hex[:10], 'password': 'a-good-password'}).status_code == 200
     return client, client.get('/api/profile').json()['id']
 

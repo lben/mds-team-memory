@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { api, type Corroboration, type Item } from '../api'
+import { api, ApiError, type Corroboration, type Item } from '../api'
 import EvidenceModal from '../components/EvidenceModal.vue'
 import ItemDetailModal from '../components/ItemDetailModal.vue'
 import KnowledgeGraph from '../components/KnowledgeGraph.vue'
@@ -102,9 +102,29 @@ function clearSearch() {
   results.value = null
 }
 
+// Signing in reloads the page, so keep what was typed for after it.
+const DRAFT = 'mds-home-draft'
+function keepDraft() {
+  try {
+    sessionStorage.setItem(DRAFT, text.value)
+  } catch {
+    /* The draft is a convenience. */
+  }
+}
+function needAccount() {
+  keepDraft()
+  store.promptSignIn('Sign in or create an account to post, ask or answer')
+}
+// The server can refuse even when this page thought you were signed in: the sign-in expired.
+function failed(e: unknown, fallback: string) {
+  if (e instanceof ApiError && e.status === 401) keepDraft()
+  store.fail(e, fallback)
+}
+
 async function ask() {
   const q = text.value.trim()
   if (!q) return void store.notify('Type your question first')
+  if (!store.auth.signed_in) return needAccount()
   busy.value = true
   try {
     const question = await api.post<Item>('/api/questions', { body: q })
@@ -115,7 +135,7 @@ async function ask() {
     await loadFeed()
     expandQuestion(question.id)
   } catch (e) {
-    store.fail(e, 'Could not post the question')
+    failed(e, 'Could not post the question')
   } finally {
     busy.value = false
   }
@@ -124,6 +144,7 @@ async function ask() {
 async function capture() {
   const body = text.value.trim()
   if (!body && !file.value) return void store.notify('Write something or attach a document')
+  if (!store.auth.signed_in) return needAccount()
   busy.value = true
   try {
     const form = new FormData()
@@ -146,7 +167,7 @@ async function capture() {
     await Promise.all([loadFeed(), store.loadProfile()])
     graph.value?.refresh() // the graph grows with each contribution
   } catch (e) {
-    store.fail(e, 'Could not save your knowledge')
+    failed(e, 'Could not save your knowledge')
   } finally {
     busy.value = false
   }
@@ -215,6 +236,13 @@ watch(knowledgeRevision, async () => {
 })
 
 onMounted(async () => {
+  try {
+    const draft = sessionStorage.getItem(DRAFT)
+    if (draft) text.value = draft
+    sessionStorage.removeItem(DRAFT)
+  } catch {
+    /* No draft to restore. */
+  }
   await loadFeed()
   await consumeQuery()
 })

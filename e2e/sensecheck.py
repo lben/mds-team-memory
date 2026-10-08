@@ -50,12 +50,6 @@ def answer_ask(pg, text=None, cancel=False):
         pg.get_by_test_id("ask-confirm").click()
     pg.wait_for_timeout(700)
 
-def sign_up(pg, username, password="a-good-password"):
-    pg.get_by_test_id("profile-button").click(); pg.wait_for_timeout(600)
-    pg.get_by_test_id("auth-username").fill(username)
-    pg.get_by_test_id("auth-password").fill(password)
-    pg.get_by_test_id("do-sign-up").click(); pg.wait_for_timeout(3000)
-
 def who(pg):
     return pg.get_by_test_id("profile-button").inner_text().strip().replace("\n", " · ")
 
@@ -86,6 +80,15 @@ with sync_playwright() as pw:
     shot(U, "enter_in_the_composer")
 
     U.get_by_test_id("home-input").fill("Dark Souls teaches through failure, not tutorials.")
+    before = U.evaluate("()=>fetch('/api/profile').then(r=>r.json())")
+    U.get_by_test_id("do-capture").click(); U.wait_for_timeout(1200)
+    reason = U.get_by_test_id("sign-in-reason")
+    note("capture", f"without an account, Capture opens the sign-in panel saying: {reason.inner_text().strip()!r}"
+                    if reason.count() else "without an account, Capture says nothing about why it did not post")
+    shot(U, "capture_needs_an_account")
+    U.get_by_test_id("auth-username").fill("ursula"); U.get_by_test_id("auth-password").fill("a-good-password")
+    U.get_by_test_id("do-sign-up").click(); U.wait_for_timeout(3000)
+    note("capture", f"after making the account the box still holds: {U.get_by_test_id('home-input').input_value()[:60]!r}")
     U.get_by_test_id("do-capture").click(); U.wait_for_timeout(2500)
     if U.locator(".modal-backdrop").count():
         note("capture", f"after sharing, the dialog says: "
@@ -107,9 +110,7 @@ with sync_playwright() as pw:
     shot(V, "item_details_modal")
     V.keyboard.press("Escape"); V.wait_for_timeout(500)
 
-    print("\n--- I make an account. Does my work come with me? ---")
-    before = U.evaluate("()=>fetch('/api/profile').then(r=>r.json())")
-    sign_up(U, "ursula")
+    print("\n--- I made an account to post. Who am I now? ---")
     after = U.evaluate("()=>fetch('/api/profile').then(r=>r.json())")
     note("account", f"before: {before['label']!r} shared={before['totals']['shared']} · "
                     f"after signing up: {after['label']!r} shared={after['totals']['shared']}")
@@ -117,7 +118,7 @@ with sync_playwright() as pw:
     shot(U, "signed_up", full=True)
     U.goto(base+"/"); U.wait_for_timeout(1800)
     mine = U.get_by_test_id("knowledge-column").locator(".card.result").first
-    note("account", f"my earlier contribution is now credited to: "
+    note("account", f"my contribution is credited to: "
                     f"{mine.locator('.meta').inner_text().replace(chr(10),' ')[:70]!r}")
 
     print("\n--- I am the admin. Does the app know that? ---")

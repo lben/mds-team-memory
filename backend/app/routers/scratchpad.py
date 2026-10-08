@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from ..auth import get_profile
+from ..auth import get_contributor, get_scratchpad_owner
 from ..db import get_db
 from ..impact import shared_count
 from ..knowledge import item_dict, process_after_save
@@ -42,7 +42,7 @@ def _own_pad(db: Session, pad_id: str, profile: Profile) -> Scratchpad:
 
 
 @router.get("")
-def my_scratchpads(profile: Profile = Depends(get_profile), db: Session = Depends(get_db)):
+def my_scratchpads(profile: Profile = Depends(get_scratchpad_owner), db: Session = Depends(get_db)):
     pads = (
         db.query(Scratchpad)
         .filter(Scratchpad.profile_id == profile.id)
@@ -59,7 +59,7 @@ def my_scratchpads(profile: Profile = Depends(get_profile), db: Session = Depend
 
 @router.post("")
 def create_scratchpad(
-    payload: CreateIn, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
+    payload: CreateIn, profile: Profile = Depends(get_scratchpad_owner), db: Session = Depends(get_db)
 ):
     pad = Scratchpad(profile_id=profile.id, is_default=False, name=payload.name, content="")
     db.add(pad)
@@ -71,7 +71,7 @@ def create_scratchpad(
 def save_scratchpad(
     pad_id: str,
     payload: ContentIn,
-    profile: Profile = Depends(get_profile),
+    profile: Profile = Depends(get_scratchpad_owner),
     db: Session = Depends(get_db),
 ):
     pad = _own_pad(db, pad_id, profile)
@@ -85,7 +85,7 @@ def save_scratchpad(
 def find_in_scratchpad(
     pad_id: str,
     q: str = Query(min_length=1, max_length=300),
-    profile: Profile = Depends(get_profile),
+    profile: Profile = Depends(get_scratchpad_owner),
     db: Session = Depends(get_db),
 ):
     pad = _own_pad(db, pad_id, profile)
@@ -96,7 +96,7 @@ def find_in_scratchpad(
 def share_selection(
     pad_id: str,
     payload: ShareIn,
-    profile: Profile = Depends(get_profile),
+    profile: Profile = Depends(get_contributor),
     db: Session = Depends(get_db),
 ):
     pad = _own_pad(db, pad_id, profile)

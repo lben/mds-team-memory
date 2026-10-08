@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from ..auth import get_account, get_admin, get_profile
+from ..auth import get_account, get_admin, get_contributor, get_profile
 from ..concepts import source_concepts
 from ..db import get_db
 from ..docstore import save_uploaded_document
@@ -41,7 +41,7 @@ def _get_item(db: Session, item_id: str, profile: Profile) -> KnowledgeItem:
 def capture(
     body: str = Form(""),
     file: UploadFile | None = None,
-    profile: Profile = Depends(get_profile),
+    profile: Profile = Depends(get_contributor),
     db: Session = Depends(get_db),
 ):
     body = body.strip()
@@ -223,7 +223,7 @@ def endorse(
 def add_correction(
     item_id: str,
     payload: CorrectionIn,
-    profile: Profile = Depends(get_profile),
+    profile: Profile = Depends(get_contributor),
     db: Session = Depends(get_db),
 ):
     item = _get_item(db, item_id, profile)

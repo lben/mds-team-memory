@@ -1,5 +1,8 @@
+import atexit
 import os
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -7,15 +10,19 @@ import pytest
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND_DIR))
 
+# Set before any test can import the app: app.config reads these once, at import,
+# so a test that imports the app without the fixture still never reaches the
+# developer's real database.
+DATA_DIR = Path(tempfile.mkdtemp(prefix="mds-tests-"))
+atexit.register(shutil.rmtree, DATA_DIR, ignore_errors=True)
+os.environ["MDS_DATA_DIR"] = str(DATA_DIR)
+os.environ["MDS_DATABASE_URL"] = f"sqlite:///{DATA_DIR / 'test.sqlite3'}"
+
 
 @pytest.fixture(scope="session")
-def app_modules(tmp_path_factory):
-    """Point the app at a temporary data dir, then create the schema with the
-    real Alembic migrations so tests prove the migration path."""
-    data_dir = tmp_path_factory.mktemp("data")
-    os.environ["MDS_DATA_DIR"] = str(data_dir)
-    os.environ["MDS_DATABASE_URL"] = f"sqlite:///{data_dir / 'test.sqlite3'}"
-
+def app_modules():
+    """Create the temporary database's schema with the real Alembic migrations,
+    so tests prove the migration path."""
     from alembic import command
     from alembic.config import Config
 
@@ -30,14 +37,23 @@ def app_modules(tmp_path_factory):
 
 @pytest.fixture()
 def make_client(app_modules):
-    """Factory producing an isolated 'browser' (its own cookie jar / profile)."""
+    """Factory producing an isolated 'browser' (its own cookie jar / profile).
+
+    Contributing needs an account, so each browser signs up as a new member
+    unless the test is about an anonymous visitor (`account=False`).
+    """
+    import uuid
     from fastapi.testclient import TestClient
 
     clients = []
 
-    def factory() -> "TestClient":
+    def factory(account: bool = True) -> "TestClient":
         client = TestClient(app_modules)
         client.get("/api/profile")  # establish the profile cookie
+        if account:
+            signup = client.post("/api/auth/signup", json={"username": f"member-{uuid.uuid4().hex[:10]}",
+                                                           "password": "member-password"})
+            assert signup.status_code == 200, signup.text
         clients.append(client)
         return client
 
@@ -71,6 +87,6 @@ def admin_client(make_client, app_modules):
     finally:
         db.close()
 
-    client = make_client()
+    client = make_client(account=False)
     assert client.post("/api/auth/login", json=ADMIN_CREDENTIALS).status_code == 200
     return client

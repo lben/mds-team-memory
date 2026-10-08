@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from ..auth import get_profile
+from ..auth import get_contributor, get_profile
 from ..db import get_db
 from ..docstore import document_dict, save_uploaded_document
 from ..impact import shared_count
@@ -21,7 +21,7 @@ class SharePassageIn(BaseModel):
 
 @router.post("/documents")
 def upload_document(
-    file: UploadFile, profile: Profile = Depends(get_profile), db: Session = Depends(get_db)
+    file: UploadFile, profile: Profile = Depends(get_contributor), db: Session = Depends(get_db)
 ):
     document = save_uploaded_document(db, profile, file)
     return document_dict(document, profile=profile)
@@ -87,7 +87,7 @@ def download_document(document_id: str, db: Session = Depends(get_db)):
 def share_passage(
     passage_id: str,
     payload: SharePassageIn,
-    profile: Profile = Depends(get_profile),
+    profile: Profile = Depends(get_contributor),
     db: Session = Depends(get_db),
 ):
     passage = db.get(DocumentPassage, passage_id)

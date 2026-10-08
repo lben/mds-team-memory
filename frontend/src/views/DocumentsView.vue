@@ -169,8 +169,12 @@ onMounted(async () => {
         <p>PDF, DOCX, TXT, or Markdown · owner and upload date recorded automatically · original file preserved.</p>
       </div>
       <input ref="fileInput" type="file" accept=".pdf,.docx,.txt,.md" style="display: none" @change="upload" />
-      <button class="btn primary" :disabled="uploading" data-testid="upload-doc" @click="pick">
+      <button v-if="store.auth.signed_in" class="btn primary" :disabled="uploading" data-testid="upload-doc" @click="pick">
         {{ uploading ? 'Uploading…' : 'Upload file' }}
+      </button>
+      <button v-else class="btn primary" data-testid="sign-in-to-upload"
+        @click="store.promptSignIn('Sign in or create an account to upload documents')">
+        Sign in to upload
       </button>
     </div>
 

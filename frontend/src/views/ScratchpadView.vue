@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { api, type Corroboration, type Item } from '../api'
+import { api, ApiError, type Corroboration, type Item } from '../api'
 import SuccessModal from '../components/SuccessModal.vue'
 import { store } from '../store'
 import AskModal from '../components/AskModal.vue'
@@ -56,6 +56,9 @@ function lastPadId(): string | null {
   }
 }
 
+/** A private scratchpad needs an account; without one the page says so. */
+const needsAccount = ref(false)
+
 async function load() {
   try {
     const data = await api.get<{ default: Pad; others: Pad[] }>('/api/scratchpad')
@@ -63,6 +66,11 @@ async function load() {
     const remembered = pads.value.find((p) => p.id === lastPadId())
     current.value = remembered ?? pads.value[0]
   } catch (e) {
+    if (e instanceof ApiError && e.status === 401) {
+      needsAccount.value = true
+      void store.refreshIdentity() // the sign-in may have run out while the page was open
+      return
+    }
     store.fail(e, 'Could not load your scratchpad')
   }
 }
@@ -247,21 +255,24 @@ onMounted(async () => {
           Long, searchable files for random knowledge. No notes, titles, folders, or
           categorization required — start with this one and add more if you want them.
         </p>
-        <p v-if="!store.profile?.verified" class="lead" style="color: var(--accent)">
-          You have no account, so this file lives in this browser only. Clearing your cookies
-          destroys it, and nobody can get it back for you.
-        </p>
       </div>
       <div class="row gap8">
-        <!-- What "private" is tied to changed when accounts arrived: with an
-             account it follows you, without one it dies with the cookie. -->
-        <span class="chip private" data-testid="privacy-chip">
-          {{ store.profile?.verified ? 'PRIVATE TO YOU' : 'PRIVATE TO THIS BROWSER ONLY' }}
-        </span>
+        <span class="chip private" data-testid="privacy-chip">PRIVATE TO YOU</span>
       </div>
     </div>
 
-    <div class="card">
+    <div v-if="needsAccount" class="card card-pad" data-testid="scratchpad-needs-account">
+      <p class="lead" style="margin-top: 0">
+        A private scratchpad needs an account, so your notes follow you to any computer and nobody
+        else using this browser can read them.
+      </p>
+      <button class="btn primary" style="margin-top: 12px"
+        @click="store.promptSignIn('Sign in or create an account to keep a private scratchpad')">
+        Sign in or create an account
+      </button>
+    </div>
+
+    <div v-else class="card">
       <div class="scratch-toolbar">
         <select v-if="pads.length > 1" :value="current?.id" @change="switchPad(($event.target as HTMLSelectElement).value)">
           <option v-for="p in pads" :key="p.id" :value="p.id">{{ p.name }}</option>

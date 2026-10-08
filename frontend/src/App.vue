@@ -70,7 +70,12 @@ async function signOut() {
 
 async function saveName() {
   if (!nameDraft.value.trim()) return void store.notify('Enter a display name first')
-  await api.put('/api/profile', { display_name: nameDraft.value.trim() })
+  try {
+    await api.put('/api/profile', { display_name: nameDraft.value.trim() })
+  } catch (e) {
+    await store.refreshIdentity() // refused because the sign-in expired: show that, not "Signed in"
+    return store.fail(e, 'Could not save the name')
+  }
   await store.loadProfile()
   showProfile.value = false
   store.notify('Display name saved')
@@ -89,6 +94,13 @@ async function markAllRead() {
   notifications.value = notifications.value.map((n) => ({ ...n, read: true }))
   store.unread = 0
 }
+
+watch(() => store.signInReason, (reason) => {
+  if (reason) showProfile.value = true
+})
+watch(showProfile, (open) => {
+  if (!open) store.signInReason = ''
+})
 
 watch(knowledgeRevision, async () => {
   if (!showNotifications.value) return
@@ -123,6 +135,10 @@ onMounted(() => {
   store.refreshIdentity()
   store.refreshUnread()
   store.watchNotifications()
+  // A sign-in can expire while the tab sits open overnight; show the truth when it is looked at again.
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) store.refreshIdentity()
+  })
 })
 </script>
 
@@ -151,23 +167,29 @@ onMounted(() => {
         </span>
       </button>
       <div v-if="showProfile" class="profile-pop" data-testid="profile-pop">
-        <template v-if="store.profile?.verified">
+        <!-- The sign-in, not the profile, decides: a sign-in can expire while the page is open. -->
+        <template v-if="store.auth.signed_in">
           <p class="pop-note">
             Signed in as <strong>{{ store.auth.username }}</strong
             ><template v-if="store.auth.is_admin"> · administrator</template>. Your contributions
             and your scratchpad belong to this account and survive clearing your cookies.
           </p>
+          <label style="margin-top: 10px">Display name</label>
+          <input v-model="nameDraft" type="text" maxlength="80" :placeholder="store.profile?.label" data-testid="display-name"
+            aria-label="Display name" @keyup.enter="saveName" />
+          <p class="pop-note">Shown to your team instead of your username, on every device.</p>
           <div class="modal-actions" style="margin-top: 12px">
             <button class="btn small" @click="showProfile = false">Close</button>
+            <button class="btn small" @click="saveName">Save name</button>
             <button class="btn small" data-testid="sign-out" @click="signOut">Sign out</button>
           </div>
         </template>
 
         <template v-else>
+          <p v-if="store.signInReason" class="pop-warn" data-testid="sign-in-reason">{{ store.signInReason }}.</p>
           <p class="pop-warn" data-testid="no-account-warning">
-            You have no account. Everything you write lives in this browser only — clear your
-            cookies and your contributions and your private scratchpad are gone for good, with no
-            way to get them back. Create an account and they stay yours.
+            You have no account. You can browse and search; to post, ask, answer or keep a
+            private scratchpad, sign in or create one.
           </p>
           <label>Username</label>
           <input v-model="username" type="text" maxlength="80" autocomplete="username" data-testid="auth-username"
@@ -191,15 +213,8 @@ onMounted(() => {
               Create account
             </button>
           </div>
-
-          <div class="pop-divider"></div>
-          <label>Or just a display name, on this machine</label>
-          <input v-model="nameDraft" type="text" maxlength="80" placeholder="e.g. Jane S." data-testid="display-name"
-            aria-label="Display name, on this machine only" @keyup.enter="saveName" />
-          <p class="pop-note">A name set here is not an account and does not survive a cookie clear.</p>
           <div class="modal-actions" style="margin-top: 10px">
             <button class="btn small" @click="showProfile = false">Close</button>
-            <button class="btn small" @click="saveName">Save name</button>
           </div>
         </template>
       </div>

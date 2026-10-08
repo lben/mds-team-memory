@@ -442,7 +442,7 @@ set per target in `tools/deploy.toml` on the dev machine and written into
 | `MDS_SIMILARITY_THRESHOLD` | `0.95` | duplicate-grouping similarity (0–1) |
 | `MDS_COOCCURRENCE_MIN` | `1` | co-mentions before a concept link is suggested; raise it if the map gets noisy |
 | `MDS_MAX_UPLOAD_BYTES` | `26214400` | upload size limit (25 MB) |
-| `MDS_SESSION_HOURS` | `12` | how long a signed-in session lasts |
+| `MDS_SESSION_HOURS` | unset | how long a signed-in session lasts, in hours; unset, it lasts until the next Sunday 00:00 in the server's time zone |
 
 Editing `app.env` on the server works until the next deploy replaces it, so put
 anything you want to keep in `tools/deploy.toml`.

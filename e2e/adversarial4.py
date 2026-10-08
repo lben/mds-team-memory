@@ -54,6 +54,11 @@ with sync_playwright() as pw:
     for pg, who in ((A,"admin"),(U,"user")):
         pg.on("pageerror", lambda e, w=who: crashes.append(f"[{w}] JS ERROR: {str(e)[:200]}"))
         pg.on("response", lambda r, w=who: crashes.append(f"[{w}] HTTP {r.status} {r.url.split(base)[-1]}") if r.status>=500 else None)
+    # Contributing needs an account, so the person who writes things has one.
+    U.goto(base+"/"); U.wait_for_timeout(1200)
+    U.get_by_test_id("profile-button").click(); U.wait_for_timeout(600)
+    U.get_by_test_id("auth-username").fill("ugo"); U.get_by_test_id("auth-password").fill("a-good-password")
+    U.get_by_test_id("do-sign-up").click(); U.wait_for_timeout(3000)
 
     def toast(pg): return pg.locator(".toast").inner_text() if pg.locator(".toast").count() else ""
     def js_errors(): return [c for c in crashes if "JS ERROR" in c]

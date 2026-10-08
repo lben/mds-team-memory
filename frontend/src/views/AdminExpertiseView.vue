@@ -58,7 +58,7 @@ async function loadPublicMap() {
 }
 
 async function loadState() {
-  await store.loadAuth()
+  await store.refreshIdentity() // sign-in and profile together, so the sidebar agrees
   loaded.value = true
   if (store.auth.is_admin) await loadData()
   else await loadPublicMap()

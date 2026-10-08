@@ -10,7 +10,7 @@ def test_routing_deduplicates_accounts_and_excludes_all_asker_profiles(make_clie
     from app.models import Concept, KnowledgeItem
 
     suffix = uuid.uuid4().hex[:8]
-    asker, expert = make_client(), make_client()
+    asker, expert = make_client(account=False), make_client(account=False)
     for label, client in (("asker", asker), ("expert", expert)):
         assert client.post("/api/auth/signup", json={"username": label + suffix,
                            "password": "a-private-test-password"}).status_code == 200

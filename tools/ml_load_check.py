@@ -246,9 +246,15 @@ def run(args):
     with sqlite3.connect(dbpath) as con:
         con.execute('PRAGMA foreign_keys=ON')
         con.execute('PRAGMA journal_mode=WAL')
+        # Contributing needs an account, so each client is a signed-in member with its own session.
         for i, token in enumerate(tokens):
-            con.execute('INSERT INTO profiles(id,token_hash,display_name,claim_locked,created_at) VALUES(?,?,?,?,?)',
-                        (profiles[i], hashlib.sha256(token.encode()).hexdigest(), f'Load profile {i + 1}', 0, now))
+            account = f'{5000 + i:032x}'
+            con.execute('INSERT INTO accounts(id,username,password_hash,is_admin,created_at) VALUES(?,?,?,?,?)',
+                        (account, f'load-member-{i + 1:02d}', 'load-check-no-password', 0, now))
+            con.execute('INSERT INTO sessions(token_hash,account_id,expires_at) VALUES(?,?,?)',
+                        (hashlib.sha256(token.encode()).hexdigest(), account, datetime.datetime(2099, 1, 1)))
+            con.execute('INSERT INTO profiles(id,account_id,display_name,claim_locked,created_at) VALUES(?,?,?,?,?)',
+                        (profiles[i], account, f'Load profile {i + 1}', 1, now))
         for i, name in enumerate(names):
             con.execute('INSERT INTO concepts(id) VALUES(?)', (concept_ids[name],))
             con.execute('INSERT INTO concept_terms(id,concept_id,term,display,is_canonical) VALUES(?,?,?,?,1)',
@@ -358,7 +364,7 @@ def run(args):
         while not monitoring.wait(.5):
             snapshot()
     def request(client, path, body=None):
-        headers = {'Cookie': 'mds_profile='+tokens[client]}
+        headers = {'Cookie': 'mds_session='+tokens[client]}
         data = None
         if body is not None:
             data = urllib.parse.urlencode({'body': body}).encode()
